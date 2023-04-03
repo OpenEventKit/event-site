@@ -10,7 +10,14 @@ module.exports = {
     description: `${GeneralSettings?.siteMetadata?.description || process.env.GATSBY_METADATA_DESCRIPTION || 'Event Site'}`,
   },
   plugins: [
-    "gatsby-plugin-root-import",
+    {
+      resolve: "gatsby-alias-imports",
+      options: {
+        aliases: {
+          "@utils": `${__dirname}/src/utils`,
+        }
+      }
+    },
     'gatsby-plugin-react-helmet',
     {
       /**
