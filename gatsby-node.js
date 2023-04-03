@@ -413,7 +413,7 @@ exports.createPages = ({ actions, graphql }) => {
 
       const page = {
         path: slug,
-        component: path.resolve(
+        component: require.resolve(
           `src/templates/${String(templateKey)}.js`
         ),
         context: {
