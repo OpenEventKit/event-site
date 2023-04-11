@@ -1,6 +1,6 @@
 import {createAction} from "openstack-uicore-foundation/lib/utils/actions";
 import {RELOAD_USER_PROFILE} from "./schedule-actions";
-import {getFromCache, putOnCache, deleteFromCache} from "../utils/cacheUtils";
+import {getFromCache, putOnCache, deleteFromCache} from "@utils/cacheUtils";
 import {SYNC_DATA } from './base-actions-definitions';
 import {RELOAD_EVENT_STATE} from './event-actions-definitions';
 import {
@@ -21,7 +21,17 @@ import {
     BUCKET_VOTABLE_PRES_ETAG_KEY,
     BUCKET_VOTABLE_PRES_DATA_KEY,
     isSummitEventDataUpdate,
-} from '../utils/dataUpdatesUtils';
+} from '@utils/dataUpdatesUtils';
+
+import {
+  SUMMIT_FILE_NAME,
+  EVENTS_FILE_NAME,
+  EVENTS_IDX_FILE_NAME,
+  SPEAKERS_FILE_NAME,
+  SPEAKERS_IDX_FILE_NAME,
+  EXTRA_QUESTIONS_FILE_NAME,
+  VOTEABLE_PRESENTATIONS_FILE_NAME
+} from "@utils/filePath";
 
 /**
  *
@@ -106,7 +116,7 @@ const fetchBucket = async (etagKeyPre, dataKeyPre, fileName, summitId, lastBuild
  * @returns {Promise<Response>}
  */
 export const bucket_getEvents = async (summitId, lastBuildTime = null) => {
-    return fetchBucket(BUCKET_EVENTS_ETAG_KEY, BUCKET_EVENTS_DATA_KEY, 'events.json', summitId, lastBuildTime).then(data => {
+    return fetchBucket(BUCKET_EVENTS_ETAG_KEY, BUCKET_EVENTS_DATA_KEY, EVENTS_FILE_NAME, summitId, lastBuildTime).then(data => {
         return data;
     }).catch(e => null);
 }
@@ -119,7 +129,7 @@ export const bucket_getEvents = async (summitId, lastBuildTime = null) => {
  */
 export const bucket_getSummit = (summitId, lastBuildTime = null) => {
 
-    return fetchBucket(BUCKET_SUMMIT_ETAG_KEY, BUCKET_SUMMIT_DATA_KEY, 'summit.json', summitId, lastBuildTime)
+    return fetchBucket(BUCKET_SUMMIT_ETAG_KEY, BUCKET_SUMMIT_DATA_KEY, SUMMIT_FILE_NAME, summitId, lastBuildTime)
         .then(data => {
             return data;
         }).catch(e => null);
@@ -133,7 +143,7 @@ export const bucket_getSummit = (summitId, lastBuildTime = null) => {
  */
 export const bucket_getSpeakers = (summitId, lastBuildTime = null) => {
 
-    return fetchBucket(BUCKET_SPEAKERS_ETAG_KEY, BUCKET_SPEAKERS_DATA_KEY, 'speakers.json', summitId, lastBuildTime)
+    return fetchBucket(BUCKET_SPEAKERS_ETAG_KEY, BUCKET_SPEAKERS_DATA_KEY, SPEAKERS_FILE_NAME, summitId, lastBuildTime)
         .then(data => {
             return data;
         }).catch(e => null);
@@ -147,21 +157,33 @@ export const bucket_getSpeakers = (summitId, lastBuildTime = null) => {
  */
 export const bucket_getVotablePresentations = (summitId, lastBuildTime = null) => {
 
-    return fetchBucket(BUCKET_VOTABLE_PRES_ETAG_KEY, BUCKET_VOTABLE_PRES_DATA_KEY, 'voteable-presentations.json', summitId, lastBuildTime)
+    return fetchBucket(BUCKET_VOTABLE_PRES_ETAG_KEY, BUCKET_VOTABLE_PRES_DATA_KEY, VOTEABLE_PRESENTATIONS_FILE_NAME, summitId, lastBuildTime)
         .then(data => {
             return data;
         }).catch(e => null);
 }
 
+/**
+ *
+ * @param summitId
+ * @param lastBuildTime
+ * @returns {Promise<Response>}
+ */
 export const bucket_getEventsIDX = (summitId, lastBuildTime = null) => {
-    return fetchBucket(BUCKET_EVENTS_IDX_ETAG_KEY, BUCKET_EVENTS_IDX_DATA_KEY, 'events.idx.json', summitId, lastBuildTime)
+    return fetchBucket(BUCKET_EVENTS_IDX_ETAG_KEY, BUCKET_EVENTS_IDX_DATA_KEY, EVENTS_IDX_FILE_NAME, summitId, lastBuildTime)
         .then(data => {
             return data;
         }).catch(e => null);
 }
 
+/**
+ *
+ * @param summitId
+ * @param lastBuildTime
+ * @returns {Promise<Response>}
+ */
 export const bucket_getSpeakersIDX = (summitId, lastBuildTime = null) => {
-    return fetchBucket(BUCKET_SPEAKERS_IDX_ETAG_KEY, BUCKET_SPEAKERS_IDX_DATA_KEY, 'speakers.idx.json', summitId, lastBuildTime)
+    return fetchBucket(BUCKET_SPEAKERS_IDX_ETAG_KEY, BUCKET_SPEAKERS_IDX_DATA_KEY, SPEAKERS_IDX_FILE_NAME, summitId, lastBuildTime)
         .then(data => {
             return data;
         }).catch(e => null);
