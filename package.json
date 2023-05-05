@@ -147,6 +147,7 @@
     "update-libs": "yarn upgrade live-event-widget openstack-uicore-foundation schedule-lite simple-chat-widget speakers-widget attendee-to-attendee-widget"
   },
   "devDependencies": {
+    "babel-preset-gatsby": "^3.9.0",
     "devcert": "1.1.0",
     "gatsby-plugin-webpack-speed-measure": "^0.1.1",
     "prettier": "^2.0.5"
