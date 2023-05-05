@@ -146,7 +146,7 @@ const MarketingHeroComponent = ({
             </div>
           </div>
         </div>
-        {marketingPageSettings.hero?.images &&
+        {marketingPageSettings.hero?.images?.length > 0 &&
         <div className={`${styles.rightColumn} column is-6 px-0`} id="marketing-slider" ref={sliderRef}>
             {marketingPageSettings.hero?.images?.length > 1 ?
             <Slider {...sliderSettings}>
