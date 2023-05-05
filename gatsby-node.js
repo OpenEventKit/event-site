@@ -9,8 +9,6 @@ const { ClientCredentials } = require("simple-oauth2");
 const URI = require("urijs");
 const sizeOf = require("image-size");
 
-const typeDefs = require("./src/cms/config/collections/typeDefs");
-
 const myEnv = require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
 });
@@ -173,7 +171,7 @@ exports.onPreBootstrap = async () => {
 
   const summitId = process.env.GATSBY_SUMMIT_ID;
   const summitApiBaseUrl = process.env.GATSBY_SUMMIT_API_BASE_URL;
-  const marketingSettings = await SSR_getMarketingSettings(summitApiBaseUrl, summitId);
+  const marketingSettings = await SSR_getMarketingSettings(process.env.GATSBY_MARKETING_API_BASE_URL, summitId);
   const colorSettings = fs.existsSync(COLORS_FILE_PATH) ? JSON.parse(fs.readFileSync(COLORS_FILE_PATH)) : {};
   const homeSettings = fs.existsSync(HOME_SETTINGS_FILE_PATH) ? JSON.parse(fs.readFileSync(HOME_SETTINGS_FILE_PATH)) : {};
   const globalSettings = fs.existsSync(SITE_SETTINGS_FILE_PATH) ? JSON.parse(fs.readFileSync(SITE_SETTINGS_FILE_PATH)) : {};
@@ -278,6 +276,8 @@ exports.onPreBootstrap = async () => {
 
 exports.createSchemaCustomization = ({ actions }) => {
   const { createTypes } = actions;
+  // TODO: improve typeDefs to allow theme override
+  const typeDefs = require("./src/cms/config/collections/typeDefs");
   createTypes(typeDefs);
 };
 
@@ -349,7 +349,7 @@ exports.createPages = ({ actions, graphql }) => {
       const page = {
         path: slug,
         component: require.resolve(
-          `src/templates/${String(templateKey)}.js`
+          `./src/templates/${String(templateKey)}.js`
         ),
         context: {
           id,
@@ -378,7 +378,9 @@ exports.onCreateWebpackConfig = ({ actions, plugins, loaders }) => {
         path: require.resolve('path-browserify'),
         stream: require.resolve('stream-browserify'),
         buffer: require.resolve('buffer/')
-      }
+      },
+      // allows content and data imports to correctly resolve when theming
+      modules: [path.resolve(__dirname, "src")]
     },
     // canvas is a jsdom external dependency
     externals: ['canvas'],

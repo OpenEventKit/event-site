@@ -3,7 +3,7 @@ import { LOGOUT_USER } from "openstack-uicore-foundation/lib/security/actions";
 import { RESET_STATE, GET_THIRD_PARTY_PROVIDERS, SYNC_DATA } from "../actions/base-actions-definitions";
 import { GET_EXTRA_QUESTIONS } from '../actions/user-actions';
 
-import summitData from "../data/summit.json";
+import summitData from "data/summit.json";
 
 const DEFAULT_STATE = {
   loading: false,

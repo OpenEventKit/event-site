@@ -1,12 +1,22 @@
+const path = require("path");
+
 require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
 });
 
 const {
-  STATIC_CONTENT_DIR_PATH
+  STATIC_CONTENT_DIR_PATH,
+  SITE_SETTINGS_FILE_PATH
 } = require("./src/utils/filePath");
 
-const siteSettings = require("./src/content/site-settings/index.json");
+let siteSettings = require(`./${SITE_SETTINGS_FILE_PATH}`);
+try {
+  const resolvedSiteSettingsFilePath = path.resolve(SITE_SETTINGS_FILE_PATH);
+  siteSettings = require(resolvedSiteSettingsFilePath);
+}
+catch (e) {
+  console.log("Falling back to default site settings.")
+}
 
 module.exports = {
   siteMetadata: {
@@ -83,24 +93,12 @@ module.exports = {
       options: {
         plugins: [
           {
-            resolve: "gatsby-remark-relative-images",
-            options: {
-              name: 'uploads',
-            },
-          },
-          {
             resolve: "gatsby-remark-images",
             options: {
               // It"s important to specify the maxWidth (in pixels) of
               // the content container as this plugin uses this as the
               // base for generating different widths of each image.
               maxWidth: 2048
-            }
-          },
-          {
-            resolve: "gatsby-remark-copy-linked-files",
-            options: {
-              destinationDir: "static",
             }
           }
         ]
