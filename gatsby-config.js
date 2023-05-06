@@ -110,15 +110,35 @@ module.exports = {
         modulePath: `${__dirname}/src/cms/cms.js`,
         manualInit: true,
         enableIdentityWidget: false,
-        /**
-         * Fixes Module not found: Error: Can"t resolve "path" bug.
-         * Webpack 5 doesn"t include browser polyfills for node APIs by default anymore,
-         * so we need to provide them ourselves.
-         * @see https://github.com/postcss/postcss/issues/1509#issuecomment-772097567
-         * @see https://github.com/gatsbyjs/gatsby/issues/31475
-         * @see https://github.com/gatsbyjs/gatsby/issues/31179#issuecomment-844588682
-         */
         customizeWebpackConfig: (config) => {
+          /**
+           * Forces transpiliation of solution js files; required for theming.
+           * @see https://github.com/gatsbyjs/gatsby/issues/14053#issuecomment-493401486
+           */
+          const solutionJsTest = new RegExp(`${__dirname}(?:[^]*)*\.(js|mjs|jsx|ts|tsx)`);
+          const jsTest = /\.(js|mjs|jsx|ts|tsx)$/;
+          const jsRule = config.module.rules.find(
+            (rule) => String(rule.test) === String(jsTest)
+          );
+          const jsRuleInclude = jsRule.include;
+          jsRule.include = (modulePath) => {
+            if (solutionJsTest.test(modulePath)) return true;
+            return jsRuleInclude(modulePath);
+          }
+          config.module.rules = [
+            ...config.module.rules.filter(
+              (rule) => String(rule.test) !== String(jsTest)
+            ),
+            jsRule
+          ];
+           /**
+           * Fixes Module not found: Error: Can"t resolve "path" bug.
+           * Webpack 5 doesn"t include browser polyfills for node APIs by default anymore,
+           * so we need to provide them ourselves.
+           * @see https://github.com/postcss/postcss/issues/1509#issuecomment-772097567
+           * @see https://github.com/gatsbyjs/gatsby/issues/31475
+           * @see https://github.com/gatsbyjs/gatsby/issues/31179#issuecomment-844588682
+           */
           config.resolve = {
             ...config.resolve,
             fallback: {

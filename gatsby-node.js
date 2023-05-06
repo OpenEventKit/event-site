@@ -365,7 +365,7 @@ exports.createPages = ({ actions, graphql }) => {
   });
 };
 
-exports.onCreateWebpackConfig = ({ actions, plugins, loaders }) => {  
+exports.onCreateWebpackConfig = ({ actions, plugins, loaders }) => {
   actions.setWebpackConfig({
     resolve: {
       /**
