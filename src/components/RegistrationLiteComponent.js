@@ -42,7 +42,8 @@ const RegistrationLiteComponent = ({
    allowsNativeAuth,
    allowsOtpAuth,
    checkRequireExtraQuestionsByAttendee,
-   getExtraQuestions
+   getExtraQuestions,
+   children,
 }) => {
     const [isActive, setIsActive] = useState(false);
     const [initialEmailValue, setInitialEmailValue] = useState('');
@@ -63,6 +64,10 @@ const RegistrationLiteComponent = ({
         let backUrl = '/#registration=1';
         return URI.encode(backUrl);
     };
+
+    const handleOpenPopup = () => {
+        setIsActive(true);
+    }
 
     const onClickLogin = (provider) => {
         doLogin(getBackURL(), provider);
@@ -174,12 +179,15 @@ const RegistrationLiteComponent = ({
 
     return (
         <>
-            {registerButton.display &&
-                <button className={`${styles.button} button is-large`} disabled={isActive}
-                        onClick={() => setIsActive(true)}>
-                    <i className={`fa fa-2x fa-edit icon is-large`}/>
-                    <b>{registerButton.text}</b>
-                </button>
+            {children ? 
+                React.cloneElement(children, { onClick: handleOpenPopup })
+                :
+                registerButton.display &&
+                    <button className={`${styles.button} button is-large`} disabled={isActive}
+                            onClick={handleOpenPopup}>
+                        <i className={`fa fa-2x fa-edit icon is-large`}/>
+                        <b>{registerButton.text}</b>
+                    </button>
             }
             <div>
                 <Sentry.ErrorBoundary fallback={SentryFallbackFunction({componentName: 'Registration Lite'})}>
