@@ -59,13 +59,13 @@ const LoginButton = ({
         doLogin(getBackURL(), provider, null, initialEmailValue || null);
     };
 
-    const closeLoginPopup = () => {
+    const handleClosePopup = () => {
         setIsActive(false);
         setOtpLogin(false);
         setOtpError(false);
     }
 
-    const openLoginPopup = () => {
+    const handleOpenPopup = () => {
         setIsActive(true);
         setOtpLogin(false);
         setOtpError(false);
@@ -132,9 +132,9 @@ const LoginButton = ({
     return (
         <div className={styles.loginButtonWrapper}>
             {children ? 
-                React.cloneElement(children, { onClick: openLoginPopup })
+                React.cloneElement(children, { onClick: handleOpenPopup })
                 :
-                <button className={`${styles.button} button is-large`} onClick={() => openLoginPopup()}>
+                <button className={`${styles.button} button is-large`} onClick={handleOpenPopup}>
                     <i className={`fa fa-2x fa-edit icon is-large`} />
                     <b>{loginButton.text}</b>
                 </button>
@@ -147,7 +147,7 @@ const LoginButton = ({
                             <div className={styles.innerWrapper}>
                                 <div className={styles.title}>
                                     <span>{summit.name}</span>
-                                    <i className="fa fa-close" aria-label="close" onClick={() => closeLoginPopup()}></i>
+                                    <i className="fa fa-close" aria-label="close" onClick={handleClosePopup}></i>
                                 </div>
                                 {!otpLogin && <LoginComponent {...loginComponentProps} />}
                                 {otpLogin && <PasswordlessLoginComponent {...passwordlessLoginProps} />}
