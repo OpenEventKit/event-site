@@ -365,8 +365,34 @@ exports.createPages = ({ actions, graphql }) => {
   });
 };
 
-exports.onCreateWebpackConfig = ({ actions, plugins, loaders }) => {
+exports.onCreateWebpackConfig = ({
+  actions,
+  plugins,
+  loaders,
+  getConfig
+}) => {
+  /**
+   * Forces transpiliation of solution js files; required for theming.
+   * @see https://www.gatsbyjs.com/docs/how-to/custom-configuration/add-custom-webpack-config/#modifying-the-babel-loader
+   */
+  const config = getConfig();
+  const jsTestString = "\\.(js|mjs|jsx|ts|tsx)$";
+  const jsTest = new RegExp(jsTestString);
+  const jsRule = config.module.rules.find(
+    (rule) => String(rule.test) === String(jsTest)
+  );
+  const solutionJsTest = new RegExp(`${__dirname}(.*)${jsTestString}`);
+  const jsRuleInclude = jsRule.include;
+  jsRule.include = (modulePath) => {
+    if (solutionJsTest.test(modulePath)) return true;
+    return jsRuleInclude(modulePath);
+  }
   actions.setWebpackConfig({
+    module: {
+      rules: [
+        jsRule
+      ]
+    },
     resolve: {
       /**
        * Webpack removed automatic polyfills for these node APIs in v5,
@@ -382,8 +408,6 @@ exports.onCreateWebpackConfig = ({ actions, plugins, loaders }) => {
       // allows content and data imports to correctly resolve when theming
       modules: [path.resolve(__dirname, "src")]
     },
-    // canvas is a jsdom external dependency
-    externals: ['canvas'],
     // devtool: 'source-map',
     plugins: [
       plugins.define({
@@ -392,6 +416,11 @@ exports.onCreateWebpackConfig = ({ actions, plugins, loaders }) => {
       }),
       new webpack.ProvidePlugin({
         Buffer: ['buffer', 'Buffer'],
+      }),
+      // ignore unused jsdom dependency
+      new webpack.IgnorePlugin({
+        resourceRegExp: /canvas/,
+        contextRegExp: /jsdom$/
       }),
         // upload source maps only if we have an sentry auth token and we are at production
         ...('GATSBY_SENTRY_AUTH_TOKEN' in process.env && process.env.NODE_ENV === 'production') ?[

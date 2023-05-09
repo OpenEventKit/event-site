@@ -113,13 +113,14 @@ module.exports = {
         customizeWebpackConfig: (config) => {
           /**
            * Forces transpiliation of solution js files; required for theming.
-           * @see https://github.com/gatsbyjs/gatsby/issues/14053#issuecomment-493401486
+           * @see https://www.gatsbyjs.com/docs/how-to/custom-configuration/add-custom-webpack-config/#modifying-the-babel-loader
            */
-          const solutionJsTest = new RegExp(`${__dirname}(?:[^]*)*\.(js|mjs|jsx|ts|tsx)`);
-          const jsTest = /\.(js|mjs|jsx|ts|tsx)$/;
+          const jsTestString = "\\.(js|mjs|jsx|ts|tsx)$";
+          const jsTest = new RegExp(jsTestString);
           const jsRule = config.module.rules.find(
             (rule) => String(rule.test) === String(jsTest)
           );
+          const solutionJsTest = new RegExp(`${__dirname}(.*)${jsTestString}`);
           const jsRuleInclude = jsRule.include;
           jsRule.include = (modulePath) => {
             if (solutionJsTest.test(modulePath)) return true;
