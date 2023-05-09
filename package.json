@@ -1,7 +1,7 @@
 {
   "name": "@openeventkit/event-site",
   "description": "Event Site",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "author": "Tipit LLC",
   "dependencies": {
     "@mui/base": "^5.0.0-alpha.114",
