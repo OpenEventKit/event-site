@@ -23,6 +23,7 @@ const LoginButton = ({
     allowsNativeAuth,
     allowsOtpAuth,
     location,
+    children,
 }) => {
     const [isActive, setIsActive] = useState(false);
     const [initialEmailValue, setInitialEmailValue] = useState('');
@@ -130,10 +131,14 @@ const LoginButton = ({
 
     return (
         <div className={styles.loginButtonWrapper}>
-            <button className={`${styles.button} button is-large`} onClick={() => openLoginPopup()}>
-                <i className={`fa fa-2x fa-edit icon is-large`} />
-                <b>{loginButton.text}</b>
-            </button>
+            {children ? 
+                React.cloneElement(children, { onClick: openLoginPopup })
+                :
+                <button className={`${styles.button} button is-large`} onClick={() => openLoginPopup()}>
+                    <i className={`fa fa-2x fa-edit icon is-large`} />
+                    <b>{loginButton.text}</b>
+                </button>
+            }
             {isActive &&
                 <div id={`${styles.modal}`} className="modal is-active">
                     <div className="modal-background"></div>
