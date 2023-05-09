@@ -37,7 +37,7 @@ const getAccessToken = async (config, scope) => {
   try {
     return await client.getToken({ scope });
   } catch (error) {
-    console.log('Access Token error', error);
+    console.log("Access Token error", error);
   }
 };
 
@@ -54,7 +54,7 @@ const SSR_getMarketingSettings = async (baseUrl, summitId) => {
     .then(response => {
       return response.data.data
     })
-    .catch(e => console.log('ERROR: ', e));
+    .catch(e => console.log("ERROR: ", e));
 };
 
 const SSR_GetRemainingPages = async (endpoint, params, lastPage) => {
@@ -84,7 +84,7 @@ const SSR_getEvents = async (baseUrl, summitId, accessToken) => {
     access_token: accessToken,
     per_page: 50,
     page: 1,
-    expand: 'slides, links, videos, media_uploads, type, track, track.allowed_access_levels, location, location.venue, location.floor, speakers, moderator, sponsors, current_attendance, groups, rsvp_template, tags',
+    expand: "slides, links, videos, media_uploads, type, track, track.allowed_access_levels, location, location.venue, location.floor, speakers, moderator, sponsors, current_attendance, groups, rsvp_template, tags",
   }
 
   return await axios.get(endpoint, { params }).then(async ({data}) => {
@@ -95,7 +95,7 @@ const SSR_getEvents = async (baseUrl, summitId, accessToken) => {
 
     return [...data.data, ...remainingPages];
 
-  }).catch(e => console.log('ERROR: ', e));
+  }).catch(e => console.log("ERROR: ", e));
 };
 
 const SSR_getSpeakers = async (baseUrl, summitId, accessToken, filter = null) => {
@@ -109,7 +109,7 @@ const SSR_getSpeakers = async (baseUrl, summitId, accessToken, filter = null) =>
   const endpoint = `${baseUrl}/api/v1/summits/${summitId}/speakers/on-schedule`;
 
   if (filter) {
-    params['filter[]'] = filter;
+    params["filter[]"] = filter;
   }
 
   return await axios.get(
@@ -123,13 +123,13 @@ const SSR_getSpeakers = async (baseUrl, summitId, accessToken, filter = null) =>
 
       return [ ...data.data, ...remainingPages];
     })
-    .catch(e => console.log('ERROR: ', e));
+    .catch(e => console.log("ERROR: ", e));
 };
 
 const SSR_getSummit = async (baseUrl, summitId) => {
 
   const params = {
-    expand: 'event_types,tracks,track_groups,presentation_levels,locations.rooms,locations.floors,order_extra_questions.values,schedule_settings,schedule_settings.filters,schedule_settings.pre_filters',
+    expand: "event_types,tracks,track_groups,presentation_levels,locations.rooms,locations.floors,order_extra_questions.values,schedule_settings,schedule_settings.filters,schedule_settings.pre_filters",
     t: Date.now()
   };
 
@@ -138,7 +138,7 @@ const SSR_getSummit = async (baseUrl, summitId) => {
     { params }
   )
     .then(({ data }) => data)
-    .catch(e => console.log('ERROR: ', e));
+    .catch(e => console.log("ERROR: ", e));
 };
 
 const SSR_getVoteablePresentations = async (baseUrl, summitId, accessToken) => {
@@ -149,8 +149,8 @@ const SSR_getVoteablePresentations = async (baseUrl, summitId, accessToken) => {
     access_token: accessToken,
     per_page: 50,
     page: 1,
-    filter: 'published==1',
-    expand: 'slides, links, videos, media_uploads, type, track, track.allowed_access_levels, location, location.venue, location.floor, speakers, moderator, sponsors, current_attendance, groups, rsvp_template, tags',
+    filter: "published==1",
+    expand: "slides, links, videos, media_uploads, type, track, track.allowed_access_levels, location, location.venue, location.floor, speakers, moderator, sponsors, current_attendance, groups, rsvp_template, tags",
   };
 
   return await axios.get(endpoint,
@@ -162,12 +162,12 @@ const SSR_getVoteablePresentations = async (baseUrl, summitId, accessToken) => {
 
     return [...data.data, ...remainingPages];
   })
-    .catch(e => console.log('ERROR: ', e));
+    .catch(e => console.log("ERROR: ", e));
 };
 
 exports.onPreBootstrap = async () => {
 
-  console.log('onPreBootstrap');
+  console.log("onPreBootstrap");
 
   const summitId = process.env.GATSBY_SUMMIT_ID;
   const summitApiBaseUrl = process.env.GATSBY_SUMMIT_API_BASE_URL;
@@ -186,7 +186,7 @@ exports.onPreBootstrap = async () => {
       tokenPath: process.env.GATSBY_OAUTH_TOKEN_PATH
     },
     options: {
-      authorizationMethod: 'header'
+      authorizationMethod: "header"
     }
   };
 
@@ -194,7 +194,7 @@ exports.onPreBootstrap = async () => {
 
   // extract colors from marketing settings
   marketingSettings.map(({ key, value }) => {
-    if (key.startsWith('color_')) colorSettings[key] = value;
+    if (key.startsWith("color_")) colorSettings[key] = value;
   });
 
   // create required directories
@@ -215,16 +215,16 @@ exports.onPreBootstrap = async () => {
   // summit
   const summit = await SSR_getSummit(summitApiBaseUrl, summitId);
   fileBuildTimes.push({
-    'file': SUMMIT_FILE_PATH,
-    'build_time': Date.now()
+    "file": SUMMIT_FILE_PATH,
+    "build_time": Date.now()
   });
   fs.writeFileSync(SUMMIT_FILE_PATH, JSON.stringify(summit), "utf8");
 
   // Show Events
   const allEvents = await SSR_getEvents(summitApiBaseUrl, summitId, accessToken);
   fileBuildTimes.push({
-    'file': EVENTS_FILE_PATH,
-    'build_time': Date.now()
+    "file": EVENTS_FILE_PATH,
+    "build_time": Date.now()
   });
   console.log(`allEvents ${allEvents.length}`);
 
@@ -234,8 +234,8 @@ exports.onPreBootstrap = async () => {
   allEvents.forEach((e, index) => allEventsIDX[e.id] = index);
 
   fileBuildTimes.push({
-    'file': EVENTS_IDX_FILE_PATH,
-    'build_time': Date.now()
+    "file": EVENTS_IDX_FILE_PATH,
+    "build_time": Date.now()
   });
   fs.writeFileSync(EVENTS_IDX_FILE_PATH, JSON.stringify(allEventsIDX), "utf8");
 
@@ -244,8 +244,8 @@ exports.onPreBootstrap = async () => {
   const allSpeakers = await SSR_getSpeakers(summitApiBaseUrl, summitId, accessToken);
   console.log(`allSpeakers ${allSpeakers.length}`);
   fileBuildTimes.push({
-    'file': SPEAKERS_FILE_PATH,
-    'build_time': Date.now()
+    "file": SPEAKERS_FILE_PATH,
+    "build_time": Date.now()
   });
 
   fs.writeFileSync(SPEAKERS_FILE_PATH, JSON.stringify(allSpeakers), "utf8");
@@ -253,8 +253,8 @@ exports.onPreBootstrap = async () => {
   const allSpeakersIDX = {};
   allSpeakers.forEach((e, index) => allSpeakersIDX[e.id] = index);
   fileBuildTimes.push({
-    'file': SPEAKERS_IDX_FILE_PATH,
-    'build_time': Date.now()
+    "file": SPEAKERS_IDX_FILE_PATH,
+    "build_time": Date.now()
   });
   fs.writeFileSync(SPEAKERS_IDX_FILE_PATH, JSON.stringify(allSpeakersIDX), "utf8");
 
@@ -262,8 +262,8 @@ exports.onPreBootstrap = async () => {
   const allVoteablePresentations = await SSR_getVoteablePresentations(summitApiBaseUrl, summitId, accessToken);
   console.log(`allVoteablePresentations ${allVoteablePresentations.length}`);
   fileBuildTimes.push({
-    'file':VOTEABLE_PRESENTATIONS_FILE_PATH,
-    'build_time': Date.now()
+    "file":VOTEABLE_PRESENTATIONS_FILE_PATH,
+    "build_time": Date.now()
   });
   fs.writeFileSync(VOTEABLE_PRESENTATIONS_FILE_PATH, JSON.stringify(allVoteablePresentations), "utf8");
 
@@ -302,8 +302,8 @@ exports.createPages = ({ actions, graphql }) => {
   // create a catch all redirect
   if (maintenanceMode.enabled) {
     createRedirect({
-      fromPath: '/*',
-      toPath: '/maintenance/'
+      fromPath: "/*",
+      toPath: "/maintenance/"
     });
   }
 
@@ -343,7 +343,7 @@ exports.createPages = ({ actions, graphql }) => {
 
       var slug = fields.slug;
       if (slug.match(/custom-pages/)) {
-        slug = slug.replace('/custom-pages/', '/');
+        slug = slug.replace("/custom-pages/", "/");
       }
 
       const page = {
@@ -401,82 +401,82 @@ exports.onCreateWebpackConfig = ({
        * @see https://viglucci.io/how-to-polyfill-buffer-with-webpack-5
        */
       fallback: {
-        path: require.resolve('path-browserify'),
-        stream: require.resolve('stream-browserify'),
-        buffer: require.resolve('buffer/')
+        path: require.resolve("path-browserify"),
+        stream: require.resolve("stream-browserify"),
+        buffer: require.resolve("buffer/")
       },
       // allows content and data imports to correctly resolve when theming
       modules: [path.resolve(__dirname, "src")]
     },
-    // devtool: 'source-map',
+    // devtool: "source-map",
     plugins: [
       plugins.define({
-        'global.GENTLY': false,
-        'global.BLOB': false
+        "global.GENTLY": false,
+        "global.BLOB": false
       }),
       new webpack.ProvidePlugin({
-        Buffer: ['buffer', 'Buffer'],
+        Buffer: ["buffer", "Buffer"],
       }),
       // ignore unused jsdom dependency
       new webpack.IgnorePlugin({
         resourceRegExp: /canvas/,
         contextRegExp: /jsdom$/
       }),
-        // upload source maps only if we have an sentry auth token and we are at production
-        ...('GATSBY_SENTRY_AUTH_TOKEN' in process.env && process.env.NODE_ENV === 'production') ?[
-            new SentryWebpackPlugin({
-          org: process.env.GATSBY_SENTRY_ORG,
-          project: process.env.GATSBY_SENTRY_PROJECT,
-          ignore: ["app-*", "polyfill-*", "framework-*", "webpack-runtime-*","~partytown"],
-          // Specify the directory containing build artifacts
-          include: [
-              {
-                paths: ['src','public','.cache'],
-                urlPrefix: '~/',
-              },
-              {
-                paths: ['node_modules/upcoming-events-widget/dist'],
-                urlPrefix: '~/node_modules/upcoming-events-widget/dist',
-              },
-              {
-                paths: ['node_modules/summit-registration-lite/dist'],
-                urlPrefix: '~/node_modules/summit-registration-lite/dist',
-              },
-              {
-                paths: ['node_modules/full-schedule-widget/dist'],
-                urlPrefix: '~/node_modules/full-schedule-widget//dist',
-              },
-              {
-                paths: ['node_modules/schedule-filter-widget/dist'],
-                urlPrefix: '~/node_modules/schedule-filter-widget/dist',
-              },
-              {
-                paths: ['node_modules/lite-schedule-widget/dist'],
-                urlPrefix: '~/node_modules/lite-schedule-widget/dist',
-              },
-              {
-                paths: ['node_modules/live-event-widget/dist'],
-                urlPrefix: '~/node_modules/live-event-widget/dist',
-              },
-              {
-                paths: ['node_modules/attendee-to-attendee-widget/dist'],
-                urlPrefix: '~/node_modules/attendee-to-attendee-widget/dist',
-              },
-              {
-                paths: ['node_modules/openstack-uicore-foundation/lib'],
-                urlPrefix: '~/node_modules/openstack-uicore-foundation/lib',
-              },
-              {
-                paths: ['node_modules/speakers-widget/dist'],
-                urlPrefix: '~/node_modules/speakers-widget/dist',
-              },
-          ],
-          // Auth tokens can be obtained from https://sentry.io/settings/account/api/auth-tokens/
-          // and needs the `project:releases` and `org:read` scopes
-          authToken: process.env.GATSBY_SENTRY_AUTH_TOKEN,
-          // Optionally uncomment the line below to override automatic release name detection
-          release: process.env.GATSBY_SENTRY_RELEASE,
-        })]:[],
+      // upload source maps only if we have an sentry auth token and we are at production
+      ...("GATSBY_SENTRY_AUTH_TOKEN" in process.env && process.env.NODE_ENV === "production") ?[
+          new SentryWebpackPlugin({
+        org: process.env.GATSBY_SENTRY_ORG,
+        project: process.env.GATSBY_SENTRY_PROJECT,
+        ignore: ["app-*", "polyfill-*", "framework-*", "webpack-runtime-*", "~partytown"],
+        // Specify the directory containing build artifacts
+        include: [
+            {
+              paths: ["src","public",".cache"],
+              urlPrefix: "~/",
+            },
+            {
+              paths: ["node_modules/upcoming-events-widget/dist"],
+              urlPrefix: "~/node_modules/upcoming-events-widget/dist",
+            },
+            {
+              paths: ["node_modules/summit-registration-lite/dist"],
+              urlPrefix: "~/node_modules/summit-registration-lite/dist",
+            },
+            {
+              paths: ["node_modules/full-schedule-widget/dist"],
+              urlPrefix: "~/node_modules/full-schedule-widget//dist",
+            },
+            {
+              paths: ["node_modules/schedule-filter-widget/dist"],
+              urlPrefix: "~/node_modules/schedule-filter-widget/dist",
+            },
+            {
+              paths: ["node_modules/lite-schedule-widget/dist"],
+              urlPrefix: "~/node_modules/lite-schedule-widget/dist",
+            },
+            {
+              paths: ["node_modules/live-event-widget/dist"],
+              urlPrefix: "~/node_modules/live-event-widget/dist",
+            },
+            {
+              paths: ["node_modules/attendee-to-attendee-widget/dist"],
+              urlPrefix: "~/node_modules/attendee-to-attendee-widget/dist",
+            },
+            {
+              paths: ["node_modules/openstack-uicore-foundation/lib"],
+              urlPrefix: "~/node_modules/openstack-uicore-foundation/lib",
+            },
+            {
+              paths: ["node_modules/speakers-widget/dist"],
+              urlPrefix: "~/node_modules/speakers-widget/dist",
+            },
+        ],
+        // Auth tokens can be obtained from https://sentry.io/settings/account/api/auth-tokens/
+        // and needs the `project:releases` and `org:read` scopes
+        authToken: process.env.GATSBY_SENTRY_AUTH_TOKEN,
+        // Optionally uncomment the line below to override automatic release name detection
+        release: process.env.GATSBY_SENTRY_RELEASE,
+      })]:[],
     ]
   });
 };
