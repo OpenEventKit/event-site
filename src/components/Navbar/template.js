@@ -8,8 +8,6 @@ import styles from "../../styles/navbar.module.scss";
 
 const NavbarTemplate = ({
   data,
-  location,
-  summitPhase,
   summit,
   isLoggedUser,
   idpLoading,

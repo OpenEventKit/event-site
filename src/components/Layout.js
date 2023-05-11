@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import Header from "../components/Header";
+import Navbar from "../components/Navbar";
 import ClockComponent from "../components/ClockComponent";
 import Footer from "../components/Footer";
 
@@ -27,7 +27,7 @@ const TemplateWrapper = ({
   return (
     <div id="container">
       <a className="sr-only skip-to-content" href="#content-wrapper">Skip to content</a>
-      <Header location={location} />
+      <Navbar location={location} />
       <ClockComponent active={isFocus} summit={summit} />
       <main id="content-wrapper">{children}</main>
       <Footer marketing={marketing} />

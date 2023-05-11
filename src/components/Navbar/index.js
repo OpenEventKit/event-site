@@ -26,8 +26,7 @@ const Navbar = ({
   userProfile,
   updateProfile,
   updateProfilePicture,
-  eventRedirect,
-  logo
+  eventRedirect
 }) => {
 
   // we store this calculation to use it later
@@ -110,7 +109,6 @@ const Navbar = ({
     <NavbarTemplate
       data={navbarContent.items.filter(showItem)}
       summit={summit}
-      summitPhase={summitPhase}
       isLoggedUser={isLoggedUser}
       idpLoading={idpLoading}
       idpProfile={idpProfile}
@@ -118,7 +116,7 @@ const Navbar = ({
       updateProfile={updateProfile}
       updateProfilePicture={updateProfilePicture}
       defaultPath={defaultPath}
-      logo={logo}
+      logo={summit?.logo}
     />
   )
 };
@@ -128,10 +126,14 @@ const mapStateToProps = ({
   clockState,
   settingState,
   summitState,
+  loggedUserState,
   userState
 }) => ({
   summitPhase: clockState.summit_phase,
   summit: summitState.summit,
+  isLoggedUser: loggedUserState.isLoggedUser,
+  idpProfile: userState.idpProfile,
+  idpLoading: userState.loadingIDP,
   userProfile: userState.userProfile,
   // TODO: move to site settings i/o marketing page settings
   eventRedirect: settingState.marketingPageSettings.eventRedirect
