@@ -130,8 +130,7 @@ const RegistrationLiteComponent = ({
         getAccessToken: getAccessToken,
         closeWidget:  () => {
             // reload user profile
-            // NOTE: We need to catch the rejected promise here, or else the app will crash (locally, at least).
-            getUserProfile();
+            getUserProfile().catch((e) => console.log("getUserProfile error. Not logged in?"));
             setIsActive(false);
         },
         goToExtraQuestions: () => {
