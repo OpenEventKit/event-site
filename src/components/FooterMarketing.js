@@ -1,7 +1,7 @@
 import * as React from "react";
 import Link from "./Link";
 
-import footerContent from "../content/footer/index.json";
+import footerContent from "content/footer/index.json";
 
 import styles from "../styles/footer.module.scss";
 
@@ -22,11 +22,7 @@ const FooterMarketing = () => (
       {footerContent.social.networks.map((net, index) => (
         net.display &&
         <Link href={net.link} className={styles.link} key={index}>
-          {net.icon === 'fa-facebook' ?
-            <img alt="logo" style={{ width: 25, margin: '-10px 10px 0 0' }} src="/img/f_logo_RGB-White_58.png" />
-            :
-            <i className={`fa icon is-large ${net.icon}`} />
-          }
+          <i className={`fa icon is-large ${net.icon}`} />
         </Link>
       ))}
     </div>
