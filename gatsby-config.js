@@ -18,6 +18,19 @@ catch (e) {
   console.log("Falling back to default site settings.")
 }
 
+const relativeContentDir = `${__dirname}/${STATIC_CONTENT_DIR_PATH}`;
+const resolvedContentDir = path.resolve(STATIC_CONTENT_DIR_PATH);
+const contentDirs = [relativeContentDir];
+if (relativeContentDir !== resolvedContentDir) {
+  contentDirs.unshift(resolvedContentDir);
+};
+const gatsbySourceFilesystemContentConfigs = contentDirs.map(contentDir => ({
+  resolve: "gatsby-source-filesystem",
+  options: {
+    path: contentDir
+  }
+}));
+
 module.exports = {
   siteMetadata: {
     title: `${siteSettings?.siteMetadata?.title || process.env.GATSBY_METADATA_TITLE || 'Event Site'}`,
@@ -77,13 +90,7 @@ module.exports = {
         name: "pages"
       }
     },
-    {
-      resolve: "gatsby-source-filesystem",
-      options: {
-        path: `${__dirname}/${STATIC_CONTENT_DIR_PATH}`,
-        name: "content"
-      }
-    },
+    ...gatsbySourceFilesystemContentConfigs,
     "gatsby-plugin-image",
     "gatsby-plugin-sharp",
     "gatsby-transformer-sharp",
