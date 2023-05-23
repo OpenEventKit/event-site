@@ -17,7 +17,6 @@ import { PAGE_RESTRICTIONS } from "../../cms/config/collections/configurationsCo
 import navbarContent from "content/navbar/index.json";
 
 const Navbar = ({
-  location,
   summitPhase,
   summit,
   isLoggedUser,
