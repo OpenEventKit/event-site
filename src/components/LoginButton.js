@@ -23,6 +23,7 @@ const LoginButton = ({
     allowsNativeAuth,
     allowsOtpAuth,
     location,
+    style = {},
     children,
 }) => {
     const [isActive, setIsActive] = useState(false);
@@ -130,7 +131,7 @@ const LoginButton = ({
     const { loginButton } = marketingPageSettings.hero.buttons;
 
     return (
-        <div className={styles.loginButtonWrapper}>
+        <div style={style} className={styles.loginButtonWrapper}>
             {children ? 
                 React.cloneElement(children, { onClick: handleOpenPopup })
                 :
