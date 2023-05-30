@@ -2,9 +2,9 @@ import { START_LOADING, STOP_LOADING } from "openstack-uicore-foundation/lib/uti
 import { LOGOUT_USER } from "openstack-uicore-foundation/lib/security/actions";
 import { RESET_STATE, SYNC_DATA, UPDATE_LAST_CHECK_FOR_NOVELTIES } from "../actions/base-actions-definitions";
 
+import colors from "data/colors.json";
 // TODO: dont store build timestamps in site-settings, use another file
 import settings from "content/site-settings/index.json";
-import colors from "content/colors.json";
 // TODO: rename to lobby page settings?
 import homeSettings from "content/home-settings.json";
 // TODO: should this live in reducer or should be accessed though graphql?

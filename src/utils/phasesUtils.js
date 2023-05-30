@@ -2,7 +2,7 @@ import {
   MARKETING_SETTINGS_KEYS
 } from "./useMarketingSettings";
 
-import marketingSettings from "content/marketing-settings.json";
+import marketingSettings from "data/marketing-settings.json";
 
 const summitDeltaStartTime = marketingSettings.find(
   (setting) => setting.key === MARKETING_SETTINGS_KEYS.summitDeltaStartTime

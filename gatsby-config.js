@@ -1,35 +1,22 @@
 const path = require("path");
 
 require("dotenv").config({
-  path: `.env.${process.env.NODE_ENV}`,
+  path: `.env.${process.env.NODE_ENV}`
 });
 
 const {
   STATIC_CONTENT_DIR_PATH,
-  SITE_SETTINGS_FILE_PATH
+  SITE_SETTINGS_FILE_PATH,
+  MARKETING_SETTINGS_FILE_PATH
 } = require("./src/utils/filePath");
 
 let siteSettings = require(`./${SITE_SETTINGS_FILE_PATH}`);
 try {
-  const resolvedSiteSettingsFilePath = path.resolve(SITE_SETTINGS_FILE_PATH);
-  siteSettings = require(resolvedSiteSettingsFilePath);
+  siteSettings = require(path.resolve(SITE_SETTINGS_FILE_PATH));
 }
 catch (e) {
   console.log("Falling back to default site settings.")
 }
-
-const relativeContentDir = `${__dirname}/${STATIC_CONTENT_DIR_PATH}`;
-const resolvedContentDir = path.resolve(STATIC_CONTENT_DIR_PATH);
-const contentDirs = [relativeContentDir];
-if (relativeContentDir !== resolvedContentDir) {
-  contentDirs.unshift(resolvedContentDir);
-};
-const gatsbySourceFilesystemContentConfigs = contentDirs.map(contentDir => ({
-  resolve: "gatsby-source-filesystem",
-  options: {
-    path: contentDir
-  }
-}));
 
 module.exports = {
   siteMetadata: {
@@ -90,7 +77,20 @@ module.exports = {
         name: "pages"
       }
     },
-    ...gatsbySourceFilesystemContentConfigs,
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        path: path.resolve(MARKETING_SETTINGS_FILE_PATH),
+        name: "marketingSettings"
+      }
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        path: path.resolve(STATIC_CONTENT_DIR_PATH),
+        name: "content"
+      }
+    },
     "gatsby-plugin-image",
     "gatsby-plugin-sharp",
     "gatsby-transformer-sharp",

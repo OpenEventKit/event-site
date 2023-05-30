@@ -2,8 +2,6 @@ import * as Sentry from "@sentry/gatsby";
 import { RewriteFrames as RewriteFramesIntegration } from "@sentry/integrations";
 import ReduxWrapper from "./src/state/ReduxWrapper";
 
-import colors from "./src/content/colors.json";
-
 import smoothscroll from "smoothscroll-polyfill";
 import "what-input";
 
@@ -11,6 +9,8 @@ import "what-input";
 import "./src/styles/bulma.scss";
 // import base styles
 import "./src/styles/style.scss";
+
+import colors from "data/colors.json";
 
 // smooth scroll polyfill needed for Safari
 smoothscroll.polyfill();

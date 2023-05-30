@@ -1,10 +1,10 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import maintenanceMode from '../content/maintenance.json';
+import * as React from "react";
+import PropTypes from "prop-types";
+import maintenanceMode from "content/maintenance.json";
 
-import HeroComponent from '../components/HeroComponent';
+import HeroComponent from "../components/HeroComponent";
 
-import '../styles/bulma.scss';
+import "../styles/bulma.scss";
 
 const MaintenancePageTemplate = ({
   title,

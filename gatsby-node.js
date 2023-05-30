@@ -15,8 +15,9 @@ const myEnv = require("dotenv").config({
 
 const {
   REQUIRED_DIR_PATHS,
-  COLORS_SASS_FILE_PATH,
+  DEFAULT_COLORS_FILE_PATH,
   COLORS_FILE_PATH,
+  COLORS_SASS_FILE_PATH,
   SITE_SETTINGS_FILE_PATH,
   HOME_SETTINGS_FILE_PATH,
   SUMMIT_FILE_PATH,
@@ -172,7 +173,7 @@ exports.onPreBootstrap = async () => {
   const summitId = process.env.GATSBY_SUMMIT_ID;
   const summitApiBaseUrl = process.env.GATSBY_SUMMIT_API_BASE_URL;
   const marketingSettings = await SSR_getMarketingSettings(process.env.GATSBY_MARKETING_API_BASE_URL, summitId);
-  const colorSettings = fs.existsSync(COLORS_FILE_PATH) ? JSON.parse(fs.readFileSync(COLORS_FILE_PATH)) : {};
+  const colorSettings = fs.existsSync(COLORS_FILE_PATH) ? JSON.parse(fs.readFileSync(COLORS_FILE_PATH)) : require(`./${DEFAULT_COLORS_FILE_PATH}`);
   const homeSettings = fs.existsSync(HOME_SETTINGS_FILE_PATH) ? JSON.parse(fs.readFileSync(HOME_SETTINGS_FILE_PATH)) : {};
   const globalSettings = fs.existsSync(SITE_SETTINGS_FILE_PATH) ? JSON.parse(fs.readFileSync(SITE_SETTINGS_FILE_PATH)) : {};
 
