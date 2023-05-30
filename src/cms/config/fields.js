@@ -111,13 +111,11 @@ export const fileField = ({
 export const selectField = ({
   label = "Select",
   name = "select",
-  required = false,
   options = [],
   ...rest
 } = {}) => ({
   label,
   name,
-  required,
   widget: "select",
   options,
   ...rest
@@ -126,12 +124,10 @@ export const selectField = ({
 export const selectOption = ({
   label = "SelectOption",
   value,
-  required = false,
   ...rest
 } = {}) => ({
   label,
   value,
-  required,
   ...rest
 });
 

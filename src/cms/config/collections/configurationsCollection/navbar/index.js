@@ -75,7 +75,6 @@ const navbar = {
           label: "Show only on page",
           name: "pageRestriction",
           multiple: true,
-          required: false,
           default: [PAGE_RESTRICTIONS.any],
           options: getPageRestrictionsOptions()
         })

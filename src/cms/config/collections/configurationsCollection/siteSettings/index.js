@@ -84,7 +84,6 @@ const siteSettings = {
             selectField({
               label: "Default Filter Criteria",
               name: "defaultScope",
-              required: false,
               default: 'page',
               options: [
                 selectOption({

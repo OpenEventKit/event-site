@@ -343,8 +343,8 @@ exports.createPages = ({ actions, graphql }) => {
       const { id, fields, frontmatter: { templateKey } } = edge.node;
 
       var slug = fields.slug;
-      if (slug.match(/custom-pages/)) {
-        slug = slug.replace("/custom-pages/", "/");
+      if (slug.match(/content-pages/)) {
+        slug = slug.replace("/content-pages/", "/");
       }
 
       const page = {

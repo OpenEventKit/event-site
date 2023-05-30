@@ -6,6 +6,7 @@ require("dotenv").config({
 
 const {
   STATIC_CONTENT_DIR_PATH,
+  CONTENT_PAGES_DIR_PATH,
   SITE_SETTINGS_FILE_PATH,
   MARKETING_SETTINGS_FILE_PATH
 } = require("./src/utils/filePath");
@@ -80,8 +81,8 @@ module.exports = {
     {
       resolve: "gatsby-source-filesystem",
       options: {
-        path: path.resolve(MARKETING_SETTINGS_FILE_PATH),
-        name: "marketingSettings"
+        path: path.resolve(CONTENT_PAGES_DIR_PATH),
+        name: "contentPages"
       }
     },
     {
@@ -89,6 +90,13 @@ module.exports = {
       options: {
         path: path.resolve(STATIC_CONTENT_DIR_PATH),
         name: "content"
+      }
+    },
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        path: path.resolve(MARKETING_SETTINGS_FILE_PATH),
+        name: "marketingSettings"
       }
     },
     "gatsby-plugin-image",

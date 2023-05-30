@@ -6,7 +6,9 @@ import { Redirect } from "@gatsbyjs/reach-router";
 import Layout from "../components/Layout";
 import Content, { HTMLContent } from "../components/Content";
 
-export const CustomPageTemplate = ({
+import { USER_REQUIREMENTS } from "../cms/config/collections/contentPagesCollection"
+
+export const ContentPageTemplate = ({
   title,
   content,
   contentComponent
@@ -21,24 +23,24 @@ export const CustomPageTemplate = ({
   )
 }
 
-CustomPageTemplate.propTypes = {
+ContentPageTemplate.propTypes = {
   title: PropTypes.string,
   content: PropTypes.string,
   contentComponent: PropTypes.func,
 }
 
-const CustomPage = ({ data, isLoggedUser, hasTicket, isAuthorized }) => {
+const ContentPage = ({ data, isLoggedUser, hasTicket, isAuthorized }) => {
   const { frontmatter: {title, userRequirement}, html } = data.markdownRemark
   // if isAuthorized byoass the AUTHZ check
   if (!isAuthorized && (
-    (userRequirement === 'LOGGED_IN' && !isLoggedUser) || (userRequirement === 'HAS_TICKET' && !hasTicket)
+    (userRequirement === USER_REQUIREMENTS.loggedIn && !isLoggedUser) || (userRequirement === USER_REQUIREMENTS.hasTicket && !hasTicket)
   )) {
     return <Redirect to='/' noThrow />
   }
 
   return (
     <Layout>
-      <CustomPageTemplate
+      <ContentPageTemplate
         contentComponent={HTMLContent}
         title={title}
         content={html}
@@ -47,7 +49,7 @@ const CustomPage = ({ data, isLoggedUser, hasTicket, isAuthorized }) => {
   )
 }
 
-CustomPage.propTypes = {
+ContentPage.propTypes = {
   data: PropTypes.shape({
     markdownRemark: PropTypes.shape({
       frontmatter: PropTypes.object,
@@ -63,9 +65,9 @@ const mapStateToProps = ({ loggedUserState, userState }) => ({
   isAuthorized: userState.isAuthorized
 });
 
-export default connect(mapStateToProps, null)(CustomPage);
+export default connect(mapStateToProps, null)(ContentPage);
 
-export const customPageQuery = graphql`
+export const contentPageQuery = graphql`
   query ($id: String!) {    
     markdownRemark(id: { eq: $id }) {
       html

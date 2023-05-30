@@ -6,7 +6,8 @@ import {
 
 export const collectionDefaults = ({
   label,
-  name
+  name,
+  editor = { preview: false }
 }) => ({
   label,
   name,
@@ -15,9 +16,7 @@ export const collectionDefaults = ({
    */
   media_folder: "",
   public_folder: "",
-  editor: {
-    preview: false
-  }
+  editor: editor
 });
 
 export const imageWithAltFieldset = ({

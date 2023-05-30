@@ -6,11 +6,11 @@ import "./cms-utils";
 import { Widget as FileRelationWidget } from "@ncwidgets/file-relation";
 import { Widget as IdWidget } from "@ncwidgets/id";
 
-import CustomPagePreview from "./preview-templates/CustomPagePreview";
+import ContentPagePreview from "./preview-templates/ContentPagePreview";
 
 CMS.init({ config });
 
 CMS.registerWidget(IdWidget);
 CMS.registerWidget(FileRelationWidget);
 
-CMS.registerPreviewTemplate("pages", CustomPagePreview);
+CMS.registerPreviewTemplate("contentPages", ContentPagePreview);

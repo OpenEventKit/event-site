@@ -1,9 +1,11 @@
 import configurationsCollection from "./collections/configurationsCollection";
 import defaultPagesCollection from "./collections/defaultPagesCollection";
+import contentPagesCollection from "./collections/contentPagesCollection";
 
 export const collections = [
   configurationsCollection,
-  defaultPagesCollection
+  defaultPagesCollection,
+  contentPagesCollection
 ];
 
 const config = {
