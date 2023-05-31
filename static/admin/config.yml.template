@@ -201,8 +201,7 @@ collections:
               {label: "Image", name: "image", widget: object, required: false, fields: [
                 {label: "File", name: "file", widget: image, default: '', required: false},
                 {label: "Alt", name: "alt", widget: string, required: false},
-              ]},
-              {label: "Copy", name: copy, widget: text, required: false}
+              ]}
             ]}
           - {label: "Featured Event - Live Event Widget", name: live_now_featured_event_id, widget: number, required: false, default: null}
   - name: "marketing"

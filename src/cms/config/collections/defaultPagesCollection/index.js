@@ -12,7 +12,7 @@ const defaultPagesCollection = {
   }),
   files: [
     marketingPage,
-    //lobbyPage
+    lobbyPage
   ]
 };
 

@@ -36,7 +36,7 @@ const marketingPage = {
         }),
         stringField({
           label: "Subtitle",
-          name: "subtitle",
+          name: "subTitle",
           required: false
         }),
         stringField({

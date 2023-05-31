@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { DiscussionEmbed } from "disqus-react";
-import { withMarketingSettings } from "@utils/useMarketingSettings";
+import { withMarketingSettings, MARKETING_SETTINGS_KEYS } from "@utils/useMarketingSettings";
 import { getEnvVariable, DISQUS_SHORTNAME } from "@utils/envVariables";
 import { getDisqusSSO } from "../actions/user-actions";
 import PropTypes from "prop-types";
@@ -51,8 +51,7 @@ const DisqusComponent = class extends React.Component {
       page,
       sponsor,
       event,
-      getMarketingSettingByKey,
-      MARKETING_SETTINGS_KEYS
+      getMarketingSettingByKey
     } = this.props;
 
     let threadsBy = getMarketingSettingByKey(MARKETING_SETTINGS_KEYS.disqusThreadsBy) ?? "event";
@@ -102,8 +101,7 @@ const DisqusComponent = class extends React.Component {
       page,
       sponsor,
       event,
-      getMarketingSettingByKey,
-      MARKETING_SETTINGS_KEYS
+      getMarketingSettingByKey
     } = this.props;
 
     let suffix = '';

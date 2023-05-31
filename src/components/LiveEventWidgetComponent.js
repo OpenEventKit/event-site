@@ -9,35 +9,40 @@ import 'live-event-widget/dist/index.css';
 // https://cdnjs.cloudflare.com/ajax/libs/awesome-bootstrap-checkbox/1.0.2/awesome-bootstrap-checkbox.min.css
 // injected through HeadComponents
 
+import useMarketingSettings, { MARKETING_SETTINGS_KEYS } from "@utils/useMarketingSettings";
 import { SentryFallbackFunction } from "./SentryErrorComponent";
 
-const LiveEventWidgetComponent = ({allEvents, summit, colorSettings, homeSettings, className = 'live-event-container', ...rest}) => {
+const LiveEventWidgetComponent = ({
+  allEvents,
+  summit,
+  colorSettings,
+  className = "live-event-container",
+  ...rest
+}) => {
+  const { getSettingByKey } = useMarketingSettings();
+  const defaultImage = getSettingByKey(MARKETING_SETTINGS_KEYS.schedultDefaultImage);
+  const widgetProps = {
+    title: "",
+    defaultImage: defaultImage,
+    eventsData: allEvents,
+    summitData: summit,
+    marketingData: colorSettings,
+    ...rest
+  };
 
-    const widgetProps = {
-        title: "",
-        defaultImage: homeSettings.schedule_default_image,
-        eventsData: allEvents,
-        summitData: summit,
-        marketingData: colorSettings,
-        ...rest
-    };
-
-    return (
-        <>
-            <div className={className}>
-                <Sentry.ErrorBoundary fallback={SentryFallbackFunction({componentName: 'Live Event'})}>
-                    <LiveEventWidget {...widgetProps} />
-                </Sentry.ErrorBoundary>
-            </div>
-        </>
-    )
+  return (
+    <div className={className}>
+      <Sentry.ErrorBoundary fallback={SentryFallbackFunction({componentName: 'Live Event'})}>
+        <LiveEventWidget {...widgetProps} />
+      </Sentry.ErrorBoundary>
+    </div>
+  )
 };
 
 const mapStateToProps = ({ summitState, allSchedulesState, settingState }) => ({
-    summit: summitState.summit,
-    allEvents: allSchedulesState.allEvents,
-    colorSettings: settingState.colorSettings,
-    homeSettings: settingState.homeSettings,
+  summit: summitState.summit,
+  allEvents: allSchedulesState.allEvents,
+  colorSettings: settingState.colorSettings
 });
 
-export default connect(mapStateToProps, { })(LiveEventWidgetComponent)
+export default connect(mapStateToProps, { })(LiveEventWidgetComponent);

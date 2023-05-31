@@ -5,8 +5,7 @@ import { RESET_STATE, SYNC_DATA, UPDATE_LAST_CHECK_FOR_NOVELTIES } from "../acti
 import colors from "data/colors.json";
 // TODO: dont store build timestamps in site-settings, use another file
 import settings from "content/site-settings/index.json";
-// TODO: rename to lobby page settings?
-import homeSettings from "content/home-settings.json";
+import lobbyPageSettings from "content/lobby-page/index.json";
 // TODO: should this live in reducer or should be accessed though graphql?
 import marketingPageSettings from "content/marketing-page/index.json";
 import postersPages from "content/posters-pages.json";
@@ -21,7 +20,7 @@ const DEFAULT_STATE = {
   widgets: settings.widgets,
   colorSettings: colors,
   marketingPageSettings: marketingPageSettings,
-  homeSettings: homeSettings,
+  lobbyPageSettings: lobbyPageSettings,
   posterPagesSettings: postersPages,
   // this keeps tracks of last data synch
   lastDataSync: settings.lastBuild,

@@ -19,7 +19,7 @@ const {
   COLORS_FILE_PATH,
   COLORS_SASS_FILE_PATH,
   SITE_SETTINGS_FILE_PATH,
-  HOME_SETTINGS_FILE_PATH,
+  LOBBY_PAGE_FILE_PATH,
   SUMMIT_FILE_PATH,
   EVENTS_FILE_PATH,
   EVENTS_IDX_FILE_PATH,
@@ -174,8 +174,8 @@ exports.onPreBootstrap = async () => {
   const summitApiBaseUrl = process.env.GATSBY_SUMMIT_API_BASE_URL;
   const marketingSettings = await SSR_getMarketingSettings(process.env.GATSBY_MARKETING_API_BASE_URL, summitId);
   const colorSettings = fs.existsSync(COLORS_FILE_PATH) ? JSON.parse(fs.readFileSync(COLORS_FILE_PATH)) : require(`./${DEFAULT_COLORS_FILE_PATH}`);
-  const homeSettings = fs.existsSync(HOME_SETTINGS_FILE_PATH) ? JSON.parse(fs.readFileSync(HOME_SETTINGS_FILE_PATH)) : {};
   const globalSettings = fs.existsSync(SITE_SETTINGS_FILE_PATH) ? JSON.parse(fs.readFileSync(SITE_SETTINGS_FILE_PATH)) : {};
+  const lobbyPageSettings = fs.existsSync(LOBBY_PAGE_FILE_PATH) ? JSON.parse(fs.readFileSync(LOBBY_PAGE_FILE_PATH)) : {};
 
   const config = {
     client: {
@@ -205,9 +205,9 @@ exports.onPreBootstrap = async () => {
     }
   });
 
-  fs.writeFileSync(COLORS_FILE_PATH, JSON.stringify(colorSettings), "utf8");
   fs.writeFileSync(MARKETING_SETTINGS_FILE_PATH, JSON.stringify(marketingSettings), "utf8");
-  fs.writeFileSync(HOME_SETTINGS_FILE_PATH, JSON.stringify(homeSettings), "utf8");
+  fs.writeFileSync(COLORS_FILE_PATH, JSON.stringify(colorSettings), "utf8");
+  fs.writeFileSync(LOBBY_PAGE_FILE_PATH, JSON.stringify(lobbyPageSettings), "utf8");
 
   let sassColors = "";
   Object.entries(colorSettings).forEach(([key, value]) => sassColors += `$${key} : ${value};\n`);

@@ -1,25 +1,24 @@
-import React from "react"
-import { Router, Location } from "@reach/router"
-import { connect } from 'react-redux'
-import HomePage from "../../templates/home-page"
-import EventPage from "../../templates/event-page"
+import * as React from "react";
+import { Router, Location } from "@reach/router";
+import { connect } from "react-redux";
+import LobbyPage from "../../templates/lobby-page";
+import EventPage from "../../templates/event-page";
 import PostersPage from "../../templates/posters-page";
 import SchedulePage from "../../templates/schedule-page";
 import SponsorPage from "../../templates/sponsor-page"
 import ExpoHallPage from "../../templates/expo-hall-page"
 import FullProfilePage from "../../templates/full-profile-page"
-import WithAuthzRoute from '../../routes/WithAuthzRoute'
-import WithAuthRoute from '../../routes/WithAuthRoute';
+import WithAuthzRoute from "../../routes/WithAuthzRoute"
+import WithAuthRoute from "../../routes/WithAuthRoute";
 import ExtraQuestionsPage from "../../templates/extra-questions-page"
 import ShowOpenRoute from "../../routes/ShowOpenRoute";
 import WithBadgeRoute from "../../routes/WithBadgeRoute";
 import PosterDetailPage from "../../templates/poster-detail-page";
-import MyTicketsPage from '../../templates/my-tickets-page';
+import MyTicketsPage from "../../templates/my-tickets-page";
 import WithTicketRoute from "../../routes/WithTicketRoute";
 import withRealTimeUpdates from "../../utils/real_time_updates/withRealTimeUpdates";
 import withFeedsWorker from "../../utils/withFeedsWorker";
 import Link from "../../components/Link";
-
 
 const App = ({ isLoggedUser, user, summit_phase, allowClick = true }) => {
 
@@ -32,7 +31,7 @@ const App = ({ isLoggedUser, user, summit_phase, allowClick = true }) => {
             location={location}
             schedKey="schedule-main"
             scheduleProps={{ subtitle:
-              <Link to={'/a/my-schedule'}>Show My Schedule</Link>
+              <Link to={"/a/my-schedule"}>Show My Schedule</Link>
             }}
             allowClick={allowClick}
           />
@@ -52,8 +51,10 @@ const App = ({ isLoggedUser, user, summit_phase, allowClick = true }) => {
                   summit_phase={summit_phase}
                   isLoggedIn={isLoggedUser}
                   user={user}
-                  scheduleProps={{ title: 'My Schedule', showSync: true, subtitle:
-                        <Link to={'/a/schedule'}>Show Schedule</Link>
+                  scheduleProps={{
+                    title: "My Schedule",
+                    showSync: true,
+                    subtitle: <Link to={"/a/schedule"}>Show Schedule</Link>
                   }}
                   schedKey="my-schedule-main"
                   allowClick={allowClick}
@@ -62,7 +63,7 @@ const App = ({ isLoggedUser, user, summit_phase, allowClick = true }) => {
                   <WithBadgeRoute path="/event/:eventId" summit_phase={summit_phase} isLoggedIn={isLoggedUser} user={user} location={location}>
                     <EventPage path="/" summit_phase={summit_phase} isLoggedIn={isLoggedUser} user={user} location={location} />
                   </WithBadgeRoute>
-                  <HomePage path="/" isLoggedIn={isLoggedUser} user={user} location={location} />
+                  <LobbyPage path="/" isLoggedIn={isLoggedUser} user={user} location={location} />
                   <SponsorPage path="/sponsor/:sponsorId" summit_phase={summit_phase} isLoggedIn={isLoggedUser} user={user} location={location} />
                   <ExpoHallPage path="/sponsors/" summit_phase={summit_phase} isLoggedIn={isLoggedUser} user={user} location={location} />
                 </ShowOpenRoute>
@@ -85,4 +86,4 @@ const mapStateToProps = ({ loggedUserState, userState, clockState, settingState,
 });
 
 export default connect(mapStateToProps, {
-})(withFeedsWorker(withRealTimeUpdates(App)))
+})(withFeedsWorker(withRealTimeUpdates(App)));

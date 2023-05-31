@@ -29,7 +29,7 @@ const useMarketingSettings = () => {
   const { allMarketingSettingsJson } = useStaticQuery(marketingSettingsQuery);
   const getSettingByKey = (key) =>
     allMarketingSettingsJson.nodes.find(setting => setting.key === key)?.value;
-  return { MARKETING_SETTINGS_KEYS, getSettingByKey };
+  return { getSettingByKey };
 };
 
 export default useMarketingSettings;
@@ -37,14 +37,10 @@ export default useMarketingSettings;
 // HOC for use on class based components 
 export const withMarketingSettings = (Component) => (
   (props) => {
-    const {
-      MARKETING_SETTINGS_KEYS,
-      getSettingByKey
-    } = useMarketingSettings();
+    const { getSettingByKey } = useMarketingSettings();
     return (
       <Component
         {...props}
-        MARKETING_SETTINGS_KEYS={MARKETING_SETTINGS_KEYS}
         getMarketingSettingByKey={getSettingByKey}
       />
     );

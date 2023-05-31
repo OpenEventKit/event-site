@@ -16,7 +16,7 @@ export const marketingPageQuery = graphql`
     marketingPageJson {
       hero {
         title
-        subtitle
+        subTitle
         dateLayout
         date
         time

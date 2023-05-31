@@ -9,6 +9,7 @@ import { callAction, getShareLink } from "../actions/schedule-actions";
 import Schedule from "full-schedule-widget/dist";
 import "full-schedule-widget/dist/index.css";
 
+import useMarketingSettings, { MARKETING_SETTINGS_KEYS } from "@utils/useMarketingSettings";
 import { SentryFallbackFunction } from "./SentryErrorComponent";
 
 const FullSchedule = ({
@@ -16,7 +17,6 @@ const FullSchedule = ({
   className,
   userProfile,
   colorSettings,
-  homeSettings,
   addToSchedule,
   removeFromSchedule,
   callAction,
@@ -26,13 +26,15 @@ const FullSchedule = ({
   schedKey,
   ...rest
 }) => {
+  const { getSettingByKey } = useMarketingSettings();
+  const defaultImage = getSettingByKey(MARKETING_SETTINGS_KEYS.schedultDefaultImage);
   const componentProps = {
     title: "Schedule",
     summit,
     marketingSettings: colorSettings,
     userProfile,
     withThumbs: false,
-    defaultImage: homeSettings.schedule_default_image,
+    defaultImage: defaultImage,
     showSendEmail: false,
     onStartChat: null,
     shareLink: getShareLink(filters, view),
@@ -57,7 +59,7 @@ const FullSchedule = ({
 
   return (
     <div className={className || "schedule-container"}>
-      <Sentry.ErrorBoundary fallback={SentryFallbackFunction({componentName: 'Full Schedule'})}>
+      <Sentry.ErrorBoundary fallback={SentryFallbackFunction({componentName: "Full Schedule"})}>
         <Schedule {...componentProps} />
       </Sentry.ErrorBoundary>
     </div>
@@ -67,7 +69,6 @@ const FullSchedule = ({
 const mapStateToProps = ({ userState, settingState }) => ({
   userProfile: userState.userProfile,
   colorSettings: settingState.colorSettings,
-  homeSettings: settingState.homeSettings,
   allowClick: settingState?.widgets?.schedule?.allowClick
 });
 

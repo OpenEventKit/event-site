@@ -42,7 +42,7 @@ module.exports = `
   }
   type MarketingPageHero {
     title: String
-    subtitle: String
+    subTitle: String
     date: String
     time: String
     dateLayout: Boolean

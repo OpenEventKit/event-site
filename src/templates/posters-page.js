@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { connect } from 'react-redux';
 import { navigate } from "gatsby";
 import Layout from '../components/Layout';
-import PageHeader from '../components/page-header';
+import PageHeader from '../components/PageHeader';
 import PosterGrid from '../components/poster-grid';
 import ScheduleFilters from '../components/ScheduleFilters';
 import PosterHeaderFilter from '../components/poster-header-filter';

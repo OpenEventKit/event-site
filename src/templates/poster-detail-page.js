@@ -27,7 +27,7 @@ import { castPresentationVote, uncastPresentationVote } from '../actions/user-ac
 import { PHASES } from '../utils/phasesUtils';
 import { isAuthorizedBadge } from '../utils/authorizedGroups';
 
-import useMarketingSettings from "@utils/useMarketingSettings";
+import useMarketingSettings, { MARKETING_SETTINGS_KEYS } from "@utils/useMarketingSettings";
 
 export const PosterDetailPage = ({
   location,
@@ -138,10 +138,7 @@ export const PosterDetailPage = ({
     setPreviousVotingPeriods(votingPeriods);
   }, [posterTrackGroups, votingPeriods]);
 
-  const {
-    MARKETING_SETTINGS_KEYS,
-    getSettingByKey
-  } = useMarketingSettings();
+  const { getSettingByKey } = useMarketingSettings();
 
   if (loading) return <HeroComponent title="Loading poster" />;
 
