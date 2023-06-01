@@ -50,12 +50,14 @@ export const LobbyPageTemplate = class extends React.Component {
   } = this.props;
 
     return (
-      <React.Fragment>
+      <>
+        { hero &&
         <PageHeader
           title={hero.title}
           subtitle={hero.subTitle}
           backgroundImageSrc={hero.image?.src}
         />
+        }
         <div className="px-5 py-5 mb-6">
           <div className="columns">
             <div className="column is-one-quarter">
@@ -89,7 +91,7 @@ export const LobbyPageTemplate = class extends React.Component {
                 allEventsLink={<Link to="/a/schedule">View all <span
                   className="sr-only">events</span></Link>}
               />
-              {centerColumn.speakers.showTodaySpeakers &&
+              {centerColumn?.speakers?.showTodaySpeakers &&
                 <SpeakersWidgetComponent
                   title="Today's Speakers"
                   id={`home_page_today_speakers_${lastDataSync}`}
@@ -97,7 +99,7 @@ export const LobbyPageTemplate = class extends React.Component {
                   bigPics={true}
                 />
               }
-              {centerColumn.speakers.showFeatureSpeakers &&
+              {centerColumn?.speakers?.showFeatureSpeakers &&
                 <SpeakersWidgetComponent
                   title="Featured Speakers"
                   id={`lobby_page_featured_speakers_${lastDataSync}`}
@@ -127,7 +129,7 @@ export const LobbyPageTemplate = class extends React.Component {
             </div>
           </div>
         </div>
-      </React.Fragment>
+      </>
     )
   }
 };

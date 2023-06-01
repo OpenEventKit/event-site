@@ -1,1 +1,0 @@
-{"centerColumn":{"speakers":{"showTodaySpeakers":true,"showFeatureSpeakers":false}},"hero":{"title":"Lobby Title","subTitle":"Lobby Subtitle"}}
