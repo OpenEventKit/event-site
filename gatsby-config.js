@@ -126,20 +126,24 @@ module.exports = {
         manualInit: true,
         enableIdentityWidget: false,
         customizeWebpackConfig: (config) => {
-          /**
-           * Forces transpiliation of solution js files; required for theming.
-           * @see https://www.gatsbyjs.com/docs/how-to/custom-configuration/add-custom-webpack-config/#modifying-the-babel-loader
-           */
           const jsTestString = "\\.(js|mjs|jsx|ts|tsx)$";
           const jsTest = new RegExp(jsTestString);
           const jsRule = config.module.rules.find(
             (rule) => String(rule.test) === String(jsTest)
           );
-          const solutionJsTest = new RegExp(`${__dirname}(.*)${jsTestString}`);
-          const jsRuleInclude = jsRule.include;
-          jsRule.include = (modulePath) => {
-            if (solutionJsTest.test(modulePath)) return true;
-            return jsRuleInclude(modulePath);
+          // is it running standalone? or is it running as a module/package?
+          const standalone = __dirname === path.resolve();
+          if (!standalone) {
+            /**
+             * Force transpiliation of solution js files; required for theming.
+             * @see https://www.gatsbyjs.com/docs/how-to/custom-configuration/add-custom-webpack-config/#modifying-the-babel-loader
+             */
+            const solutionJsTest = new RegExp(`${__dirname}(.*)${jsTestString}`);
+            const jsRuleInclude = jsRule.include;
+            jsRule.include = (modulePath) => {
+              if (solutionJsTest.test(modulePath)) return true;
+              return jsRuleInclude(modulePath);
+            }
           }
           config.module.rules = [
             ...config.module.rules.filter(
