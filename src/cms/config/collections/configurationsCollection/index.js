@@ -7,6 +7,7 @@ import ads from "./ads";
 import navbar from "./navbar";
 import footer from "./footer";
 import postersPages from "./postersPages";
+import sponsorTiers from "./sponsorTiers";
 
 const configurationsCollection = {
   ...collectionDefaults({
@@ -18,7 +19,8 @@ const configurationsCollection = {
     ads,
     navbar,
     footer,
-    postersPages
+    postersPages,
+    sponsorTiers
   ]
 };
 
