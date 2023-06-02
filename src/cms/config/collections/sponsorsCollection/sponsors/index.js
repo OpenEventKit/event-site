@@ -12,12 +12,13 @@ import {
 } from "../../../fields";
 
 import {
-    SPONSOR_DATA_FILE_PATH
+    SPONSOR_DATA_FILE_PATH,
+    SPONSOR_TIERS_FILE_PATH,
 } from "@utils/filePath";
 
 const sponsors = {
-    label: "Sponsors Tiers",
-    name: "sponsors-tiers",
+    label: "Sponsor Tiers",
+    name: "sponsor-tiers",
     file: SPONSOR_DATA_FILE_PATH,
     fields: [
         listField({
@@ -29,7 +30,7 @@ const sponsors = {
                     label: "Tier",
                     name: "tier",
                     collection: "configurations",
-                    file: "sponsorsTiers",
+                    file: SPONSOR_TIERS_FILE_PATH,
                     target_field: "tiers",
                     id_field: "id",
                     display_fields: "name"

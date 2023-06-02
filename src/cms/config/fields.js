@@ -273,7 +273,7 @@ export const ncwIdField = ({
   ...rest
 } = {}) => ({
   label,
-  name,  
+  name,
   widget: "ncw-id",
   ...rest
 });
@@ -281,17 +281,17 @@ export const ncwIdField = ({
 // {label: "Tier", name: "tier", widget: ncw-file-relation, collection: configurations, file: sponsorsTiers, target_field: tiers, id_field: id, display_fields: name},
 
 export const ncwFileRelationField = ({
-  label = "Tier",
-  name = "tier",
-  collection = "configurations", 
-  file = "sponsorsTiers", 
-  target_field = "tiers", 
-  id_field = "id", 
+  label,
+  name,
+  collection,
+  file,
+  target_field,
+  id_field = "id",
   display_fields = "name",
   ...rest
 } = {}) => ({
   label,
-  name,  
+  name,
   widget: "ncw-file-relation",
   collection,
   file,

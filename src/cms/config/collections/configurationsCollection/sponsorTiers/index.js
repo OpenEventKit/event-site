@@ -16,8 +16,8 @@ import {
 } from "@utils/filePath";
 
 const tiers = {
-  label: "Sponsors Tiers",
-  name: "sponsors-tiers",
+  label: "Sponsor Tiers",
+  name: "sponsor-tiers",
   file: SPONSOR_TIERS_FILE_PATH,
   fields: [
     listField({
