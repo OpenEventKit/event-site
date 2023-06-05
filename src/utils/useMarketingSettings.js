@@ -11,7 +11,13 @@ export const MARKETING_SETTINGS_KEYS = {
   activityCtaText: "ACTIVITY_CTA_TEXT",
   regLiteAllowPromoCodes: "REG_LITE_ALLOW_PROMO_CODES",
   regLiteCompanyInputPlaceholder: "REG_LITE_COMPANY_INPUT_PLACEHOLDER",
-  regLiteCompanyDDLPlaceholder: "REG_LITE_COMPANY_DDL_PLACEHOLDER"
+  regLiteCompanyDDLPlaceholder: "REG_LITE_COMPANY_DDL_PLACEHOLDER",
+  regLiteInitialOrderComplete1stParagraph: "REG_LITE_INITIAL_ORDER_COMPLETE_STEP_1ST_PARAGRAPH",
+  regLiteInitialOrderComplete2ndParagraph: "REG_LITE_INITIAL_ORDER_COMPLETE_STEP_2ND_PARAGRAPH",
+  regLiteInitialOrderCompleteButton: "REG_LITE_INITIAL_ORDER_COMPLETE_BTN_LABEL",
+  regLiteOrderComplete1stParagraph: "REG_LITE_ORDER_COMPLETE_STEP_1ST_PARAGRAPH",
+  regLiteOrderComplete2ndParagraph: "REG_LITE_ORDER_COMPLETE_STEP_2ND_PARAGRAPH",
+  regLiteOrderCompleteButton: "REG_LITE_ORDER_COMPLETE_BTN_LABEL",
 }
 
 const marketingSettingsQuery = graphql`
