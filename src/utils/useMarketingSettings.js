@@ -18,6 +18,7 @@ export const MARKETING_SETTINGS_KEYS = {
   regLiteOrderComplete1stParagraph: "REG_LITE_ORDER_COMPLETE_STEP_1ST_PARAGRAPH",
   regLiteOrderComplete2ndParagraph: "REG_LITE_ORDER_COMPLETE_STEP_2ND_PARAGRAPH",
   regLiteOrderCompleteButton: "REG_LITE_ORDER_COMPLETE_BTN_LABEL",
+  regLiteNoAllowedTicketsMessage: "REG_LITE_NO_ALLOWED_TICKETS_MESSAGE",
 }
 
 const marketingSettingsQuery = graphql`
