@@ -115,6 +115,7 @@ const RegistrationLiteComponent = ({
     const orderComplete1stParagraph = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteOrderComplete1stParagraph)
     const orderComplete2ndParagraph = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteOrderComplete2ndParagraph)
     const orderCompleteButton = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteOrderCompleteButton)
+    const noAllowedTicketsMessage = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteNoAllowedTicketsMessage);
 
     const widgetProps = {
         apiBaseUrl: getEnvVariable(SUMMIT_API_BASE_URL),
@@ -182,6 +183,7 @@ const RegistrationLiteComponent = ({
         orderComplete1stParagraph: orderComplete1stParagraph,
         orderComplete2ndParagraph: orderComplete2ndParagraph,
         orderCompleteButton: orderCompleteButton,
+        noAllowedTicketsMessage: noAllowedTicketsMessage
     };
 
     const { registerButton } = marketingPageSettings.hero.buttons;
