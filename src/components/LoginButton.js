@@ -86,6 +86,10 @@ const LoginButton = ({
         setOtpError(false);
     }
 
+    const handleEnterEvent = () => {
+        navigate(defaultPath);
+    }
+
     const getPasswordlessCode = (email) => {
         const backUrl = getBackURL(true)
         const params = {
@@ -153,8 +157,8 @@ const LoginButton = ({
         if (multipleButtons) {
             if (!isLoggedUser) {
                 return React.cloneElement(childrenArray[0], { onClick: handleOpenPopup });
-            } else if (isLoggedUser && summitPhase >= PHASES.DURING && hasVirtualBadge) {
-                return React.cloneElement(childrenArray[1], { onClick: handleOpenPopup });
+            } else if (isLoggedUser) {
+                return React.cloneElement(childrenArray[1], { onClick: handleEnterEvent });
             }
         } else {
             // only 1 children element passed, render it always as default
