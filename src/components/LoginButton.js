@@ -13,6 +13,7 @@ import { formatThirdPartyProviders } from "../utils/loginUtils";
 import 'summit-registration-lite/dist/index.css';
 import styles from '../styles/login-button.module.scss'
 import PropTypes from 'prop-types'
+import Link from "./Link";
 
 import { PHASES } from "@utils/phasesUtils";
 import { getDefaultLocation } from "@utils/loginUtils";
