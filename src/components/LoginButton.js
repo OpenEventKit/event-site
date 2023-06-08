@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useMemo } from "react"
 import { navigate } from "gatsby"
 import { connect } from "react-redux";
 import URI from "urijs"
@@ -14,6 +14,10 @@ import 'summit-registration-lite/dist/index.css';
 import styles from '../styles/login-button.module.scss'
 import PropTypes from 'prop-types'
 
+import { PHASES } from "@utils/phasesUtils";
+import { getDefaultLocation } from "@utils/loginUtils";
+import { userHasAccessLevel, VirtualAccessLevel } from "../utils/authorizedGroups";
+
 const LoginButton = ({
     getThirdPartyProviders,
     thirdPartyProviders,
@@ -22,9 +26,13 @@ const LoginButton = ({
     marketingPageSettings,
     allowsNativeAuth,
     allowsOtpAuth,
+    isLoggedUser,
+    summitPhase,
+    userProfile,
+    eventRedirect,
     location,
     style = {},
-    children,
+    children = null,
 }) => {
     const [isActive, setIsActive] = useState(false);
     const [initialEmailValue, setInitialEmailValue] = useState('');
@@ -32,6 +40,11 @@ const LoginButton = ({
     const [userEmail, setUserEmail] = useState('');
     const [otpLength, setOtpLength] = useState(null);
     const [otpError, setOtpError] = useState(false);
+
+    const hasVirtualBadge = useMemo(() =>
+        userProfile ? userHasAccessLevel(userProfile.summit_tickets, VirtualAccessLevel) : false
+        , [userProfile]);
+    const defaultPath = getDefaultLocation(eventRedirect, hasVirtualBadge);
 
     useEffect(() => {
         const fragmentParser = new FragmentParser();
@@ -51,7 +64,7 @@ const LoginButton = ({
             : '/';
         const fragmentParser = new FragmentParser();
         const paramBackUrl = fragmentParser.getParam('backurl');
-        if(paramBackUrl)
+        if (paramBackUrl)
             backUrl = paramBackUrl;
         return encode ? URI.encode(backUrl) : backUrl;
     };
@@ -112,7 +125,7 @@ const LoginButton = ({
     const loginComponentProps = {
         loginOptions: formatThirdPartyProviders(thirdPartyProviders),
         login: (provider) => onClickLogin(provider),
-        getLoginCode: (email) => sendCode(email),        
+        getLoginCode: (email) => sendCode(email),
         allowsNativeAuth: allowsNativeAuth,
         allowsOtpAuth: allowsOtpAuth,
         initialEmailValue: initialEmailValue,
@@ -122,7 +135,7 @@ const LoginButton = ({
     const passwordlessLoginProps = {
         email: userEmail,
         codeLength: otpLength,
-        passwordlessLogin:  (code) =>  loginPasswordless(code, userEmail).then(() => navigate(getBackURL(false)) ).catch((e) => console.log(e)),
+        passwordlessLogin: (code) => loginPasswordless(code, userEmail).then(() => navigate(getBackURL(false))).catch((e) => console.log(e)),
         codeError: otpError,
         goToLogin: () => setOtpLogin(false),
         getLoginCode: (email) => sendCode(email),
@@ -130,15 +143,43 @@ const LoginButton = ({
 
     const { loginButton } = marketingPageSettings.hero.buttons;
 
+    const renderCustomChildren = (element) => {        
+        
+        const childrenArray = React.Children.toArray(element);
+        const multipleButtons = childrenArray.length > 1;
+
+        if (multipleButtons) {
+            if (!isLoggedUser) {
+            return React.cloneElement(childrenArray[0], { onClick: handleOpenPopup });
+            } else if (isLoggedUser && summitPhase >= PHASES.DURING && hasVirtualBadge) {
+            return React.cloneElement(childrenArray[1], { onClick: handleOpenPopup });
+            }
+        } else {
+            return React.cloneElement(element, { onClick: handleOpenPopup });
+        }
+    };
+
     return (
         <div style={style} className={styles.loginButtonWrapper}>
-            {children ? 
-                React.cloneElement(children, { onClick: handleOpenPopup })
+            {children ?
+                renderCustomChildren(children)
                 :
-                <button className={`${styles.button} button is-large`} onClick={handleOpenPopup}>
-                    <i className={`fa fa-2x fa-edit icon is-large`} />
-                    <b>{loginButton.text}</b>
-                </button>
+                !isLoggedUser ?
+                    <button className={`${styles.button} button is-large`} onClick={handleOpenPopup}>
+                        <i className={`fa fa-2x fa-edit icon is-large`} />
+                        <b>{loginButton.text}</b>
+                    </button>
+                    :
+                (isLoggedUser && summitPhase >= PHASES.DURING && hasVirtualBadge ?
+                    <Link className={styles.link} to={defaultPath}>
+                        <button className={`${styles.button} button is-large`}>
+                            <i className={`fa fa-2x fa-sign-in icon is-large`} />
+                            <b>Enter</b>
+                        </button>
+                    </Link>
+                    :
+                    null
+                )
             }
             {isActive &&
                 <div id={`${styles.modal}`} className="modal is-active">
@@ -161,7 +202,7 @@ const LoginButton = ({
     )
 };
 
-const mapStateToProps = ({ userState, summitState, settingState }) => {
+const mapStateToProps = ({ userState, summitState, settingState, clockState, loggedUserState }) => {
     return ({
         loadingProfile: userState.loading,
         loadingIDP: userState.loadingIDP,
@@ -170,7 +211,12 @@ const mapStateToProps = ({ userState, summitState, settingState }) => {
         allowsOtpAuth: summitState.allows_otp_auth,
         summit: summitState.summit,
         colorSettings: settingState.colorSettings,
+        userProfile: userState.userProfile,
         marketingPageSettings: settingState.marketingPageSettings,
+        summitPhase: clockState.summit_phase,
+        isLoggedUser: loggedUserState.isLoggedUser,
+        // TODO: move to site settings i/o marketing page settings
+        eventRedirect: settingState.marketingPageSettings.eventRedirect
     })
 };
 

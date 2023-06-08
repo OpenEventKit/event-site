@@ -25,10 +25,7 @@ const MarketingPageTemplate = ({
   lastDataSync,
   summit,
   summitPhase,
-  doLogin,
   isLoggedUser,
-  hasVirtualBadge,
-  defaultPath
 }) => {
 
   const {
@@ -58,11 +55,6 @@ const MarketingPageTemplate = ({
       <MarketingHeroComponent
         location={location}
         marketingPageSettings={marketingPageJson}
-        summit={summit}
-        doLogin={doLogin}
-        isLoggedUser={isLoggedUser}
-        hasVirtualBadge={hasVirtualBadge}
-        defaultPath={defaultPath}
       />
       {summit && marketingPageJson.countdown?.display && <Countdown summit={summit} text={marketingPageJson?.countdown?.text} />}
       <div className="columns" id="marketing-columns">
