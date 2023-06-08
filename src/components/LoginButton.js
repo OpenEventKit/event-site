@@ -149,13 +149,15 @@ const LoginButton = ({
         const childrenArray = React.Children.toArray(element);
         const multipleButtons = childrenArray.length > 1;
 
+        // if the component has 2 custom children (login, enter), check to display one or the other
         if (multipleButtons) {
             if (!isLoggedUser) {
-            return React.cloneElement(childrenArray[0], { onClick: handleOpenPopup });
+                return React.cloneElement(childrenArray[0], { onClick: handleOpenPopup });
             } else if (isLoggedUser && summitPhase >= PHASES.DURING && hasVirtualBadge) {
-            return React.cloneElement(childrenArray[1], { onClick: handleOpenPopup });
+                return React.cloneElement(childrenArray[1], { onClick: handleOpenPopup });
             }
         } else {
+            // only 1 children element passed, render it always as default
             return React.cloneElement(element, { onClick: handleOpenPopup });
         }
     };
