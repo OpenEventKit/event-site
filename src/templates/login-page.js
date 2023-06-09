@@ -24,7 +24,7 @@ export const LoginPageTemplate = ({ loggedUserState, eventRedirect, location, us
 
   return (
     <React.Fragment>
-      <AuthComponent location={location} eventRedirect={eventRedirect} hasVirtualBadge={hasVirtualBadge}/>
+      <AuthComponent location={location} />
     </React.Fragment>
   )
 }
