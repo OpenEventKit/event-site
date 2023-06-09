@@ -5,7 +5,7 @@ import React, {
 } from "react";
 import { getSrc } from "gatsby-plugin-image";
 import Slider from "react-slick";
-import LoginButton from "./LoginButton";
+import AuthComponent from "./AuthComponent";
 import RegistrationLiteComponent from "./RegistrationLiteComponent";
 
 import styles from "../styles/marketing-hero.module.scss";
@@ -43,7 +43,7 @@ const MarketingHeroComponent = ({
             </span>
           )}
         {loginButton.display && (
-          <LoginButton location={location} />
+          <AuthComponent location={location} />
         )}
       </>
     );

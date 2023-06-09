@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { navigate } from "gatsby"
 
 import Layout from '../components/Layout'
-import LoginButton from '../components/LoginButton'
+import AuthComponent from '../components/AuthComponent'
 
 import { getDefaultLocation } from '../utils/loginUtils'
 import {userHasAccessLevel, VirtualAccessLevel} from "../utils/authorizedGroups";
@@ -24,7 +24,7 @@ export const LoginPageTemplate = ({ loggedUserState, eventRedirect, location, us
 
   return (
     <React.Fragment>
-      <LoginButton location={location} eventRedirect={eventRedirect} hasVirtualBadge={hasVirtualBadge}/>
+      <AuthComponent location={location} eventRedirect={eventRedirect} hasVirtualBadge={hasVirtualBadge}/>
     </React.Fragment>
   )
 }

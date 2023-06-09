@@ -19,7 +19,7 @@ import { PHASES } from "@utils/phasesUtils";
 import { getDefaultLocation } from "@utils/loginUtils";
 import { userHasAccessLevel, VirtualAccessLevel } from "../utils/authorizedGroups";
 
-const LoginButton = ({
+const AuthComponent = ({
     getThirdPartyProviders,
     thirdPartyProviders,
     setPasswordlessLogin,
@@ -232,8 +232,8 @@ export default connect(mapStateToProps, {
     setPasswordlessLogin,
     setUserOrder,
     checkOrderData
-})(LoginButton)
+})(AuthComponent)
 
-LoginButton.propTypes = {
+AuthComponent.propTypes = {
     location: PropTypes.object.isRequired,
 }
