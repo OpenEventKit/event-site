@@ -157,7 +157,7 @@ const LoginButton = ({
         if (multipleButtons) {
             if (!isLoggedUser) {
                 return React.cloneElement(childrenArray[0], { onClick: handleOpenPopup });
-            } else if (isLoggedUser) {
+            } else if (summitPhase >= PHASES.DURING && isLoggedUser && hasVirtualBadge) {
                 return React.cloneElement(childrenArray[1], { onClick: handleEnterEvent });
             }
         } else {
