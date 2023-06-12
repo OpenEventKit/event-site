@@ -3,7 +3,7 @@ import { LOGOUT_USER } from "openstack-uicore-foundation/lib/security/actions";
 import {RESET_STATE, SYNC_DATA} from "../actions/base-actions-definitions";
 
 import sponsorData from "content/sponsors";
-import tierData from "content/sponsors-tiers";
+import tierData from "content/sponsor-tiers";
 
 const DEFAULT_STATE = {
   sponsors: sponsorData.tierSponsors,
