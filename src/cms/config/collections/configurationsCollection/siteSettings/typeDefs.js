@@ -1,5 +1,9 @@
 
 module.exports = `
+  type SiteMetadata {
+    title: String
+    description: String
+  }
   type Favicons {
     favicon180: File @fileByRelativePath
     favicon32: File @fileByRelativePath
@@ -18,6 +22,7 @@ module.exports = `
     chat: Chat
   }
   type SiteSettingsJson implements Node {
+    siteMetadata: SiteMetadata
     favicons: Favicons
     widgets: Widgets
   }

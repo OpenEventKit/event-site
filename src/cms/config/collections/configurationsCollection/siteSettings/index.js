@@ -1,5 +1,7 @@
 import {
   booleanField,
+  stringField,
+  textField,
   imageField,
   selectField,
   selectOption,
@@ -15,6 +17,22 @@ const siteSettings = {
   name: "site-settings",
   file: SITE_SETTINGS_FILE_PATH,
   fields: [
+    objectField({
+      label: "Site Metadata",
+      name: "siteMetadata",
+      fields: [
+        stringField({
+          label: "title",
+          name: "title",
+          required: false
+        }),
+        textField({
+          label: "description",
+          name: "description",
+          required: false
+        })
+      ]
+    }),
     objectField({
       label: "Favicons",
       name: "favicons",
