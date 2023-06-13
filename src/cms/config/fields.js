@@ -264,39 +264,3 @@ export const linkImagesField = ({
   ],
   ...rest
 });
-
-// {label: "ID", name: "id", widget: ncw-id, prefix: tier, hidden: true},
-export const ncwIdField = ({
-  label = "Id",
-  name = "id",
-  hidden = true,
-  ...rest
-} = {}) => ({
-  label,
-  name,
-  widget: "ncw-id",
-  ...rest
-});
-
-// {label: "Tier", name: "tier", widget: ncw-file-relation, collection: configurations, file: sponsorsTiers, target_field: tiers, id_field: id, display_fields: name},
-
-export const ncwFileRelationField = ({
-  label,
-  name,
-  collection,
-  file,
-  target_field,
-  id_field = "id",
-  display_fields = "name",
-  ...rest
-} = {}) => ({
-  label,
-  name,
-  widget: "ncw-file-relation",
-  collection,
-  file,
-  target_field,
-  id_field,
-  display_fields,
-  ...rest
-});
