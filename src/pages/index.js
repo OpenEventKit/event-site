@@ -2,6 +2,7 @@ import * as React from "react";
 import { useMemo } from "react";
 import { connect } from "react-redux";
 import { graphql } from "gatsby";
+import Seo from "../components/Seo";
 import MarketingPageTemplate from "../templates/marketing-page-template";
 import withRealTimeUpdates from "@utils/real_time_updates/withRealTimeUpdates";
 import withFeedsWorker from "@utils/withFeedsWorker";
@@ -152,3 +153,5 @@ const mapStateToProps = ({
 
 export default connect(mapStateToProps, {
 })(withFeedsWorker(withRealTimeUpdates(MarketingPage)));
+
+export const Head = () => <Seo />;

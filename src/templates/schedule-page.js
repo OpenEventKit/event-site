@@ -115,15 +115,3 @@ SchedulePage.propTypes = {
 };
 
 export default withScheduleData(SchedulePage);
-
-export const Head = ({
-  location,
-  pageContext
-}) => {
-  return (
-    <Seo
-      title="Schedule"
-      pathname={location.pathname}
-    />
-  );
-}
