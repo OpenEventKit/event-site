@@ -3,8 +3,11 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { graphql } from "gatsby";
 import { Redirect } from "@gatsbyjs/reach-router";
+import Seo from "../components/Seo";
 import Layout from "../components/Layout";
 import Content, { HTMLContent } from "../components/Content";
+import { titleFromPathname } from "../utils/urlFormating";
+
 
 import { USER_REQUIREMENTS } from "../cms/config/collections/contentPagesCollection"
 
@@ -78,3 +81,12 @@ export const contentPageQuery = graphql`
     }
   }
 `;
+
+export const Head = ({
+  location
+}) => (
+  <Seo
+    title={titleFromPathname(location.pathname)}
+    pathname={location.pathname}
+  />
+);
