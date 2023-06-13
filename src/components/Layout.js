@@ -11,10 +11,8 @@ const TemplateWrapper = ({
   marketing
 }) => {
   const [isFocus, setIsFocus] = useState(true);
-
   const onFocus = () => setIsFocus(true);
   const onBlur = () => setIsFocus(false);
-
   useEffect(() => {
     window.addEventListener("focus", onFocus);
     window.addEventListener("blur", onBlur);
@@ -23,7 +21,6 @@ const TemplateWrapper = ({
       window.removeEventListener("blur", onBlur);
     };
   });
-
   return (
     <div id="container">
       <a className="sr-only skip-to-content" href="#content-wrapper">Skip to content</a>

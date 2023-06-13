@@ -1,9 +1,9 @@
 
 module.exports = `
   type Favicons {
-    favicon180: String
-    favicon32: String
-    favicon16: String
+    favicon180: File @fileByRelativePath
+    favicon32: File @fileByRelativePath
+    favicon16: File @fileByRelativePath
   }
   type Schedule {
     allowClick: Boolean

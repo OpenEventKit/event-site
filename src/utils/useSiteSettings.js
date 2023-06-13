@@ -1,12 +1,33 @@
-import { graphql, useStaticQuery } from "gatsby";
+import {
+  graphql,
+  useStaticQuery
+} from "gatsby";
 
 const siteSettingsQuery = graphql`
   query {
     siteSettingsJson {
       favicons {
-        favicon16
-        favicon32
-        favicon180
+        favicon16 {
+          childImageSharp {
+            gatsbyImageData (
+              quality: 100
+            )
+          }
+        }
+        favicon32 {
+          childImageSharp {
+            gatsbyImageData (
+              quality: 100
+            )
+          }
+        }
+        favicon180 {
+          childImageSharp {
+            gatsbyImageData (
+              quality: 100
+            )
+          }
+        }
       }
       widgets {
         chat {

@@ -10,31 +10,6 @@ import {
   SITE_SETTINGS_FILE_PATH
 } from "@utils/filePath";
 
-/*
-- file: "src/content/site-settings/index.json"
-  label: "Site Settings"
-  name: "site-settings"
-  fields:
-    - {label: "Favicons", name: favicons, widget: object, fields: [
-        {label: "Favicon 180x180", name: favicon180, widget: image},
-        {label: "Favicon 32x32", name: favicon32, widget: image},
-        {label: "Favicon 16x16", name: favicon16, widget: image}
-      ]}
-    - {label: "Widgets", name: widgets, widget: object, fields: [
-        {label: "Chat", name: chat, widget: object, fields: [
-          {label: "Show QA", name: showQA, widget: boolean, required: false, default: false},
-          {label: "Show Help", name: showHelp, widget: boolean, required: false, default: false},
-          {label: "Default Filter Criteria", name: defaultScope, widget: select, required: false, default: 'page', options: [
-            {label: "In this Room", value: "page" },
-            {label: "All Attendees", value: "show" }
-          ]}
-        ]},
-        {label: "Schedule", name: schedule, widget: object, fields: [
-          {label: "Allow Clickable Behavior", name: allowClick, widget: boolean, required: false, default: true},                
-        ]}
-      ]}
-*/
-
 const siteSettings = {
   label: "Site Settings",
   name: "site-settings",

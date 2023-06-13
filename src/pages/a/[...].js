@@ -18,10 +18,11 @@ import MyTicketsPage from "../../templates/my-tickets-page";
 import WithTicketRoute from "../../routes/WithTicketRoute";
 import withRealTimeUpdates from "../../utils/real_time_updates/withRealTimeUpdates";
 import withFeedsWorker from "../../utils/withFeedsWorker";
+import Seo from "../../components/Seo";
 import Link from "../../components/Link";
+import { titleFromPathname } from "../../utils/urlFormating";
 
 const App = ({ isLoggedUser, user, summit_phase, allowClick = true }) => {
-
   return (
     <Location>
       {({ location }) => (
@@ -72,7 +73,7 @@ const App = ({ isLoggedUser, user, summit_phase, allowClick = true }) => {
         </Router>
       )}
     </Location>
-  )
+  );
 };
 
 const mapStateToProps = ({ loggedUserState, userState, clockState, settingState, summitState }) => ({
@@ -85,5 +86,13 @@ const mapStateToProps = ({ loggedUserState, userState, clockState, settingState,
   allowClick: settingState?.widgets?.schedule?.allowClick
 });
 
-export default connect(mapStateToProps, {
-})(withFeedsWorker(withRealTimeUpdates(App)));
+export default connect(mapStateToProps, {})(withFeedsWorker(withRealTimeUpdates(App)));
+
+export const Head = ({
+  location
+}) => (
+  <Seo
+    title={titleFromPathname(location.pathname)}
+    pathname={location.pathname}
+  />
+);

@@ -92,7 +92,7 @@ const SchedulePage = ({ summit, scheduleState, summitPhase, isLoggedUser, locati
         <div className={`${styles.wrapper} ${showFilters ? styles.showFilters : ""}`}>
           <div className={styles.scheduleWrapper}>
             <FullSchedule {...schedProps}
-                          key={`fullschedule_${lastDataSync}`}
+              key={`fullschedule_${lastDataSync}`}
             />
           </div>
           <div ref={filtersWrapperRef} className={styles.filterWrapper}>
@@ -115,3 +115,15 @@ SchedulePage.propTypes = {
 };
 
 export default withScheduleData(SchedulePage);
+
+export const Head = ({
+  location,
+  pageContext
+}) => {
+  return (
+    <Seo
+      title="Schedule"
+      pathname={location.pathname}
+    />
+  );
+}
