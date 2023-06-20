@@ -90,6 +90,8 @@ export const getFilteredEvents = (events, filters, summitTimezone) => {
       valid = filters.date.values.includes(dateString);
       if (!valid) return false;
     }
+    
+    if (ev.type.show_always_on_schedule) return true;
 
     if (filters.level?.values.length > 0) {
       valid = filters.level.values.some(l => l.toString().toLowerCase() === ev.level?.toLowerCase());
