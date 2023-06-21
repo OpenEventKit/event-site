@@ -33,7 +33,8 @@ const AuthComponent = ({
     eventRedirect,
     location,
     style = {},
-    children = null,
+    renderLoginButton = null,
+    renderEnterButton = null
 }) => {
     const [isActive, setIsActive] = useState(false);
     const [initialEmailValue, setInitialEmailValue] = useState('');
@@ -148,42 +149,29 @@ const AuthComponent = ({
 
     const { loginButton } = marketingPageSettings.hero.buttons;
 
-    const renderCustomChildren = (element) => {        
-        
-        const childrenArray = React.Children.toArray(element);
-        const multipleButtons = childrenArray.length > 1;
+    const defaultLoginButton = () => (
+        <button className={`${styles.button} button is-large`} onClick={handleOpenPopup}>
+            <i className={`fa fa-2x fa-edit icon is-large`} />
+            <b>{loginButton.text}</b>
+        </button>
+    );
 
-        // if the component has 2 custom children (login, enter), check to display one or the other
-        if (multipleButtons) {
-            if (!isLoggedUser) {
-                return React.cloneElement(childrenArray[0], { onClick: handleOpenPopup });
-            } else if (summitPhase >= PHASES.DURING && isLoggedUser && hasVirtualBadge) {
-                return React.cloneElement(childrenArray[1], { onClick: handleEnterEvent });
-            }
-        } else {
-            // only 1 children element passed, render it always as default
-            return React.cloneElement(element, { onClick: handleOpenPopup });
-        }
-    };
+    const defaultEnterButton = () => (
+        <Link className={styles.link} to={defaultPath}>
+            <button className={`${styles.button} button is-large`}>
+                <i className={`fa fa-2x fa-sign-in icon is-large`} />
+                <b>Enter</b>
+            </button>
+        </Link>
+    );
 
     return (
         <div style={style} className={styles.loginButtonWrapper}>
-            {children ?
-                renderCustomChildren(children)
+            {!isLoggedUser ?
+                renderLoginButton ? renderLoginButton(handleOpenPopup) : defaultLoginButton()
                 :
-                !isLoggedUser ?
-                    <button className={`${styles.button} button is-large`} onClick={handleOpenPopup}>
-                        <i className={`fa fa-2x fa-edit icon is-large`} />
-                        <b>{loginButton.text}</b>
-                    </button>
-                    :
                 (isLoggedUser && summitPhase >= PHASES.DURING && hasVirtualBadge ?
-                    <Link className={styles.link} to={defaultPath}>
-                        <button className={`${styles.button} button is-large`}>
-                            <i className={`fa fa-2x fa-sign-in icon is-large`} />
-                            <b>Enter</b>
-                        </button>
-                    </Link>
+                    renderEnterButton ? renderEnterButton(handleEnterEvent) : defaultEnterButton()
                     :
                     null
                 )
