@@ -3,27 +3,16 @@ import React, {
   useState,
   useEffect
 } from "react";
-import { connect } from "react-redux";
 import { getSrc } from "gatsby-plugin-image";
 import Slider from "react-slick";
-import URI from "urijs";
-import Link from "../components/Link";
-import LoginButton from "./LoginButton";
+import AuthComponent from "./AuthComponent";
 import RegistrationLiteComponent from "./RegistrationLiteComponent";
-
-import { PHASES } from "@utils/phasesUtils";
 
 import styles from "../styles/marketing-hero.module.scss";
 
 const MarketingHeroComponent = ({
   location,
   marketingPageSettings,
-  summitPhase,
-  isLoggedUser,
-  summit,
-  doLogin,
-  hasVirtualBadge,
-  defaultPath
 }) => {
 
   const sliderRef = useRef(null);
@@ -41,40 +30,9 @@ const MarketingHeroComponent = ({
     };
   }, []);
 
-  const getBackURL = () => {
-    const backUrl = location.state?.backUrl
-      ? location.state.backUrl
-      : defaultPath;
-    return URI.encode(backUrl);
-  };
-
-  const onClickLogin = () => {
-    doLogin(getBackURL());
-  };
 
   const getButtons = () => {
     const { registerButton, loginButton } = marketingPageSettings.hero.buttons;
-
-    if (summitPhase >= PHASES.DURING && isLoggedUser) {
-      return (
-        <>
-          {registerButton.display &&
-            (
-              <span className={styles.link}>
-                <RegistrationLiteComponent location={location} />
-              </span>
-            )}
-          {hasVirtualBadge && /* only show button if we have virtual access */
-              <Link className={styles.link} to={defaultPath}>
-                <button className={`${styles.button} button is-large`}>
-                  <i className={`fa fa-2x fa-sign-in icon is-large`}/>
-                  <b>Enter</b>
-                </button>
-              </Link>
-          }
-        </>
-      );
-    }
 
     return (
       <>
@@ -84,8 +42,8 @@ const MarketingHeroComponent = ({
               <RegistrationLiteComponent location={location} />
             </span>
           )}
-        {loginButton.display && !isLoggedUser && (
-          <LoginButton location={location} />
+        {loginButton.display && (
+          <AuthComponent location={location} />
         )}
       </>
     );
@@ -170,9 +128,4 @@ const MarketingHeroComponent = ({
   );
 }
 
-const mapStateToProps = ({ clockState, summitState }) => ({
-  summitPhase: clockState.summit_phase,
-  summit: summitState.summit
-});
-
-export default connect(mapStateToProps, null)(MarketingHeroComponent);
+export default MarketingHeroComponent;

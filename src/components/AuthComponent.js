@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useMemo } from "react"
 import { navigate } from "gatsby"
 import { connect } from "react-redux";
 import URI from "urijs"
@@ -13,8 +13,13 @@ import { formatThirdPartyProviders } from "../utils/loginUtils";
 import 'summit-registration-lite/dist/index.css';
 import styles from '../styles/login-button.module.scss'
 import PropTypes from 'prop-types'
+import Link from "./Link";
 
-const LoginButton = ({
+import { PHASES } from "@utils/phasesUtils";
+import { getDefaultLocation } from "@utils/loginUtils";
+import { userHasAccessLevel, VirtualAccessLevel } from "../utils/authorizedGroups";
+
+const AuthComponent = ({
     getThirdPartyProviders,
     thirdPartyProviders,
     setPasswordlessLogin,
@@ -22,9 +27,14 @@ const LoginButton = ({
     marketingPageSettings,
     allowsNativeAuth,
     allowsOtpAuth,
+    isLoggedUser,
+    summitPhase,
+    userProfile,
+    eventRedirect,
     location,
     style = {},
-    children,
+    renderLoginButton = null,
+    renderEnterButton = null
 }) => {
     const [isActive, setIsActive] = useState(false);
     const [initialEmailValue, setInitialEmailValue] = useState('');
@@ -32,6 +42,11 @@ const LoginButton = ({
     const [userEmail, setUserEmail] = useState('');
     const [otpLength, setOtpLength] = useState(null);
     const [otpError, setOtpError] = useState(false);
+
+    const hasVirtualBadge = useMemo(() =>
+        userProfile ? userHasAccessLevel(userProfile.summit_tickets, VirtualAccessLevel) : false
+        , [userProfile]);
+    const defaultPath = getDefaultLocation(eventRedirect, hasVirtualBadge);
 
     useEffect(() => {
         const fragmentParser = new FragmentParser();
@@ -51,7 +66,7 @@ const LoginButton = ({
             : '/';
         const fragmentParser = new FragmentParser();
         const paramBackUrl = fragmentParser.getParam('backurl');
-        if(paramBackUrl)
+        if (paramBackUrl)
             backUrl = paramBackUrl;
         return encode ? URI.encode(backUrl) : backUrl;
     };
@@ -70,6 +85,10 @@ const LoginButton = ({
         setIsActive(true);
         setOtpLogin(false);
         setOtpError(false);
+    }
+
+    const handleEnterEvent = () => {
+        navigate(defaultPath);
     }
 
     const getPasswordlessCode = (email) => {
@@ -112,7 +131,7 @@ const LoginButton = ({
     const loginComponentProps = {
         loginOptions: formatThirdPartyProviders(thirdPartyProviders),
         login: (provider) => onClickLogin(provider),
-        getLoginCode: (email) => sendCode(email),        
+        getLoginCode: (email) => sendCode(email),
         allowsNativeAuth: allowsNativeAuth,
         allowsOtpAuth: allowsOtpAuth,
         initialEmailValue: initialEmailValue,
@@ -122,7 +141,7 @@ const LoginButton = ({
     const passwordlessLoginProps = {
         email: userEmail,
         codeLength: otpLength,
-        passwordlessLogin:  (code) =>  loginPasswordless(code, userEmail).then(() => navigate(getBackURL(false)) ).catch((e) => console.log(e)),
+        passwordlessLogin: (code) => loginPasswordless(code, userEmail).then(() => navigate(getBackURL(false))).catch((e) => console.log(e)),
         codeError: otpError,
         goToLogin: () => setOtpLogin(false),
         getLoginCode: (email) => sendCode(email),
@@ -130,15 +149,32 @@ const LoginButton = ({
 
     const { loginButton } = marketingPageSettings.hero.buttons;
 
+    const defaultLoginButton = () => (
+        <button className={`${styles.button} button is-large`} onClick={handleOpenPopup}>
+            <i className={`fa fa-2x fa-edit icon is-large`} />
+            <b>{loginButton.text}</b>
+        </button>
+    );
+
+    const defaultEnterButton = () => (
+        <Link className={styles.link} to={defaultPath}>
+            <button className={`${styles.button} button is-large`}>
+                <i className={`fa fa-2x fa-sign-in icon is-large`} />
+                <b>Enter</b>
+            </button>
+        </Link>
+    );
+
     return (
         <div style={style} className={styles.loginButtonWrapper}>
-            {children ? 
-                React.cloneElement(children, { onClick: handleOpenPopup })
+            {!isLoggedUser ?
+                renderLoginButton ? renderLoginButton(handleOpenPopup) : defaultLoginButton()
                 :
-                <button className={`${styles.button} button is-large`} onClick={handleOpenPopup}>
-                    <i className={`fa fa-2x fa-edit icon is-large`} />
-                    <b>{loginButton.text}</b>
-                </button>
+                (summitPhase >= PHASES.DURING && hasVirtualBadge ?
+                    renderEnterButton ? renderEnterButton(handleEnterEvent) : defaultEnterButton()
+                    :
+                    null
+                )
             }
             {isActive &&
                 <div id={`${styles.modal}`} className="modal is-active">
@@ -161,7 +197,7 @@ const LoginButton = ({
     )
 };
 
-const mapStateToProps = ({ userState, summitState, settingState }) => {
+const mapStateToProps = ({ userState, summitState, settingState, clockState, loggedUserState }) => {
     return ({
         loadingProfile: userState.loading,
         loadingIDP: userState.loadingIDP,
@@ -170,7 +206,12 @@ const mapStateToProps = ({ userState, summitState, settingState }) => {
         allowsOtpAuth: summitState.allows_otp_auth,
         summit: summitState.summit,
         colorSettings: settingState.colorSettings,
+        userProfile: userState.userProfile,
         marketingPageSettings: settingState.marketingPageSettings,
+        summitPhase: clockState.summit_phase,
+        isLoggedUser: loggedUserState.isLoggedUser,
+        // TODO: move to site settings i/o marketing page settings
+        eventRedirect: settingState.marketingPageSettings.eventRedirect
     })
 };
 
@@ -179,8 +220,8 @@ export default connect(mapStateToProps, {
     setPasswordlessLogin,
     setUserOrder,
     checkOrderData
-})(LoginButton)
+})(AuthComponent)
 
-LoginButton.propTypes = {
+AuthComponent.propTypes = {
     location: PropTypes.object.isRequired,
 }
