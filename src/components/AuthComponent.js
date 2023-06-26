@@ -170,7 +170,7 @@ const AuthComponent = ({
             {!isLoggedUser ?
                 renderLoginButton ? renderLoginButton(handleOpenPopup) : defaultLoginButton()
                 :
-                (isLoggedUser && summitPhase >= PHASES.DURING && hasVirtualBadge ?
+                (summitPhase >= PHASES.DURING && hasVirtualBadge ?
                     renderEnterButton ? renderEnterButton(handleEnterEvent) : defaultEnterButton()
                     :
                     null

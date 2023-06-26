@@ -105,18 +105,16 @@ const MarketingPage = ({
   summit,
   summitPhase,
   isLoggedUser,
-}) => {  
-  return (
-    <MarketingPageTemplate
-      location={location}
-      data={data}
-      lastDataSync={lastDataSync}
-      summit={summit}
-      summitPhase={summitPhase}
-      isLoggedUser={isLoggedUser}
-    />
-  )
-};
+}) => (
+  <MarketingPageTemplate
+    location={location}
+    data={data}
+    lastDataSync={lastDataSync}
+    summit={summit}
+    summitPhase={summitPhase}
+    isLoggedUser={isLoggedUser}
+  />
+);
 
 const mapStateToProps = ({
   settingState,
