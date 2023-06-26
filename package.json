@@ -7,6 +7,7 @@
     "@mui/base": "^5.0.0-alpha.114",
     "@ncwidgets/file-relation": "^0.8.0",
     "@ncwidgets/id": "^0.8.1",
+    "@react-pdf/renderer": "^3.1.12",
     "@react-spring/web": "^9.4.3",
     "@sentry/browser": "^7.39.0",
     "@sentry/cli": "^2.13.0",
