@@ -52,8 +52,8 @@ const RegistrationLiteComponent = ({
     const [initialEmailValue, setInitialEmailValue] = useState("");
 
     useEffect(() => {
+        const fragmentParser = new FragmentParser();
         if(!ignoreAutoOpen) {
-            const fragmentParser = new FragmentParser();
             setIsActive(fragmentParser.getParam("registration"));
         }
         const paramInitialEmailValue = fragmentParser.getParam("email");
