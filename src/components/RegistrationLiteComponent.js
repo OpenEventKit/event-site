@@ -3,6 +3,7 @@ import * as Sentry from "@sentry/react";
 import { navigate, withPrefix } from "gatsby"
 import { connect } from "react-redux";
 import URI from "urijs";
+import PropTypes from 'prop-types';
 
 // these two libraries are client-side only
 import RegistrationLiteWidget from "summit-registration-lite/dist";
@@ -45,13 +46,16 @@ const RegistrationLiteComponent = ({
                                        checkRequireExtraQuestionsByAttendee,
                                        getExtraQuestions,
                                        children,
+                                       ignoreAutoOpen
                                    }) => {
     const [isActive, setIsActive] = useState(false);
     const [initialEmailValue, setInitialEmailValue] = useState("");
 
     useEffect(() => {
-        const fragmentParser = new FragmentParser();
-        setIsActive(fragmentParser.getParam("registration"));
+        if(!ignoreAutoOpen) {
+            const fragmentParser = new FragmentParser();
+            setIsActive(fragmentParser.getParam("registration"));
+        }
         const paramInitialEmailValue = fragmentParser.getParam("email");
         if (paramInitialEmailValue)
             setInitialEmailValue(paramInitialEmailValue);
@@ -206,6 +210,15 @@ const RegistrationLiteComponent = ({
         </>
     )
 };
+
+RegistrationLiteComponent.defaultProps = {
+    ignoreAutoOpen: false,
+};
+
+RegistrationLiteComponent.propTypes = {
+    ignoreAutoOpen: PropTypes.bool,
+};
+
 
 const mapStateToProps = ({userState, summitState, settingState}) => {
     return ({
