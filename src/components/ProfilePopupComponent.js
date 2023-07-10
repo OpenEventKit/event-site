@@ -33,16 +33,16 @@ const ProfilePopupComponent = ({ userProfile, idpLoading, closePopup, showProfil
   const height = 200;
 
   useEffect(() => {
-    setFirstName(userProfile.given_name || '');
-    setLastName(userProfile.family_name || '');
-    setCompany(userProfile.company || '');
-    setBio(userProfile.bio || '');
-    setJobTitle(userProfile.job_title || '');
-    setImage(userProfile.picture || '');
-    setGithub(userProfile.github_user || '');
-    setIRC(userProfile.irc || '');
-    setLinkedin(userProfile.linked_in_profile || '');
-    setTwitter(userProfile.twitter_name || '');
+    setFirstName(userProfile?.given_name || '');
+    setLastName(userProfile?.family_name || '');
+    setCompany(userProfile?.company || '');
+    setBio(userProfile?.bio || '');
+    setJobTitle(userProfile?.job_title || '');
+    setImage(userProfile?.picture || '');
+    setGithub(userProfile?.github_user || '');
+    setIRC(userProfile?.irc || '');
+    setLinkedin(userProfile?.linked_in_profile || '');
+    setTwitter(userProfile?.twitter_name || '');
 
     return () => {
       setFirstName('');
@@ -56,16 +56,16 @@ const ProfilePopupComponent = ({ userProfile, idpLoading, closePopup, showProfil
       setTwitter('');
     };
   }, [
-              userProfile.given_name,
-              userProfile.family_name,
-              userProfile.company,
-              userProfile.picture,
-              userProfile.bio,
-              userProfile.job_title,
-              userProfile.github,
-              userProfile.irc,
-              userProfile.linkedin,
-              userProfile.twitter_name
+              userProfile?.given_name,
+              userProfile?.family_name,
+              userProfile?.company,
+              userProfile?.picture,
+              userProfile?.bio,
+              userProfile?.job_title,
+              userProfile?.github,
+              userProfile?.irc,
+              userProfile?.linkedin,
+              userProfile?.twitter_name
   ]);
 
   useEffect(() => {
@@ -160,15 +160,15 @@ const ProfilePopupComponent = ({ userProfile, idpLoading, closePopup, showProfil
             .then(file => changePicture(file));
       }
     }
-    if (userProfile.given_name !== firstName ||
-        userProfile.family_name !== lastName ||
-        userProfile.company !== company ||
-        userProfile.bio !== bio ||
-        userProfile.job_title !== jobTitle ||
-        userProfile.github_user !== github ||
-        userProfile.irc !== irc ||
-        userProfile.linked_in_profile !== linkedin ||
-        userProfile.twitter_name != twitter) {
+    if (userProfile?.given_name !== firstName ||
+        userProfile?.family_name !== lastName ||
+        userProfile?.company !== company ||
+        userProfile?.bio !== bio ||
+        userProfile?.job_title !== jobTitle ||
+        userProfile?.github_user !== github ||
+        userProfile?.irc !== irc ||
+        userProfile?.linked_in_profile !== linkedin ||
+        userProfile?.twitter_name != twitter) {
       const newProfile = {
         first_name: firstName,
         last_name: lastName,

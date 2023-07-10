@@ -66,38 +66,38 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
         if (!user.idpProfile) {
             getIDPProfile();
         } else {
-            setImage(user.idpProfile.picture);
-            let birthdate = user.idpProfile.birthdate ?
-                moment.tz(user.idpProfile.birthdate.date, user.idpProfile.birthdate.timezone || 'UTC') : null;
+            setImage(user?.idpProfile?.picture);
+            let birthdate = user?.idpProfile?.birthdate ?
+                moment.tz(user?.idpProfile?.birthdate.date, user?.idpProfile?.birthdate.timezone || 'UTC') : null;
             setPersonalProfile({
-                firstName: user.idpProfile.given_name || '',
-                lastName: user.idpProfile.family_name || '',
-                identifier: user.idpProfile.nickname || '',
-                email: user.idpProfile.email || '',
-                company: user.idpProfile.company || '',
-                jobTitle: user.idpProfile.job_title || '',
+                firstName: user?.idpProfile?.given_name || '',
+                lastName: user?.idpProfile?.family_name || '',
+                identifier: user?.idpProfile?.nickname || '',
+                email: user?.idpProfile?.email || '',
+                company: user?.idpProfile?.company || '',
+                jobTitle: user?.idpProfile?.job_title || '',
                 birthday: birthdate,
-                gender: user.idpProfile.gender || '',
-                specifyGender: user.idpProfile.gender_specify,
-                irc: user.idpProfile.irc || '',
-                github: user.idpProfile.github_user || '',
-                twitter: user.idpProfile.twitter_name || '',
-                linkedin: user.idpProfile.linked_in_profile || '',
-                language: user.idpProfile.locale || ''
+                gender: user?.idpProfile?.gender || '',
+                specifyGender: user?.idpProfile?.gender_specify,
+                irc: user?.idpProfile?.irc || '',
+                github: user?.idpProfile?.github_user || '',
+                twitter: user?.idpProfile?.twitter_name || '',
+                linkedin: user?.idpProfile?.linked_in_profile || '',
+                language: user?.idpProfile?.locale || ''
             });
-            setShowFullName(user.idpProfile.public_profile_show_fullname);
-            setAllowChatWithMe(user.idpProfile.public_profile_allow_chat_with_me);
-            setShowEmail(user.idpProfile.public_profile_show_email);
-            setBio(user.idpProfile.bio || '');
-            setStatementOfInterest(user.idpProfile.statement_of_interest || '');
+            setShowFullName(user?.idpProfile?.public_profile_show_fullname);
+            setAllowChatWithMe(user?.idpProfile?.public_profile_allow_chat_with_me);
+            setShowEmail(user?.idpProfile?.public_profile_show_email);
+            setBio(user?.idpProfile?.bio || '');
+            setStatementOfInterest(user?.idpProfile?.statement_of_interest || '');
             setAddress({
-                street: user.idpProfile.address1 || '',
-                floor: user.idpProfile.address2 || '',
-                city: user.idpProfile.locality || '',
-                state: user.idpProfile.region || '',
-                zipCode: user.idpProfile.postal_code || '',
-                country: user.idpProfile.country || '',
-                phone: user.idpProfile.phone_number || ''
+                street: user?.idpProfile?.address1 || '',
+                floor: user?.idpProfile?.address2 || '',
+                city: user?.idpProfile?.locality || '',
+                state: user?.idpProfile?.region || '',
+                zipCode: user?.idpProfile?.postal_code || '',
+                country: user?.idpProfile?.country || '',
+                phone: user?.idpProfile?.phone_number || ''
             });
         }
         return () => {
@@ -107,7 +107,7 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                 company: ''
             });
         };
-    }, [user.idpProfile, getIDPProfile]);
+    }, [user?.idpProfile, getIDPProfile]);
 
     const handlePictureUpdate = (picture) => {
         updateProfilePicture(picture);
@@ -242,10 +242,10 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                         </button>
                         <h3>
                             Hello, <br />
-                            {user.idpProfile.given_name} {user.idpProfile.family_name}
+                            {user?.idpProfile.given_name} {user?.idpProfile.family_name}
                         </h3>
                         <h4>
-                            @{user.idpProfile?.nickname}
+                            @{user?.idpProfile?.nickname}
                         </h4>
                         <ChangePasswordComponent updatePassword={handlePasswordUpdate} />
                     </div>
@@ -592,7 +592,7 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
             </div>
             {showProfile &&
                 <ProfilePopupComponent
-                    userProfile={user.idpProfile}
+                    userProfile={user?.idpProfile}
                     showProfile={showProfile}
                     idpLoading={user.loadingIDP}
                     fromFullProfile={true}
