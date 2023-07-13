@@ -2,6 +2,8 @@ import configurationsCollection from "./collections/configurationsCollection";
 import defaultPagesCollection from "./collections/defaultPagesCollection";
 import contentPagesCollection from "./collections/contentPagesCollection";
 
+const CMS_BACKEND_REPO = process.env.GATSBY_CMS_BACKEND_REPO;
+
 export const collections = [
   configurationsCollection,
   defaultPagesCollection,
@@ -11,7 +13,7 @@ export const collections = [
 const config = {
   backend: {
     name: "github",
-    repo: "OpenEventKit/event-site",
+    repo: CMS_BACKEND_REPO,
     branch: "main",
     commit_messages: {
       create: "Create {{collection}} “{{slug}}”",
