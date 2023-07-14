@@ -85,7 +85,7 @@ const SSR_getEvents = async (baseUrl, summitId, accessToken) => {
     access_token: accessToken,
     per_page: 50,
     page: 1,
-    expand: "slides, links, videos, media_uploads, type, track, track.allowed_access_levels, location, location.venue, location.floor, speakers, moderator, sponsors, current_attendance, groups, rsvp_template, tags",
+    expand: "slides, links, videos, media_uploads, type, track, track.subtracks, track.allowed_access_levels, location, location.venue, location.floor, speakers, moderator, sponsors, current_attendance, groups, rsvp_template, tags",
   }
 
   return await axios.get(endpoint, { params }).then(async ({data}) => {
@@ -130,7 +130,7 @@ const SSR_getSpeakers = async (baseUrl, summitId, accessToken, filter = null) =>
 const SSR_getSummit = async (baseUrl, summitId) => {
 
   const params = {
-    expand: "event_types,tracks,track_groups,presentation_levels,locations.rooms,locations.floors,order_extra_questions.values,schedule_settings,schedule_settings.filters,schedule_settings.pre_filters",
+    expand: "event_types,tracks, tracks.subtracks,track_groups,presentation_levels,locations.rooms,locations.floors,order_extra_questions.values,schedule_settings,schedule_settings.filters,schedule_settings.pre_filters",
     t: Date.now()
   };
 
