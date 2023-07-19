@@ -55,7 +55,7 @@ export const LobbyPageTemplate = class extends React.Component {
         <PageHeader
           title={hero.title}
           subtitle={hero.subTitle}
-          backgroundImageSrc={hero.image?.src}
+          backgroundImageSrc={hero.background?.src}
         />
         }
         <div className="px-5 py-5 mb-6">
