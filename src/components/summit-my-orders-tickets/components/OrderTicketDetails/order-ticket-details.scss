@@ -115,4 +115,14 @@
   &--unset &__status {
     color: $color-black;
   }
+
+  &--cancel {
+    cursor: not-allowed;
+  }
+
+  &--cancel &__icon,
+  &--cancel &__status {
+    font-weight: bold;
+    color: $color-danger;
+  }
 }
