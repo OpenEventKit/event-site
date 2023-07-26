@@ -27,7 +27,8 @@ const {
   SPEAKERS_IDX_FILE_PATH,
   VOTEABLE_PRESENTATIONS_FILE_PATH,
   MARKETING_SETTINGS_FILE_PATH,
-  MAINTENANCE_FILE_PATH
+  MAINTENANCE_FILE_PATH,
+  SPONSORS_FILE_PATH
 } = require("./src/utils/filePath");
 
 const fileBuildTimes = [];
@@ -310,7 +311,11 @@ exports.onPreBootstrap = async () => {
   const allSponsors = await SSR_getSponsors(summitApiBaseUrl, summitId, accessToken);
   console.log(`allSponsors ${allSponsors.length}`);
   const sponsorsWithCollections  = await SSR_getSponsorCollections(allSponsors, summitApiBaseUrl, summitId, accessToken);
-  fs.writeFileSync('src/content/sponsors.json', JSON.stringify(sponsorsWithCollections), 'utf8');
+  fileBuildTimes.push({
+    "file": SPONSORS_FILE_PATH,
+    "build_time": Date.now()
+  });
+  fs.writeFileSync(SPONSORS_FILE_PATH, JSON.stringify(sponsorsWithCollections), 'utf8');
 
   // Voteable Presentations
   const allVoteablePresentations = await SSR_getVoteablePresentations(summitApiBaseUrl, summitId, accessToken);
