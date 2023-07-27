@@ -3,6 +3,7 @@ import defaultPagesCollection from "./collections/defaultPagesCollection";
 import contentPagesCollection from "./collections/contentPagesCollection";
 
 const CMS_BACKEND_REPO = process.env.GATSBY_CMS_BACKEND_REPO;
+const CMS_BACKEND_BRANCH = process.env.GATSBY_CMS_BACKEND_BRANCH ||  "main";
 
 export const collections = [
   configurationsCollection,
@@ -14,7 +15,7 @@ const config = {
   backend: {
     name: "github",
     repo: CMS_BACKEND_REPO,
-    branch: "main",
+    branch: CMS_BACKEND_BRANCH,
     commit_messages: {
       create: "Create {{collection}} “{{slug}}”",
       update: "Update {{collection}} “{{slug}}”",
