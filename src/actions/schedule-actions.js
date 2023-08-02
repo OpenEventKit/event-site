@@ -103,7 +103,7 @@ export const updateFiltersFromHash =
           : "";
       } else {
         const newValues = normalizedFilters[key]
-          ? normalizedFilters[key].split(",")
+          ? decodeURIComponent(normalizedFilters[key]).split(",")
           : [];
         newFilters[key].values = newValues.map((val) => {
           if (isNaN(val)) return decodeURIComponent(val);
@@ -147,7 +147,7 @@ export const getShareLink = (filters, view) => {
   }
 
   if (typeof window !== "undefined") {
-    return `${window.location}#${hashVars.join("&")}`;
+    return `${window.location}${window.location.hash}${hashVars.join("&")}`;
   }
 
   return "";
