@@ -79,9 +79,10 @@ export const updateFiltersFromHash =
     // clear hash that match filters
     fragmentParser.deleteParams([...filterKeys, "view"]);
 
-    // reset url hash
+    // remove from hash all params that are related to filters
     if (windowExists) {
-      window.history.replaceState(null, null, " ");
+        const fragment = fragmentParser.serialize();
+        window.location.hash = fragment;
     }
 
     // escape if no filter hash
