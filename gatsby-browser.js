@@ -27,7 +27,7 @@ export const onClientEntry = () => {
   });
   // set theme
   const themeSetting = marketingSettings.find(ms => ms.key === 'EVENT_SITE_COLOR_SCHEME');
-  const theme = themeSetting?.value || 'DARK';
+  const theme = themeSetting?.value || 'LIGHT';
   document.documentElement.setAttribute('data-theme', theme);
 
   // init sentry
