@@ -147,7 +147,8 @@ export const getShareLink = (filters, view) => {
   }
 
   if (typeof window !== "undefined") {
-    return `${window.location}${window.location.hash}${hashVars.join("&")}`;
+    const currentURL = window.location.href.split("#")[0];
+    return `${currentURL}${window.location.hash ? window.location.hash : '#'}${hashVars.join("&")}`;
   }
 
   return "";
