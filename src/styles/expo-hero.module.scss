@@ -7,14 +7,14 @@
 
 .title {
   font-size: 102px;
-  color: $color_primary_contrast;
+  color: var(--color_primary_contrast);
   font-weight: bold;
   text-align: center;
 }
 
 .subtitle {
   font-size: 32px;
-  color: $color_primary_contrast;
+  color: var(--color_primary_contrast);
   text-align: center;
   max-width: 800px;
   margin: auto;

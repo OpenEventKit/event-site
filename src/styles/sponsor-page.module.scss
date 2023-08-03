@@ -10,7 +10,7 @@
   display: flex;
   justify-content: space-between;
   .button {
-    background-color: $color_secondary_contrast;
+    background-color: var(--color_secondary_contrast);
     align-items: center;
     border: none;
     color: #fff;
@@ -50,7 +50,7 @@
 
 .hero {
   background-color: black;
-  color: $color_text_light;
+  color: var(--color_text_light);
 
   .hero-sponsor-image-bg {
     background-size: cover;
@@ -60,7 +60,7 @@
   .hero-sponsor {
     position: relative;
     overflow: hidden;
-    background-color: $color_secondary_contrast;
+    background-color: var(--color_secondary_contrast);
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
@@ -89,7 +89,7 @@
           align-self: flex-end;
 
           .link {
-            color: $color_text_light;
+            color: var(--color_text_light);
 
             i {
               font-size: 2.5rem;
@@ -122,7 +122,7 @@
 
             .link {
               .button {
-                background-color: $color_secondary_contrast;
+                background-color: var(--color_secondary_contrast);
                 border: none;
                 color: #fff;
                 height: 5rem;
@@ -170,7 +170,7 @@
 
               .link {
                 .button {
-                  background-color: $color_secondary_contrast;
+                  background-color: var(--color_secondary_contrast);
                   border: none;
                   color: #fff;
                   height: 3.5rem;
@@ -253,7 +253,7 @@
 
   .link {
     .button {
-      background-color: $color_secondary_contrast;
+      background-color: var(--color_secondary_contrast);
       border: none;
       color: #fff;
       height: 5rem;
@@ -307,8 +307,8 @@
 }
 
 .bottom-bar {
-  background-color: $color_secondary_contrast;
-  color: $color_text_light;
+  background-color: var(--color_secondary_contrast);
+  color: var(--color_text_light);
   font-size: 30px;
   padding: 6px 10px;
   position: relative;
@@ -350,11 +350,11 @@
   justify-content: space-evenly;
   padding: 3rem;
   margin-top: 2rem;
-  background-color: $color_secondary_contrast;
+  background-color: var(--color_secondary_contrast);
 
   .container-text {
     font-size: 32px;
-    color: $color_text_light;
+    color: var(--color_text_light);
   }
 
   .container-buttons {
@@ -462,7 +462,7 @@
             flex-direction: column;
 
             .link {
-              color: $color_text_light;
+              color: var(--color_text_light);
 
               i {
                 font-size: 2.5rem;
@@ -498,8 +498,8 @@
 
               .link {
                 .button {
-                  background-color: $color_secondary_contrast;
-                  border-color: $color_secondary_contrast;
+                  background-color: var(--color_secondary_contrast);
+                  border-color: var(--color_secondary_contrast);
                   color: #fff;
                   height: 5rem;
                   width: 5rem;
@@ -550,8 +550,8 @@
 
                 .link {
                   .button {
-                    background-color: $color_secondary_contrast;
-                    border-color: $color_secondary_contrast;
+                    background-color: var(--color_secondary_contrast);
+                    border-color: var(--color_secondary_contrast);
                     color: #fff;
                     height: 4rem;
                     width: 4rem;

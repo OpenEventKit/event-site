@@ -4,8 +4,8 @@
 %button-big {
   border-radius: 4px;
   height: 56px;
-  color: $color_text_light;
-  background-color: $color_secondary;
+  color: var(--color_text_light);
+  background-color: var(--color_secondary);
   font-size: 15px;
 
   @extend %font-regular;
@@ -14,7 +14,7 @@
 %title-huge {
   font-size: 46px;
   line-height: 46px;
-  color: $color_text_dark;
+  color: var(--color_text_dark);
 
   @extend %font-bold;
 }
@@ -22,7 +22,7 @@
 %title-big {
   font-size: 32px;
   line-height: 32px;
-  color: $color_text_dark;
+  color: var(--color_text_dark);
 
   @extend %font-bold;
 }
@@ -30,7 +30,7 @@
 %title {
   font-size: 28px;
   line-height: 28px;
-  color: $color_text_dark;
+  color: var(--color_text_dark);
 
   @extend %font-semi;
 }
@@ -38,21 +38,21 @@
 %title-med {
   font-size: 24px;
   line-height: 24px;
-  color: $color_text_dark;
+  color: var(--color_text_dark);
 
   @extend %font-bold;
 }
 
 %title-small {
   font-size: 18px;
-  color: $color_text_dark;
+  color: var(--color_text_dark);
 
   @extend %font-bold;
 }
 
 %title-tiny {
   font-size: 14px;
-  color: $color_text_dark;
+  color: var(--color_text_dark);
 
   @extend %font-semi;
 }
@@ -60,7 +60,7 @@
 %text-big {
   font-size: 20px;
   line-height: 24px;
-  color: $color_text_med;
+  color: var(--color_text_dark);
 
   @extend %font-semi;
 }
@@ -68,7 +68,7 @@
 %text-med {
   font-size: 15px;
   line-height: 20px;
-  color: $color_text_med;
+  color: var(--color_text_dark);
 
   @extend %font-regular;
 }
@@ -84,7 +84,7 @@
 %text-tiny {
   font-size: 12px;
   line-height: 16px;
-  color: $color_text_med;
+  color: var(--color_text_med);
 
   @extend %font-regular;
 }
@@ -92,8 +92,8 @@
 %button-small-primary {
   border-radius: 4px;
   height: 39px;
-  color: $color_text_light;
-  background-color: $color_secondary;
+  color: var(--color_text_light);
+  background-color: var(--color_secondary);
   font-size: 15px;
 
   @extend %font-regular;
@@ -102,8 +102,8 @@
 %button-small-secondary {
   border-radius: 4px;
   height: 39px;
-  color: $color_text_med;
-  background-color: $color_gray_light;
+  color: var(--color_text_med);
+  background-color: var(--color_gray_light);
   font-size: 15px;
 
   @extend %font-regular;
@@ -114,8 +114,8 @@
   height: 39px;
   background-color: white;
   font-size: 15px;
-  border: 1px solid $color_gray_dark;
-  color: $color_text_dark;
+  border: 1px solid var(--color_gray_dark);
+  color: var(--color_text_dark);
 
 
   @extend %font-regular;
@@ -126,8 +126,8 @@
   height: 39px;
   background-color: white;
   font-size: 15px;
-  border: 1px solid $color_gray_light;
-  color: $color_text_dark;
+  border: 1px solid var(--color_gray_light);
+  color: var(--color_text_dark);
 
 
   @extend %font-regular;

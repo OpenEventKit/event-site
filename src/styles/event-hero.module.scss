@@ -1,7 +1,7 @@
 @import "styles/colors.scss";
 
 div.column:first-of-type {
-  background-color: $color_secondary_contrast;
+  background-color: var(--color_secondary_contrast);
 }
 
 .hero-events {
@@ -21,7 +21,7 @@ div.column:first-of-type {
 
     .title {
       font-size: 48px;
-      color: $color_text_light;
+      color: var(--color_text_light);
       font-weight: bold;
       letter-spacing: 0.5rem;
       padding-left: 1rem;
@@ -29,13 +29,13 @@ div.column:first-of-type {
 
     .subtitle {
       font-size: 38px;
-      color: $color_text_light;
+      color: var(--color_text_light);
       padding-left: 1rem;
     }
 
     .date {
-      background-color: $color_secondary;
-      color: $color_text_light;
+      background-color: var(--color_secondary);
+      color: var(--color_text_light);
       font-size: 32px;
       letter-spacing: 0.5rem;
       padding: 0.5rem 0;

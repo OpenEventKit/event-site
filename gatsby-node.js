@@ -17,7 +17,6 @@ const {
   REQUIRED_DIR_PATHS,
   DEFAULT_COLORS_FILE_PATH,
   COLORS_FILE_PATH,
-  COLORS_SASS_FILE_PATH,
   SITE_SETTINGS_FILE_PATH,
   LOBBY_PAGE_FILE_PATH,
   SUMMIT_FILE_PATH,
@@ -260,10 +259,6 @@ exports.onPreBootstrap = async () => {
   fs.writeFileSync(MARKETING_SETTINGS_FILE_PATH, JSON.stringify(marketingSettings), "utf8");
   fs.writeFileSync(COLORS_FILE_PATH, JSON.stringify(colorSettings), "utf8");
   fs.writeFileSync(LOBBY_PAGE_FILE_PATH, JSON.stringify(lobbyPageSettings), "utf8");
-
-  let sassColors = "";
-  Object.entries(colorSettings).forEach(([key, value]) => sassColors += `$${key} : ${value};\n`);
-  fs.writeFileSync(COLORS_SASS_FILE_PATH, sassColors, "utf8");
 
   // summit
   const summit = await SSR_getSummit(summitApiBaseUrl, summitId);

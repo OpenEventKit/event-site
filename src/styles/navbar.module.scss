@@ -5,7 +5,7 @@
 @import 'styles/colors.scss';
 
 .navbar {
-  background-color: $color_primary;
+  background-color: var(--color_primary);
   min-height: 7.25rem;
 
   .navbar-brand {
@@ -27,12 +27,12 @@
   }
 
   .user-icon {
-    color: $color_text_light;
+    color: var(--color_text_light);
     padding-left: 10px;
   }
 
   .navbar-item {
-    color: $color_text_light;
+    color: var(--color_text_light);
   }
 
   .navbar-menu {
@@ -40,22 +40,22 @@
       font-weight: 300;
 
       .link {
-        color: $color_text_light;
+        color: var(--color_text_light);
         padding: 6px;
         margin: -6px;
 
         &:hover {
-          color: $color_text_light;
+          color: var(--color_text_light);
           text-decoration: none;
         }
 
         &:active {
-          color: $color_text_light;
+          color: var(--color_text_light);
           text-decoration: underline;
         }
 
         &:visited {
-          color: $color_text_light;
+          color: var(--color_text_light);
         }
       }      
 
@@ -101,11 +101,11 @@
 
   .user-burger {
     display: block;
-    color: $color_text_light;
+    color: var(--color_text_light);
   }
 
   .user-icon {
-    color: $color_text_light;
+    color: var(--color_text_light);
     padding-left: 10px;
   }
 }
@@ -131,25 +131,25 @@
     }
 
     .navbar-burger {
-      color: $color_text_light;
+      color: var(--color_text_light);
       margin-right: 15px;
     }
 
     .navbar-menu {
       .navbar-item {
         .link {
-          color: $color_primary;
+          color: var(--color_primary);
 
           &:hover {
-            color: $color_primary;
+            color: var(--color_primary);
           }
 
           &:active {
-            color: $color_primary;
+            color: var(--color_primary);
           }
 
           &:visited {
-            color: $color_primary;
+            color: var(--color_primary);
           }
         }
       }
@@ -160,7 +160,7 @@
       }
 
       .user-icon {
-        color: $color_primary;
+        color: var(--color_primary);
         padding-bottom: 5px;
       }
     }

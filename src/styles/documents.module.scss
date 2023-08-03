@@ -2,7 +2,7 @@
 
 .docs-container {  
   border: 1px solid #d3d3d3;
-  color: $color_text_dark;
+  color: var(--color_text_dark);
   display: flex;
   flex-direction: column;
 
@@ -39,7 +39,7 @@
   }
 
   a {
-    color: $color_text_dark;
+    color: var(--color_text_dark);
   }
 
   i {

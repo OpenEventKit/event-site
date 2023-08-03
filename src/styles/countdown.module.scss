@@ -1,9 +1,11 @@
 @import 'styles/colors.scss';
 
+$color_secondary_loc: #00CEC4;
+
 .countdown {
   height: 150px;
-  background-color: $color_secondary;
-  color: $color_text_light;
+  background-color: var(--color_secondary);
+  color: var(--color_text_light);
 
   .countdown-columns {
     height: 100%;
@@ -22,11 +24,11 @@
       align-items: center;
 
       & div:first-of-type {
-        background-color: darken($color: $color_secondary, $amount: 20%);
+        background-color: rgba(0,0,0,0.2);
       }
 
       & div:nth-of-type(2) {
-        background-color: darken($color: $color_secondary, $amount: 10%);
+        background-color: rgba(0,0,0,0.1);
       }
 
       div {
