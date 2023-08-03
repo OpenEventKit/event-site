@@ -125,7 +125,7 @@ export const updateFiltersFromHash =
   };
 
 export const getShareLink = (filters, view) => {
-  const hashVars = [];
+  const hashVars = {};
 
   if (filters) {
     Object.entries(filters).forEach(([key, value]) => {
@@ -137,18 +137,20 @@ export const getShareLink = (filters, view) => {
         } else {
           hashValue = encodeURIComponent(value.values);
         }
-        hashVars.push(`${key}=${hashValue}`);
+        hashVars[key] = hashValue;
       }
     });
   }
 
   if (view) {
-    hashVars.push(`view=${view}`);
+    hashVars['view'] = view;
   }
 
   if (typeof window !== "undefined") {
     const currentURL = window.location.href.split("#")[0];
-    return `${currentURL}${window.location.hash ? window.location.hash : '#'}${hashVars.join("&")}`;
+    Object.entries(hashVars).map(([key, value]) => fragmentParser.setParam(key, value));    
+    let fragment = fragmentParser.serialize();
+    return `${currentURL}${fragment}`;
   }
 
   return "";
