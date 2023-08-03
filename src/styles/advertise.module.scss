@@ -15,7 +15,7 @@
 .sponsor-container-center {
   margin-top: 3rem;
   height: 250px;
-  background-color: $color_secondary_contrast;
+  background-color: var(--color_secondary_contrast);
   display: flex;
 
   .container-text {
@@ -28,7 +28,7 @@
 
     .ad-text {
       display: inline-flex;
-      color: $color_text_light;
+      color: var(--color_text_light);
       font-size: 24px;
       text-align: center;
     }

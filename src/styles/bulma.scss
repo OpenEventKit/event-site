@@ -2,8 +2,8 @@
 @import "bulma/sass/utilities/_all.sass";
 @import 'styles/colors.scss';
 
-$footer-background-color: $color-primary !important;
-$footer-color: $color-text-light !important;
+$footer-background-color: var(--color-primary) !important;
+$footer-color: var(--color-text-light) !important;
 $footer-padding: 2rem !important;
 
 $font-family-base: 'Nunito Sans', sans-serif;
