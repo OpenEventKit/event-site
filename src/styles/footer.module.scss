@@ -4,18 +4,18 @@
   text-align: left;
 
   h4 {
-    border-bottom: 2px solid $color_text_light;
+    border-bottom: 2px solid var(--color_text_light);
     text-transform: uppercase;
     padding-bottom: 1rem;
     margin-bottom: 2rem;
   }
 
   .link {
-    color: $color_text_light;
+    color: var(--color_text_light);
 
     :hover,
     :visited {
-      color: $color_text_light;
+      color: var(--color_text_light);
     }
   }
 
@@ -31,18 +31,18 @@
 }
 
 .legals-bar {
-  color: $color_text_light;
+  color: var(--color_text_light);
   background-color: #494a4c;
   padding: 1rem 2rem;
   display: flex;
 
   .link {
-    color: $color_text_light;
+    color: var(--color_text_light);
   }
 
   a:hover.link,
   a:visited.link {
-    color: $color_text_light;
+    color: var(--color_text_light);
     text-decoration: none;
   }
 

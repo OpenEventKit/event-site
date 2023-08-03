@@ -11,6 +11,7 @@ import "./src/styles/bulma.scss";
 import "./src/styles/style.scss";
 
 import colors from "data/colors.json";
+import marketingSettings from "data/marketing-settings.json";
 
 // smooth scroll polyfill needed for Safari
 smoothscroll.polyfill();
@@ -20,10 +21,15 @@ export const wrapRootElement = ReduxWrapper;
 export const onClientEntry = () => {
   // var set at document level
   // prevents widget color flashing from defaults to fetched by widget from marketing api
-  Object.entries(colors).forEach(color => {
-    document.documentElement.style.setProperty(`--${color[0]}`, color[1]);
-    document.documentElement.style.setProperty(`--${color[0]}50`, `${color[1]}50`);
-  })
+  Object.entries(colors).forEach(([key, value]) => {
+    document.documentElement.style.setProperty(`--${key}`, value);
+    document.documentElement.style.setProperty(`--${key}50`, `${value}50`);
+  });
+  // set theme
+  const themeSetting = marketingSettings.find(ms => ms.key === 'EVENT_SITE_COLOR_SCHEME');
+  const theme = themeSetting?.value || 'LIGHT';
+  document.documentElement.setAttribute('data-theme', theme);
+
   // init sentry
   const GATSBY_SENTRY_DSN = process.env.GATSBY_SENTRY_DSN;
   if(GATSBY_SENTRY_DSN) {

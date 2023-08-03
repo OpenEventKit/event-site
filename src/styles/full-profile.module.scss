@@ -59,7 +59,7 @@
         .header {
             font-size: 18px;
             line-height: 22px;
-            color: $color_text_dark;
+            color: var(--color_text_dark);
             font-weight: bold;
             margin: 0 -20px;
             padding: 0 15px 10px;
@@ -122,7 +122,7 @@
                     button {
                         color: #ffffff;
                         border-color: #ffffff;
-                        background-color: $color_primary;
+                        background-color: var(--color-primary);
                     }
                 }
             }

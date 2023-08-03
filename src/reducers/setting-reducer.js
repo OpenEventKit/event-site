@@ -40,7 +40,7 @@ const settingReducer = (state = DEFAULT_STATE, action) => {
         lastDataSync: Date.now(),
         lastCheckForNovelties: state.lastCheckForNovelties,
       };
-    case  UPDATE_LAST_CHECK_FOR_NOVELTIES:{
+    case UPDATE_LAST_CHECK_FOR_NOVELTIES:{
       let newLastCheckForNovelties = payload;
       if(newLastCheckForNovelties < state.lastCheckForNovelties)
         newLastCheckForNovelties = state.lastCheckForNovelties;

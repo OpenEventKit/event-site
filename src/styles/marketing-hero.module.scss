@@ -107,7 +107,7 @@
         transform: skew(25deg);
         font-size: 3rem;
         font-weight: bold;
-        color: $color_text_light;
+        color: var(--color_text_light);
         letter-spacing: 0.1rem;
       }
 
