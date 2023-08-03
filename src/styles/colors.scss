@@ -31,8 +31,8 @@ $color_text_input_hints : #c4c4c4;
 }
 
 html[data-theme="DARK"] {
-  --color_text_dark: #{$color_text_light};
-  --color_text_light: #{$color_text_dark};
-  --color_background_light: #{$color_background_dark};
-  --color_background_dark: #{$color_background_light};
+  --color_text_dark: #{$color_text_light} !important;
+  --color_text_light: #{$color_text_dark} !important;
+  --color_background_light: #{$color_background_dark} !important;
+  --color_background_dark: #{$color_background_light} !important;
 }
