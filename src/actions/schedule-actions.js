@@ -150,7 +150,7 @@ export const getShareLink = (filters, view) => {
     const currentURL = window.location.href.split("#")[0];
     Object.entries(hashVars).map(([key, value]) => fragmentParser.setParam(key, value));    
     let fragment = fragmentParser.serialize();
-    return `${currentURL}${fragment}`;
+    return `${currentURL}#${fragment}`;
   }
 
   return "";
