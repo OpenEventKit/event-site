@@ -103,7 +103,7 @@ export const updateFiltersFromHash =
           : "";
       } else {
         const newValues = normalizedFilters[key]
-          ? normalizedFilters[key].split(",")
+          ? decodeURIComponent(normalizedFilters[key]).split(",")
           : [];
         newFilters[key].values = newValues.map((val) => {
           if (isNaN(val)) return decodeURIComponent(val);
@@ -125,7 +125,7 @@ export const updateFiltersFromHash =
   };
 
 export const getShareLink = (filters, view) => {
-  const hashVars = [];
+  const hashVars = {};
 
   if (filters) {
     Object.entries(filters).forEach(([key, value]) => {
@@ -137,17 +137,20 @@ export const getShareLink = (filters, view) => {
         } else {
           hashValue = encodeURIComponent(value.values);
         }
-        hashVars.push(`${key}=${hashValue}`);
+        hashVars[key] = hashValue;
       }
     });
   }
 
   if (view) {
-    hashVars.push(`view=${view}`);
+    hashVars['view'] = view;
   }
 
   if (typeof window !== "undefined") {
-    return `${window.location}#${hashVars.join("&")}`;
+    const currentURL = window.location.href.split("#")[0];
+    Object.entries(hashVars).map(([key, value]) => fragmentParser.setParam(key, value));    
+    let fragment = fragmentParser.serialize();
+    return `${currentURL}#${fragment}`;
   }
 
   return "";
