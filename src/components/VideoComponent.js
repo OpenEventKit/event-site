@@ -17,6 +17,10 @@ const checkVimeoVideo = (url) => {
     return url.match(/https:\/\/(www\.)?(player\.)?vimeo.com\/(.*)/);
 };
 
+function checkYouTubeVideo(url) {
+    return url.match(/^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/);
+}
+
 const VideoComponent = ({ url, title, namespace, firstHalf, autoPlay, start }) => {
     console.log({ url, title, namespace, firstHalf, autoPlay, start });
     if (url) {
@@ -54,6 +58,23 @@ const VideoComponent = ({ url, title, namespace, firstHalf, autoPlay, start }) =
                 <VideoJSPlayer title={title} namespace={namespace} firstHalf={firstHalf} {...videoJsOptions} />
             );
         };
+
+        const customOptions = checkYouTubeVideo(url) ? {
+            techOrder: ["youtube"],
+            sources: [{
+                type: "video/youtube",
+                src: url
+            }],
+            youtube: {
+                ytControls: 0,
+                iv_load_policy: 1
+            },
+        }: {
+            sources: [{
+                src: url
+            }],
+        };
+
         const videoJsOptions = {
             autoplay: autoPlay,
             /*
@@ -64,17 +85,10 @@ const VideoComponent = ({ url, title, namespace, firstHalf, autoPlay, start }) =
             muted: !!autoPlay,
             controls: true,
             fluid: true,
-            techOrder: ["youtube"],
-            sources: [{
-                type: "video/youtube",
-                src: url
-            }],
-            youtube: {
-                ytControls: 0,
-                iv_load_policy: 1
-            },
             playsInline: true,
+            ...customOptions
         };
+
         return (
             <VideoJSPlayer title={title} namespace={namespace} {...videoJsOptions} />
         );
