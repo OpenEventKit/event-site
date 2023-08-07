@@ -7858,10 +7858,10 @@ fsevents@~2.3.2:
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.2.tgz#8a526f78b8fdf4623b709e0b975c52c24c02fd1a"
   integrity sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==
 
-full-schedule-widget@^2.0.35:
-  version "2.0.35"
-  resolved "https://registry.yarnpkg.com/full-schedule-widget/-/full-schedule-widget-2.0.35.tgz#3e7475d467ca76e77a995508e638fa80d5609046"
-  integrity sha512-NLQYjcV5s8F+64tvWW+dO1DN6TAWZf2ar1PwJJ1d3eOOv8WfJmJIHktTTN3st4NFuCXxdV/PVlqG3cYjnR0S6Q==
+full-schedule-widget@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/full-schedule-widget/-/full-schedule-widget-3.0.0.tgz#5f814c2f51aa0a60e01e0f51a9899f4963f49b04"
+  integrity sha512-EVBf5wacQl5n6KqZqLojLbcfDfRWtP4MSmudvd+hJj8BUcrSJHpc1o3r/7ja6Fl47j/VS3w1/Kdju6C1sSFX8Q==
   dependencies:
     "@mui/base" "5.0.0-alpha.127"
     "@react-pdf/renderer" "^3.1.11"
@@ -17119,10 +17119,10 @@ unpipe@1.0.0, unpipe@~1.0.0:
   resolved "https://registry.yarnpkg.com/unpipe/-/unpipe-1.0.0.tgz#b2bf4ee8514aae6165b4817829d21b2ef49904ec"
   integrity sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==
 
-upcoming-events-widget@2.0.9:
-  version "2.0.9"
-  resolved "https://registry.yarnpkg.com/upcoming-events-widget/-/upcoming-events-widget-2.0.9.tgz#0c8cc36b60470a9e07388357cd0fcde4c8fb20f4"
-  integrity sha512-JMSYB/4sihWfP0pE7/lAwKJNIOxRB+poScuQ9MrgVIS5tG3XUjf1jssGYQHEEA59imbGFgipvrt99smxihc2NA==
+upcoming-events-widget@3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/upcoming-events-widget/-/upcoming-events-widget-3.0.1.tgz#d8d27ab40c619de1d2e949038273554dfcdbeb79"
+  integrity sha512-9RJVwRMOK7OXdvi/4qHZddKXKDpuNVw5EGiySfqJnkSXEFUMrRvXWkndlLli3b2puW5K2lzyfncdggGjsFw0nw==
   dependencies:
     pure-react-carousel "^1.30.1"
 
