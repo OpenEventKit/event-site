@@ -235,6 +235,7 @@ h2 {
 }
 
 .talk {
+  color: var(--color_text_dark);
   &__break {
     background-color: var(--color_secondary);
     min-height: 92vh !important;
