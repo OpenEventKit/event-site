@@ -32,6 +32,7 @@ const AuthComponent = ({
     userProfile,
     eventRedirect,
     location,
+    authRef,
     style = {},
     renderLoginButton = null,
     renderEnterButton = null
@@ -166,7 +167,7 @@ const AuthComponent = ({
     );
 
     return (
-        <div style={style} className={styles.loginButtonWrapper}>
+        <div style={style} className={styles.loginButtonWrapper} ref={authRef}>
             {!isLoggedUser ?
                 renderLoginButton ? renderLoginButton(handleOpenPopup) : defaultLoginButton()
                 :
