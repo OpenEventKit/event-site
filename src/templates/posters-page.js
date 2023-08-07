@@ -225,7 +225,7 @@ const PostersPage = ({
 };
 
 const mapStateToProps = ({ settingState, presentationsState, userState, summitState }) => ({
-  pagesSettings: [...settingState.posterPagesSettings.posterPages],
+  pagesSettings: [...settingState.posterPagesSettings.postersPages],
   posters: presentationsState.voteablePresentations.filteredPresentations,
   allBuildTimePosters: presentationsState.voteablePresentations.ssrPresentations,
   allPosters: presentationsState.voteablePresentations.allPresentations,
