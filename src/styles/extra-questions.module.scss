@@ -49,6 +49,9 @@
 .button-save {
   float: right;
   margin-top: 20px;
+  color: var(--color_input_text_color) !important;
+  background-color: var(--color_input_background_color) !important;
+  border-color: var(--color_input_border_color) !important;
 }
 
 .mandatoryDisclaimer::after {

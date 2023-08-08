@@ -30,6 +30,7 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, saveA
     const hasExtraQuestions = extraQuestions.length > 0;
 
     const initialValues = useMemo(() => {
+
         const {
             email,
             first_name,
@@ -37,7 +38,7 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, saveA
             company,
             disclaimer_accepted_date,
             extra_questions
-        } = ticket.owner || {};
+        } = ticket?.owner || {};
 
         const formattedExtraQuestions = extra_questions ?
             extra_questions.map(({ question_id, value }) => (
