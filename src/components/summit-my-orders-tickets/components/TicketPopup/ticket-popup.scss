@@ -43,12 +43,13 @@
   top: 0%;
   bottom: 0%;
   margin: auto;
-  background: $color-white;
+  background-color: var(--color_background_light) !important;
   z-index: 15;
+
 }
 
 .ticket-popup-header {
-  background-color: $color-primary;
+  background-color: var(--color_background_light) !important;
   font-weight: bold;
   padding: 15px;
   display: flex;
@@ -274,7 +275,7 @@
 
   &--edit {
     .ticket-popup-footer {
-      border-top: 1px solid $color-gray-lighter;
+      border-top: 1px solid var(--color-gray-lighter);
       left: 0;
       bottom: 0;
       height: 60px;
@@ -282,13 +283,17 @@
       position: absolute;
       text-align: center;
       width: 100%;
-      background-color: $color-white;
+      background-color: var(--color_background_light);
       z-index: 25;
+
 
       button {
         padding: 8px 26px;
         line-height: 22px;
         font-size: 16px;
+        color: var(--color_input_text_color) !important;
+        background-color: var(--color_input_background_color) !important;
+        border-color: var(--color_input_border_color) !important;
       }
     }
 

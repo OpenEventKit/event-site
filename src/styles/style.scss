@@ -7,7 +7,43 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
+  /********************************************************/
+  /*                  base mode rules                     */
+  /********************************************************/
+
   background-color: var(--color_background_light) !important;
+  color: var(--color_text_dark) !important;
+
+  input, select, textarea {
+    color: var(--color_input_text_color) !important;
+    background-color: var(--color_input_background_color) !important;
+    border-color: var(--color_input_border_color) !important;
+  }
+
+  h2, h1 , h3{
+    color: var(--color_text_dark) !important;
+  }
+
+  .ajax-loader-container {
+    .fa-spinner{
+      color:var(--color_input_text_color) !important;
+    }
+  }
+
+  .rdtPicker{
+    background-color: var(--color_input_background_color);
+    color: var(--color_input_text_color);
+    .rdtDays{
+      table th{
+        color: var(--color_input_text_color);
+        text-align: center;
+      }
+    }
+  }
+
+  /********************************************************/
+  /*            end of base mode rules                    */
+  /********************************************************/
 }
 
 
@@ -235,7 +271,8 @@ h2 {
 }
 
 .talk {
-  color: var(--color_text_dark);
+  color: var(--color_text_med);
+
   &__break {
     background-color: var(--color_secondary);
     min-height: 92vh !important;
@@ -251,12 +288,13 @@ h2 {
 
   h1 {
     font-size: 40px;
+    color: var(--color_text_dark);
   }
 
   &__date {
     font-weight: bold;
+    color: var(--color_text_dark);
   }
-
 
   &__speaker, &__moderator {
     &--name {
