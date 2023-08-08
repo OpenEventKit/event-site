@@ -17,10 +17,15 @@
       padding-top: 10px;
     }
   }
+  textarea{
+    width: 100%;
+    resize: none;
+  }
   input[type="checkbox"] {
     margin-right: 3px;
     &~ label {
       padding-left: 13px !important;
+      color: var(--color_input_text_color) !important;
     }
   }
   h4 {
@@ -29,6 +34,7 @@
     line-height: 1;
     padding-top: 4px;
     margin-bottom: 0px;
+    color: var(--color_input_text_color) !important;
   }
 }
 
