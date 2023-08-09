@@ -57,7 +57,7 @@ const App = ({ data, isLoggedUser, user, summitPhase }) => {
   );
 };
 
-const mapStateToProps = ({ loggedUserState, userState, clockState, settingState, summitState }) => ({
+const mapStateToProps = ({ loggedUserState, userState, clockState }) => ({
   isLoggedUser: loggedUserState.isLoggedUser,
   summitPhase: clockState.summit_phase,
   user: userState
