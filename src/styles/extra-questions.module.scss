@@ -36,11 +36,6 @@
     margin-bottom: 0px;
     color: var(--color_input_text_color) !important;
   }
-  .controlWrapper > div > div[class$="container"] > div[class$="control"] {
-    background-color: var(--color_input_background_color) !important;;
-    color: var(--color_input_text_color) !important;
-    border-color: var(--color_input_border_color) !important;
-  }
 }
 
 .error-label {
@@ -73,4 +68,10 @@
   color: red;
   font-size: 1em;
   font-weight: 700;
+}
+
+.controlWrapper > div > div[class$="container"] > div[class$="control"] {
+  background-color: var(--color_input_background_color) !important;;
+  color: var(--color_input_text_color) !important;
+  border-color: var(--color_input_border_color) !important;
 }

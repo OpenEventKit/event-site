@@ -21,6 +21,7 @@ import { DefaultScrollBehaviour as ScrollBehaviour } from '@utils/scroll';
 
 import './ticket-popup-edit-details-form.scss';
 import { useTicketAssignedContext } from '../../../context/TicketAssignedContext';
+import styles from "../../../../../styles/extra-questions.module.scss";
 
 const noOpFn = () => {};
 
@@ -343,7 +344,7 @@ export const TicketPopupEditDetailsForm = ({
                         allowExtraQuestionsEdit={canEditTicketData}
                         questionContainerClassName={`columns is-multiline extra-question pt-3`}
                         questionLabelContainerClassName={'column is-full pb-0'}
-                        questionControlContainerClassName={'column is-full pt-0'}
+                        questionControlContainerClassName={`column is-full pt-0 ${styles.controlWrapper}`}
                         shouldScroll2FirstError={false}
                         onError={handleExtraQuestionError}
                     />
