@@ -63,7 +63,6 @@ const App = ({ isLoggedUser, user, summitPhase, allowClick = true }) => {
                   <WithBadgeRoute path="/event/:eventId" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location}>
                     <EventPage path="/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location} />
                   </WithBadgeRoute>
-                  <LobbyPage path="/" isLoggedIn={isLoggedUser} user={user} location={location} />
                   <SponsorPage path="/sponsor/:sponsorId" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location} />
                   <ExpoHallPage path="/sponsors/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location} />
                 </ShowOpenRoute>
