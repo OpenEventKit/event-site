@@ -226,7 +226,7 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, saveA
                         allowExtraQuestionsEdit={summit.allow_update_attendee_extra_questions}
                         questionContainerClassName={`columns is-multiline ${styles.extraQuestion} pt-3`}
                         questionLabelContainerClassName={'column is-full pb-0'}
-                        questionControlContainerClassName={'column is-full pt-0'}
+                        questionControlContainerClassName={`column is-full pt-0 ${styles.controlWrapper}`}
                         shouldScroll2FirstError={false}
                         onError={handleExtraQuestionError}
                     />
