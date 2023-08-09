@@ -7244,10 +7244,10 @@ event-emitter@^0.3.5:
     d "1"
     es5-ext "~0.10.14"
 
-event-feedback-widget@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/event-feedback-widget/-/event-feedback-widget-2.0.0.tgz#fbeb7608bdd23bdd60f1cc6034a5b9b96eef65e2"
-  integrity sha512-zxznOsv+yc0XySfGBF/pXfb81A3vgDQnM7Y2vhe6BZFKAoH3sulBkGBtmhN4A+fTbD5n5p7uYVyHJRfF+0EMtA==
+event-feedback-widget@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/event-feedback-widget/-/event-feedback-widget-2.0.1.tgz#0c00740d290f8a6225370b3867187728271dd8ef"
+  integrity sha512-INjptM0sxAgtn8hZYC0MoN0HZzcUEG99CVm8NUkmkLxb8oi7IrmZ0pVn/UXoeHPPpGC1KnNlEK++ls4USUzIqg==
   dependencies:
     svg-url-loader "^7.1.1"
 
@@ -15142,10 +15142,10 @@ saxes@^5.0.1:
   dependencies:
     xmlchars "^2.2.0"
 
-schedule-filter-widget@^2.0.6:
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/schedule-filter-widget/-/schedule-filter-widget-2.0.6.tgz#36b5b6015877e4b8bf66ba55d5e77e5df142fa5b"
-  integrity sha512-Ynff8kXcxEFzZdwPCtLOHFLtf529gT4j5MO22SP1MEvCyl9CVILdyIgndGv3y5tnXPnEMDPSVVvi8HGFXwW9+g==
+schedule-filter-widget@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/schedule-filter-widget/-/schedule-filter-widget-3.0.0.tgz#b02bce8a26731487716215ae8bcbc6c0fba69f8e"
+  integrity sha512-BCcF53CXTYGpvwpHJxHZjtguqFrqDmLLxOiasgb6P4SZBVU5eI+hdsrMnozhsO4PKmsLAfKDQjzXJ29wXNRxFg==
   dependencies:
     react-spring "^9.1.2"
     react-use "^17.2.4"
