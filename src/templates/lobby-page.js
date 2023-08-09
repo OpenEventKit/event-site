@@ -148,9 +148,7 @@ const LobbyPage = (
     summit,
     lastDataSync
   }
-) => {
-  console.log(data)
-  return(
+) => (
   <Layout location={location}>
     <AttendanceTrackerComponent sourceName="LOBBY"/>
     <OrchestedTemplate
@@ -161,8 +159,7 @@ const LobbyPage = (
       lastDataSync={lastDataSync}
     />
   </Layout>
-
-)};
+);
 
 LobbyPage.propTypes = {
   data: PropTypes.object,
