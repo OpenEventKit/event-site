@@ -19,6 +19,6 @@ module.exports = `
   type LobbyPageJson implements Node {
     hero: LobbyPageHero
     centerColumn: LobbyPageCenterColumn
-    liveNowFeaturedEventId: Int
+    liveNowFeaturedEventId: String
   }
 `;

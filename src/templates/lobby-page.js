@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { navigate } from "gatsby";
+import { getSrc } from "gatsby-plugin-image";
 import { connect } from "react-redux";
 
 import Layout from "../components/Layout";
@@ -41,13 +42,15 @@ export const LobbyPageTemplate = class extends React.Component {
     const {
       user,
       summit,
-      lobbyPageSettings: {
-        hero,
-        centerColumn,
-        liveNowFeaturedEventId
+      data: {
+        lobbyPageJson: {
+          hero,
+          centerColumn,
+          liveNowFeaturedEventId
+        }
       },
       lastDataSync
-  } = this.props;
+    } = this.props;
 
     return (
       <>
@@ -55,7 +58,7 @@ export const LobbyPageTemplate = class extends React.Component {
         <PageHeader
           title={hero.title}
           subtitle={hero.subTitle}
-          backgroundImageSrc={hero.background?.src}
+          backgroundImageSrc={hero.background ? getSrc(hero.background.src) : null}
         />
         }
         <div className="px-5 py-5 mb-6">
@@ -139,31 +142,36 @@ const OrchestedTemplate = withOrchestra(LobbyPageTemplate);
 const LobbyPage = (
   {
     location,
+    data,
     user,
     getUserProfile,
     summit,
-    lastDataSync,
-    lobbyPageSettings
+    lastDataSync
   }
-) => (
+) => {
+  console.log(data)
+  return(
   <Layout location={location}>
     <AttendanceTrackerComponent sourceName="LOBBY"/>
     <OrchestedTemplate
       user={user}
+      data={data}
       getUserProfile={getUserProfile}
       summit={summit}
       lastDataSync={lastDataSync}
-      lobbyPageSettings={lobbyPageSettings}
     />
   </Layout>
-);
+
+)};
 
 LobbyPage.propTypes = {
+  data: PropTypes.object,
   user: PropTypes.object,
   getUserProfile: PropTypes.func
 };
 
 LobbyPageTemplate.propTypes = {
+  data: PropTypes.object,
   user: PropTypes.object,
   getUserProfile: PropTypes.func
 };
@@ -171,8 +179,7 @@ LobbyPageTemplate.propTypes = {
 const mapStateToProps = ({userState, summitState, settingState}) => ({
   user: userState,
   summit: summitState.summit,
-  lastDataSync: settingState.lastDataSync,
-  lobbyPageSettings: settingState.lobbyPageSettings,
+  lastDataSync: settingState.lastDataSync
 });
 
 export default connect(mapStateToProps, {getUserProfile})(LobbyPage);
