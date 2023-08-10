@@ -201,8 +201,8 @@
     .form-control {
       width: 60%;
       margin: 25px auto 5px auto;
-      background-color: $color-gray-lighter;
-      border-color: $color-primary;
+      background-color:  var(--color_input_background_color) !important;
+      border-color: var(--color_input_border_color) !important;
 
       &::placeholder {
         color: $color-text-input-hints;
@@ -256,8 +256,8 @@
     .form-control {
       width: 60%;
       margin: 25px auto 5px auto;
-      background-color: $color-gray-lighter;
-      border-color: $color-primary;
+      background-color:  var(--color_input_background_color) !important;
+      border-color: var(--color_input_border_color) !important;
 
       &::placeholder {
         color: $color-text-input-hints;
@@ -410,10 +410,8 @@
   }
 }
 
-.ticket-assign-form{
-  button{
-    background-color: var(--color_input_background_color) !important;;
-    color: var(--color_input_text_color) !important;
-    border-color: var(--color_input_border_color) !important;
-  }
+button {
+  background-color: var(--color_input_background_color) !important;;
+  color: var(--color_input_text_color) !important;
+  border-color: var(--color_input_border_color) !important;
 }
