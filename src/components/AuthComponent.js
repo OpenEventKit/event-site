@@ -50,7 +50,8 @@ const AuthComponent = ({
 
     useEffect(() => {
         const fragmentParser = new FragmentParser();
-        setIsActive(fragmentParser.getParam('login'));
+        // to show the login dialog check if we are already logged or not
+        setIsActive(fragmentParser.getParam('login') && !isLoggedUser);
         const paramInitialEmailValue = fragmentParser.getParam('email');
         if (paramInitialEmailValue)
             setInitialEmailValue(paramInitialEmailValue);
@@ -104,7 +105,6 @@ const AuthComponent = ({
     };
 
     const loginPasswordless = (code, email) => {
-
         const params = {
             connection: "email",
             otp: code,
@@ -141,7 +141,12 @@ const AuthComponent = ({
     const passwordlessLoginProps = {
         email: userEmail,
         codeLength: otpLength,
-        passwordlessLogin: (code) => loginPasswordless(code, userEmail).then(() => navigate(getBackURL(false))).catch((e) => console.log(e)),
+        passwordlessLogin: (code) => loginPasswordless(code, userEmail).then(() => {
+            // close popup and then navigate bc its its the same origin page
+            // it would not reload and closed the popup automatically
+            handleClosePopup();
+            navigate(getBackURL(false))
+        }).catch((e) => console.log(e)),
         codeError: otpError,
         goToLogin: () => setOtpLogin(false),
         getLoginCode: (email) => sendCode(email),
