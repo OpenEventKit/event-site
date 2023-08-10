@@ -199,7 +199,7 @@ const AccessTracker = ({ user, isLoggedUser, summitPhase }) => {
     return user.isAuthorized;
   };
 
-  // if summit_phase wasn't initialized yet (eg: due to a delay in the reducer), 
+  // if summitPhase wasn't initialized yet (eg: due to a delay in the reducer), 
   // this render shouldn't continue
   if (summitPhase === null) return null;
 
