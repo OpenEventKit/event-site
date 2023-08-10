@@ -409,3 +409,11 @@
     }
   }
 }
+
+.ticket-assign-form{
+  button{
+    background-color: var(--color_input_background_color) !important;;
+    color: var(--color_input_text_color) !important;
+    border-color: var(--color_input_border_color) !important;
+  }
+}
