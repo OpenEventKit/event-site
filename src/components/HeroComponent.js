@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { navigate } from 'gatsby';
+import styles from '../styles/hero.scss'
 
 const HeroComponent = ({ title, subtitle, event, redirectTo, options = {} }) => {
 
   useEffect(() => {
-    if (redirectTo) setTimeout(() => navigate(redirectTo, options), 3000);
+    //if (redirectTo) setTimeout(() => navigate(redirectTo, options), 3000);
   }, [redirectTo]);
 
   return (
