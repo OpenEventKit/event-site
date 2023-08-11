@@ -4,69 +4,7 @@
 html,
 body {
   font-family: "Nunito Sans", sans-serif !important;
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  /********************************************************/
-  /*                  base mode rules                     */
-  /********************************************************/
-
-  background-color: var(--color_background_light) !important;
-  color: var(--color_text_dark) !important;
-
-  input, select, textarea {
-    color: var(--color_input_text_color) !important;
-    background-color: var(--color_input_background_color) !important;
-    border-color: var(--color_input_border_color) !important;
-    &::placeholder{
-      color: var(--color_input_text_color) !important;
-    }
-  }
-
-  h2, h1 , h3{
-    color: var(--color_text_dark) !important;
-  }
-
-  .ajax-loader-container {
-    .fa-spinner{
-      color:var(--color_input_text_color) !important;
-    }
-  }
-
-  .rdtPicker{
-    background-color: var(--color_input_background_color);
-    color: var(--color_input_text_color);
-    .rdtDays{
-      table th{
-        color: var(--color_input_text_color);
-        text-align: center;
-      }
-    }
-  }
-
-  .registration_company_dll_prefix__control, .ddl-extra-questions__control{
-    background-color: var(--color_input_background_color) !important;;
-    color: var(--color_input_text_color) !important;
-    border-color: var(--color_input_border_color) !important;
-    .registration_company_dll_prefix__single-value, .ddl-extra-questions__single-value{
-      color: var(--color_input_text_color) !important;
-    }
-  }
-
-  .ddl-extra-questions__menu{
-    background-color: var(--color_input_background_color) !important;;
-    color: var(--color_input_text_color) !important;
-    border-color: var(--color_input_border_color) !important;
-  }
-
-  .ddl-extra-questions__option:hover {
-      background-color: var(--color_background_dark) !important;;
-      color: var(--color_text_light) !important
-  }
-
-  /********************************************************/
-  /*            end of base mode rules                    */
-  /********************************************************/
+  @extend %body_base;
 }
 
 

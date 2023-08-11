@@ -147,7 +147,7 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, saveA
     }
 
     return (
-        <div className="content columns">
+        <div className={`content columns ${styles.extraQuestionsContainer}`}>
             <div className="column is-three-fifths is-offset-one-fifth px-6-desktop py-6-desktop mb-6">
                 <h2>Attendee Information</h2>
                 <div className="columns is-multiline pt-4 pb-5">

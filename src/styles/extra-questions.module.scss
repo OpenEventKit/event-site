@@ -3,38 +3,51 @@
 @import "bulma/sass/form/_all.sass";
 
 @import "colors.scss";
+.extraQuestionsContainer {
 
-.extra-question {
-  label {
-    font-weight: 600;
-    b {
-      color: red;
+  h2, h1, h3{
+    color: var(--color_text_dark) !important;
+  }
+
+  .extra-question {
+    label {
+      font-weight: 600;
+
+      b {
+        color: red;
+      }
     }
-  }
-  [id^=rl_wrapper] div {
-    padding-top: 5px;
-    &~ div {
-      padding-top: 10px;
+
+    [id^=rl_wrapper] div {
+      padding-top: 5px;
+
+      & ~ div {
+        padding-top: 10px;
+      }
     }
-  }
-  textarea{
-    width: 100%;
-    resize: none;
-  }
-  input[type="checkbox"] {
-    margin-right: 3px;
-    &~ label {
-      padding-left: 13px !important;
+
+    textarea {
+      width: 100%;
+      resize: none;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 3px;
+
+      & ~ label {
+        padding-left: 13px !important;
+        color: var(--color_input_text_color) !important;
+      }
+    }
+
+    h4 {
+      font-weight: 400;
+      font-size: 1em !important;
+      line-height: 1;
+      padding-top: 4px;
+      margin-bottom: 0px;
       color: var(--color_input_text_color) !important;
     }
-  }
-  h4 {
-    font-weight: 400;
-    font-size: 1em !important;
-    line-height: 1;
-    padding-top: 4px;
-    margin-bottom: 0px;
-    color: var(--color_input_text_color) !important;
   }
 }
 
