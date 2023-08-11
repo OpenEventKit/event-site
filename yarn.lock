@@ -4385,10 +4385,10 @@ atob@^2.1.2:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
-attendee-to-attendee-widget@3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/attendee-to-attendee-widget/-/attendee-to-attendee-widget-3.0.1.tgz#9d22f3d35ec637da777cc6cba120bf4057a48195"
-  integrity sha512-xgkSie8QN36hxnMIBYnBrsQpkYy/K/9gw3HGsVPPM6NJ/ITuf/UhWwjmbuNEoOIALJ6aW+F3uJtti7duHiRD8g==
+attendee-to-attendee-widget@3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/attendee-to-attendee-widget/-/attendee-to-attendee-widget-3.0.2.tgz#ba28b56713c9d66497be3ac84ff3d91839689002"
+  integrity sha512-P5lPc0pLGmv+peaECG9ONxitEtgowpRIHfGdzhwCKec5DK1Wk/Rna5CZGKJQFHIx6iNilNljucxtV8J+g/kcTg==
   dependencies:
     "@babel/helper-string-parser" "^7.19.4"
     "@supabase/supabase-js" "^1.35.6"
