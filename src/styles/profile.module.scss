@@ -6,12 +6,13 @@
 @import 'colors.scss';
 
 .modal-card {
-  color: #363636;
+  background-color: var(--color_background_light);
+  color: var(--color_text_dark);
   margin: 0 5rem 0 auto;
 
   .modal-card-head {
     padding: 10px 20px;
-    background-color: #ffffff;
+    background-color: var(--color_background_light);
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
     display: flex;
@@ -20,6 +21,7 @@
     .modal-card-title {
       font-weight: bold;
       margin-bottom: 0;
+      color: var(--color_text_dark);
     }
 
     .close-icon {
@@ -31,17 +33,17 @@
 
   .modal-card-body {
     padding: 0px;
-
+    background-color: var(--color_background_light);
     .modal-card-picture {
       .title {
-        background-color: #ffffff;
+        background-color: var(--color_background_light);
         padding: 10px 20px;
         font-weight: bold;
         border-bottom: 1px solid #dbdbdb;
       }
 
       .picture {
-        background-color: #f7f7f7;
+        background-color: var(--color_background_light);
         text-align: center;
         padding: 0px 20px 20px;
         position: relative;
@@ -90,14 +92,14 @@
 
     .modal-card-form {
       .title {
-        background-color: #ffffff;
+        background-color: var(--color_background_light);
         padding: 10px 20px;
         font-weight: bold;
         border-bottom: 1px solid #dbdbdb;
       }
 
       .form {
-        background-color: #f7f7f7;
+        background-color: var(--color_background_light);
         text-align: center;
         padding: 20px;
 
@@ -114,7 +116,7 @@
   }
 
   .modal-card-foot {
-    background-color: #ffffff;
+    background-color: var(--color_background_light);
     display: flex;
     justify-content: space-evenly;
     border-bottom-left-radius: 0px;
@@ -123,12 +125,9 @@
     button {
       width: 20rem;
       height: 4.5rem;
-
-      &:last-of-type {
-        color: #ffffff;
-        border-color: #ffffff;
-        background-color: var(--color_primary);
-      }
+      background-color: var(--color_input_background_color) !important;;
+      color: var(--color_input_text_color) !important;
+      border-color: var(--color_input_border_color) !important;
     }
   }
 }
