@@ -10,7 +10,7 @@ const HeroComponent = ({ title, subtitle, event, redirectTo, options = {} }) => 
 
   return (
     <section className={`hero is-fullheight ${event ? 'talk__break' : ''}`}>
-      <div className="hero-body">
+      <div className="hero-body hero-component">
         <div className={`${event ? '' : 'container has-text-centered'}`}>
           <h1 className="title">{title}</h1>
           <h2 className="subtitle">{subtitle}</h2>
