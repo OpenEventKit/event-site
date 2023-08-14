@@ -17,6 +17,7 @@ import { RESET_STATE } from "../actions/base-actions";
 
 import {
     GET_USER_ORDERS,
+    SET_ACTIVE_ORDER_ID,
     REFUND_ORDER,
 } from "../actions/order-actions";
 
@@ -47,6 +48,7 @@ const DEFAULT_STATE = {
     stripeForm: false,
     loaded: false,
     loading: false,
+    activeOrderId: null,
     current_page: 1,
     last_page: 1,
     per_page: 5,
@@ -69,6 +71,8 @@ const orderReducer = (state = DEFAULT_STATE, action) => {
         case STOP_LOADING:
             return { ...state, loading: false };
             break;
+        case SET_ACTIVE_ORDER_ID: 
+            return { ...state, activeOrderId: payload };
         case GET_USER_ORDERS:
             let { data, current_page, total, last_page } = payload.response;
             return { ...state, memberOrders: data, current_page, total, last_page };

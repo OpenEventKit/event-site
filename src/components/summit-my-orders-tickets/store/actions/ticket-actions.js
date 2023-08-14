@@ -148,11 +148,11 @@ export const getTicketById = ({order, ticket}) => async (dispatch, getState, { g
 
 export const getTicketsByOrder = ({ orderId, page = 1, perPage = 5 }) => async (dispatch, getState, { getAccessToken, apiBaseUrl, loginUrl }) => {
     
+    dispatch(startLoading());
+    
     const accessToken = await getAccessToken().catch(_ => history.replace(loginUrl));
 
     if (!accessToken) return;
-
-    dispatch(startLoading());
 
     const params = {
         access_token: accessToken,        

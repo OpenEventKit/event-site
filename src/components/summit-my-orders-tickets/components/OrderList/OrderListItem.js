@@ -5,21 +5,24 @@ import { OrderDetails } from '../OrderDetails/OrderDetails';
 import { OrderSummary } from '../OrderSummary/OrderSummary';
 import { OrderTicketList } from '../OrderTicketList/OrderTicketList';
 import { OrderOptions } from "../OrderOptions/OrderOptions";
-import { useOrderListContext } from "./OrderList.helpers";
 import Pager from "../../../Pager";
 
 export const OrderListItem = ({ order, className, changeTicketsPage }) => {
     const summit = useSelector(state => state.summitState.summit);
-    const { state } = useOrderListContext();
 
     const {
         orderTickets: {
             total, per_page, current_page, last_page, tickets
         },
-        loading
+        loading,
+        isOrderLoading
     } = useSelector(state => state.ticketState || {});
 
-    const isActive = state.activeOrderId === order.id;
+    const {
+        activeOrderId
+    } = useSelector(state => state.orderState || {});
+
+    const isActive = activeOrderId === order.id;
 
     return (
         <li className={classNames('order-list__item', { 'order-list__item--active': isActive }, className)}>
@@ -27,7 +30,7 @@ export const OrderListItem = ({ order, className, changeTicketsPage }) => {
                 <div className="col-md-8">
                     <OrderDetails order={order} summit={summit} />
 
-                    {isActive && tickets.length > 0 && (
+                    {!loading && !isOrderLoading && isActive && tickets.length > 0 && (
                         <>
                             <OrderSummary type="mobile" order={order} summit={summit} tickets={tickets}/>
 
