@@ -15,11 +15,11 @@ export const OrderListItem = ({ order, className, changeTicketsPage }) => {
             total, per_page, current_page, last_page, tickets
         },
         loading,
-        isOrderLoading
     } = useSelector(state => state.ticketState || {});
 
     const {
-        activeOrderId
+        activeOrderId,
+        isOrderLoading
     } = useSelector(state => state.orderState || {});
 
     const isActive = activeOrderId === order.id;
@@ -30,7 +30,7 @@ export const OrderListItem = ({ order, className, changeTicketsPage }) => {
                 <div className="col-md-8">
                     <OrderDetails order={order} summit={summit} />
 
-                    {!loading && !isOrderLoading && isActive && tickets.length > 0 && (
+                    {!isOrderLoading && isActive && tickets.length > 0 && (
                         <>
                             <OrderSummary type="mobile" order={order} summit={summit} tickets={tickets}/>
 

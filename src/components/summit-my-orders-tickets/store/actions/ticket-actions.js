@@ -35,6 +35,7 @@ export const REMOVE_TICKET_ATTENDEE = 'REMOVE_TICKET_ATTENDEE';
 export const REFUND_TICKET = 'REFUND_TICKET';
 export const RESEND_NOTIFICATION = 'RESEND_NOTIFICATION';
 export const GET_TICKETS_BY_ORDER = 'GET_TICKETS_BY_ORDER';
+export const GET_TICKETS_BY_ORDER_ERROR = 'GET_TICKETS_BY_ORDER_ERROR';
 export const GET_ORDER_TICKET_DETAILS = 'GET_ORDER_TICKET_DETAILS';
 export const GET_TICKET_DETAILS = 'GET_TICKET_DETAILS';
 
@@ -171,6 +172,7 @@ export const getTicketsByOrder = ({ orderId, page = 1, perPage = 5 }) => async (
         dispatch(stopLoading());
     }).catch(e => {
         dispatch(stopLoading());
+        dispatch(createAction(GET_TICKETS_BY_ORDER_ERROR));
         return (e);
     });
 }

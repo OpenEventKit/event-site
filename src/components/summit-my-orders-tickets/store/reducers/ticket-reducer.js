@@ -22,7 +22,6 @@ import {
     GET_TICKET_DETAILS,
     GET_ORDER_TICKET_DETAILS
 } from "../actions/ticket-actions";
-import { SET_ACTIVE_ORDER_ID } from "../actions/order-actions";
 
 const DEFAULT_STATE = {
     loading: false,
@@ -33,7 +32,6 @@ const DEFAULT_STATE = {
         last_page: 1,
         tickets: []
     },
-    isOrderLoading: false,
     selectedTicket: null,
     memberTickets: [],
     errors: {},
@@ -68,11 +66,9 @@ const ticketReducer = (state = DEFAULT_STATE, action) => {
             return { ...state, selectedTicket: payload.response };
         case REMOVE_TICKET_ATTENDEE:
             return { ...state, selectedTicket: payload.response };
-        case SET_ACTIVE_ORDER_ID: 
-            return { ...state, isOrderLoading: true };
         case GET_TICKETS_BY_ORDER: {
             const { total, per_page, current_page, last_page, data } = payload.response;
-            return { ...state, orderTickets: { total, per_page, current_page, last_page, tickets: data }, isOrderLoading: false }
+            return { ...state, orderTickets: { total, per_page, current_page, last_page, tickets: data } }
         }
         case GET_ORDER_TICKET_DETAILS: {
             const ticket = payload.response;

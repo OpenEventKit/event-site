@@ -20,6 +20,7 @@ import {
     SET_ACTIVE_ORDER_ID,
     REFUND_ORDER,
 } from "../actions/order-actions";
+import { GET_TICKETS_BY_ORDER, GET_TICKETS_BY_ORDER_ERROR } from "../actions/ticket-actions";
 
 const DEFAULT_ENTITY = {
     first_name: '',
@@ -49,6 +50,7 @@ const DEFAULT_STATE = {
     loaded: false,
     loading: false,
     activeOrderId: null,
+    isOrderLoading: false,
     current_page: 1,
     last_page: 1,
     per_page: 5,
@@ -72,7 +74,12 @@ const orderReducer = (state = DEFAULT_STATE, action) => {
             return { ...state, loading: false };
             break;
         case SET_ACTIVE_ORDER_ID: 
-            return { ...state, activeOrderId: payload };
+            return { ...state, activeOrderId: payload, isOrderLoading: true };
+            break;
+        case GET_TICKETS_BY_ORDER_ERROR:
+        case GET_TICKETS_BY_ORDER:
+            return { ...state, isOrderLoading: false };
+            break;
         case GET_USER_ORDERS:
             let { data, current_page, total, last_page } = payload.response;
             return { ...state, memberOrders: data, current_page, total, last_page };
