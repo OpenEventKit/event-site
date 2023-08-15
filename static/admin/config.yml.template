@@ -67,53 +67,10 @@ collections:
                 {label: "Specific Event?", name: "eventId", widget: string, required: false, default: 0}
               ]},
             ]}
-      - file: "src/content/sponsors-tiers.json"
-        label: "Sponsors Tiers"
-        name: "sponsors-tiers"
+      - file: "src/content/expo-hall.json"
+        label: "Expo Hall Settings"
+        name: "expo-hall"
         fields:
-          - {label: "Tiers", name: "tiers", widget: list, fields: [
-              {label: "Tier", name: "name", widget: string},
-              {label: "Widget Title", name: "widgetTitle", widget: string, required: false},
-              {label: "ID", name: "id", widget: ncw-id, prefix: tier, hidden: true},
-              {label: "Badge", name: "badge", widget: object, required: false, fields: [
-                {label: "File", name: "file", widget: image, required: false, default: ''},
-                {label: "Alt", name: "alt", widget: string, required: false, default: ''},
-              ]},
-              {label: "Lobby", name: "lobby", widget: object, fields: [
-                {label: "Lobby Template", name: "lobbyTemplate", widget: select, required: false, default: 'small-images', options: [
-                  {label: "Big Images", value: "big-images" },
-                  {label: "Small Images", value: "small-images" },
-                  {label: "Horizontal Images", value: "horizontal-images" },
-                  {label: "Carousel", value: "carousel" },
-                ]},
-                {label: "Display", name: display, widget: boolean, required: false, default: false}
-              ]},
-              {label: "Expo Hall Page", name: "expoHallPage", widget: object, fields: [
-                {label: "Expo Hall Template", name: "expoHallTemplate", widget: select, required: false, default: 'medium-images', options: [
-                  {label: "Big Images", value: "big-images" },
-                  {label: "Medium Images", value: "medium-images" },
-                  {label: "Small Images", value: "small-images" },
-                ]},
-                {label: "Display", name: display, widget: boolean, required: false, default: false}
-              ]},
-              {label: "Sponsor Page", name: "sponsorPage", widget: object, fields: [
-                {label: "Sponsor Page Template", name: "sponsorTemplate", widget: select, required: false, default: 'small-header', options: [
-                  {label: "Big Header", value: "big-header" },
-                  {label: "Small Header", value: "small-header" },
-                ]},
-                {label: "Widgets", name: "widgets", widget: object, fields: [
-                  {label: "Disqus", name: disqus, widget: boolean, required: false, default: false},
-                  {label: "Live Event", name: liveEvent, widget: boolean, required: false, default: false},
-                  {label: "Schedule", name: schedule, widget: boolean, required: false, default: false},
-                  {label: "Banner", name: banner, widget: boolean, required: false, default: false}
-                ]}
-              ]},
-              {label: "In Event Template", name: "eventTemplate", widget: select, required: false, default: 'small-images', options: [
-                {label: "Big Images", value: "big-images" },
-                {label: "Small Images", value: "small-images" },
-                {label: "Horizontal Images", value: "horizontal-images" },
-              ]},
-            ]}
           - {label: "Expo Hall Header Image", name: "imageHeader", widget: object, required: false, fields: [
               {label: "File", name: "file", widget: image, default: '', required: false},
               {label: "Alt", name: "alt", widget: string, required: false}
