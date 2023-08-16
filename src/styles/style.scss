@@ -377,15 +377,18 @@ div.event-feedback-container {
 }
 
 .disqus-container-lobby {
-  border: 1px solid #eee;
+  border: 1px solid var(--color_input_border_color);
   display: flex;
   flex-direction: column;
   max-height: 1500px;
 
   .disqus-header {
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--color_input_border_color);
     padding: 0 15px;
     position: relative;
+    #disqus-title {
+      color: var(--color_text_dark);
+    }
     /*
      Show Skip to next section link when focused
      */

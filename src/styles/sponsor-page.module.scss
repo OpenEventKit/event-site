@@ -13,12 +13,12 @@
     background-color: var(--color_secondary_contrast);
     align-items: center;
     border: none;
-    color: #fff;
+    color: var(--color_text_dark);
     height: 5rem;
     width: 15rem;
 
     i {
-      color: #fff;
+      color: var(--color_text_dark);
       height: 1em;
       width: 2.5em;
       margin-right: auto;
