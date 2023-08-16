@@ -1,9 +1,10 @@
 @import './colors.scss';
 @import './global-classes';
+@import "./fonts.scss";
 
 html,
 body {
-  font-family: "Nunito Sans", sans-serif !important;
+  font-family: $font-family !important;
   @extend %body_base;
 }
 
@@ -140,7 +141,7 @@ div.content {
 div.title {
   font-weight: 700 !important;
   color: #333333 !important;
-  font-family: "Nunito Sans", sans-serif;
+  font-family: $font-family;
 }
 
 h2 {
@@ -335,7 +336,7 @@ h2 {
 
 .outerWrapper___lGus2 {
   .widget-title {
-    font-family: "Nunito Sans", sans-serif;
+    font-family: $font-family;
     font-weight: 700;
     font-size: 30px;
     line-height: 33px;
@@ -345,7 +346,7 @@ h2 {
 }
 
 .widget-title {
-  font-family: "Open Sans", sans-serif;
+  font-family: $font-family;
   font-size: 18px !important;
 }
 
