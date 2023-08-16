@@ -19,6 +19,8 @@ $color_input_border_color_light:#dbdbdb;
 $color_input_text_color_dark: #FFFFFF;
 $color_input_background_color_dark:rgb(24, 26, 27);
 $color_input_border_color_dark:rgb(58, 63, 65);
+$color_horizontal_rule_dark: #7B7B7B;
+$color_horizontal_rule_light: #E5E5E5;
 
 :root {
   --color_primary: #{$color_primary};
@@ -38,6 +40,7 @@ $color_input_border_color_dark:rgb(58, 63, 65);
   --color_input_background_color: #{$color_input_background_color_light};
   --color_input_border_color: #{$color_input_border_color_light};
   --color_text_input_hints: #{$color_input_text_color_light};
+  --color_horizontal_rule: #{$color_horizontal_rule_light};
 }
 
 html[data-theme="DARK"] {
@@ -53,4 +56,5 @@ html[data-theme="DARK"] {
   --color_input_background_color: #{$color_input_background_color_dark} !important;
   --color_input_border_color: #{$color_input_border_color_dark} !important;
   --color_text_input_hints: #{$color_input_text_color_dark} !important;
+  --color_horizontal_rule: #{$color_horizontal_rule_dark};
 }
