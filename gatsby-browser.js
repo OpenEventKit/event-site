@@ -8,8 +8,8 @@ import "what-input";
 // import bulma framwork
 import "./src/styles/bulma.scss";
 // import base styles
+import "./src/styles/fonts.scss";
 import "./src/styles/style.scss";
-
 import colors from "data/colors.json";
 import marketingSettings from "data/marketing-settings.json";
 
