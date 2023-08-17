@@ -2,8 +2,8 @@
   position: fixed;
   top: 7.25rem;
   left: -15px;
-  background-color: #f6f6f6;
-  color: #6c6c6c;
+  background-color: red;
+  color: var(--color_text-dark);
   border: none;
   height: 50px;
   width: calc(100% + 30px);
@@ -20,7 +20,7 @@
   }
 
   &.open {
-    background-color: white;
+    background-color: var(--color_background_light);
     text-align: left;
     padding-left: 15px;
     left: 0;
