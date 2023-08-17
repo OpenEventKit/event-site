@@ -7,8 +7,8 @@ $footer-background-color: var(--color-primary) !important;
 $footer-color: var(--color-text-light) !important;
 $footer-padding: 2rem !important;
 
-$font-family-base: $font-family;
-$family-sans-serif: $font-family;
+$font-family-base: var(--font_family);
+$family-sans-serif: var(--font_family);
 
 @import "bulma/sass/base/_all.sass";
 @import "bulma/sass/components/modal.sass";
