@@ -2,8 +2,9 @@
   position: fixed;
   top: 7.25rem;
   left: -15px;
-  background-color: var(--color_background_light);
-  color: var(--color_text-dark);
+  color: var(--color_input_text_color);
+  background-color: var(--color_input_background_color);
+  border-color: var(--color_input_border_color);
   border: none;
   height: 50px;
   width: calc(100% + 30px);
