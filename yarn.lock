@@ -17119,10 +17119,10 @@ unpipe@1.0.0, unpipe@~1.0.0:
   resolved "https://registry.yarnpkg.com/unpipe/-/unpipe-1.0.0.tgz#b2bf4ee8514aae6165b4817829d21b2ef49904ec"
   integrity sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==
 
-upcoming-events-widget@3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/upcoming-events-widget/-/upcoming-events-widget-3.0.3.tgz#49c003b47effa80002b375123819b3d91a0cc707"
-  integrity sha512-N4VqZZoXo9C4Cnqwd5MCG8t4y9KFKl5aWwttyS8BzJjbm55wX8E6AFPZuvOROZX0CRDj0nyGfqAOqTamtnH+DA==
+upcoming-events-widget@3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/upcoming-events-widget/-/upcoming-events-widget-3.0.4.tgz#ec70f29dcc88fbb1114d66fd3c09e425061a18ce"
+  integrity sha512-e9yi+gcV4LYKrTZb6Cv5OLkf7JzkLFgX/yTjqJoh4jdY0tlXHc1H7/LbJkiD/87MwpyRM/OKUD1fNKsBpIxOww==
   dependencies:
     pure-react-carousel "^1.30.1"
 
