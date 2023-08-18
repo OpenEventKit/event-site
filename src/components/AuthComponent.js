@@ -32,6 +32,7 @@ const AuthComponent = ({
     userProfile,
     eventRedirect,
     location,
+    ignoreAutoOpen,
     style = {},
     renderLoginButton = null,
     renderEnterButton = null
@@ -50,8 +51,10 @@ const AuthComponent = ({
 
     useEffect(() => {
         const fragmentParser = new FragmentParser();
-        // to show the login dialog check if we are already logged or not
-        setIsActive(fragmentParser.getParam('login') && !isLoggedUser);
+        if(!ignoreAutoOpen) {
+            // to show the login dialog check if we are already logged or not
+            setIsActive(fragmentParser.getParam('login') && !isLoggedUser);
+        }
         const paramInitialEmailValue = fragmentParser.getParam('email');
         if (paramInitialEmailValue)
             setInitialEmailValue(paramInitialEmailValue);
@@ -227,6 +230,11 @@ export default connect(mapStateToProps, {
     checkOrderData
 })(AuthComponent)
 
+AuthComponent.defaultProps = {
+    ignoreAutoOpen: false,
+}
+
 AuthComponent.propTypes = {
     location: PropTypes.object.isRequired,
+    ignoreAutoOpen: PropTypes.bool,
 }
