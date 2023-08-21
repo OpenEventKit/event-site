@@ -2,6 +2,10 @@
 @import './global-classes';
 @import "./fonts.scss";
 
+@include placeholder {
+  color: var(--color_text_input_hints) !important;
+}
+
 html,
 body {
   @extend %body_fonts;

@@ -210,7 +210,7 @@
       border-color: var(--color_input_border_color) !important;
 
       &::placeholder {
-        color: $color-text-input-hints;
+        color: var(--color_text_input_hints);
       }
     }
 
@@ -265,7 +265,7 @@
       border-color: var(--color_input_border_color) !important;
 
       &::placeholder {
-        color: $color-text-input-hints;
+        color: var(--color_text_input_hints);
       }
     }
 

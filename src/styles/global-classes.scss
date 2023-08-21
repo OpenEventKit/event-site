@@ -1,6 +1,14 @@
 @import "fonts";
 @import "colors";
 
+@mixin placeholder {
+  ::placeholder               {@content}
+  ::-webkit-input-placeholder {@content}
+  :-moz-placeholder           {@content}
+  ::-moz-placeholder          {@content}
+  :-ms-input-placeholder      {@content}
+}
+
 %button-big {
   border-radius: 4px;
   height: 56px;
@@ -146,7 +154,7 @@
     background-color: var(--color_input_background_color) !important;
     border-color: var(--color_input_border_color) !important;
     &::placeholder{
-      color: var(--color_input_text_color) !important;
+      color: var(--color_text_input_hints) !important;
     }
   }
 
