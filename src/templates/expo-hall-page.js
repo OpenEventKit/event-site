@@ -1,40 +1,41 @@
-import React from 'react'
+import React from "react";
+import { getSrc } from "gatsby-plugin-image";
+import Layout from "../components/Layout";
+import SponsorComponent from "../components/SponsorComponent";
+import AttendanceTrackerComponent from "../components/AttendanceTrackerComponent";
+import AccessTracker from "../components/AttendeeToAttendeeWidgetComponent";
 
-import { connect } from "react-redux";
+import styles from "../styles/expo-hero.module.scss";
 
-import Layout from '../components/Layout'
-import SponsorComponent from '../components/SponsorComponent'
-import AttendanceTrackerComponent from '../components/AttendanceTrackerComponent'
-import AccessTracker from '../components/AttendeeToAttendeeWidgetComponent'
-import styles from '../styles/expo-hero.module.scss'
-
-const ExpoHallPage = ({ location, imageHeader }) => {
-
+const ExpoHallPage = ({
+  data,
+  location
+}) => {
+  const { expoHallPageJson: { hero } } = data;
+  const style = hero?.background ? { backgroundImage: `url(${getSrc(hero.background.src)})` } : {};
   return (
     <Layout location={location}>
       <AttendanceTrackerComponent />
       <AccessTracker />
-        <section className="hero is-large sponsors-header" style={{ backgroundImage: `url(${imageHeader.file})` }}>
-          <div className="hero-body">
-            <div className={styles.heroContainer}>
-              <h1 className={styles.title}>
-                Sponsors
-              </h1>
-              <span className={styles.subtitle}>
-                See the schedule to join live sessions and meet representatives from the sponsor companies.
-              </span>
-            </div>
+      { hero && (hero.background || hero.title || hero.subTitle) &&
+      <section className="hero is-large sponsors-header" style={style}>
+        <div className="hero-body">
+          <div className={styles.heroContainer}>
+            <h1 className={styles.title}>
+              {hero.title}
+            </h1>
+            <span className={styles.subtitle}>
+              {hero.subTitle}
+            </span>
           </div>
-        </section>      
+        </div>
+      </section>
+      }    
       <section className="section px-6 py-6">
         <SponsorComponent />
       </section>
     </Layout>
   )
-}
+};
 
-const mapStateToProps = ({ sponsorState }) => ({
-  imageHeader: sponsorState.imageHeader
-});
-
-export default connect(mapStateToProps, {})(ExpoHallPage);
+export default ExpoHallPage;
