@@ -60,6 +60,22 @@ const lobbyPage = {
       label: "Live Event Widget - Featured Event",
       name: "liveNowFeaturedEventId",
       required: false
+    }),
+    objectField({
+      label: "Sponsors Widget Button",
+      name: "sponsorsWidgetButton",
+      fields: [
+        stringField({
+          label: "Text",
+          name: "text",
+          required: false
+        }),
+        stringField({
+          label: "Link",
+          name: "link",
+          required: false
+        }),
+      ]
     })
   ]
 };

@@ -4,6 +4,7 @@ import {
 
 import marketingPage from "./marketingPage";
 import lobbyPage from "./lobbyPage";
+import expoHallPage from "./expoHallPage";
 
 const defaultPagesCollection = {
   ...collectionDefaults({
@@ -12,7 +13,8 @@ const defaultPagesCollection = {
   }),
   files: [
     marketingPage,
-    lobbyPage
+    lobbyPage,
+    expoHallPage
   ]
 };
 

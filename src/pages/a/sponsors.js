@@ -2,7 +2,7 @@ import * as React from "react";
 import { graphql } from "gatsby";
 import { Router, Location } from "@reach/router";
 import { connect } from "react-redux";
-import LobbyPage from "../../templates/lobby-page";
+import ExpoHallPage from "../../templates/expo-hall-page";
 import WithAuthzRoute from "../../routes/WithAuthzRoute";
 import WithAuthRoute from "../../routes/WithAuthRoute";
 import ShowOpenRoute from "../../routes/ShowOpenRoute";
@@ -10,9 +10,9 @@ import withRealTimeUpdates from "../../utils/real_time_updates/withRealTimeUpdat
 import withFeedsWorker from "../../utils/withFeedsWorker";
 import Seo from "../../components/Seo";
 
-export const lobbyPageQuery = graphql`
+export const expoHallPageQuery = graphql`
   query {
-    lobbyPageJson {
+    expoHallPageJson {
       hero {
         title
         subTitle
@@ -28,22 +28,16 @@ export const lobbyPageQuery = graphql`
           alt
         }
       }
-      centerColumn {
-        speakers {
-          showTodaySpeakers
-          showFeatureSpeakers
-        }
-      }
-      liveNowFeaturedEventId
-      sponsorsWidgetButton {
-        text
-        link
-      }
     }
   }
 `;
 
-const App = ({ data, isLoggedUser, user, summitPhase }) => {
+const App = ({
+  data,
+  isLoggedUser,
+  user,
+  summitPhase
+}) => {
   return (
     <Location>
       {({ location }) => (
@@ -51,7 +45,7 @@ const App = ({ data, isLoggedUser, user, summitPhase }) => {
         <WithAuthRoute path="/" isLoggedIn={isLoggedUser} location={location}>
           <WithAuthzRoute path="/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location}>
             <ShowOpenRoute path="/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location}>
-              <LobbyPage path="/" data={data} isLoggedIn={isLoggedUser} user={user} location={location} />
+              <ExpoHallPage path="/sponsors/" location={location} data={data}/>
             </ShowOpenRoute>
           </WithAuthzRoute>
         </WithAuthRoute>
@@ -61,7 +55,10 @@ const App = ({ data, isLoggedUser, user, summitPhase }) => {
   );
 };
 
-const mapStateToProps = ({ loggedUserState, userState, clockState }) => ({
+const mapStateToProps = ({
+  loggedUserState,
+  userState, clockState
+}) => ({
   isLoggedUser: loggedUserState.isLoggedUser,
   summitPhase: clockState.summit_phase,
   user: userState
@@ -73,7 +70,7 @@ export const Head = ({
   location
 }) => (
   <Seo
-    title={"Lobby"}
+    title={"Expo Hall"}
     pathname={location.pathname}
   />
 );
