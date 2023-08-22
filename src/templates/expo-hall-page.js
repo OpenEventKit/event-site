@@ -9,8 +9,7 @@ import styles from "../styles/expo-hero.module.scss";
 
 const ExpoHallPage = ({
   data,
-  location,
-  imageHeader
+  location
 }) => {
   const { expoHallPageJson: { hero } } = data;
   const style = hero?.background ? { backgroundImage: `url(${getSrc(hero.background.src)})` } : {};
