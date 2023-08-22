@@ -1,14 +1,11 @@
 import { START_LOADING, STOP_LOADING } from "openstack-uicore-foundation/lib/utils/actions";
 import { LOGOUT_USER } from "openstack-uicore-foundation/lib/security/actions";
-import {RESET_STATE, SYNC_DATA} from "../actions/base-actions-definitions";
+import { RESET_STATE, SYNC_DATA } from "../actions/base-actions-definitions";
 
-import sponsorData from "content/sponsors";
-import expoHallData from '../content/expo-hall.json';
+import sponsorData from "content/sponsors.json";
 
 const DEFAULT_STATE = {
-  sponsors: sponsorData,
-  imageHeader: expoHallData.imageHeader,
-  lobbyButton: expoHallData.lobbyButton
+  sponsors: sponsorData
 };
 
 const sponsorReducer = (state = DEFAULT_STATE, action) => {

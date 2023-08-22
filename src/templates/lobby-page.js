@@ -46,7 +46,8 @@ export const LobbyPageTemplate = class extends React.Component {
         lobbyPageJson: {
           hero,
           centerColumn,
-          liveNowFeaturedEventId
+          liveNowFeaturedEventId,
+          sponsorsWidgetButton
         }
       },
       lastDataSync
@@ -65,7 +66,10 @@ export const LobbyPageTemplate = class extends React.Component {
           <div className="columns">
             <div className="column is-one-quarter">
               <h2><b>Community</b></h2>
-              <SponsorComponent page="lobby"/>
+              <SponsorComponent
+                page="lobby"
+                linkButton={sponsorsWidgetButton}
+              />
               <AdvertiseComponent section="lobby" column="left"/>
             </div>
             <div className="column is-half">

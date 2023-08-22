@@ -1,17 +1,17 @@
-import React from 'react'
+import * as React from "react";
 import { connect } from "react-redux";
 import Slider from "react-slick";
-import Link from '../components/Link'
-import { getSponsorURL } from '../utils/urlFormating'
+import Link from "../components/Link";
+import { getSponsorURL } from "../utils/urlFormating";
 
-import styles from '../styles/sponsor.module.scss'
+import styles from "../styles/sponsor.module.scss";
 
-const SponsorComponent = ({ page, sponsorsState, lobbyButton }) => {
+const SponsorComponent = ({ page, sponsorsState, linkButton }) => {
   let renderButton = false;
 
   let sponsorsByTier = sponsorsState.reduce((memo, x) => {
-    if (!memo[x['sponsorship'].type.name]) { memo[x['sponsorship'].type.name] = []; }
-    memo[x['sponsorship'].type.name].push(x);
+    if (!memo[x["sponsorship"].type.name]) { memo[x["sponsorship"].type.name] = []; }
+    memo[x["sponsorship"].type.name].push(x);
     return memo;
   }, {});
 
@@ -24,16 +24,16 @@ const SponsorComponent = ({ page, sponsorsState, lobbyButton }) => {
       {Object.values(sponsorsByTier).sort((a, b) => a.order - b.order).map((tier, tierIndex) => {        
         const sponsors = tier.sponsors.sort((a, b) => a.order - b.order);
         if (!tier) return null;
-        const template = page === 'lobby' ? tier.lobby_template : page === 'event' ? tier.event_page_template : 'expo-hall';
+        const template = page === "lobby" ? tier.lobby_template : page === "event" ? tier.event_page_template : "expo-hall";
         if (sponsors?.length > 0) {
           renderButton = true;
           switch (template) {
-            case 'big-images': {
-              if (page === 'lobby' && !tier.should_display_on_lobby_page) {
+            case "big-images": {
+              if (page === "lobby" && !tier.should_display_on_lobby_page) {
                 return null
               } else {
                 return (
-                  <div className={`${tierIndex === 0 ? styles.firstContainer : ''} ${styles.bigImageContainer}`} key={tierIndex}>
+                  <div className={`${tierIndex === 0 ? styles.firstContainer : ""} ${styles.bigImageContainer}`} key={tierIndex}>
                     {tier.widget_title &&
                       <span><b>{tier.widget_title}</b></span>
                     }
@@ -59,17 +59,17 @@ const SponsorComponent = ({ page, sponsorsState, lobbyButton }) => {
                 )
               }
             }
-            case 'small-images': {
-              if (page === 'lobby' && !tier.should_display_on_lobby_page) {
+            case "small-images": {
+              if (page === "lobby" && !tier.should_display_on_lobby_page) {
                 return null
               } else {
                 return (
-                  <div className={`${tierIndex === 0 ? styles.firstContainer : ''} ${styles.smallImageContainer}`} key={tierIndex}>
+                  <div className={`${tierIndex === 0 ? styles.firstContainer : ""} ${styles.smallImageContainer}`} key={tierIndex}>
                     {tier.widget_title &&
                       <span><b>{tier.widget_title}</b></span>
                     }
                     {sponsors.map((sponsor, index) => {
-                      if (page === 'event' && !sponsor.showLogoInEventPage) return null
+                      if (page === "event" && !sponsor.showLogoInEventPage) return null
                       return (
                         (!sponsor.company.big_logo && !sponsor.company.logo) ?
                         null 
@@ -96,9 +96,9 @@ const SponsorComponent = ({ page, sponsorsState, lobbyButton }) => {
                 )
               }
             }
-            case 'horizontal-images': {
+            case "horizontal-images": {
               return (
-                <div className={`${tierIndex === 0 ? styles.firstContainer : ''} ${styles.horizontalContainer} px-6`} key={tierIndex}>
+                <div className={`${tierIndex === 0 ? styles.firstContainer : ""} ${styles.horizontalContainer} px-6`} key={tierIndex}>
                   {sponsors.map((sponsor, index) => {
                     return (
                       (!sponsor.company.big_logo && !sponsor.company.logo) ?
@@ -125,7 +125,7 @@ const SponsorComponent = ({ page, sponsorsState, lobbyButton }) => {
                 </div>
               )
             }
-            case 'expo-hall': {
+            case "expo-hall": {
               return tier.should_display_on_expo_hall_page === true && (
                 <div className={`${styles.expoContainer} px-6`} key={tierIndex}>
                   {sponsors.map((sponsor, index) => {
@@ -136,7 +136,7 @@ const SponsorComponent = ({ page, sponsorsState, lobbyButton }) => {
                       sponsor.is_published ?
                         <div className={`
                           ${styles.imageBox} 
-                          ${tier.expo_hall_template === 'big-images' ? styles.large : tier.expo_hall_template === 'medium-images' ? styles.medium : styles.small}`}
+                          ${tier.expo_hall_template === "big-images" ? styles.large : tier.expo_hall_template === "medium-images" ? styles.medium : styles.small}`}
                           key={`${tier.type.label}-${index}`}
                         >
                           <Link to={`/a/sponsor/${getSponsorURL(sponsor.id, sponsor.company.name)}`}>
@@ -146,7 +146,7 @@ const SponsorComponent = ({ page, sponsorsState, lobbyButton }) => {
                         : sponsor.external_link ?
                           <div className={`
                           ${styles.imageBox} 
-                          ${tier.expo_hall_template === 'big-images' ? styles.large : tier.expo_hall_template === 'medium-images' ? styles.medium : styles.small}`}
+                          ${tier.expo_hall_template === "big-images" ? styles.large : tier.expo_hall_template === "medium-images" ? styles.medium : styles.small}`}
                             key={`${tier.type.label}-${index}`}
                           >
                             <Link to={sponsor.external_link}>
@@ -156,7 +156,7 @@ const SponsorComponent = ({ page, sponsorsState, lobbyButton }) => {
                           :
                           <div className={`
                           ${styles.imageBox} 
-                          ${tier.expo_hall_template === 'big-images' ? styles.large : tier.expo_hall_template === 'medium-images' ? styles.medium : styles.small}`}
+                          ${tier.expo_hall_template === "big-images" ? styles.large : tier.expo_hall_template === "medium-images" ? styles.medium : styles.small}`}
                             key={`${tier.type.label}-${index}`}
                           >
                             <img src={sponsor.company.big_logo ? sponsor.company.big_logo : sponsor.company.logo} alt={sponsor.company.name} />
@@ -166,23 +166,23 @@ const SponsorComponent = ({ page, sponsorsState, lobbyButton }) => {
                 </div>
               )
             }
-            case 'carousel': {
-              if (page === 'lobby' && !tier.should_display_on_lobby_page) {
+            case "carousel": {
+              if (page === "lobby" && !tier.should_display_on_lobby_page) {
                 return null
               } else {
                 const sliderSettings = {
                   autoplay: true,
                   autoplaySpeed: 5000,
                   infinite: true,
-                  className: 'sponsor-carousel',
+                  className: "sponsor-carousel",
                   dots: false,
                   slidesToShow: 1,
                   slidesToScroll: 1
                 };
                 return (
-                  <div className={`${tierIndex === 0 ? styles.firstContainer : ''} ${styles.carouselContainer}`} key={tierIndex}>
+                  <div className={`${tierIndex === 0 ? styles.firstContainer : ""} ${styles.carouselContainer}`} key={tierIndex}>
                     {tier.widget_title &&
-                      <span style={{ marginBottom: '0' }}><b>{tier.widget_title}</b></span>
+                      <span style={{ marginBottom: "0" }}><b>{tier.widget_title}</b></span>
                     }
                     <Slider {...sliderSettings}>
                       {sponsors.map((sponsor, index) => {
@@ -219,10 +219,10 @@ const SponsorComponent = ({ page, sponsorsState, lobbyButton }) => {
           return null;
         }
       })}
-      {page === 'lobby' && lobbyButton.text && lobbyButton.link && renderButton &&
-        <Link className={styles.link} to={lobbyButton.link}>
+      {linkButton?.text && linkButton?.link && renderButton &&
+        <Link className={styles.link} to={linkButton.link}>
           <button className={`${styles.button} button is-large`}>
-            {lobbyButton.text}
+            {linkButton.text}
           </button>
         </Link>
       }
@@ -231,8 +231,7 @@ const SponsorComponent = ({ page, sponsorsState, lobbyButton }) => {
 };
 
 const mapStateToProps = ({ sponsorState }) => ({
-  sponsorsState: sponsorState.sponsors,
-  lobbyButton: sponsorState.lobbyButton
+  sponsorsState: sponsorState.sponsors
 });
 
 export default connect(mapStateToProps, {})(SponsorComponent);

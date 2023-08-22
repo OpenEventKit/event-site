@@ -1,5 +1,9 @@
 
 module.exports = `
+  type Button {
+    text: String
+    link: String
+  }
   type ImageWithAlt {
     src: File @fileByRelativePath
     alt: String
@@ -20,5 +24,6 @@ module.exports = `
     hero: LobbyPageHero
     centerColumn: LobbyPageCenterColumn
     liveNowFeaturedEventId: String
+    sponsorsWidgetButton: Button
   }
 `;
