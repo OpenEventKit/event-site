@@ -10,7 +10,6 @@ export const MARKETING_SETTINGS_KEYS = {
   summitDeltaStartTime: "summit_delta_start_time",
   activityCtaText: "ACTIVITY_CTA_TEXT",
   regLiteAllowPromoCodes: "REG_LITE_ALLOW_PROMO_CODES",
-  regLiteCompanyInputPlaceholder: "REG_LITE_COMPANY_INPUT_PLACEHOLDER",
   regLiteCompanyDDLPlaceholder: "REG_LITE_COMPANY_DDL_PLACEHOLDER",
   regLiteInitialOrderComplete1stParagraph: "REG_LITE_INITIAL_ORDER_COMPLETE_STEP_1ST_PARAGRAPH",
   regLiteInitialOrderComplete2ndParagraph: "REG_LITE_INITIAL_ORDER_COMPLETE_STEP_2ND_PARAGRAPH",
