@@ -36,7 +36,7 @@ const FullSchedule = ({
     userProfile,
     withThumbs: false,
     defaultImage: defaultImage,
-    summitLogoPrint: summitLogoPrint,
+    summitLogoPrint: summitLogoPrint ? summitLogoPrint : null,
     showSendEmail: false,
     onStartChat: null,
     shareLink: getShareLink(filters, view),
