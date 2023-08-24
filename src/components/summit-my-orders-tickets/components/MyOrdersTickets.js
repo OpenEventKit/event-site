@@ -6,7 +6,6 @@ import { AjaxLoader } from "openstack-uicore-foundation/lib/components";
 import { getUserOrders } from '../store/actions/order-actions';
 import { getUserTickets } from '../store/actions/ticket-actions';
 import { OrderList } from './OrderList/OrderList';
-import { OrderListContextProvider } from './OrderList/OrderList.helpers';
 import { TicketList } from './TicketList/TicketList';
 
 export const MyOrdersTickets = ({ className }) => {
@@ -63,10 +62,8 @@ export const MyOrdersTickets = ({ className }) => {
             )}
 
             <div className={classNames('my-orders-tickets', className)}>
-                {hasOrders && (
-                    <OrderListContextProvider>
-                        <OrderList />
-                    </OrderListContextProvider>
+                {hasOrders && (                    
+                    <OrderList />
                 )}
 
                 {(hasOrders && hasTickets) && (

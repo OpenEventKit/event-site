@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react"
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import classNames from 'classnames';
 import { getNow } from "../../store/actions/timer-actions";
@@ -11,7 +11,7 @@ import {
     getSummitFormattedDate,
     formatCurrency
 } from "../../util";
-import { useOrderListContext } from "../OrderList/OrderList.helpers";
+import { setActiveOrderId } from "../../store/actions/order-actions";
 
 import './order-details.scss';
 
@@ -20,16 +20,21 @@ export const OrderDetails = ({ order, summit, className }) => {
 
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const { state, actions } = useOrderListContext();
+
+    const {
+        activeOrderId
+    } = useSelector(state => state.orderState || {});
 
     const isSummitPast = checkSummitPast(summit, dispatch(getNow()));
     const statusData = getOrderStatusData(order, isSummitPast);
-    const isActive = state.activeOrderId === order.id;
+    const isActive = activeOrderId === order.id;
+
+    const handleSetOrderActive = (orderId) => dispatch(setActiveOrderId( orderId ));
 
     const handleClick = (event) => {
-        if (isActive) return actions.setActiveOrderId(null);
+        if (isActive) return handleSetOrderActive(null);
 
-        actions.setActiveOrderId(order.id);
+        handleSetOrderActive(order.id);
 
         setTimeout(() => {
             const offset = getDocumentOffset(elementRef.current);
@@ -42,7 +47,7 @@ export const OrderDetails = ({ order, summit, className }) => {
     };
 
     // Clear active order on unmount (i.e., when page pagination changes)
-    useEffect(() => () => actions.setActiveOrderId(null), []);
+    useEffect(() => () => setActiveOrderId(null), []);
 
     return (
         <div

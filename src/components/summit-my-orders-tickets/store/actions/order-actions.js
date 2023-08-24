@@ -23,6 +23,7 @@ import history from '../history';
 
 export const GET_USER_ORDERS = 'GET_ORDERS';
 export const REFUND_ORDER = 'REFUND_ORDER';
+export const SET_ACTIVE_ORDER_ID = 'SET_ACTIVE_ORDER_ID';
 
 export const getUserOrders = ({ page = 1, perPage = 5 }) => async (dispatch, getState, { getAccessToken, apiBaseUrl, loginUrl }) => {
     const { summitState: { summit } } = getState();
@@ -82,3 +83,7 @@ export const cancelOrder = ({ order }) => async (dispatch, getState, { getAccess
         return e;
     });
 };
+
+export const setActiveOrderId = (orderId) => async (dispatch, getState) => {
+    return dispatch(createAction(SET_ACTIVE_ORDER_ID)(orderId));
+}
