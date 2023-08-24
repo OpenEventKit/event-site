@@ -112,6 +112,7 @@ const SSR_getSponsors = async (baseUrl, summitId, accessToken) => {
         access_token: accessToken,
         per_page: 50,
         page: 1,
+        filter: "is_published==1",
         expand: 'company,sponsorship,sponsorship.type',
   }
 
