@@ -6,7 +6,6 @@ import classNames from 'classnames';
 import { getUserOrders } from "../../store/actions/order-actions";
 import { getTicketsByOrder } from "../../store/actions/ticket-actions";
 import { OrderListItem } from './OrderListItem';
-import { useOrderListContext } from "./OrderList.helpers";
 
 import './order-list.scss';
 
@@ -19,6 +18,7 @@ export const OrderList = ({ className }) => {
         current_page: currentPage,
         last_page: lastPage,
         per_page: perPage,
+        activeOrderId,
         total
     } = useSelector(state => state.orderState || {});
 
@@ -27,8 +27,6 @@ export const OrderList = ({ className }) => {
             current_page: orderTicketsCurrentPage,
         }        
     } = useSelector(state => state.ticketState || {});
-
-    const { state : { activeOrderId } } = useOrderListContext();
 
     const handlePageChange = (page) => dispatch(getUserOrders({ page, perPage }));
 
