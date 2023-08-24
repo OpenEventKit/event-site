@@ -103,17 +103,7 @@ export const EventPageTemplate = class extends React.Component {
     return (
       <React.Fragment>
         {/* <EventHeroComponent /> */}
-        <section
-          className="section px-0 py-0"
-          style={{
-            marginBottom:
-              event.class_name !== "Presentation" ||
-              currentPhase < PHASES.DURING ||
-              !event.streaming_url
-                ? "-3rem"
-                : "",
-          }}
-        >
+        <section className="section px-0 py-0">
           <div className="columns is-gapless">
             {this.canRenderVideo(currentPhase) ? (
               <div className="column is-three-quarters px-0 py-0">
