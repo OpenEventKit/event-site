@@ -28,6 +28,7 @@ const FullSchedule = ({
 }) => {
   const { getSettingByKey } = useMarketingSettings();
   const defaultImage = getSettingByKey(MARKETING_SETTINGS_KEYS.schedultDefaultImage);
+  const summitLogoPrint = getSettingByKey(MARKETING_SETTINGS_KEYS.fullScheduleSummitLogoPrint);
   const componentProps = {
     title: "Schedule",
     summit,
@@ -35,6 +36,7 @@ const FullSchedule = ({
     userProfile,
     withThumbs: false,
     defaultImage: defaultImage,
+    summitLogoPrint: summitLogoPrint ? summitLogoPrint : null,
     showSendEmail: false,
     onStartChat: null,
     shareLink: getShareLink(filters, view),
