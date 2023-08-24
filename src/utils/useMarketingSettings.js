@@ -7,6 +7,7 @@ export const MARKETING_SETTINGS_KEYS = {
   disqusExcludeTracks: "disqus_exclude_tracks",
   registrationInPersonDisclaimer: "registration_in_person_disclaimer",
   scheduleDefaultImage: "schedule_default_image",
+  fullScheduleSummitLogoPrint: "FULL_SCHEDULE_SUMMIT_LOGO_PRINT",
   summitDeltaStartTime: "summit_delta_start_time",
   activityCtaText: "ACTIVITY_CTA_TEXT",
   regLiteAllowPromoCodes: "REG_LITE_ALLOW_PROMO_CODES",
