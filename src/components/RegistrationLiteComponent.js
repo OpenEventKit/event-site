@@ -111,7 +111,6 @@ const RegistrationLiteComponent = ({
 
     const inPersonDisclaimer = getSettingByKey(MARKETING_SETTINGS_KEYS.registrationInPersonDisclaimer);
     const allowPromoCodes = !!Number(getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteAllowPromoCodes));
-    const companyInputPlaceholder = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteCompanyInputPlaceholder);
     const companyDDLPlaceholder = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteCompanyDDLPlaceholder);
     const initialOrderComplete1stParagraph = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteInitialOrderComplete1stParagraph)
     const initialOrderComplete2ndParagraph = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteInitialOrderComplete2ndParagraph)
@@ -178,7 +177,6 @@ const RegistrationLiteComponent = ({
             });
         },
         allowPromoCodes: allowPromoCodes,
-        companyInputPlaceholder: companyInputPlaceholder,
         companyDDLPlaceholder: companyDDLPlaceholder,
         supportEmail: getEnvVariable(SUPPORT_EMAIL),
         initialOrderComplete1stParagraph: initialOrderComplete1stParagraph,
