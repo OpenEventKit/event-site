@@ -118,7 +118,7 @@ export const EventPageTemplate = class extends React.Component {
                 {event.meeting_url && <VideoBanner event={event} ctaText={activityCtaText} />}
               </div>
             ) : (
-              <div className="column is-three-quarters px-0 py-0">
+              <div className="column is-three-quarters px-0 py-0 is-full-mobile">
                 <NoTalkComponent
                   currentEventPhase={currentPhase}
                   event={event}
