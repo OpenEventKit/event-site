@@ -236,9 +236,8 @@ h2 {
 .talk {
   &__break {
     background-color: $color_secondary;
-    min-height: 92vh !important;
     width: 100%;
-    padding: 0 3rem;
+    aspect-ratio: auto 16 / 9;
 
     h1,
     h2 {
@@ -300,6 +299,10 @@ h2 {
     align-items: flex-end;
   }
 
+  .hero-body {
+    align-items: center;
+    display: flex;
+  }
 }
 
 .join-zoom-container {
@@ -495,12 +498,6 @@ div.event-feedback-container {
     }
   }
 
-  .talk {
-    &__break {
-      height: auto;
-    }
-  }
-
   .join-zoom-container {
     flex-direction: column;
     height: 100px;
@@ -550,14 +547,6 @@ div.event-feedback-container {
       bottom: 0;
       padding-right: 20px;
       padding-bottom: 30px;
-    }
-  }
-}
-
-@media (min-width: 1921px) {
-  .talk {
-    &__break {
-      min-height: 100vh !important;
     }
   }
 }
