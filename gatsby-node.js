@@ -30,6 +30,7 @@ const {
   MAINTENANCE_FILE_PATH,
   SPONSORS_FILE_PATH
 } = require("./src/utils/filePath");
+const { generateFontFile } = require("./src/utils/cssUtils");
 
 const fileBuildTimes = [];
 
@@ -337,6 +338,15 @@ exports.onPreBootstrap = async () => {
   globalSettings.lastBuild = Date.now();
 
   fs.writeFileSync(SITE_SETTINGS_FILE_PATH, JSON.stringify(globalSettings), "utf8");
+
+  // Read fonts from site settings
+  const siteFonts = globalSettings.siteFont;    
+
+  // Generate the SCSS file
+  const scssFontsFile = generateFontFile(siteFonts);
+
+  fs.writeFileSync('src/styles/fonts-test.scss', scssFontsFile);
+  console.log('font file geneerated...')
 };
 
 exports.createSchemaCustomization = ({ actions }) => {
