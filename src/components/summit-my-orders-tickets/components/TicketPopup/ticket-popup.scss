@@ -85,7 +85,7 @@
     display: flex;
     gap: 15px;
     width: 90px;
-    color: $color-primary-contrast;
+    color: var(--color_text_dark);
     flex-direction: column;    
 
     .ticket-popup-row-icon {
