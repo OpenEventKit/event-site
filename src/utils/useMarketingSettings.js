@@ -21,15 +21,13 @@ export const MARKETING_SETTINGS_KEYS = {
   regLiteNoAllowedTicketsMessage: "REG_LITE_NO_ALLOWED_TICKETS_MESSAGE",
 }
 
-const FileType = 'FILE';
+
 const marketingSettingsQuery = graphql`
   query {
     allMarketingSettingsJson {
       nodes {
         key
-        type
         value
-        file
       }
     }
   }
@@ -37,11 +35,8 @@ const marketingSettingsQuery = graphql`
 
 const useMarketingSettings = () => {
   const { allMarketingSettingsJson } = useStaticQuery(marketingSettingsQuery);
-  const getSettingByKey = (key) => {
-    const node = allMarketingSettingsJson.nodes.find(setting => setting.key === key);
-    if(!node) return null;
-    return node.type === FileType ? node?.file : node?.value;
-  }
+  const getSettingByKey = (key) =>
+      allMarketingSettingsJson.nodes.find(setting => setting.key === key)?.value;
   return { getSettingByKey };
 };
 

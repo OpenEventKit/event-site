@@ -225,7 +225,7 @@ exports.onPreBootstrap = async () => {
 
   const summitId = process.env.GATSBY_SUMMIT_ID;
   const summitApiBaseUrl = process.env.GATSBY_SUMMIT_API_BASE_URL;
-  const marketingSettings = await SSR_getMarketingSettings(process.env.GATSBY_MARKETING_API_BASE_URL, summitId);
+  let   marketingSettings = await SSR_getMarketingSettings(process.env.GATSBY_MARKETING_API_BASE_URL, summitId);
   const colorSettings = fs.existsSync(COLORS_FILE_PATH) ? JSON.parse(fs.readFileSync(COLORS_FILE_PATH)) : require(`./${DEFAULT_COLORS_FILE_PATH}`);
   const globalSettings = fs.existsSync(SITE_SETTINGS_FILE_PATH) ? JSON.parse(fs.readFileSync(SITE_SETTINGS_FILE_PATH)) : {};
   const lobbyPageSettings = fs.existsSync(LOBBY_PAGE_FILE_PATH) ? JSON.parse(fs.readFileSync(LOBBY_PAGE_FILE_PATH)) : {};
@@ -247,9 +247,12 @@ exports.onPreBootstrap = async () => {
 
   const accessToken = await getAccessToken(config, process.env.GATSBY_BUILD_SCOPES).then(({ token }) => token.access_token);
 
+  const FileType = 'FILE';
   // extract colors from marketing settings
-  marketingSettings.map(({ key, value }) => {
-    if (key.startsWith("color_")) colorSettings[key] = value;
+  marketingSettings = marketingSettings.map( entry => {
+    if (entry.key.startsWith("color_")) colorSettings[entry.key] = entry.value;
+    if(entry.type === FileType) return {...entry, value: entry.file};
+    return {...entry};
   });
 
   // create required directories
