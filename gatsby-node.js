@@ -28,7 +28,8 @@ const {
   VOTEABLE_PRESENTATIONS_FILE_PATH,
   MARKETING_SETTINGS_FILE_PATH,
   MAINTENANCE_FILE_PATH,
-  SPONSORS_FILE_PATH
+  SPONSORS_FILE_PATH,
+  FONTS_SCSS_FILE_PATH
 } = require("./src/utils/filePath");
 const { generateFontFile } = require("./src/utils/cssUtils");
 
@@ -340,13 +341,15 @@ exports.onPreBootstrap = async () => {
   fs.writeFileSync(SITE_SETTINGS_FILE_PATH, JSON.stringify(globalSettings), "utf8");
 
   // Read fonts from site settings
-  const siteFonts = globalSettings.siteFont;    
+  const siteFonts = globalSettings.siteFont;
 
-  // Generate the SCSS file
-  const scssFontsFile = generateFontFile(siteFonts);
+  if(siteFonts && Object.keys(siteFonts).length > 0) {
+    // Generate the SCSS file
+    const scssFontsFile = generateFontFile(siteFonts);
 
-  fs.writeFileSync('src/styles/fonts.scss', scssFontsFile);
-  console.log('font file geneerated...')
+    fs.writeFileSync(FONTS_SCSS_FILE_PATH, scssFontsFile);
+    console.log('font file geneerated...')
+  }
 };
 
 exports.createSchemaCustomization = ({ actions }) => {
