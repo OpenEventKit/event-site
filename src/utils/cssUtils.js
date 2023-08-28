@@ -28,20 +28,24 @@ const generateFontFile = (fontData) => {
   }
 
   // Adding these new fonts for this theme
-  ${fontData.regularFont?.fontFile &&
+  ${fontData.regularFont && fontData.regularFont.fontFile ?
     `@font-face {
         font-family: "${fontData.fontFamily}";
         src: url("${fontData.regularFont?.fontFile}") ${getFontFormat(fontData.regularFont?.fontFormat)};
         font-weight: normal;
     }`
+    :
+    ''
   }
 
-  ${fontData.boldFont?.fontFile &&
+  ${fontData.boldFont && fontData.boldFont.fontFile ?
     `@font-face {
         font-family: "${fontData.fontFamily}";
         src: url("${fontData.boldFont?.fontFile}") ${getFontFormat(fontData.boldFont?.fontFormat)};
         font-weight: bold;
     }`
+    :
+    ''
   }
   
   %font-regular {
