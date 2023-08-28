@@ -1,4 +1,25 @@
-export const generateFontFile = (fontData) => {
+const getFontFormat = (format) => {
+  let formatString = '';
+  switch (format) {
+    case 'ttf':
+      formatString = "format('truetype')";
+      break;
+    case 'otf':
+      formatString = "format('opentype')";
+      break;
+    case 'woff':
+      formatString = "format('woff')";
+      break;
+    case 'woff2':
+      formatString = "format('woff2')";
+      break;
+    default:
+      break;
+  }
+  return formatString;
+}
+
+const generateFontFile = (fontData) => {
   const scssFonts = `
   $font-family: "${fontData.fontFamily}";
 
@@ -7,21 +28,21 @@ export const generateFontFile = (fontData) => {
   }
 
   // Adding these new fonts for this theme
-  ${fontData.regularFont.fontFile &&
+  ${fontData.regularFont?.fontFile &&
     `@font-face {
         font-family: "${fontData.fontFamily}";
-        src: url("${fontData.regularFont.fontFile}") ${getFontFormat(fontData.regularFont.fontFormat)};
+        src: url("${fontData.regularFont?.fontFile}") ${getFontFormat(fontData.regularFont?.fontFormat)};
         font-weight: normal;
     }`
-    }
+  }
 
-  ${fontData.boldFont.fontFile &&
+  ${fontData.boldFont?.fontFile &&
     `@font-face {
         font-family: "${fontData.fontFamily}";
-        src: url("${fontData.boldFont.fontFile}") ${getFontFormat(fontData.boldFont.fontFormat)};
+        src: url("${fontData.boldFont?.fontFile}") ${getFontFormat(fontData.boldFont?.fontFormat)};
         font-weight: bold;
     }`
-    }
+  }
   
   %font-regular {
     font-family: "${fontData.fontFamily}";
@@ -39,25 +60,8 @@ export const generateFontFile = (fontData) => {
   }
  `;
   return scssFonts;
-}
+};
 
-const getFontFormat = (format) => {
-  let formatString = ''
-  switch (format) {
-    case 'ttf':
-      formatString = "format('truetype')"
-      break;
-    case 'otf':
-      formatString = "format('opentype')"
-      break;
-    case 'woff':
-      formatString = "format('woff')"
-      break;
-    case 'woff2':
-      formatString = "format('woff2')"
-      break;
-    default:
-      break;
-  }
-  return formatString;
+module.exports = {
+  generateFontFile
 }
