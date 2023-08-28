@@ -10,7 +10,8 @@ import {
 } from "../../../fields";
 
 import {
-  SITE_SETTINGS_FILE_PATH
+  SITE_SETTINGS_FILE_PATH,
+  CMS_FONT_FILE_PATH
 } from "@utils/filePath";
 
 const FONT_FORMATS = {
@@ -134,12 +135,14 @@ const siteSettings = {
             fileField({
               label: "Font File",
               name: "fontFile",
-              default: "/fonts/"
+              required: false,
+              media_folder: CMS_FONT_FILE_PATH,
             }),
             selectField({
               label: "Font Format",
               name: "fontFormat",
               multiple: false,
+              required: false,
               options: getFontFormatOptions()
             })
           ],
@@ -151,12 +154,14 @@ const siteSettings = {
             fileField({
               label: "Font File",
               name: "fontFile",
-              default: "/fonts/"
+              media_folder: CMS_FONT_FILE_PATH,
+              required: false,
             }),
             selectField({
               label: "Font Format",
               name: "fontFormat",
               multiple: false,
+              required: false,
               options: getFontFormatOptions()
             })
           ],

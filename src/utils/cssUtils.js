@@ -14,6 +14,7 @@ const getFontFormat = (format) => {
       formatString = "format('woff2')";
       break;
     default:
+      formatString = null;
       break;
   }
   return formatString;
@@ -31,7 +32,7 @@ const generateFontFile = (fontData) => {
   ${fontData.regularFont && fontData.regularFont.fontFile ?
     `@font-face {
         font-family: "${fontData.fontFamily}";
-        src: url("/fonts/${fontData.regularFont?.fontFile}") ${getFontFormat(fontData.regularFont?.fontFormat)};
+        src: url("${fontData.regularFont?.fontFile}") ${getFontFormat(fontData.regularFont?.fontFormat)};
         font-weight: normal;
     }`
     :
@@ -41,7 +42,7 @@ const generateFontFile = (fontData) => {
   ${fontData.boldFont && fontData.boldFont.fontFile ?
     `@font-face {
         font-family: "${fontData.fontFamily}";
-        src: url("/fonts/${fontData.boldFont?.fontFile}") ${getFontFormat(fontData.boldFont?.fontFormat)};
+        src: url("${fontData.boldFont?.fontFile}") ${getFontFormat(fontData.boldFont?.fontFormat)};
         font-weight: bold;
     }`
     :
