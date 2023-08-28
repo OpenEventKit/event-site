@@ -21,6 +21,13 @@ const getFontFormat = (format) => {
 }
 
 const generateFontFile = (fontData) => {
+  // check fields
+  if(!fontData?.fontFamily) return null;
+  if(!fontData?.regularFont?.fontFile) return null;
+  if(!fontData?.regularFont?.fontFormat) return null;
+  if(!fontData?.boldFont?.fontFile) return null;
+  if(!fontData?.boldFont?.fontFormat) return null;
+
   const scssFonts = `
   $font-family: "${fontData.fontFamily}";
 

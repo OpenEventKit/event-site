@@ -346,9 +346,10 @@ exports.onPreBootstrap = async () => {
   if(siteFonts && Object.keys(siteFonts).length > 0) {
     // Generate the SCSS file
     const scssFontsFile = generateFontFile(siteFonts);
-
-    fs.writeFileSync(FONTS_SCSS_FILE_PATH, scssFontsFile);
-    console.log(`CUSTOM FONT FILE ${FONTS_SCSS_FILE_PATH} generated.`);
+    if(scssFontsFile) {
+      fs.writeFileSync(FONTS_SCSS_FILE_PATH, scssFontsFile);
+      console.log(`CUSTOM FONT FILE ${FONTS_SCSS_FILE_PATH} generated.`);
+    }
   }
 };
 
