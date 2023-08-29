@@ -5,12 +5,25 @@ import {
   imageField,
   selectField,
   selectOption,
-  objectField
+  objectField,
+  fileField
 } from "../../../fields";
 
 import {
-  SITE_SETTINGS_FILE_PATH
+  SITE_SETTINGS_FILE_PATH,
+  CMS_FONT_FILE_PATH
 } from "@utils/filePath";
+
+const FONT_FORMATS = {
+  truetype: "ttf",
+  opentype: "otf",
+  woff: "woff",
+  woff2: "woff2",
+  eot: "eot",
+};
+
+const getFontFormatOptions = () =>
+  Object.entries(FONT_FORMATS).map(([key, value]) => selectOption({ label: value, value: value }));
 
 const siteSettings = {
   label: "Site Settings",
@@ -71,7 +84,7 @@ const siteSettings = {
             booleanField({
               label: "Show Help",
               name: "showHelp",
-              required: false, 
+              required: false,
               default: false
             }),
             selectField({
@@ -104,7 +117,57 @@ const siteSettings = {
           ]
         }),
       ]
-    })
+    }),
+    objectField({
+      label: "Site Font",
+      name: "siteFont",
+      fields: [
+        textField({
+          label: "Font Name",
+          name: "fontFamily",
+          required: true,
+          default: "Nunito Sans"
+        }),
+        objectField({
+          label: "Regular Font",
+          name: "regularFont",
+          fields: [
+            fileField({
+              label: "Font File",
+              name: "fontFile",
+              required: false,
+              media_folder: CMS_FONT_FILE_PATH,
+            }),
+            selectField({
+              label: "Font Format",
+              name: "fontFormat",
+              multiple: false,
+              required: false,
+              options: getFontFormatOptions()
+            })
+          ],
+        }),
+        objectField({
+          label: "Bold Font",
+          name: "boldFont",
+          fields: [
+            fileField({
+              label: "Font File",
+              name: "fontFile",
+              media_folder: CMS_FONT_FILE_PATH,
+              required: false,
+            }),
+            selectField({
+              label: "Font Format",
+              name: "fontFormat",
+              multiple: false,
+              required: false,
+              options: getFontFormatOptions()
+            })
+          ],
+        }),
+      ]
+    }),
   ]
 };
 
