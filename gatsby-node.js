@@ -347,8 +347,13 @@ exports.onPreBootstrap = async () => {
     // Generate the SCSS file
     const scssFontsFile = generateFontFile(siteFonts);
     if(scssFontsFile) {
-      fs.writeFileSync(FONTS_SCSS_FILE_PATH, scssFontsFile);
-      console.log(`CUSTOM FONT FILE ${FONTS_SCSS_FILE_PATH} generated.`);
+      const standalone = __dirname === path.resolve();
+      let fontFilePath = FONTS_SCSS_FILE_PATH;
+      if (!standalone) {
+        fontFilePath = `${__dirname}/${fontFilePath}`;
+      }
+      fs.writeFileSync(fontFilePath, scssFontsFile);
+      console.log(`CUSTOM FONT FILE ${fontFilePath} generated.`);
     }
   }
 };
