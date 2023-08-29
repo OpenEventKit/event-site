@@ -37,7 +37,7 @@ const MAINTENANCE_FILE_PATH = `${STATIC_CONTENT_DIR_PATH}/maintenance.json`;
 const EXPO_HALL_PAGE_FILE_PATH = `${STATIC_CONTENT_DIR_PATH}/expo-hall-page/index.json`;
 const SPONSORS_FILE_NAME = "sponsors.json";
 const SPONSORS_FILE_PATH = `${STATIC_CONTENT_DIR_PATH}/${SPONSORS_FILE_NAME}`;
-const CMS_FONT_FILE_PATH = "../../../static/fonts/"
+const CMS_FONT_FILE_PATH = "/static/fonts/"
 
 exports.REQUIRED_DIR_PATHS = [
 	DATA_DIR_PATH,

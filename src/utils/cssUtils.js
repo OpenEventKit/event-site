@@ -20,6 +20,12 @@ const getFontFormat = (format) => {
   return formatString;
 }
 
+const getFontSrc = (fontPath) => {
+  // get the filename from the file path
+  const fileName = fontPath.substring(fontPath.lastIndexOf("/")+1) 
+  return `/fonts/${fileName}`;
+}
+
 const generateFontFile = (fontData) => {
   // check fields
   if(!fontData?.fontFamily) return null;
@@ -39,7 +45,7 @@ const generateFontFile = (fontData) => {
   ${fontData.regularFont && fontData.regularFont.fontFile ?
     `@font-face {
         font-family: "${fontData.fontFamily}";
-        src: url("${fontData.regularFont?.fontFile}") ${getFontFormat(fontData.regularFont?.fontFormat)};
+        src: url("${getFontSrc(fontData.regularFont?.fontFile)}") ${getFontFormat(fontData.regularFont?.fontFormat)};
         font-weight: normal;
     }`
     :
@@ -49,7 +55,7 @@ const generateFontFile = (fontData) => {
   ${fontData.boldFont && fontData.boldFont.fontFile ?
     `@font-face {
         font-family: "${fontData.fontFamily}";
-        src: url("${fontData.boldFont?.fontFile}") ${getFontFormat(fontData.boldFont?.fontFormat)};
+        src: url("${getFontSrc(fontData.boldFont?.fontFile)}") ${getFontFormat(fontData.boldFont?.fontFormat)};
         font-weight: bold;
     }`
     :

@@ -72,6 +72,14 @@ module.exports = {
       }
     },
     {
+      // Add font assets before markdown or json files
+      resolve: "gatsby-source-filesystem",
+      options: {
+        path: `${__dirname}/static/fonts`,
+        name: "fonts"
+      }
+    },
+    {
       resolve: "gatsby-source-filesystem",
       options: {
         path: `${__dirname}/src/pages`,
