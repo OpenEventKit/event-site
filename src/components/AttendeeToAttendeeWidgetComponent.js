@@ -163,6 +163,8 @@ const AttendeesWidgetComponent = ({ user, event, chatSettings }) => {
     ...sbAuthProps,
   };
 
+  if (!chatSettings?.enabled) return null;
+
   return (
     <div style={{ margin: "20px auto", position: "relative" }}>
         <Sentry.ErrorBoundary fallback={SentryFallbackFunction({componentName: 'Attendee To Attendee'})}>
