@@ -37,7 +37,7 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, saveA
             company,
             disclaimer_accepted_date,
             extra_questions
-        } = ticket.owner || {};
+        } = ticket?.owner || {};
 
         const formattedExtraQuestions = extra_questions ?
             extra_questions.map(({ question_id, value }) => (

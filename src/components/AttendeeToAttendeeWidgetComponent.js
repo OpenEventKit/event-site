@@ -32,7 +32,7 @@ const sbAuthProps = {
 
 const adminGroups = ["administrators", "super-admins"];
 
-export const AttendeesWidget = ({ user, event, chatSettings }) => {
+const AttendeesWidgetComponent = ({ user, event, chatSettings }) => {
   const [loading, setLoading] = useState(true);
 
   //Deep linking support
@@ -163,8 +163,6 @@ export const AttendeesWidget = ({ user, event, chatSettings }) => {
     ...sbAuthProps,
   };
 
-  if (!chatSettings.enabled) return null;
-
   return (
     <div style={{ margin: "20px auto", position: "relative" }}>
         <Sentry.ErrorBoundary fallback={SentryFallbackFunction({componentName: 'Attendee To Attendee'})}>
@@ -176,6 +174,12 @@ export const AttendeesWidget = ({ user, event, chatSettings }) => {
       </div>
   );
 };
+
+const mapState = ({ settingState }) => ({
+  chatSettings: settingState.widgets.chat,
+});
+
+export const AttendeesWidget = connect(mapState)(AttendeesWidgetComponent);
 
 const AccessTracker = ({ user, isLoggedUser, summitPhase, chatSettings }) => {
   const trackerRef = useRef();
@@ -271,7 +275,7 @@ const mapStateToProps = ({ loggedUserState, userState, clockState, settingState 
   isLoggedUser: loggedUserState.isLoggedUser,
   user: userState,
   summitPhase: clockState.summit_phase,
-  chatSettings: settingState.widgets.chat
+  chatSettings: settingState.widgets.chat,
 });
 
 export default connect(mapStateToProps)(AccessTracker);
