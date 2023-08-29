@@ -14,36 +14,5 @@
     "favicon180": "/img/favicon.png",
     "favicon32": "/img/favicon.png",
     "favicon16": "/img/favicon.png"
-  },
-  "staticJsonFilesBuildTime": [
-    {
-      "file": "src/data/summit.json",
-      "build_time": 1693334029778
-    },
-    {
-      "file": "src/data/events.json",
-      "build_time": 1693334032846
-    },
-    {
-      "file": "src/data/events.idx.json",
-      "build_time": 1693334032850
-    },
-    {
-      "file": "src/data/speakers.json",
-      "build_time": 1693334033633
-    },
-    {
-      "file": "src/data/speakers.idx.json",
-      "build_time": 1693334033634
-    },
-    {
-      "file": "src/content/sponsors.json",
-      "build_time": 1693334036539
-    },
-    {
-      "file": "src/data/voteable-presentations.json",
-      "build_time": 1693334037825
-    }
-  ],
-  "lastBuild": 1693334037828
+  }
 }
