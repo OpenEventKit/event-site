@@ -163,6 +163,8 @@ export const AttendeesWidget = ({ user, event, chatSettings }) => {
     ...sbAuthProps,
   };
 
+  if (!chatSettings.enabled) return null;
+
   return (
     <div style={{ margin: "20px auto", position: "relative" }}>
         <Sentry.ErrorBoundary fallback={SentryFallbackFunction({componentName: 'Attendee To Attendee'})}>
@@ -175,7 +177,7 @@ export const AttendeesWidget = ({ user, event, chatSettings }) => {
   );
 };
 
-const AccessTracker = ({ user, isLoggedUser, summitPhase }) => {
+const AccessTracker = ({ user, isLoggedUser, summitPhase, chatSettings }) => {
   const trackerRef = useRef();
 
   const handleLogout = useCallback(() => {
@@ -259,6 +261,8 @@ const AccessTracker = ({ user, isLoggedUser, summitPhase }) => {
     summitId: parseInt(getEnvVariable(SUMMIT_ID)),
     ...sbAuthProps,
   };
+
+  if (!chatSettings.enabled) return null;
 
   return <Tracker {...widgetProps} ref={trackerRef} />;
 };

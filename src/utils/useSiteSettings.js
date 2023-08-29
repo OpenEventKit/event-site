@@ -31,6 +31,7 @@ const siteSettingsQuery = graphql`
       }
       widgets {
         chat {
+          enabled
           defaultScope
           showHelp
           showQA

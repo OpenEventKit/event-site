@@ -13,6 +13,7 @@ module.exports = `
     allowClick: Boolean
   }
   type Chat {
+    enabled: Boolean
     showQA: Boolean
     showHelp: Boolean
     defaultScope: String

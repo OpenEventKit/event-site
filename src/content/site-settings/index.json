@@ -1,17 +1,1 @@
-{
-  "widgets": {
-    "chat": {
-      "showQA": false,
-      "showHelp": false,
-      "defaultScope": "page"
-    },
-    "schedule": {
-      "allowClick": true
-    }
-  },
-  "favicons": {
-    "favicon180": "/img/favicon.png",
-    "favicon32": "/img/favicon.png",
-    "favicon16": "/img/favicon.png"
-  }
-}
+{"widgets":{"chat":{"enabled":true,"showQA":false,"showHelp":false,"defaultScope":"page"},"schedule":{"allowClick":true}},"favicons":{"favicon180":"/img/favicon.png","favicon32":"/img/favicon.png","favicon16":"/img/favicon.png"},"staticJsonFilesBuildTime":[{"file":"src/data/summit.json","build_time":1693332871333},{"file":"src/data/events.json","build_time":1693332874510},{"file":"src/data/events.idx.json","build_time":1693332874516},{"file":"src/data/speakers.json","build_time":1693332875291},{"file":"src/data/speakers.idx.json","build_time":1693332875292},{"file":"src/content/sponsors.json","build_time":1693332878304},{"file":"src/data/voteable-presentations.json","build_time":1693332880132}],"lastBuild":1693332880135}
