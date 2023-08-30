@@ -32,4 +32,8 @@ const config = {
   collections: collections
 };
 
+if (!!CMS_BACKEND_REPO && !!CMS_BACKEND_BRANCH) {
+  config.local_backend = true;
+}
+
 export default config;
