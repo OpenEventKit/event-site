@@ -55,7 +55,7 @@ const fetchBucket = async (etagKeyPre, dataKeyPre, fileName, summitId, lastBuild
 
     if (eTag) headers.headers = {'If-None-Match': eTag};
 
-    console.log(`fetchBucket ${url} eTag ${eTag} lastModifiedStored ${lastModifiedStored} lastBuildTime ${lastBuildTime}`);
+    //console.log(`fetchBucket ${url} eTag ${eTag} lastModifiedStored ${lastModifiedStored} lastBuildTime ${lastBuildTime}`);
 
     return fetch(url, {
         method: 'GET',
