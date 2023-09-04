@@ -76,6 +76,12 @@ const siteSettings = {
           name: "chat",
           fields: [
             booleanField({
+              label: "Enabled?",
+              name: "enabled",
+              required: true,
+              default: true
+            }),
+            booleanField({
               label: "Show QA",
               name: "showQA",
               required: false,
