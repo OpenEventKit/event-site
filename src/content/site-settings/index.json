@@ -1,6 +1,7 @@
 {
   "widgets": {
     "chat": {
+      "enabled": true,
       "showQA": false,
       "showHelp": false,
       "defaultScope": "page"
