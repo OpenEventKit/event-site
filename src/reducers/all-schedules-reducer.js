@@ -45,6 +45,7 @@ const allSchedulesReducer = (state = DEFAULT_STATE, action) => {
         case RELOAD_SCHED_DATA:
         {
             const {eventsData: allScheduleEvents, summitData, isLoggedUser, userProfile, eventsIDXData } = payload;
+            const allEventsTagExclusion = filterEventsByTags(allScheduleEvents);
 
             const schedules = summitData?.schedule_settings?.map(sched => {
 
@@ -62,7 +63,7 @@ const allSchedulesReducer = (state = DEFAULT_STATE, action) => {
                     return result;
                 }, {});
 
-                const newData = {...sched, all_events: allScheduleEvents, baseFilters: newFilters, filters: newFilters, pre_filters: newPreFilters};
+                const newData = {...sched, all_events: allEventsTagExclusion, baseFilters: newFilters, filters: newFilters, pre_filters: newPreFilters};
 
                 const schedState = scheduleReducer(scheduleState, {type: `SCHED_${type}`, payload: {...newData, isLoggedUser, userProfile }});
 
@@ -77,7 +78,7 @@ const allSchedulesReducer = (state = DEFAULT_STATE, action) => {
                 allEvents:allScheduleEvents,
                 schedules,
                 allIDXEvents: eventsIDXData,
-                allScheduleEvents: filterEventsByTags(allScheduleEvents)
+                allScheduleEvents: allEventsTagExclusion
             };
         }
         case GET_EVENT_DATA: {
