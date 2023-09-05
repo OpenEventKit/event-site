@@ -32,12 +32,11 @@ const VideoComponent = ({ url, title, namespace, firstHalf, autoPlay, start, isS
         // using mux player
         if(checkMuxVideo(url)) {
             const muxOptions = {
-                autoPlay: autoPlay,
                 muted: !!autoPlay,
                 startTime: start,
             };            
             return (
-                <VideoMUXPlayer streamType={checkLiveVideo(url) ? "live" : "on-demand"} isSecure={isSecure}
+                <VideoMUXPlayer streamType={checkLiveVideo(url) ? "live" : "on-demand"} isSecure={isSecure} autoPlay={autoPlay}
                     title={title} namespace={namespace} videoSrc={url} tokens={tokens} {...muxOptions} />
             );
         }

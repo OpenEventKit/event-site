@@ -3,14 +3,15 @@ import MuxPlayer from '@mux/mux-player-react';
 
 import { getEnvVariable, MUX_ENV_KEY } from '../utils/envVariables'
 
-const getPlaybackId = (url) => {  
+const getPlaybackId = (url) => {
   const fileMatch = url.match(/\/([^/]+)\.([a-zA-Z0-9]+)$/);
-  return fileMatch ? fileMatch[1] : null; 
+  return fileMatch ? fileMatch[1] : null;
 }
 
-const VideoMUXPlayer = ({title, namespace, videoSrc, streamType, tokens, isSecure, ...muxOptions}) => {  
+const VideoMUXPlayer = ({ title, namespace, videoSrc, streamType, tokens, isSecure, autoPlay, ...muxOptions }) => {
 
   const playerRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(autoPlay);
 
   useEffect(() => {
     console.log('MUX new tokens comming...')
@@ -20,10 +21,39 @@ const VideoMUXPlayer = ({title, namespace, videoSrc, streamType, tokens, isSecur
     console.log('new src: ', videoSrc);
   }, [videoSrc]);
 
-  if(isSecure && !tokens?.playback_token) {
+  if (isSecure && !tokens?.playback_token) {
     return (<div>
       Loading...
     </div>)
+  }
+
+  const handleVideoEnded = () => {
+    if (streamType === "live") {
+      setIsPlaying(false);
+    }
+
+    //       this.player.on('ended', () => {        
+    //         if (isLive) {
+    //           this.player.pause();
+    //           modal = this.player.createModal();
+    //           modal.closeable(false);
+    //           let newElement = document.createElement('div');
+    //           newElement.classList.add('video-error');
+    //           let message = 'VOD will be available soon';
+    //           newElement.innerHTML = `
+    //             <section class="hero">
+    //               <div class="hero-body">
+    //                 <div class='has-text-centered'}>
+    //                   <h1 class="title">${message}</h1>               
+    //                 </div>
+    //               </div>
+    //             </section>
+    //             `
+    //           modal.content(newElement);
+    //           modal.fill();
+    //         }
+    //       });
+    //     }
   }
 
   return (
@@ -31,18 +61,22 @@ const VideoMUXPlayer = ({title, namespace, videoSrc, streamType, tokens, isSecur
       ref={playerRef}
       streamType={streamType}
       envKey={getEnvVariable(MUX_ENV_KEY)}
-      playbackId={getPlaybackId(videoSrc)}      
+      playbackId={getPlaybackId(videoSrc)}
+      onError={(err) => console.log('Error: ', err)}
+      onEnded={handleVideoEnded}
       tokens={{
         playback: tokens?.playback_token,
         thumbnail: tokens?.thumbnail_token,
         storyboard: tokens?.storyboard_token,
       }}
+      autoPlay={isPlaying}
       metadata={{
-        video_title: {title},
-        sub_property_id: {namespace},
+        video_title: { title },
+        sub_property_id: { namespace },
         // video_id: "video-id-54321",
         // viewer_user_id: "user-id-007",
       }}
+
       {...muxOptions}
     />
   );
@@ -129,28 +163,7 @@ export default VideoMUXPlayer;
 //         };
 //       });
 
-//       this.player.on('ended', () => {        
-//         if (isLive) {
-//           this.player.pause();
-//           modal = this.player.createModal();
-//           modal.closeable(false);
-//           let newElement = document.createElement('div');
-//           newElement.classList.add('video-error');
-//           let message = 'VOD will be available soon';
-//           newElement.innerHTML = `
-//             <section class="hero">
-//               <div class="hero-body">
-//                 <div class='has-text-centered'}>
-//                   <h1 class="title">${message}</h1>               
-//                 </div>
-//               </div>
-//             </section>
-//             `
-//           modal.content(newElement);
-//           modal.fill();
-//         }
-//       });
-//     }
+
 
 //     this.player = videojs(this.videoNode, options, onPlayerReady);
 //   }
