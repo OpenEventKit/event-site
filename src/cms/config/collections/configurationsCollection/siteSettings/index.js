@@ -131,7 +131,7 @@ const siteSettings = {
         textField({
           label: "Font Name",
           name: "fontFamily",
-          required: true,
+          required: false,
           default: "Nunito Sans"
         }),
         objectField({
