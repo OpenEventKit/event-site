@@ -31,7 +31,6 @@ export const EventPageTemplate = class extends React.Component {
 
   constructor(props) {
     super(props);
-    this.onEventChange = this.onEventChange.bind(this);
     this.canRenderVideo = this.canRenderVideo.bind(this);
   }
 
@@ -43,9 +42,10 @@ export const EventPageTemplate = class extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const {eventId, event, eventsPhases, lastDataSync} = this.props;
+    const {eventId, event, eventTokens, eventsPhases, lastDataSync} = this.props;
     if (eventId !== nextProps.eventId) return true;
     if (!isEqual(event, nextProps.event)) return true;
+    if (!isEqual(eventTokens, nextProps.eventTokens)) return true;
     // a synch did happened!
     if(lastDataSync !== nextProps.lastDataSync) return true;
     // compare current event phase with next one
@@ -88,7 +88,7 @@ export const EventPageTemplate = class extends React.Component {
 
   render() {
 
-    const {event, user, loading, nowUtc, summit, eventsPhases, eventId, lastDataSync, activityCtaText} = this.props;
+    const {event, eventTokens, user, loading, nowUtc, summit, eventsPhases, eventId, lastDataSync, activityCtaText} = this.props;
     // get current event phase
     const currentPhaseInfo = eventsPhases.find((e) => parseInt(e.id) === parseInt(eventId));
     const currentPhase = currentPhaseInfo?.phase;
@@ -117,6 +117,8 @@ export const EventPageTemplate = class extends React.Component {
               <div className="column is-three-quarters px-0 py-0">
                 <VideoComponent
                   url={event.streaming_url}
+                  isSecure={event.stream_is_secure}
+                  tokens={eventTokens}
                   title={event.title}
                   namespace={summit.name}
                   firstHalf={firstHalf}
@@ -219,11 +221,13 @@ const EventPage = ({
    location,
    loading,
    event,
+   eventTokens,
    eventId,
    user,
    eventsPhases,
    nowUtc,
    getEventById,
+   getEventTokensById,
    lastUpdate,
    lastDataSync
 }) => {
@@ -243,6 +247,7 @@ const EventPage = ({
       <EventPageTemplate
         summit={summit}
         event={event}
+        eventTokens={eventTokens}
         eventId={eventId}
         loading={loading}
         user={user}
@@ -250,6 +255,7 @@ const EventPage = ({
         nowUtc={nowUtc}
         location={location}
         getEventById={getEventById}
+        getEventTokensById={getEventTokensById}
         lastUpdate={lastUpdate}
         activityCtaText={activityCtaText}
         lastDataSync={lastDataSync}
@@ -261,21 +267,25 @@ const EventPage = ({
 EventPage.propTypes = {
   loading: PropTypes.bool,
   event: PropTypes.object,
+  eventTokens: PropTypes.object,
   lastUpdate: PropTypes.object,
   eventId: PropTypes.string,
   user: PropTypes.object,
   eventsPhases: PropTypes.array,
   getEventById: PropTypes.func,
+  getEventTokensById: PropTypes.func,
 };
 
 EventPageTemplate.propTypes = {
   event: PropTypes.object,
+  eventTokens: PropTypes.object,
   lastUpdate: PropTypes.object,
   loading: PropTypes.bool,
   eventId: PropTypes.string,
   user: PropTypes.object,
   eventsPhases: PropTypes.array,
   getEventById: PropTypes.func,
+  getEventTokensById: PropTypes.func,
   activityCtaText: PropTypes.string,
 };
 
@@ -288,6 +298,7 @@ const mapStateToProps = ({
 }) => ({
   loading: eventState.loading,
   event: eventState.event,
+  eventTokens: eventState.tokens,
   user: userState,
   summit: summitState.summit,
   eventsPhases: clockState.events_phases,

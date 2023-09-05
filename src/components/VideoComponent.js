@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import VideoJSPlayer from './VideoJSPlayer';
 import VimeoPlayer from "./VimeoPlayer";
 
 import styles from '../styles/video.module.scss';
+import VideoMUXPlayer from './VideoMUXPlayer';
 
 const checkLiveVideo = (url) => {
     let isLiveVideo = null;
@@ -21,9 +22,25 @@ function checkYouTubeVideo(url) {
     return url.match(/^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/);
 }
 
-const VideoComponent = ({ url, title, namespace, firstHalf, autoPlay, start }) => {
-    console.log({ url, title, namespace, firstHalf, autoPlay, start });
+function checkMuxVideo (url) {
+    return url.match(/^https:\/\/[^/]*\.mux\.com\//i)
+}
+
+const VideoComponent = ({ url, title, namespace, firstHalf, autoPlay, start, isSecure, tokens }) => {
+
     if (url) {
+        // using mux player
+        if(checkMuxVideo(url)) {
+            const muxOptions = {
+                autoPlay: autoPlay,
+                muted: !!autoPlay,
+                startTime: start,
+            };            
+            return (
+                <VideoMUXPlayer streamType={checkLiveVideo(url) ? "live" : "on-demand"} isSecure={isSecure}
+                    title={title} namespace={namespace} videoSrc={url} tokens={tokens} {...muxOptions} />
+            );
+        }
         // vimeo player
         if (checkVimeoVideo(url)) {
             return (
@@ -34,8 +51,8 @@ const VideoComponent = ({ url, title, namespace, firstHalf, autoPlay, start }) =
                     className={styles.vimeoPlayer}
                 />
             );
-        };
-        // default mux live
+        };        
+        // video.js mux live
         if (checkLiveVideo(url)) {
             const videoJsOptions = {
                 autoplay: autoPlay,
@@ -54,7 +71,7 @@ const VideoComponent = ({ url, title, namespace, firstHalf, autoPlay, start }) =
                     type: 'application/x-mpegURL'
                 }],
             };
-            return (
+            return (                
                 <VideoJSPlayer title={title} namespace={namespace} firstHalf={firstHalf} {...videoJsOptions} />
             );
         };
