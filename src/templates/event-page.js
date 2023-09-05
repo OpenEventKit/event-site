@@ -21,7 +21,7 @@ import AccessTracker, {AttendeesWidget} from "../components/AttendeeToAttendeeWi
 import AttendanceTrackerComponent from "../components/AttendanceTrackerComponent";
 import EventFeedbackComponent from "../components/EventFeedbackComponent"
 import {PHASES} from "../utils/phasesUtils";
-import { getEventById } from "../actions/event-actions";
+import { getEventById, getEventTokensById } from "../actions/event-actions";
 import URI from "urijs";
 import useMarketingSettings, { MARKETING_SETTINGS_KEYS } from "@utils/useMarketingSettings";
 /**
@@ -67,14 +67,22 @@ export const EventPageTemplate = class extends React.Component {
     const {eventId: prevEventId} = prevProps;
     // event id could come as param at uri
     if (parseInt(eventId) !== parseInt(prevEventId) || parseInt(event?.id) !== parseInt(eventId)) {
-      this.props.getEventById(eventId);
+      this.props.getEventById(eventId).then((res) => {
+        const { response }  = res;
+        if(response.stream_is_secure) // todo check
+          this.props.getEventTokensById(eventId)
+      });
     }
   }
 
   componentDidMount() {
     const {eventId, event } = this.props;
     if (parseInt(event?.id) !== parseInt(eventId)) {
-      this.props.getEventById(eventId);
+      this.props.getEventById(eventId).then((res) => {
+        const { response }  = res;
+        if(response.stream_is_secure) // todo check stream url is mux
+          this.props.getEventTokensById(eventId)
+      });
     }
   }
 
@@ -290,4 +298,5 @@ const mapStateToProps = ({
 
 export default connect(mapStateToProps, {
   getEventById,
+  getEventTokensById,
 })(EventPage);
