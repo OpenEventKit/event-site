@@ -4,9 +4,9 @@ import MuxPlayer from '@mux/mux-player-react/lazy';
 import Swal from 'sweetalert2';
 
 import { getEnvVariable, MUX_ENV_KEY } from '../utils/envVariables'
-import { checkMuxTokens, getMUXPlaybackId } from '../utils/videoUtils';
+import { getMUXPlaybackId } from '../utils/videoUtils';
 
-const VideoMUXPlayer = ({ title, namespace, videoSrc, streamType, tokens, isSecure, autoPlay, ...muxOptions }) => {
+const VideoMUXPlayer = ({ title, namespace, videoSrc, streamType, tokens, autoPlay, ...muxOptions }) => {
 
   const playerRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(autoPlay);
@@ -16,6 +16,12 @@ const VideoMUXPlayer = ({ title, namespace, videoSrc, streamType, tokens, isSecu
       setIsPlaying(false);
     }    
   }
+
+  const secureProps = tokens ? { tokens: {
+    playback: tokens?.playback_token,
+    thumbnail: tokens?.thumbnail_token,
+    storyboard: tokens?.storyboard_token,
+  }} : {}
 
   return (
     <MuxPlayer
@@ -28,17 +34,13 @@ const VideoMUXPlayer = ({ title, namespace, videoSrc, streamType, tokens, isSecu
         console.log(err);
       }}
       onEnded={handleVideoEnded}
-      tokens={{
-        playback: tokens?.playback_token,
-        thumbnail: tokens?.thumbnail_token,
-        storyboard: tokens?.storyboard_token,
-      }}
       autoPlay={isPlaying}
       metadata={{
         video_title: { title },
         sub_property_id: { namespace },
       }}
       style={{ aspectRatio: 16/9 }}
+      {...secureProps}
       {...muxOptions}
     />
   );
@@ -49,8 +51,7 @@ VideoMUXPlayer.propTypes = {
   title: PropTypes.string,
   namespace: PropTypes.string,
   streamType: PropTypes.oneOfType(["live", "on-demand"]),
-  autoPlay: PropTypes.bool,  
-  isSecure: PropTypes.bool,
+  autoPlay: PropTypes.bool,
   tokens: PropTypes.object
 };
 

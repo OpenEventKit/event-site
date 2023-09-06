@@ -121,7 +121,6 @@ export const EventPageTemplate = class extends React.Component {
                   :
                   <VideoComponent
                     url={event.streaming_url}
-                    isSecure={event.stream_is_secure}
                     tokens={eventTokens}
                     isLive={event.streaming_type === "LIVE"}
                     title={event.title}
