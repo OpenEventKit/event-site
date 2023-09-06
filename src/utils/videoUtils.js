@@ -1,5 +1,7 @@
+const IS_MUX_VIDEO_REGEX = /https:\/\/stream.mux.com\/(.*).m3u8/;
+
 export const getMUXPlaybackId = (url) => {
-    const fileMatch = url.match(/https:\/\/stream.mux.com\/(.*).m3u8/);
+    const fileMatch = url.match(IS_MUX_VIDEO_REGEX);
     return fileMatch ? fileMatch[1] : null;
 }
 
@@ -17,5 +19,5 @@ export const isYouTubeVideo = (url) => {
 }
 
 export const isMuxVideo = (url) => {
-    return url.match(/https:\/\/stream.mux.com\/(.*).m3u8/)
+    return url.match(IS_MUX_VIDEO_REGEX)
 }

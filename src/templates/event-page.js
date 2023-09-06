@@ -116,7 +116,7 @@ export const EventPageTemplate = class extends React.Component {
           <div className="columns is-gapless">
             {this.canRenderVideo(currentPhase) ? (
               <div className="column is-three-quarters px-0 py-0">
-                {event.is_secure && isMuxVideo(event) && !checkMuxTokens(eventTokens) ?
+                {event.is_secure && isMuxVideo(event.streaming_url) && !checkMuxTokens(eventTokens) ?
                   <div>Loading tokens...</div>
                   :
                   <VideoComponent
