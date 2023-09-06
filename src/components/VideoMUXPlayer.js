@@ -17,27 +17,26 @@ const VideoMUXPlayer = ({ title, namespace, videoSrc, streamType, tokens, isSecu
   }
 
   return (
-    isSecure && !checkMuxTokens(tokens) ?
-      null :
-      <MuxPlayer
-        ref={playerRef}
-        streamType={streamType}
-        envKey={getEnvVariable(MUX_ENV_KEY)}
-        playbackId={getMUXPlaybackId(videoSrc)}
-        onError={(err) => console.log('Error: ', err)}
-        onEnded={handleVideoEnded}
-        tokens={{
-          playback: tokens.playback_token,
-          thumbnail: tokens.thumbnail_token,
-          storyboard: tokens.storyboard_token,
-        }}
-        autoPlay={isPlaying}
-        metadata={{
-          video_title: { title },
-          sub_property_id: { namespace },
-        }}
-        {...muxOptions}
-      />
+    <MuxPlayer
+      ref={playerRef}
+      streamType={streamType}
+      envKey={getEnvVariable(MUX_ENV_KEY)}
+      playbackId={getMUXPlaybackId(videoSrc)}
+      onError={(err) => console.log('Error: ', err)}
+      onEnded={handleVideoEnded}
+      tokens={{
+        playback: tokens?.playback_token,
+        thumbnail: tokens?.thumbnail_token,
+        storyboard: tokens?.storyboard_token,
+      }}
+      autoPlay={isPlaying}
+      metadata={{
+        video_title: { title },
+        sub_property_id: { namespace },
+      }}
+      style={{ aspectRatio: 16/9 }}
+      {...muxOptions}
+    />
   );
 }
 
@@ -50,7 +49,5 @@ VideoMUXPlayer.propTypes = {
   isSecure: PropTypes.bool,
   tokens: PropTypes.object
 };
-
-title, namespace, videoSrc, streamType, tokens, isSecure, autoPlay
 
 export default VideoMUXPlayer;

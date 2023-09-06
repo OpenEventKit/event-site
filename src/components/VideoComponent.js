@@ -8,7 +8,7 @@ import styles from '../styles/video.module.scss';
 import VideoMUXPlayer from './VideoMUXPlayer';
 import { isLiveVideo, isMuxVideo, isVimeoVideo, isYouTubeVideo } from '../utils/videoUtils';
 
-const VideoComponent = ({ url, title, namespace, firstHalf, autoPlay, start, isSecure, tokens }) => {
+const VideoComponent = ({ url, title, namespace, streamType, firstHalf, autoPlay, start, isSecure, tokens }) => {
 
     if (url) {
         // using mux player
@@ -18,7 +18,7 @@ const VideoComponent = ({ url, title, namespace, firstHalf, autoPlay, start, isS
                 startTime: start,
             };
             return (
-                <VideoMUXPlayer streamType={isLiveVideo(url) ? "live" : "on-demand"} isSecure={isSecure} autoPlay={autoPlay}
+                <VideoMUXPlayer streamType={streamType === "VOD" ? "on-demand" : "live"} isSecure={isSecure} autoPlay={autoPlay}
                     title={title} namespace={namespace} videoSrc={url} tokens={tokens} {...muxOptions} />
             );
         }
@@ -98,6 +98,7 @@ VideoComponent.propTypes = {
     url: PropTypes.string.isRequired,
     title: PropTypes.string,
     namespace: PropTypes.string,
+    streamType: PropTypes.string,
     firstHalf: PropTypes.bool,
     autoPlay: PropTypes.bool,
     start: PropTypes.number,

@@ -123,6 +123,7 @@ export const EventPageTemplate = class extends React.Component {
                     url={event.streaming_url}
                     isSecure={event.stream_is_secure}
                     tokens={eventTokens}
+                    streamType={event.streaming_type}
                     title={event.title}
                     namespace={summit.name}
                     firstHalf={firstHalf}
