@@ -24,6 +24,7 @@ import {PHASES} from "../utils/phasesUtils";
 import { getEventById, getEventTokensById } from "../actions/event-actions";
 import URI from "urijs";
 import useMarketingSettings, { MARKETING_SETTINGS_KEYS } from "@utils/useMarketingSettings";
+import { isMuxVideo } from "../utils/videoUtils";
 /**
  * @type {EventPageTemplate}
  */
@@ -69,7 +70,7 @@ export const EventPageTemplate = class extends React.Component {
     if (parseInt(eventId) !== parseInt(prevEventId) || parseInt(event?.id) !== parseInt(eventId)) {
       this.props.getEventById(eventId).then((res) => {
         const { response }  = res;
-        if(response.stream_is_secure) // todo check
+        if(response.stream_is_secure && isMuxVideo(response.streaming_url)) // todo check
           this.props.getEventTokensById(eventId)
       });
     }
@@ -80,7 +81,7 @@ export const EventPageTemplate = class extends React.Component {
     if (parseInt(event?.id) !== parseInt(eventId)) {
       this.props.getEventById(eventId).then((res) => {
         const { response }  = res;
-        if(response.stream_is_secure) // todo check stream url is mux
+        if(response.stream_is_secure && isMuxVideo(response.streaming_url)) // todo check stream url is mux
           this.props.getEventTokensById(eventId)
       });
     }
@@ -115,16 +116,20 @@ export const EventPageTemplate = class extends React.Component {
           <div className="columns is-gapless">
             {this.canRenderVideo(currentPhase) ? (
               <div className="column is-three-quarters px-0 py-0">
-                <VideoComponent
-                  url={event.streaming_url}
-                  isSecure={event.stream_is_secure}
-                  tokens={eventTokens}
-                  title={event.title}
-                  namespace={summit.name}
-                  firstHalf={firstHalf}
-                  autoPlay={autoPlay}
-                  start={startTime}
-                />
+                {event.is_secure && isMuxVideo(event) && !checkMuxTokens(eventTokens) ?
+                  <div>Loading tokens...</div>
+                  :
+                  <VideoComponent
+                    url={event.streaming_url}
+                    isSecure={event.stream_is_secure}
+                    tokens={eventTokens}
+                    title={event.title}
+                    namespace={summit.name}
+                    firstHalf={firstHalf}
+                    autoPlay={autoPlay}
+                    start={startTime}
+                  />
+                }                
                 {event.meeting_url && <VideoBanner event={event} ctaText={activityCtaText} />}
               </div>
             ) : (

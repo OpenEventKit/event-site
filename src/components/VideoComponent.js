@@ -6,42 +6,24 @@ import VimeoPlayer from "./VimeoPlayer";
 
 import styles from '../styles/video.module.scss';
 import VideoMUXPlayer from './VideoMUXPlayer';
-
-const checkLiveVideo = (url) => {
-    let isLiveVideo = null;
-    url.match(/.m3u8/) ? isLiveVideo = true : isLiveVideo = false;
-    return isLiveVideo;
-};
-
-const checkVimeoVideo = (url) => {
-    // this is get from vimeo dash board
-    return url.match(/https:\/\/(www\.)?(player\.)?vimeo.com\/(.*)/);
-};
-
-function checkYouTubeVideo(url) {
-    return url.match(/^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/);
-}
-
-function checkMuxVideo (url) {
-    return url.match(/^https:\/\/[^/]*\.mux\.com\//i)
-}
+import { isLiveVideo, isMuxVideo, isVimeoVideo, isYouTubeVideo } from '../utils/videoUtils';
 
 const VideoComponent = ({ url, title, namespace, firstHalf, autoPlay, start, isSecure, tokens }) => {
 
     if (url) {
         // using mux player
-        if(checkMuxVideo(url)) {
+        if(isMuxVideo(url)) {
             const muxOptions = {
                 muted: !!autoPlay,
                 startTime: start,
-            };            
+            };
             return (
-                <VideoMUXPlayer streamType={checkLiveVideo(url) ? "live" : "on-demand"} isSecure={isSecure} autoPlay={autoPlay}
+                <VideoMUXPlayer streamType={isLiveVideo(url) ? "live" : "on-demand"} isSecure={isSecure} autoPlay={autoPlay}
                     title={title} namespace={namespace} videoSrc={url} tokens={tokens} {...muxOptions} />
             );
         }
         // vimeo player
-        if (checkVimeoVideo(url)) {
+        if (isVimeoVideo(url)) {
             return (
                 <VimeoPlayer
                     video={url}
@@ -52,7 +34,7 @@ const VideoComponent = ({ url, title, namespace, firstHalf, autoPlay, start, isS
             );
         };        
         // video.js mux live
-        if (checkLiveVideo(url)) {
+        if (isLiveVideo(url)) {
             const videoJsOptions = {
                 autoplay: autoPlay,
                 /*
@@ -75,7 +57,7 @@ const VideoComponent = ({ url, title, namespace, firstHalf, autoPlay, start, isS
             );
         };
 
-        const customOptions = checkYouTubeVideo(url) ? {
+        const customOptions = isYouTubeVideo(url) ? {
             techOrder: ["youtube"],
             sources: [{
                 type: "video/youtube",

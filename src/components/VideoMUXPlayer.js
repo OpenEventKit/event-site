@@ -1,31 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react'
-import MuxPlayer from '@mux/mux-player-react';
+import MuxPlayer from '@mux/mux-player-react/lazy';
 
 import { getEnvVariable, MUX_ENV_KEY } from '../utils/envVariables'
-
-const getPlaybackId = (url) => {
-  const fileMatch = url.match(/\/([^/]+)\.([a-zA-Z0-9]+)$/);
-  return fileMatch ? fileMatch[1] : null;
-}
+import { checkMuxTokens, getMUXPlaybackId } from '../utils/videoUtils';
 
 const VideoMUXPlayer = ({ title, namespace, videoSrc, streamType, tokens, isSecure, autoPlay, ...muxOptions }) => {
 
   const playerRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(autoPlay);
 
-  useEffect(() => {
-    console.log('MUX new tokens comming...')
+
+  useEffect(() => {    
   }, [tokens])
 
   useEffect(() => {
-    console.log('new src: ', videoSrc);
   }, [videoSrc]);
-
-  if (isSecure && !tokens?.playback_token) {
-    return (<div>
-      Loading...
-    </div>)
-  }
 
   const handleVideoEnded = () => {
     if (streamType === "live") {
@@ -57,28 +46,30 @@ const VideoMUXPlayer = ({ title, namespace, videoSrc, streamType, tokens, isSecu
   }
 
   return (
-    <MuxPlayer
-      ref={playerRef}
-      streamType={streamType}
-      envKey={getEnvVariable(MUX_ENV_KEY)}
-      playbackId={getPlaybackId(videoSrc)}
-      onError={(err) => console.log('Error: ', err)}
-      onEnded={handleVideoEnded}
-      tokens={{
-        playback: tokens?.playback_token,
-        thumbnail: tokens?.thumbnail_token,
-        storyboard: tokens?.storyboard_token,
-      }}
-      autoPlay={isPlaying}
-      metadata={{
-        video_title: { title },
-        sub_property_id: { namespace },
-        // video_id: "video-id-54321",
-        // viewer_user_id: "user-id-007",
-      }}
+    isSecure && !checkMuxTokens(tokens) ?
+      null :
+      <MuxPlayer
+        ref={playerRef}
+        streamType={streamType}
+        envKey={getEnvVariable(MUX_ENV_KEY)}
+        playbackId={getMUXPlaybackId(videoSrc)}
+        onError={(err) => console.log('Error: ', err)}
+        onEnded={handleVideoEnded}
+        tokens={{
+          playback: tokens.playback_token,
+          thumbnail: tokens.thumbnail_token,
+          storyboard: tokens.storyboard_token,
+        }}
+        autoPlay={isPlaying}
+        metadata={{
+          video_title: { title },
+          sub_property_id: { namespace },
+          // video_id: "video-id-54321",
+          // viewer_user_id: "user-id-007",
+        }}
 
-      {...muxOptions}
-    />
+        {...muxOptions}
+      />
   );
 }
 
