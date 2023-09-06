@@ -1,10 +1,9 @@
 export const getMUXPlaybackId = (url) => {
-    const fileMatch = url.match(/\/([^/]+)\.([a-zA-Z0-9]+)$/);
+    const fileMatch = url.match(/https:\/\/stream.mux.com\/(.*).m3u8/);
     return fileMatch ? fileMatch[1] : null;
 }
 
 export const checkMuxTokens = (tokens) => {
-    console.log('utils check tokens...', tokens && tokens.playback_token && tokens.thumbnail_token && tokens.storyboard_token);
     return tokens && tokens.playback_token && tokens.thumbnail_token && tokens.storyboard_token;
 }
 
@@ -24,5 +23,5 @@ export const isYouTubeVideo = (url) => {
 }
 
 export const isMuxVideo = (url) => {
-    return url.match(/^https:\/\/[^/]*\.mux\.com\//i)
+    return url.match(/https:\/\/stream.mux.com\/(.*).m3u8/)
 }

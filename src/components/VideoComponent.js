@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import VideoJSPlayer from './VideoJSPlayer';
@@ -100,6 +100,9 @@ VideoComponent.propTypes = {
     namespace: PropTypes.string,
     firstHalf: PropTypes.bool,
     autoPlay: PropTypes.bool,
+    start: PropTypes.number,
+    isSecure: PropTypes.bool,
+    tokens: PropTypes.object
 };
 
 VideoComponent.defaultProps = {
@@ -107,6 +110,8 @@ VideoComponent.defaultProps = {
     namespace: '',
     firstHalf: true,
     autoPlay: false,
+    isSecure: false,
+    tokens: null,
 };
 
 export default VideoComponent;

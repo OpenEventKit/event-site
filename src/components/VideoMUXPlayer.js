@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
+import PropTypes from 'prop-types';
 import MuxPlayer from '@mux/mux-player-react/lazy';
 
 import { getEnvVariable, MUX_ENV_KEY } from '../utils/envVariables'
@@ -9,40 +10,10 @@ const VideoMUXPlayer = ({ title, namespace, videoSrc, streamType, tokens, isSecu
   const playerRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(autoPlay);
 
-
-  useEffect(() => {    
-  }, [tokens])
-
-  useEffect(() => {
-  }, [videoSrc]);
-
   const handleVideoEnded = () => {
     if (streamType === "live") {
       setIsPlaying(false);
-    }
-
-    //       this.player.on('ended', () => {        
-    //         if (isLive) {
-    //           this.player.pause();
-    //           modal = this.player.createModal();
-    //           modal.closeable(false);
-    //           let newElement = document.createElement('div');
-    //           newElement.classList.add('video-error');
-    //           let message = 'VOD will be available soon';
-    //           newElement.innerHTML = `
-    //             <section class="hero">
-    //               <div class="hero-body">
-    //                 <div class='has-text-centered'}>
-    //                   <h1 class="title">${message}</h1>               
-    //                 </div>
-    //               </div>
-    //             </section>
-    //             `
-    //           modal.content(newElement);
-    //           modal.fill();
-    //         }
-    //       });
-    //     }
+    }    
   }
 
   return (
@@ -64,47 +35,22 @@ const VideoMUXPlayer = ({ title, namespace, videoSrc, streamType, tokens, isSecu
         metadata={{
           video_title: { title },
           sub_property_id: { namespace },
-          // video_id: "video-id-54321",
-          // viewer_user_id: "user-id-007",
         }}
-
         {...muxOptions}
       />
   );
 }
 
+VideoMUXPlayer.propTypes = {
+  videoSrc: PropTypes.string.isRequired,
+  title: PropTypes.string,
+  namespace: PropTypes.string,
+  streamType: PropTypes.oneOfType(["live", "on-demand"]),
+  autoPlay: PropTypes.bool,  
+  isSecure: PropTypes.bool,
+  tokens: PropTypes.object
+};
+
+title, namespace, videoSrc, streamType, tokens, isSecure, autoPlay
+
 export default VideoMUXPlayer;
-
-
-//       this.player.on('error', () => {
-//         const videoError = this.player.error();        
-//         if ((firstHalf !== null && videoError.code === 2) || videoError.code === 4) {
-//           if (reloadPlayer === null) {
-//             this.player.errorDisplay.close();
-//             modal = this.player.createModal();
-//             modal.closeable(false);
-//             let newElement = document.createElement('div');
-//             newElement.classList.add('video-error');
-//             let message = firstHalf ? 'This video stream will begin momentarily. Please standby.' : 'This video will be available on-demand shortly.<br>Please return to this page at your convenience.';
-//             newElement.innerHTML = `
-//               <section class="hero">
-//                 <div class="hero-body">
-//                   <div class='has-text-centered'}>
-//                     <h1 class="title">${message}</h1> 
-//                   </div>
-//                 </div>
-//               </section>
-//               `
-//             modal.content(newElement);
-//             modal.fill();
-//             if (firstHalf) {
-//               reloadPlayer = setInterval(() => {
-//                 // reload player
-//                 this.player.load();
-//                 this.player.src(src);
-//                 this.player.reset();
-//               }, 60000);
-//             }
-//           }
-//         }
-//       });
