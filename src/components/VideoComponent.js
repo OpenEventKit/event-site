@@ -6,9 +6,9 @@ import VimeoPlayer from "./VimeoPlayer";
 
 import styles from '../styles/video.module.scss';
 import VideoMUXPlayer from './VideoMUXPlayer';
-import { isLiveVideo, isMuxVideo, isVimeoVideo, isYouTubeVideo } from '../utils/videoUtils';
+import { isMuxVideo, isVimeoVideo, isYouTubeVideo } from '../utils/videoUtils';
 
-const VideoComponent = ({ url, title, namespace, streamType, firstHalf, autoPlay, start, isSecure, tokens }) => {
+const VideoComponent = ({ url, title, namespace, isLive, firstHalf, autoPlay, start, isSecure, tokens }) => {
 
     if (url) {
         // using mux player
@@ -18,7 +18,7 @@ const VideoComponent = ({ url, title, namespace, streamType, firstHalf, autoPlay
                 startTime: start,
             };
             return (
-                <VideoMUXPlayer streamType={streamType === "VOD" ? "on-demand" : "live"} isSecure={isSecure} autoPlay={autoPlay}
+                <VideoMUXPlayer isLive={isLive ? "live" : "on-demand"} isSecure={isSecure} autoPlay={autoPlay}
                     title={title} namespace={namespace} videoSrc={url} tokens={tokens} {...muxOptions} />
             );
         }
@@ -32,32 +32,9 @@ const VideoComponent = ({ url, title, namespace, streamType, firstHalf, autoPlay
                     className={styles.vimeoPlayer}
                 />
             );
-        };        
-        // video.js mux live
-        if (isLiveVideo(url)) {
-            const videoJsOptions = {
-                autoplay: autoPlay,
-                /*
-                 TIP: If you want to use autoplay and improve the chances of it working, use the muted attribute
-                 (or the muted option, with Video.js).
-                 @see https://blog.videojs.com/autoplay-best-practices-with-video-js/
-                 */
-                muted: !!autoPlay,
-                controls: true,
-                fluid: true,
-                playsInline: true,
-                start: start,
-                sources: [{
-                    src: url,
-                    type: 'application/x-mpegURL'
-                }],
-            };
-            return (                
-                <VideoJSPlayer title={title} namespace={namespace} firstHalf={firstHalf} {...videoJsOptions} />
-            );
         };
 
-        const customOptions = isYouTubeVideo(url) ? {
+        const defaultVideoJsOptions = isYouTubeVideo(url) ? {
             techOrder: ["youtube"],
             sources: [{
                 type: "video/youtube",
@@ -68,12 +45,6 @@ const VideoComponent = ({ url, title, namespace, streamType, firstHalf, autoPlay
                 iv_load_policy: 1
             },
         }: {
-            sources: [{
-                src: url
-            }],
-        };
-
-        const videoJsOptions = {
             autoplay: autoPlay,
             /*
              TIP: If you want to use autoplay and improve the chances of it working, use the muted attribute
@@ -84,11 +55,21 @@ const VideoComponent = ({ url, title, namespace, streamType, firstHalf, autoPlay
             controls: true,
             fluid: true,
             playsInline: true,
-            ...customOptions
+            start: isLive ? start : null,
+            sources: isLive ?
+            [{
+                src: url,
+                type: 'application/x-mpegURL'
+            }]
+            :
+            [{
+                src: url
+            }]
+            ,
         };
 
         return (
-            <VideoJSPlayer title={title} namespace={namespace} {...videoJsOptions} />
+            <VideoJSPlayer title={title} namespace={namespace} firstHalf={isLive? firstHalf : null} {...defaultVideoJsOptions} />
         );
     }
     return (<span className="no-video">No video URL Provided</span>);
@@ -98,7 +79,7 @@ VideoComponent.propTypes = {
     url: PropTypes.string.isRequired,
     title: PropTypes.string,
     namespace: PropTypes.string,
-    streamType: PropTypes.string,
+    isLive: PropTypes.bool,
     firstHalf: PropTypes.bool,
     autoPlay: PropTypes.bool,
     start: PropTypes.number,

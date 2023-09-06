@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types';
 import MuxPlayer from '@mux/mux-player-react/lazy';
+import Swal from 'sweetalert2';
 
 import { getEnvVariable, MUX_ENV_KEY } from '../utils/envVariables'
 import { checkMuxTokens, getMUXPlaybackId } from '../utils/videoUtils';
@@ -22,7 +23,10 @@ const VideoMUXPlayer = ({ title, namespace, videoSrc, streamType, tokens, isSecu
       streamType={streamType}
       envKey={getEnvVariable(MUX_ENV_KEY)}
       playbackId={getMUXPlaybackId(videoSrc)}
-      onError={(err) => console.log('Error: ', err)}
+      onError={(err) => {
+        Swal.fire('Error', 'This video stream will begin momentarily. Please standby.', "warning");
+        console.log(err);
+      }}
       onEnded={handleVideoEnded}
       tokens={{
         playback: tokens?.playback_token,
