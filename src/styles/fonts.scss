@@ -1,35 +1,26 @@
+/**
+* Warning:
+* Dont edit this file by hand, this file is used as default font implementation for the whole site
+* and it been re generated if font settings are set through CMS on gatsby-node.js line # 346
+**/
 
-  $font-family: "Builder Sans";
+$font-family: 'Nunito Sans', sans-serif;
 
-  :root {
-    --font_family: "Builder Sans" !important;
-  }
+:root {
+  --font_family: #{$font-family};
+}
 
-  // Adding these new fonts for this theme
-  @font-face {
-        font-family: "Builder Sans";
-        src: url("/fonts/robloxbeta-regular-v1.007.otf") format('opentype');
-        font-weight: normal;
-    }
+%font-regular {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 400;
+}
 
-  @font-face {
-        font-family: "Builder Sans";
-        src: url("/fonts/robloxdisplaybeta-bold-v1.003.otf") format('opentype');
-        font-weight: bold;
-    }
-  
-  %font-regular {
-    font-family: "Builder Sans";
-    font-weight: 400;
-  }
+%font-semi {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 600;
+}
 
-  %font-semi {
-    font-family: "Builder Sans";
-    font-weight: 600;
-  }
-
-  %font-bold {
-    font-family: "Builder Sans";
-    font-weight: 700;
-  }
- 
+%font-bold {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 700;
+}

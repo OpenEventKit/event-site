@@ -75,43 +75,6 @@ const VideoMUXPlayer = ({ title, namespace, videoSrc, streamType, tokens, isSecu
 
 export default VideoMUXPlayer;
 
-// class VideoJSPlayer extends React.Component {
-//   componentDidMount() {
-//     const { title, namespace, firstHalf, start } = this.props;
-
-//     let plugins = {}
-
-//     if (getEnvVariable(MUX_ENV_KEY)) {
-//       plugins = { ...plugins,
-//         mux: {
-//           debug: false,
-//           data: {
-//             env_key: getEnvVariable(MUX_ENV_KEY),
-//             video_title: title,
-//             sub_property_id: namespace,
-//             /* Metadata
-//             player_init_time: playerInitTime*/
-//           }
-//         }
-//       }
-//     }
-
-//     const options = {
-//       html5: {
-//         vhs: {
-//           overrideNative: !videojs.browser.IS_SAFARI,
-//         },
-//       },
-//       plugins: plugins,
-//       ...this.props,
-//     };
-
-//     const onPlayerReady = () => {          
-//       const src = this.player.src();
-//       if (start) this.player.currentTime(start);
-//       let reloadPlayer = null;
-//       let modal = null;
-//       let isLive = null;
 
 //       this.player.on('error', () => {
 //         const videoError = this.player.error();        
@@ -145,46 +108,3 @@ export default VideoMUXPlayer;
 //           }
 //         }
 //       });
-
-//       this.player.on('playing', () => {        
-//         if (reloadPlayer) clearInterval(reloadPlayer);
-//         if (modal) modal.dispose();                
-//         if (this.player.duration() === Infinity) {
-//           isLive = true;
-//         };
-//       });
-
-
-
-//     this.player = videojs(this.videoNode, options, onPlayerReady);
-//   }
-
-//   componentWillUnmount() {
-//     if (this.player) {
-//       this.player.dispose();
-//     }
-//   }
-
-//   componentWillReceiveProps(nextProps) {
-//     if (nextProps.sources !== this.props.sources) {
-//       this.player.src(nextProps.sources);
-//       this.player.poster(nextProps.poster);
-//     }
-//   }
-//   render() {
-//     return (
-//       <div>
-//         <div data-vjs-player>
-//           {/* eslint-disable jsx-a11y/media-has-caption */}
-//           <video
-//             ref={node => (this.videoNode = node)}
-//             className="video-js vjs-big-play-centered"
-//             playsInline={this.props.playsInline}
-//           />
-//         </div>
-//       </div>
-//     );
-//   }
-// }
-
-// export default VideoJSPlayer;
