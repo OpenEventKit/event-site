@@ -24,7 +24,7 @@ import {PHASES} from "../utils/phasesUtils";
 import { getEventById, getEventTokensById } from "../actions/event-actions";
 import URI from "urijs";
 import useMarketingSettings, { MARKETING_SETTINGS_KEYS } from "@utils/useMarketingSettings";
-import { isMuxVideo } from "../utils/videoUtils";
+import { checkMuxTokens, isMuxVideo } from "../utils/videoUtils";
 /**
  * @type {EventPageTemplate}
  */
