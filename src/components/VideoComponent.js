@@ -68,8 +68,10 @@ const VideoComponent = ({ url, title, namespace, isLive, firstHalf, autoPlay, st
             ,
         };
 
+        const firstHalfProp = isLive ? {firstHalf: firstHalf} : {}
+
         return (
-            <VideoJSPlayer title={title} namespace={namespace} firstHalf={isLive? firstHalf : null} {...defaultVideoJsOptions} />
+            <VideoJSPlayer title={title} namespace={namespace} {...firstHalfProp} {...defaultVideoJsOptions} />
         );
     }
     return (<span className="no-video">No video URL Provided</span>);
