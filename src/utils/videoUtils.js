@@ -1,6 +1,7 @@
 const IS_MUX_VIDEO_REGEX = /https:\/\/stream.mux.com\/(.*).m3u8/;
 
 export const getMUXPlaybackId = (url) => {
+    if(!url) return null;
     const fileMatch = url.match(IS_MUX_VIDEO_REGEX);
     return fileMatch ? fileMatch[1] : null;
 }
@@ -10,14 +11,17 @@ export const checkMuxTokens = (tokens) => {
 }
 
 export const isVimeoVideo = (url) => {
+    if(!url) return false;
     // this is get from vimeo dash board
     return url.match(/https:\/\/(www\.)?(player\.)?vimeo.com\/(.*)/);
 };
 
 export const isYouTubeVideo = (url) => {
+    if(!url) return false;
     return url.match(/^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/);
 }
 
 export const isMuxVideo = (url) => {
+    if(!url) return false;
     return url.match(IS_MUX_VIDEO_REGEX)
 }
