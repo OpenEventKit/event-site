@@ -4,6 +4,7 @@ import { isAuthorizedBadge } from "../utils/authorizedGroups";
 import HeroComponent from "../components/HeroComponent";
 import {getEventById, getEventTokensById} from "../actions/event-actions";
 import { isMuxVideo } from "../utils/videoUtils";
+import {navigate} from "gatsby";
 
 const WithBadgeRoute = ({ children, location, eventId, event, loading, userProfile, hasTicket, isAuthorized, getEventById, getEventTokensById }) => {
   // if user is Authorized then bypass the badge checking
@@ -23,9 +24,16 @@ const WithBadgeRoute = ({ children, location, eventId, event, loading, userProfi
   useEffect(() => {
     if (event === null || parseInt(eventId) !== parseInt(event.id)) {
       getEventById(eventId).then((res) => {
-        const { response }  = res;
-        if(response && response?.stream_is_secure && isMuxVideo(response?.streaming_url))
+        const { response, err }  = res;
+        // check error
+        if(err && err?.status === 404){
+           navigate('/a/schedule');
+        }
+        if(response && response?.stream_is_secure && isMuxVideo(response?.streaming_url)){
           getEventTokensById(eventId)
+        }
+      }).catch(err => {
+        console.log(err);
       });
     }
   }, [eventId, getEventById, event, getEventTokensById]);

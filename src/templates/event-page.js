@@ -1,6 +1,5 @@
 import * as React from "react";
 import PropTypes from "prop-types";
-import {navigate} from "gatsby";
 import {connect} from "react-redux";
 import { isEqual } from "lodash";
 import Layout from "../components/Layout";
