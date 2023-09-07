@@ -1,10 +1,11 @@
 import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types';
-import MuxPlayer from '@mux/mux-player-react';
-import Swal from 'sweetalert2';
-
 import { getEnvVariable, MUX_ENV_KEY } from '../utils/envVariables'
 import { getMUXPlaybackId } from '../utils/videoUtils';
+import Swal from 'sweetalert2';
+// lazy load bc otherwise SSR breaks
+// @see https://www.gatsbyjs.com/docs/using-client-side-only-packages/
+const MuxPlayer = React.lazy(() => import('@mux/mux-player-react'));
 
 const VideoMUXPlayer = ({ title, namespace, videoSrc, streamType, tokens, autoPlay, ...muxOptions }) => {
 
@@ -23,27 +24,35 @@ const VideoMUXPlayer = ({ title, namespace, videoSrc, streamType, tokens, autoPl
     storyboard: tokens?.storyboard_token,
   }} : {}
 
-  return (
-    <MuxPlayer
-      ref={playerRef}
-      streamType={streamType}
-      envKey={getEnvVariable(MUX_ENV_KEY)}
-      playbackId={getMUXPlaybackId(videoSrc)}
-      onError={(err) => {
-        Swal.fire('Error', 'This video stream will begin momentarily. Please standby.', "warning");
-        console.log(err);
-      }}
-      onEnded={handleVideoEnded}
-      autoPlay={isPlaying}
-      metadata={{
-        video_title: { title },
-        sub_property_id: { namespace },
-      }}
-      style={{ aspectRatio: 16/9 }}
-      {...secureProps}
-      {...muxOptions}
-    />
-  );
+    const isSSR = typeof window === "undefined"
+    return (
+        <>
+            {!isSSR && (
+                <React.Suspense fallback={<></>}>
+                <MuxPlayer
+                    ref={playerRef}
+                    streamType={streamType}
+                    envKey={getEnvVariable(MUX_ENV_KEY)}
+                    playbackId={getMUXPlaybackId(videoSrc)}
+                    onError={(err) => {
+                      Swal.fire('Error', 'This video stream will begin momentarily. Please standby.', "warning");
+                      console.log(err);
+                    }}
+                    onEnded={handleVideoEnded}
+                    autoPlay={isPlaying}
+                    metadata={{
+                      video_title: {title},
+                      sub_property_id: {namespace},
+                    }}
+                    style={{aspectRatio: 16 / 9}}
+                    {...secureProps}
+                    {...muxOptions}
+                />
+                </React.Suspense>
+            )}
+        </>
+    );
+
 }
 
 VideoMUXPlayer.propTypes = {
