@@ -12,7 +12,12 @@ import {
 import { customErrorHandler } from '../utils/customErrorHandler';
 
 import {LOGOUT_USER} from "openstack-uicore-foundation/lib/security/actions";
-import {GET_EVENT_DATA, GET_EVENT_DATA_ERROR, SET_EVENT_LAST_UPDATE, RELOAD_EVENT_STATE} from './event-actions-definitions';
+import {
+    GET_EVENT_DATA,
+    GET_EVENT_DATA_ERROR,
+    GET_EVENT_TOKENS,
+    SET_EVENT_LAST_UPDATE,
+} from './event-actions-definitions';
 
 export const handleResetReducers = () => (dispatch) => {
     dispatch(createAction(LOGOUT_USER)({}));
@@ -23,7 +28,6 @@ export const setEventLastUpdate = (lastUpdate) => (dispatch) => {
 }
 
 /**
- *
  * @param eventId
  * @param checkLocal
  * @returns {(function(*, *): Promise<*>)|*}
@@ -70,6 +74,46 @@ export const getEventById = (
         return payload
     }).catch(e => {
         dispatch(stopLoading());
+        dispatch(createAction(GET_EVENT_DATA_ERROR)(e));
+        console.log('ERROR: ', e);
+        clearAccessToken();
+        return (e);
+    });
+};
+
+/**
+ * @param eventId
+ * @param checkLocal
+ * @returns {(function(*, *): Promise<*>)|*}
+ */
+export const getEventTokensById = (
+    eventId
+) => async (dispatch, getState) => {
+
+    // then refresh from api
+
+    let accessToken;
+    try {
+        accessToken = await getAccessToken();
+    } catch (e) {
+        console.log('getAccessToken error: ', e);
+        return Promise.reject();
+    }
+
+    let params = {
+        access_token: accessToken
+    };
+
+    return getRequest(
+        null,
+        createAction(GET_EVENT_TOKENS),
+        `${window.SUMMIT_API_BASE_URL}/api/v1/summits/${window.SUMMIT_ID}/events/${eventId}/published/tokens`,
+        customErrorHandler,
+        {},
+        true)
+    (params)(dispatch).then((payload) => {
+        return payload
+    }).catch(e => {
         dispatch(createAction(GET_EVENT_DATA_ERROR)(e));
         console.log('ERROR: ', e);
         clearAccessToken();

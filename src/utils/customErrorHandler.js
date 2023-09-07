@@ -25,6 +25,20 @@ export const customErrorHandler = (err, res) => (dispatch, state) => {
   }
 }
 
+export const voidErrorHandler = (err, res) => (dispatch, state) => {
+  let code = err.status;
+  dispatch(stopLoading());
+  let msg = '';
+  switch (code) {
+    case 401:
+      console.log('authErrorHandler 401 - re login');
+      expiredToken(err);
+      break;
+    default:
+      break;
+  }
+}
+
 export const customBadgeHandler = (err, res) => (dispatch, state) => {
   let code = err.status;
   dispatch(stopLoading());

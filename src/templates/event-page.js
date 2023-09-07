@@ -1,10 +1,8 @@
 import * as React from "react";
 import PropTypes from "prop-types";
-import {navigate} from "gatsby";
 import {connect} from "react-redux";
 import { isEqual } from "lodash";
 import Layout from "../components/Layout";
-//import EventHeroComponent from "../components/EventHeroComponent";
 import DisqusComponent from "../components/DisqusComponent";
 import AdvertiseComponent from "../components/AdvertiseComponent";
 import Etherpad from "../components/Etherpad";
@@ -21,9 +19,10 @@ import AccessTracker, {AttendeesWidget} from "../components/AttendeeToAttendeeWi
 import AttendanceTrackerComponent from "../components/AttendanceTrackerComponent";
 import EventFeedbackComponent from "../components/EventFeedbackComponent"
 import {PHASES} from "../utils/phasesUtils";
-import { getEventById } from "../actions/event-actions";
+import { getEventById, getEventTokensById } from "../actions/event-actions";
 import URI from "urijs";
 import useMarketingSettings, { MARKETING_SETTINGS_KEYS } from "@utils/useMarketingSettings";
+import { checkMuxTokens, isMuxVideo } from "../utils/videoUtils";
 /**
  * @type {EventPageTemplate}
  */
@@ -31,21 +30,14 @@ export const EventPageTemplate = class extends React.Component {
 
   constructor(props) {
     super(props);
-    this.onEventChange = this.onEventChange.bind(this);
     this.canRenderVideo = this.canRenderVideo.bind(this);
   }
 
-  onEventChange(ev) {
-    const {eventId} = this.props;
-    if (parseInt(eventId) !== parseInt(ev.id)) {
-      navigate(`/a/event/${ev.id}`);
-    }
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
-    const {eventId, event, eventsPhases, lastDataSync} = this.props;
+    const {eventId, event, eventTokens, eventsPhases, lastDataSync} = this.props;
     if (eventId !== nextProps.eventId) return true;
     if (!isEqual(event, nextProps.event)) return true;
+    if (!isEqual(eventTokens, nextProps.eventTokens)) return true;
     // a synch did happened!
     if(lastDataSync !== nextProps.lastDataSync) return true;
     // compare current event phase with next one
@@ -67,20 +59,28 @@ export const EventPageTemplate = class extends React.Component {
     const {eventId: prevEventId} = prevProps;
     // event id could come as param at uri
     if (parseInt(eventId) !== parseInt(prevEventId) || parseInt(event?.id) !== parseInt(eventId)) {
-      this.props.getEventById(eventId);
+      this.props.getEventById(eventId).then((res) => {
+        const { response }  = res;
+        if(response && response?.stream_is_secure && isMuxVideo(response?.streaming_url)) // todo check
+          this.props.getEventTokensById(eventId)
+      });
     }
   }
 
   componentDidMount() {
     const {eventId, event } = this.props;
     if (parseInt(event?.id) !== parseInt(eventId)) {
-      this.props.getEventById(eventId);
+      this.props.getEventById(eventId).then((res) => {
+        const { response }  = res;
+        if(response && response?.stream_is_secure && isMuxVideo(response?.streaming_url)) // todo check stream url is mux
+          this.props.getEventTokensById(eventId)
+      });
     }
   }
 
   render() {
 
-    const {event, user, loading, nowUtc, summit, eventsPhases, eventId, lastDataSync, activityCtaText} = this.props;
+    const {event, eventTokens, user, loading, nowUtc, summit, eventsPhases, eventId, lastDataSync, activityCtaText} = this.props;
     // get current event phase
     const currentPhaseInfo = eventsPhases.find((e) => parseInt(e.id) === parseInt(eventId));
     const currentPhase = currentPhaseInfo?.phase;
@@ -100,21 +100,26 @@ export const EventPageTemplate = class extends React.Component {
       return <HeroComponent title="Event not found" redirectTo="/a/schedule"/>;
     }
 
+    if(isMuxVideo(event?.streaming_url) && event?.stream_is_secure && ! checkMuxTokens(eventTokens)){
+      return <HeroComponent title="Loading secure event"/>;
+    }
+
     return (
       <React.Fragment>
-        {/* <EventHeroComponent /> */}
         <section className="section px-0 py-0">
           <div className="columns is-gapless">
             {this.canRenderVideo(currentPhase) ? (
               <div className="column is-three-quarters px-0 py-0">
-                <VideoComponent
-                  url={event.streaming_url}
-                  title={event.title}
-                  namespace={summit.name}
-                  firstHalf={firstHalf}
-                  autoPlay={autoPlay}
-                  start={startTime}
-                />
+                    <VideoComponent
+                        url={event.streaming_url}
+                        tokens={eventTokens}
+                        isLive={event.streaming_type === "LIVE"}
+                        title={event.title}
+                        namespace={summit.name}
+                        firstHalf={firstHalf}
+                        autoPlay={autoPlay}
+                        start={startTime}
+                    />
                 {event.meeting_url && <VideoBanner event={event} ctaText={activityCtaText} />}
               </div>
             ) : (
@@ -211,11 +216,13 @@ const EventPage = ({
    location,
    loading,
    event,
+   eventTokens,
    eventId,
    user,
    eventsPhases,
    nowUtc,
    getEventById,
+   getEventTokensById,
    lastUpdate,
    lastDataSync
 }) => {
@@ -235,6 +242,7 @@ const EventPage = ({
       <EventPageTemplate
         summit={summit}
         event={event}
+        eventTokens={eventTokens}
         eventId={eventId}
         loading={loading}
         user={user}
@@ -242,6 +250,7 @@ const EventPage = ({
         nowUtc={nowUtc}
         location={location}
         getEventById={getEventById}
+        getEventTokensById={getEventTokensById}
         lastUpdate={lastUpdate}
         activityCtaText={activityCtaText}
         lastDataSync={lastDataSync}
@@ -253,21 +262,25 @@ const EventPage = ({
 EventPage.propTypes = {
   loading: PropTypes.bool,
   event: PropTypes.object,
+  eventTokens: PropTypes.object,
   lastUpdate: PropTypes.object,
   eventId: PropTypes.string,
   user: PropTypes.object,
   eventsPhases: PropTypes.array,
   getEventById: PropTypes.func,
+  getEventTokensById: PropTypes.func,
 };
 
 EventPageTemplate.propTypes = {
   event: PropTypes.object,
+  eventTokens: PropTypes.object,
   lastUpdate: PropTypes.object,
   loading: PropTypes.bool,
   eventId: PropTypes.string,
   user: PropTypes.object,
   eventsPhases: PropTypes.array,
   getEventById: PropTypes.func,
+  getEventTokensById: PropTypes.func,
   activityCtaText: PropTypes.string,
 };
 
@@ -280,6 +293,7 @@ const mapStateToProps = ({
 }) => ({
   loading: eventState.loading,
   event: eventState.event,
+  eventTokens: eventState.tokens,
   user: userState,
   summit: summitState.summit,
   eventsPhases: clockState.events_phases,
@@ -290,4 +304,5 @@ const mapStateToProps = ({
 
 export default connect(mapStateToProps, {
   getEventById,
+  getEventTokensById,
 })(EventPage);
