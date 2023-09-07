@@ -1,13 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import VideoJSPlayer from './VideoJSPlayer';
 import VimeoPlayer from "./VimeoPlayer";
 import VideoMUXPlayer from './VideoMUXPlayer';
 import styles from '../styles/video.module.scss';
 import { isMuxVideo, isVimeoVideo, isYouTubeVideo } from '../utils/videoUtils';
 
-const VideoComponent = ({ url, title, namespace, isLive, firstHalf, autoPlay, start, tokens }) => {
+/**
+ * @param url
+ * @param title
+ * @param namespace
+ * @param isLive
+ * @param firstHalf
+ * @param autoPlay
+ * @param start
+ * @param tokens
+ * @param onError
+ * @returns {JSX.Element}
+ * @constructor
+ */
+const VideoComponent = ({ url, title, namespace, isLive, firstHalf, autoPlay, start, tokens, onError = () => {} }) => {
 
     if (url) {
         // using mux player
@@ -17,8 +29,12 @@ const VideoComponent = ({ url, title, namespace, isLive, firstHalf, autoPlay, st
                 startTime: start,
             };
             return (
-                <VideoMUXPlayer isLive={isLive ? "live" : "on-demand"} autoPlay={autoPlay}
-                    title={title} namespace={namespace} videoSrc={url} tokens={tokens} {...muxOptions} />
+                <VideoMUXPlayer isLive={isLive ? "live" : "on-demand"}
+                                autoPlay={autoPlay}
+                                title={title}
+                                namespace={namespace}
+                                onError={onError}
+                                videoSrc={url} tokens={tokens} {...muxOptions} />
             );
         }
         // vimeo player
@@ -84,7 +100,8 @@ VideoComponent.propTypes = {
     firstHalf: PropTypes.bool,
     autoPlay: PropTypes.bool,
     start: PropTypes.number,    
-    tokens: PropTypes.object
+    tokens: PropTypes.object,
+    onError: PropTypes.func,
 };
 
 VideoComponent.defaultProps = {

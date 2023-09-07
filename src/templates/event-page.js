@@ -23,6 +23,7 @@ import { getEventById, getEventTokensById } from "../actions/event-actions";
 import URI from "urijs";
 import useMarketingSettings, { MARKETING_SETTINGS_KEYS } from "@utils/useMarketingSettings";
 import { checkMuxTokens, isMuxVideo } from "../utils/videoUtils";
+
 /**
  * @type {EventPageTemplate}
  */
@@ -31,6 +32,7 @@ export const EventPageTemplate = class extends React.Component {
   constructor(props) {
     super(props);
     this.canRenderVideo = this.canRenderVideo.bind(this);
+    this.onError = this.onError.bind(this);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -72,9 +74,16 @@ export const EventPageTemplate = class extends React.Component {
     if (parseInt(event?.id) !== parseInt(eventId)) {
       this.props.getEventById(eventId).then((res) => {
         const { response }  = res;
-        if(response && response?.stream_is_secure && isMuxVideo(response?.streaming_url)) // todo check stream url is mux
+        if(response && response?.stream_is_secure && isMuxVideo(response?.streaming_url))
           this.props.getEventTokensById(eventId)
       });
+    }
+  }
+
+  onError(err){
+    const { event, getEventTokensById } = this.props;
+    if(event?.stream_is_secure && isMuxVideo(event?.streaming_url) ){
+      getEventTokensById(event.id)
     }
   }
 
@@ -119,6 +128,7 @@ export const EventPageTemplate = class extends React.Component {
                         firstHalf={firstHalf}
                         autoPlay={autoPlay}
                         start={startTime}
+                        onError={this.onError}
                     />
                 {event.meeting_url && <VideoBanner event={event} ctaText={activityCtaText} />}
               </div>

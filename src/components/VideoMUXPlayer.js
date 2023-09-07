@@ -2,12 +2,11 @@ import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types';
 import { getEnvVariable, MUX_ENV_KEY } from '../utils/envVariables'
 import { getMUXPlaybackId } from '../utils/videoUtils';
-import Swal from 'sweetalert2';
 // lazy load bc otherwise SSR breaks
 // @see https://www.gatsbyjs.com/docs/using-client-side-only-packages/
 const MuxPlayer = React.lazy(() => import('@mux/mux-player-react'));
 
-const VideoMUXPlayer = ({ title, namespace, videoSrc, streamType, tokens, autoPlay, ...muxOptions }) => {
+const VideoMUXPlayer = ({ title, namespace, videoSrc, streamType, tokens, autoPlay, onError = () => {}, ...muxOptions }) => {
 
   const playerRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(autoPlay);
@@ -35,7 +34,7 @@ const VideoMUXPlayer = ({ title, namespace, videoSrc, streamType, tokens, autoPl
                     envKey={getEnvVariable(MUX_ENV_KEY)}
                     playbackId={getMUXPlaybackId(videoSrc)}
                     onError={(err) => {
-                      Swal.fire('Error', 'This video stream will begin momentarily. Please standby.', "warning");
+                      if(onError) onError(err);
                       console.log(err);
                     }}
                     onEnded={handleVideoEnded}
@@ -61,7 +60,8 @@ VideoMUXPlayer.propTypes = {
   namespace: PropTypes.string,
   streamType: PropTypes.oneOfType(["live", "on-demand"]),
   autoPlay: PropTypes.bool,
-  tokens: PropTypes.object
+  tokens: PropTypes.object,
+  onError:PropTypes.func,
 };
 
 export default VideoMUXPlayer;
