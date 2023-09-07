@@ -4,7 +4,6 @@ import {navigate} from "gatsby";
 import {connect} from "react-redux";
 import { isEqual } from "lodash";
 import Layout from "../components/Layout";
-//import EventHeroComponent from "../components/EventHeroComponent";
 import DisqusComponent from "../components/DisqusComponent";
 import AdvertiseComponent from "../components/AdvertiseComponent";
 import Etherpad from "../components/Etherpad";
@@ -35,13 +34,6 @@ export const EventPageTemplate = class extends React.Component {
     this.canRenderVideo = this.canRenderVideo.bind(this);
   }
 
-  onEventChange(ev) {
-    const {eventId} = this.props;
-    if (parseInt(eventId) !== parseInt(ev.id)) {
-      navigate(`/a/event/${ev.id}`);
-    }
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
     const {eventId, event, eventTokens, eventsPhases, lastDataSync} = this.props;
     if (eventId !== nextProps.eventId) return true;
@@ -70,7 +62,7 @@ export const EventPageTemplate = class extends React.Component {
     if (parseInt(eventId) !== parseInt(prevEventId) || parseInt(event?.id) !== parseInt(eventId)) {
       this.props.getEventById(eventId).then((res) => {
         const { response }  = res;
-        if(response.stream_is_secure && isMuxVideo(response.streaming_url)) // todo check
+        if(response && response?.stream_is_secure && isMuxVideo(response?.streaming_url)) // todo check
           this.props.getEventTokensById(eventId)
       });
     }
@@ -81,7 +73,7 @@ export const EventPageTemplate = class extends React.Component {
     if (parseInt(event?.id) !== parseInt(eventId)) {
       this.props.getEventById(eventId).then((res) => {
         const { response }  = res;
-        if(response.stream_is_secure && isMuxVideo(response.streaming_url)) // todo check stream url is mux
+        if(response && response?.stream_is_secure && isMuxVideo(response?.streaming_url)) // todo check stream url is mux
           this.props.getEventTokensById(eventId)
       });
     }
@@ -109,27 +101,26 @@ export const EventPageTemplate = class extends React.Component {
       return <HeroComponent title="Event not found" redirectTo="/a/schedule"/>;
     }
 
+    if(isMuxVideo(event?.streaming_url) && event?.stream_is_secure && ! checkMuxTokens(eventTokens)){
+      return <HeroComponent title="Loading secure event"/>;
+    }
+
     return (
       <React.Fragment>
-        {/* <EventHeroComponent /> */}
         <section className="section px-0 py-0">
           <div className="columns is-gapless">
             {this.canRenderVideo(currentPhase) ? (
               <div className="column is-three-quarters px-0 py-0">
-                {event.is_secure && isMuxVideo(event.streaming_url) && !checkMuxTokens(eventTokens) ?
-                  <div>Loading tokens...</div>
-                  :
-                  <VideoComponent
-                    url={event.streaming_url}
-                    tokens={eventTokens}
-                    isLive={event.streaming_type === "LIVE"}
-                    title={event.title}
-                    namespace={summit.name}
-                    firstHalf={firstHalf}
-                    autoPlay={autoPlay}
-                    start={startTime}
-                  />
-                }                
+                    <VideoComponent
+                        url={event.streaming_url}
+                        tokens={eventTokens}
+                        isLive={event.streaming_type === "LIVE"}
+                        title={event.title}
+                        namespace={summit.name}
+                        firstHalf={firstHalf}
+                        autoPlay={autoPlay}
+                        start={startTime}
+                    />
                 {event.meeting_url && <VideoBanner event={event} ctaText={activityCtaText} />}
               </div>
             ) : (

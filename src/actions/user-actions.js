@@ -20,7 +20,7 @@ import QuestionsSet from 'openstack-uicore-foundation/lib/utils/questions-set'
 import Swal from 'sweetalert2';
 import axios from "axios";
 import { navigate } from 'gatsby';
-import { customErrorHandler, customBadgeHandler } from '../utils/customErrorHandler';
+import { customErrorHandler, customBadgeHandler, voidErrorHandler } from '../utils/customErrorHandler';
 import { getEnvVariable, SUMMIT_API_BASE_URL, SUMMIT_ID } from "../utils/envVariables";
 
 export const GET_DISQUS_SSO = 'GET_DISQUS_SSO';
@@ -570,7 +570,7 @@ export const doVirtualCheckIn = (attendee) => async (dispatch, getState) => {
     createAction(UPDATE_EXTRA_QUESTIONS),
     `${window.API_BASE_URL}/api/v1/summits/${attendee.summit_id}/attendees/${attendee.id}/virtual-check-in`,
     {},
-    customErrorHandler
+    voidErrorHandler
   )(params)(dispatch).catch((e) => {
     console.log('ERROR: ', e);
     clearAccessToken();

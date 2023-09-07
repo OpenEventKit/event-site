@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 
 import VideoJSPlayer from './VideoJSPlayer';
 import VimeoPlayer from "./VimeoPlayer";
-
-import styles from '../styles/video.module.scss';
 import VideoMUXPlayer from './VideoMUXPlayer';
+import styles from '../styles/video.module.scss';
 import { isMuxVideo, isVimeoVideo, isYouTubeVideo } from '../utils/videoUtils';
 
 const VideoComponent = ({ url, title, namespace, isLive, firstHalf, autoPlay, start, tokens }) => {

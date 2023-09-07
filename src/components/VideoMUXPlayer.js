@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types';
-import MuxPlayer from '@mux/mux-player-react/lazy';
+import MuxPlayer from '@mux/mux-player-react';
 import Swal from 'sweetalert2';
 
 import { getEnvVariable, MUX_ENV_KEY } from '../utils/envVariables'

@@ -24,7 +24,7 @@ const WithBadgeRoute = ({ children, location, eventId, event, loading, userProfi
     if (event === null || parseInt(eventId) !== parseInt(event.id)) {
       getEventById(eventId).then((res) => {
         const { response }  = res;
-        if(response.stream_is_secure && isMuxVideo(response.streaming_url)) // todo check stream url is mux
+        if(response && response?.stream_is_secure && isMuxVideo(response?.streaming_url))
           getEventTokensById(eventId)
       });
     }

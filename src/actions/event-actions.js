@@ -90,8 +90,6 @@ export const getEventTokensById = (
     eventId
 ) => async (dispatch, getState) => {
 
-    dispatch(startLoading());
-
     // then refresh from api
 
     let accessToken;
@@ -99,7 +97,6 @@ export const getEventTokensById = (
         accessToken = await getAccessToken();
     } catch (e) {
         console.log('getAccessToken error: ', e);
-        dispatch(stopLoading());
         return Promise.reject();
     }
 
@@ -115,10 +112,8 @@ export const getEventTokensById = (
         {},
         true)
     (params)(dispatch).then((payload) => {
-        dispatch(stopLoading());
         return payload
     }).catch(e => {
-        dispatch(stopLoading());
         dispatch(createAction(GET_EVENT_DATA_ERROR)(e));
         console.log('ERROR: ', e);
         clearAccessToken();
