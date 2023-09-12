@@ -4,10 +4,7 @@ const fs = require("fs");
 const webpack = require("webpack");
 const { createFilePath } = require("gatsby-source-filesystem");
 const SentryWebpackPlugin = require("@sentry/webpack-plugin");
-
 const { ClientCredentials } = require("simple-oauth2");
-const URI = require("urijs");
-const sizeOf = require("image-size");
 
 const myEnv = require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
@@ -18,8 +15,6 @@ const {
   DEFAULT_COLORS_FILE_PATH,
   COLORS_FILE_PATH,
   SITE_SETTINGS_FILE_PATH,
-  LOBBY_PAGE_FILE_PATH,
-  EXPO_HALL_PAGE_FILE_PATH,
   SUMMIT_FILE_PATH,
   EVENTS_FILE_PATH,
   EVENTS_IDX_FILE_PATH,
@@ -230,8 +225,6 @@ exports.onPreBootstrap = async () => {
   let   marketingSettings = await SSR_getMarketingSettings(process.env.GATSBY_MARKETING_API_BASE_URL, summitId);
   const colorSettings = fs.existsSync(COLORS_FILE_PATH) ? JSON.parse(fs.readFileSync(COLORS_FILE_PATH)) : require(`./${DEFAULT_COLORS_FILE_PATH}`);
   const globalSettings = fs.existsSync(SITE_SETTINGS_FILE_PATH) ? JSON.parse(fs.readFileSync(SITE_SETTINGS_FILE_PATH)) : {};
-  const lobbyPageSettings = fs.existsSync(LOBBY_PAGE_FILE_PATH) ? JSON.parse(fs.readFileSync(LOBBY_PAGE_FILE_PATH)) : {};
-  const expoHallPageSettings = fs.existsSync(EXPO_HALL_PAGE_FILE_PATH) ? JSON.parse(fs.readFileSync(EXPO_HALL_PAGE_FILE_PATH)) : {};
 
   const config = {
     client: {
@@ -266,8 +259,6 @@ exports.onPreBootstrap = async () => {
 
   fs.writeFileSync(MARKETING_SETTINGS_FILE_PATH, JSON.stringify(marketingSettings), "utf8");
   fs.writeFileSync(COLORS_FILE_PATH, JSON.stringify(colorSettings), "utf8");
-  fs.writeFileSync(LOBBY_PAGE_FILE_PATH, JSON.stringify(lobbyPageSettings), "utf8");
-  fs.writeFileSync(EXPO_HALL_PAGE_FILE_PATH, JSON.stringify(expoHallPageSettings), "utf8");
 
   // summit
   const summit = await SSR_getSummit(summitApiBaseUrl, summitId);
