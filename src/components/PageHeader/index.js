@@ -10,7 +10,7 @@ const PageHeader = ({
   <section className={styles.pageHeader}>
     <div className={styles.titles}>
       <h1>{title}</h1>
-      <span class={styles.subtitle}>{subtitle}</span>
+      <span className={styles.subtitle}>{subtitle}</span>
     </div>
     {backgroundImageSrc &&
       <div className={styles.image} style={{backgroundImage: `url(${backgroundImageSrc})`}}></div>
