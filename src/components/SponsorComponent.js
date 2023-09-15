@@ -7,7 +7,7 @@ import { getSponsorURL } from "../utils/urlFormating";
 import styles from "../styles/sponsor.module.scss";
 
 const TierWrapper = ({title, index, wrapperExtraClass, children}) => (
-  <div className={`${index === 0 ? styles.firstContainer : ""} ${wrapperExtraClass}`} key={`tier-${index}`}>
+  <div className={`${index === 0 ? styles.firstContainer : ""} ${wrapperExtraClass}`}>
     {title &&
       <span><b>{title}</b></span>
     }
@@ -73,14 +73,14 @@ const SponsorComponent = ({ page, sponsorsState, linkButton }) => {
         switch (template) {
           case "big-images": {
             return (
-              <TierWrapper title={tier.widget_title} index={tierIndex} wrapperExtraClass={styles.bigImageContainer}>
+              <TierWrapper title={tier.widget_title} index={tierIndex} wrapperExtraClass={styles.bigImageContainer} key={`tier-${tierIndex}`}>
                 {sponsors.map(sponsor => getSponsorImage(sponsor,{hideWrapper: true}))}
               </TierWrapper>
             )
           }
           case "small-images": {
             return (
-              <TierWrapper title={tier.widget_title} index={tierIndex} wrapperExtraClass={styles.smallImageContainer}>
+              <TierWrapper title={tier.widget_title} index={tierIndex} wrapperExtraClass={styles.smallImageContainer} key={`tier-${tierIndex}`}>
                 {sponsors.map((sponsor, index) => {
                   if (page === "event" && !sponsor.showLogoInEventPage) return null
                   return getSponsorImage(sponsor);
@@ -90,14 +90,14 @@ const SponsorComponent = ({ page, sponsorsState, linkButton }) => {
           }
           case "horizontal-images": {
             return (
-              <TierWrapper index={tierIndex} wrapperExtraClass={styles.horizontalContainer}>
+              <TierWrapper index={tierIndex} wrapperExtraClass={styles.horizontalContainer} key={`tier-${tierIndex}`}>
                 {sponsors.map(getSponsorImage)}
               </TierWrapper>
             )
           }
           case "expo-hall": {
             return (
-              <div className={`${styles.expoContainer} px-6`} key={tierIndex}>
+              <div className={`${styles.expoContainer} px-6`} key={`tier-${tierIndex}`}>
                 {sponsors.map(sponsor => {
                   const wrapperExtraClass = tier.expo_hall_template === "big-images" ? styles.large : tier.expo_hall_template === "medium-images" ? styles.medium : styles.small;
                   return getSponsorImage(sponsor, {wrapperExtraClass});
@@ -120,6 +120,7 @@ const SponsorComponent = ({ page, sponsorsState, linkButton }) => {
                 title={tier.widget_title}
                 index={tierIndex}
                 wrapperExtraClass={styles.carouselContainer}
+                key={`tier-${tierIndex}`}
               >
                 <Slider {...sliderSettings}>
                   {sponsors.map((sponsor, index) => {

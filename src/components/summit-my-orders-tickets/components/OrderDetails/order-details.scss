@@ -18,12 +18,12 @@
 
   &:hover {
 
-    background-color: var(--color-gray-lightest);
+    background-color: var(--color_gray_lightest);
   }
 
   &--active {
     color: var(--color_text_med);
-    background-color: var(--color-gray-lighter) !important;
+    background-color: var(--color_gray_lighter) !important;
   }
 
   * {
