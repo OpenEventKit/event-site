@@ -138,6 +138,9 @@ export const getShareLink = (filters, view) => {
           hashValue = encodeURIComponent(value.values);
         }
         hashVars[key] = hashValue;
+      } else {
+        // remove filters if don't have any value
+        fragmentParser.deleteParams(key);
       }
     });
   }
