@@ -35,6 +35,20 @@ const App = ({ isLoggedUser, user, summitPhase, allowClick = true }) => {
             }}
             allowClick={allowClick}
           />
+          <SchedulePage
+              path="/my-schedule"
+              location={location}
+              summitPhase={summitPhase}
+              isLoggedIn={isLoggedUser}
+              user={user}
+              scheduleProps={{
+                title: "My Schedule",
+                showSync: true,
+                subtitle: <Link to={"/a/schedule"}>Show Schedule</Link>
+              }}
+              schedKey="my-schedule-main"
+              allowClick={allowClick}
+          />
           <WithAuthRoute path="/" isLoggedIn={isLoggedUser} location={location}>
             <MyTicketsPage path="/my-tickets" isLoggedIn={isLoggedUser} user={user} location={location} />
             <FullProfilePage path="/profile" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location} />
@@ -45,20 +59,6 @@ const App = ({ isLoggedUser, user, summitPhase, allowClick = true }) => {
                 <PostersPage path="/posters" trackGroupId={0} location={location} />
                 <PostersPage path="/posters/:trackGroupId" location={location} />
                 <PosterDetailPage path="/poster/:presentationId/" isLoggedIn={isLoggedUser} user={user} location={location} />
-                <SchedulePage
-                  path="/my-schedule"
-                  location={location}
-                  summitPhase={summitPhase}
-                  isLoggedIn={isLoggedUser}
-                  user={user}
-                  scheduleProps={{
-                    title: "My Schedule",
-                    showSync: true,
-                    subtitle: <Link to={"/a/schedule"}>Show Schedule</Link>
-                  }}
-                  schedKey="my-schedule-main"
-                  allowClick={allowClick}
-                />
                 <ShowOpenRoute path="/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location}>
                   <WithBadgeRoute path="/event/:eventId" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location}>
                     <EventPage path="/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location} />
