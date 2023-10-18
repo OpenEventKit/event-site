@@ -14,12 +14,24 @@ import FilterButton from "../components/FilterButton";
 import NotFoundPage from "../pages/404";
 import withScheduleData from '../utils/withScheduleData'
 import styles from "../styles/full-schedule.module.scss";
+import { scroller } from 'react-scroll/modules';
 
 const SchedulePage = ({ summit, scheduleState, summitPhase, isLoggedUser, location, colorSettings, updateFilter, scheduleProps, schedKey, allowClick, lastDataSync, clearFilters, callAction }) => {
 
   const [showFilters, setShowfilters] = useState(false);
   const filtersWrapperRef = useRef(null);
   const { key, events, allEvents, filters, view, timezone, colorSource } = scheduleState || {};
+
+  useEffect(() => {
+      window.setTimeout(() => {
+        // this is done on load page to autoscroll to live events on summit time
+        // this is done externally bc on data updates , the schedule component is remounted due a bug on data refresh strategy
+        // of the widget itself, leading to an undesired side effects on scrolling behavior UX ( user is scrolling and out of the
+        // blue the scroll resets again to live events).
+
+        scroller.scrollTo('currentHour');
+      }, 1000)
+  },[]);
 
   useEffect(() => {
     if (scheduleState && !!events?.length) {
