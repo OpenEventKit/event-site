@@ -191,8 +191,8 @@ export const EventPageTemplate = class extends React.Component {
                 </div>
               )}
               <UpcomingEventsComponent
-                key={`event_page_upcomming_event_${lastDataSync}`}
                 id={`event_page_upcomming_event_${lastDataSync}`}
+                lastDataSync={lastDataSync}
                 trackId={event.track ? event.track.id : null}
                 eventCount={3}
                 title={

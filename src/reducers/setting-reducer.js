@@ -32,7 +32,6 @@ const settingReducer = (state = DEFAULT_STATE, action) => {
     case LOGOUT_USER:
       return DEFAULT_STATE;
     case SYNC_DATA:
-      console.log('SYNC DATA !!!!!!');
       return {...DEFAULT_STATE,
         lastBuild: settings.lastBuild,
         staticJsonFilesBuildTime: settings.staticJsonFilesBuildTime,
