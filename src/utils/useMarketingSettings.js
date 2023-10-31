@@ -12,6 +12,7 @@ export const MARKETING_SETTINGS_KEYS = {
   activityCtaText: "ACTIVITY_CTA_TEXT",
   regLiteAllowPromoCodes: "REG_LITE_ALLOW_PROMO_CODES",
   regLiteCompanyDDLPlaceholder: "REG_LITE_COMPANY_DDL_PLACEHOLDER",
+  regLiteShowCompanyInput: "REG_LITE_SHOW_COMPANY_INPUT",
   regLiteShowCompanyInputDefaultOptions: "REG_LITE_SHOW_COMPANY_INPUT_DEFAULT_OPTIONS",
   regLiteInitialOrderComplete1stParagraph: "REG_LITE_INITIAL_ORDER_COMPLETE_STEP_1ST_PARAGRAPH",
   regLiteInitialOrderComplete2ndParagraph: "REG_LITE_INITIAL_ORDER_COMPLETE_STEP_2ND_PARAGRAPH",

@@ -113,6 +113,7 @@ const RegistrationLiteComponent = ({
     const allowPromoCodes = !!Number(getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteAllowPromoCodes));
     const companyDDLPlaceholder = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteCompanyDDLPlaceholder);
     const showCompanyInputDefaultOptions = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteShowCompanyInputDefaultOptions)
+    const showCompanyInput = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteShowCompanyInput)
     const initialOrderComplete1stParagraph = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteInitialOrderComplete1stParagraph)
     const initialOrderComplete2ndParagraph = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteInitialOrderComplete2ndParagraph)
     const initialOrderCompleteButton = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteInitialOrderCompleteButton)
@@ -187,6 +188,7 @@ const RegistrationLiteComponent = ({
         orderComplete2ndParagraph: orderComplete2ndParagraph,
         orderCompleteButton: orderCompleteButton,
         noAllowedTicketsMessage: noAllowedTicketsMessage,
+        showCompanyInput: showCompanyInput,
         showCompanyInputDefaultOptions: showCompanyInputDefaultOptions
     };
 
