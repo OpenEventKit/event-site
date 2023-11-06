@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Helmet } from "react-helmet";
 import useSiteMetadata from "@utils/useSiteMetadata";
 import { withPrefix } from "gatsby";
 import { getSrc } from "gatsby-plugin-image";
@@ -19,21 +20,18 @@ const Seo = ({
     url: `${withPrefix(pathname || "/")}`
   }
   return (
-    <>
+    <Helmet>
       <title>{seo.title}</title>
       <meta name="description" content={seo.description} />
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:title" content={seo.title} />
       <meta name="twitter:url" content={seo.url} />
       <meta name="twitter:description" content={seo.description} />
-      <meta name="description" content={seo.description} />
-      <meta name="theme-color" content="#fff" />
       <meta property="og:type" content="business.business" />
       <meta property="og:title" content={seo.title} />
       <meta property="og:url" content={seo.url} />
-      }
       {children}
-    </>
+    </Helmet>
   )
 };
 
