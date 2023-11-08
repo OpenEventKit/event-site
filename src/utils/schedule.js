@@ -63,7 +63,7 @@ const filterMyEvents = (myEvents, events) => {
   return events.filter(ev =>  myEventsIds.includes(ev.id));
 };
 
-export const preFilterEvents = (events, filters, summitTimezone, userProfile, filterByAccessLevel, filterByMySchedule) => {
+export const preFilterEvents = (events, filters, summitTimezone, userProfile, filterByAccessLevel, filterByMySchedule, hidePast) => {
   const {schedule_summit_events = []} = userProfile || {};
   let result = [...events];
 
@@ -75,10 +75,11 @@ export const preFilterEvents = (events, filters, summitTimezone, userProfile, fi
     result = filterEventsByAccessLevel(result, userProfile);
   }
 
-  return getFilteredEvents(result, filters, summitTimezone);
+  return getFilteredEvents(result, filters, summitTimezone, hidePast);
 };
 
-export const getFilteredEvents = (events, filters, summitTimezone) => {
+export const getFilteredEvents = (events, filters, summitTimezone, hidePast) => {
+  const localNow = Date.now() / 1000;
 
   return events.filter((ev) => {
     let valid = true;
@@ -90,8 +91,11 @@ export const getFilteredEvents = (events, filters, summitTimezone) => {
       valid = filters.date.values.includes(dateString);
       if (!valid) return false;
     }
-    
-    if (ev.type.show_always_on_schedule) return true;
+
+    if (ev.type.show_always_on_schedule) {
+      // hide past events when the flag is on
+      return !(hidePast && ev.end_date < localNow);
+    }
 
     if (filters.level?.values.length > 0) {
       valid = filters.level.values.some(l => l.toString().toLowerCase() === ev.level?.toLowerCase());
