@@ -12,12 +12,17 @@ export const customErrorHandler = (err, res) => (dispatch, state) => {
       expiredToken(err);
       break;
     case 412:
-      for (let [key, value] of Object.entries(err.response.body.errors)) {
-        if (isNaN(key)) {
-          msg += key + ': ';
+      const errors = err?.response?.body?.errors;
+      if(errors) {
+        for (let [key, value] of Object.entries(errors)) {
+          if (isNaN(key)) {
+            msg += key + ': ';
+          }
+          msg += value + '<br>';
         }
-        msg += value + '<br>';
-      }      
+      } else {
+        msg = 'There was a problem with our server, please contact admin.';
+      }
       Swal.fire("Validation error", msg, "warning");
       break;
     default:
