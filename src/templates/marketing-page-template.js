@@ -2,6 +2,7 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import { navigate } from "gatsby";
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
+import Markdown from "markdown-to-jsx";
 
 import Layout from "../components/Layout";
 import AttendanceTrackerComponent from "../components/AttendanceTrackerComponent";
@@ -57,8 +58,13 @@ const MarketingPageTemplate = ({
         marketingPageSettings={marketingPageJson}
       />
       {summit && marketingPageJson.countdown?.display && <Countdown summit={summit} text={marketingPageJson?.countdown?.text} />}
-      <div className="columns" id="marketing-columns">
-        <div className="column is-half px-6 pt-6 pb-0" style={{ position: 'relative' }}>
+      <div className="columns">
+        <div className={`column is-half mt-3 px-6 py-6 ${styles.leftColumn}`} style={{ position: 'relative' }}>
+          {marketingPageJson.leftColumn?.text?.content && marketingPageJson.leftColumn?.text?.display &&
+            <Markdown>
+              {marketingPageJson.leftColumn.text.content}
+            </Markdown>
+          }
           {marketingPageJson.leftColumn?.schedule?.display &&
             <>
               <h2><b>{marketingPageJson.leftColumn.schedule.title}</b></h2>
@@ -88,7 +94,7 @@ const MarketingPageTemplate = ({
             </>
           }
         </div>
-        <div className="column is-half px-0 pb-0">
+        <div className={`column is-half px-0 pb-0 ${styles.rightColumn}`}>
           <Masonry
             breakpointCols={2}
             className="my-masonry-grid"

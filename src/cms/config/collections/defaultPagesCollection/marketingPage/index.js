@@ -9,8 +9,22 @@ import {
   listField,
   imageWithAltField,
   imagesField,
-  linkImagesField
+  linkImagesField,
+  markdownField
 } from "../../../fields";
+
+const markdownFieldButtons = [
+  "bold",
+  "italic",
+  "link",
+  "heading-one",
+  "heading-two",
+  "heading-three",
+  "heading-four",
+  "heading-five",
+  "bulleted-list",
+  "numbered-list"
+];
 
 import {
   MARKETING_PAGE_FILE_PATH
@@ -116,6 +130,23 @@ const marketingPage = {
       label: "Widgets",
       name: "leftColumn",
       fields: [
+        objectField({
+          label: "Text",
+          name: "text",
+          fields: [
+            booleanField({
+              label: "Display",
+              name: "display",
+              required: false
+            }),
+            markdownField({
+              label: "Content",
+              name: "content",
+              buttons: markdownFieldButtons,
+              editor_components: []
+            })
+          ]
+        }),
         objectField({
           label: "Schedule",
           name: "schedule",

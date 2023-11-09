@@ -14,6 +14,10 @@ module.exports = `
     size: Int
     images: [LinkImageWithAlt]
   }
+  type MarketingPageLeftColumnTextWidget {
+    display: Boolean
+    content: String
+  }
   type MarketingPageLeftColumnWidget {
     display: Boolean
     title: String
@@ -24,6 +28,7 @@ module.exports = `
     image: ImageWithAlt
   }
   type MarketingPageLeftColumn {
+    text: MarketingPageLeftColumnTextWidget
     schedule: MarketingPageLeftColumnWidget
     disqus: MarketingPageLeftColumnWidget
     image: MarketingPageLeftColumnImageWidget
