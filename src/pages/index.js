@@ -55,6 +55,10 @@ export const marketingPageQuery = graphql`
         text
       }
       leftColumn {
+        text {
+          content
+          display
+        }
         disqus {
           title
           display
