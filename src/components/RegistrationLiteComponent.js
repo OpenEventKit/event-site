@@ -188,8 +188,8 @@ const RegistrationLiteComponent = ({
         orderComplete2ndParagraph: orderComplete2ndParagraph,
         orderCompleteButton: orderCompleteButton,
         noAllowedTicketsMessage: noAllowedTicketsMessage,
-        showCompanyInput: showCompanyInput,
-        showCompanyInputDefaultOptions: showCompanyInputDefaultOptions
+        showCompanyInput: showCompanyInput.toString().toLowerCase() == "1",
+        showCompanyInputDefaultOptions: showCompanyInputDefaultOptions.toString().toLowerCase() == "1",
     };
 
     const { registerButton } = marketingPageSettings.hero.buttons;
