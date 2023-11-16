@@ -8,6 +8,7 @@ const {
   STATIC_CONTENT_DIR_PATH,
   CONTENT_PAGES_DIR_PATH,
   SITE_SETTINGS_FILE_PATH,
+  SITE_SETTINGS_DIR_PATH,
   MARKETING_SETTINGS_FILE_PATH
 } = require("./src/utils/filePath");
 
@@ -19,12 +20,32 @@ catch (e) {
   console.log("Falling back to default site settings.")
 }
 
+const title = siteSettings?.siteMetadata?.title || process.env.GATSBY_METADATA_TITLE || "Event Site";
+const description = siteSettings?.siteMetadata?.description || process.env.GATSBY_METADATA_DESCRIPTION || "Event Site";
+const manifestFaviconSettings = siteSettings?.favicon?.asset ? {
+  icon: `${SITE_SETTINGS_DIR_PATH}/${siteSettings.favicon.asset}`,
+  include_favicon: true
+} : {};
+
 module.exports = {
   siteMetadata: {
-    title: `${siteSettings?.siteMetadata?.title || process.env.GATSBY_METADATA_TITLE || 'Event Site'}`,
-    description: `${siteSettings?.siteMetadata?.description || process.env.GATSBY_METADATA_DESCRIPTION || 'Event Site'}`
+    title: title,
+    description: description
   },
   plugins: [
+    {
+      resolve: "gatsby-plugin-manifest",
+      options: {
+        name: title,
+        short_name: title,
+        description: description,
+        start_url: "/",
+        // Enables "Add to Homescreen" prompt and disables browser UI (including back button)
+        // see https://developers.google.com/web/fundamentals/web-app-manifest/#display
+        display: "minimal-ui",
+        ...manifestFaviconSettings
+      }
+    },
     {
       resolve: "gatsby-alias-imports",
       options: {

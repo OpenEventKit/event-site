@@ -47,22 +47,12 @@ const siteSettings = {
       ]
     }),
     objectField({
-      label: "Favicons",
-      name: "favicons",
+      label: "Favicon",
+      name: "favicon",
       fields: [
         imageField({
-          label: "Favicon 180x180",
-          name: "favicon180",
-          required: false
-        }),
-        imageField({
-          label: "Favicon 32x32",
-          name: "favicon32",
-          required: false
-        }),
-        imageField({
-          label: "Favicon 16x16",
-          name: "favicon16",
+          label: "Image for favicon generation (squared, at least 512x512)",
+          name: "asset",
           required: false
         })
       ]

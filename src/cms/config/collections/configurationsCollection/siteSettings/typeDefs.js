@@ -4,10 +4,8 @@ module.exports = `
     title: String
     description: String
   }
-  type Favicons {
-    favicon180: File @fileByRelativePath
-    favicon32: File @fileByRelativePath
-    favicon16: File @fileByRelativePath
+  type Favicon {
+    asset: File @fileByRelativePath
   }
   type Schedule {
     allowClick: Boolean
@@ -24,7 +22,7 @@ module.exports = `
   }
   type SiteSettingsJson implements Node {
     siteMetadata: SiteMetadata
-    favicons: Favicons
+    favicon: Favicon
     widgets: Widgets
   }
 `;
