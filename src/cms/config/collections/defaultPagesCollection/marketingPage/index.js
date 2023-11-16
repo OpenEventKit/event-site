@@ -13,6 +13,10 @@ import {
   markdownField
 } from "../../../fields";
 
+import {
+  MARKETING_PAGE_FILE_PATH
+} from "@utils/filePath";
+
 const markdownFieldButtons = [
   "bold",
   "italic",
@@ -25,10 +29,6 @@ const markdownFieldButtons = [
   "bulleted-list",
   "numbered-list"
 ];
-
-import {
-  MARKETING_PAGE_FILE_PATH
-} from "@utils/filePath";
 
 const marketingPage = {
   label: "Marketing Page",
