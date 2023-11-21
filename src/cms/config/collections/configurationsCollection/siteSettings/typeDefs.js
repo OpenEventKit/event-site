@@ -3,6 +3,7 @@ module.exports = `
   type SiteMetadata {
     title: String
     description: String
+    image: File @fileByRelativePath
   }
   type Favicon {
     asset: File @fileByRelativePath

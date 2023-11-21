@@ -1,3 +1,10 @@
+
+export const getUrl = (scheme, host, pathname) => {
+  if (!host) return null;
+  const domain = `${scheme}://${host}`;
+  return `${domain}${pathname ?? "/"}`;
+};
+
 export const getSponsorURL = (id, name) => {  
   let formattedName = name.toLowerCase().replace(/\s/g, '-');
   return `${id}-${formattedName}`;

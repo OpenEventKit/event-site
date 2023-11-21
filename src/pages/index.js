@@ -139,4 +139,7 @@ const mapStateToProps = ({
 export default connect(mapStateToProps, {
 })(withFeedsWorker(withRealTimeUpdates(MarketingPage)));
 
-export const Head = () => <Seo />;
+export const Head = ({
+  location
+}) => <Seo location={location} />;
+

@@ -6,6 +6,17 @@ import {
 const siteSettingsQuery = graphql`
   query {
     siteSettingsJson {
+      siteMetadata {
+        title,
+        description,
+        image {
+          childImageSharp {
+            gatsbyImageData (
+              quality: 100
+            )
+          }
+        }
+      }
       widgets {
         chat {
           enabled
