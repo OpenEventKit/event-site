@@ -70,7 +70,7 @@ const MarketingPageTemplate = ({
               <h2><b>{marketingPageJson.leftColumn.schedule.title}</b></h2>
               <LiteScheduleComponent
                 {...scheduleProps}
-                key={`marketing_lite_schedule_${lastDataSync}`}
+                lastDataSync={lastDataSync}
                 id={`marketing_lite_schedule_${lastDataSync}`}
                 page="marketing-site"
                 showAllEvents={true}

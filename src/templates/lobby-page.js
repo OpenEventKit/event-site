@@ -76,7 +76,7 @@ export const LobbyPageTemplate = class extends React.Component {
               <h2><b>Today</b></h2>
               <LiveEventWidgetComponent
                 id={`lobby_page_live_event_${lastDataSync}`}
-                key={`lobby_page_live_event_${lastDataSync}`}
+                lastDataSync={lastDataSync}
                 onlyPresentations={true}
                 featuredEventId={liveNowFeaturedEventId}
                 onEventClick={(ev) => this.onEventChange(ev)}
@@ -91,7 +91,7 @@ export const LobbyPageTemplate = class extends React.Component {
               />
               <UpcomingEventsComponent
                 id={`lobby_page_upcomming_events_${lastDataSync}`}
-                key={`lobby_page_upcomming_events_${lastDataSync}`}
+                lastDataSync={lastDataSync}
                 title="Up Next"
                 eventCount={4}
                 renderEventLink={(event) => <Link to={`/a/event/${event.id}`}>{event.title}</Link>}
@@ -102,7 +102,7 @@ export const LobbyPageTemplate = class extends React.Component {
                 <SpeakersWidgetComponent
                   title="Today's Speakers"
                   id={`home_page_today_speakers_${lastDataSync}`}
-                  key={`home_page_today_speakers_${lastDataSync}`}
+                  lastDataSync={lastDataSync}
                   bigPics={true}
                 />
               }
@@ -110,7 +110,7 @@ export const LobbyPageTemplate = class extends React.Component {
                 <SpeakersWidgetComponent
                   title="Featured Speakers"
                   id={`lobby_page_featured_speakers_${lastDataSync}`}
-                  key={`lobby_page_featured_speakers_${lastDataSync}`}
+                  lastDataSync={lastDataSync}
                   bigPics={false}
                   featured={true}
                   date={null}
@@ -124,7 +124,7 @@ export const LobbyPageTemplate = class extends React.Component {
               <AttendeesWidget user={user}/>
               <LiteScheduleComponent
                 id={`lobby_page_lite_schedule_${lastDataSync}`}
-                key={`lobby_page_lite_schedule_${lastDataSync}`}
+                lastDataSync={lastDataSync}
                 onEventClick={(ev) => this.onEventChange(ev)}
                 onViewAllEventsClick={() => this.onViewAllMyEventsClick()}
                 title="My Schedule"

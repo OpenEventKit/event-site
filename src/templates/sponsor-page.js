@@ -21,7 +21,7 @@ import { getEnvVariable, LIVE_EVENT_THUMBNAIL_GIF_CAPTURE_STARTS } from "../util
 import styles from '../styles/sponsor-page.module.scss'
 import SponsorNavigation from '../components/SponsorNavigation'
 
-const SponsorPageTemplate = ({ sponsorId, sponsors, scanBadge, eventId }) => {
+const SponsorPageTemplate = ({ sponsorId, sponsors, scanBadge, eventId, lastDataSync }) => {
 
   const [sponsorLoading, setSponsorLoading] = useState(true);
   const [sponsor, setSponsor] = useState(null)
@@ -104,6 +104,7 @@ const SponsorPageTemplate = ({ sponsorId, sponsors, scanBadge, eventId }) => {
             }
             {liveEventWidget &&
               <LiveEventWidgetComponent
+                lastDataSync={lastDataSync}
                 onEventClick={(ev) => onEventChange(ev)}
                 onlyPresentations={true}
                 sponsorId={sponsor?.company.id}
@@ -115,6 +116,7 @@ const SponsorPageTemplate = ({ sponsorId, sponsors, scanBadge, eventId }) => {
             {scheduleWidget &&
               <UpcomingEventsComponent
                 eventCount={3}
+                lastDataSync={lastDataSync}
                 sponsorId={sponsor?.company.id}
                 renderEventLink={(event) => <Link to={`/a/event/${event.id}`}>{event.title}</Link>}
                 allEventsLink={<Link to={`/a/schedule#company=${encodeURIComponent(sponsor?.name)}`}>View all <span className="sr-only">events</span></Link>}
@@ -184,10 +186,11 @@ SponsorPageTemplate.propTypes = {
   sponsorId: PropTypes.string,
 };
 
-const mapStateToProps = ({ userState, sponsorState, summitState }) => ({
+const mapStateToProps = ({ userState, sponsorState, summitState, settingState }) => ({
   user: userState,
   sponsors: sponsorState.sponsors,
-  summit: summitState.summit
+  summit: summitState.summit,
+  lastDataSync: settingState.lastDataSync
 });
 
 export default connect(mapStateToProps, { scanBadge })(SponsorPage);

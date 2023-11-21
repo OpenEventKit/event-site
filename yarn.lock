@@ -7919,10 +7919,10 @@ fsevents@~2.3.2:
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.2.tgz#8a526f78b8fdf4623b709e0b975c52c24c02fd1a"
   integrity sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==
 
-full-schedule-widget@3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/full-schedule-widget/-/full-schedule-widget-3.0.2.tgz#f0308590da418fc162553562df2f3f32a77ff12c"
-  integrity sha512-x2/aSYl4kTgDH6ygjSFTEgsdDIiZM4dYsOuGud586kaboLGeCvo3Uag/Blpey+XZ+hPswbOI/tbg9F75Q4Y7Wg==
+full-schedule-widget@3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/full-schedule-widget/-/full-schedule-widget-3.0.3.tgz#c2e7a0b4db60f59f61ab47466d04474bdf6d6bb9"
+  integrity sha512-euoIZq74LmIvMIpBXukHTnPn2ZDqmTCknvcAQYnRGF5h/DbWHBgu+D1EcobQ8sCNCOTCMvu+/utQzk3a6Ec3Ag==
   dependencies:
     "@mui/base" "5.0.0-alpha.127"
     "@react-pdf/renderer" "^3.1.11"
@@ -10590,18 +10590,18 @@ linkifyjs@^2.1.9:
   resolved "https://registry.yarnpkg.com/linkifyjs/-/linkifyjs-2.1.9.tgz#af06e45a2866ff06c4766582590d098a4d584702"
   integrity sha512-74ivurkK6WHvHFozVaGtQWV38FzBwSTGNmJolEgFp7QgR2bl6ArUWlvT4GcHKbPe1z3nWYi+VUdDZk16zDOVug==
 
-lite-schedule-widget@3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/lite-schedule-widget/-/lite-schedule-widget-3.0.2.tgz#9a015815589c88a1b8ed998fc826bbca10532db0"
-  integrity sha512-ZGuoPBEpeZFqZ1VoHNfC+PKxbYPR5o7t8CeK0FOw3locJMQ2YzigazInaOwgQoy2b95A8+h7J7uWFbCGscGorg==
+lite-schedule-widget@3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/lite-schedule-widget/-/lite-schedule-widget-3.0.3.tgz#db2376073b8d7fe7b82d422b294505ed7639cae9"
+  integrity sha512-wR5/s7oKDeQeGjj5oyEINQkpbbkC/L6uEXlSOAEDQFr+OX0I4XQH5iwAf1/Vbqz+TGbcQqoESTjz5PR/0R9IVQ==
   dependencies:
     pure-react-carousel "^1.27.4"
     use-fit-text "^2.4.0"
 
-live-event-widget@4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/live-event-widget/-/live-event-widget-4.0.1.tgz#ea654d287446ae54d839dec4d3f7d8f157ec062c"
-  integrity sha512-Fm0Ovi+1NtSfkeH10sG3QJYOtK+PqOtf4wKUT5PX1CFBa28/LXv1JkVUuUjG4cVdBZLneoBQs20dGoKAhWr+xQ==
+live-event-widget@4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/live-event-widget/-/live-event-widget-4.0.2.tgz#5fdd6006f893b9a7d36ceac5db40540a836b110d"
+  integrity sha512-RwHesiSRze9ehYg60G1hE7J3O0APngf/4h1foEZ98ZazCbT1khl06k6iGjlBWW5T0v8mGnFwmfVeYzAIq4dQtA==
   dependencies:
     svg-url-loader "^7.1.1"
 
@@ -15926,10 +15926,10 @@ space-separated-tokens@^1.0.0, space-separated-tokens@^1.1.0:
   resolved "https://registry.yarnpkg.com/space-separated-tokens/-/space-separated-tokens-1.1.5.tgz#85f32c3d10d9682007e917414ddc5c26d1aa6899"
   integrity sha512-q/JSVd1Lptzhf5bkYm4ob4iWPjx0KiRe3sRFBNrVqbJkFaBm5vbbowy1mymoPNLRa52+oadOhJ+K49wsSeSjTA==
 
-speakers-widget@4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/speakers-widget/-/speakers-widget-4.0.0.tgz#50437cdfd1c96078b69143f365cbb2c833bf074f"
-  integrity sha512-HappNt725Lu4UzkpteKj0ikrj1pHcCEgNJ6lOJD05oOoKGsCxKYPNWw6wnCLDOqJ/YRHJZlkF/iz1mYcpDQOaw==
+speakers-widget@4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/speakers-widget/-/speakers-widget-4.0.1.tgz#29636709747b042f03167aa6efac04cfcfb151ed"
+  integrity sha512-QLzr7dl0xzag4X7WFMvRhzUe0qTWSvnvh2FZW3XRQWSO/ZWtQ1wZOD5cS3XcIuMLpnzdxjVzOmhv/C52LRH7TQ==
 
 speed-measure-webpack-plugin@1.3.1:
   version "1.3.1"
@@ -17330,10 +17330,10 @@ unpipe@1.0.0, unpipe@~1.0.0:
   resolved "https://registry.yarnpkg.com/unpipe/-/unpipe-1.0.0.tgz#b2bf4ee8514aae6165b4817829d21b2ef49904ec"
   integrity sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==
 
-upcoming-events-widget@3.0.4:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/upcoming-events-widget/-/upcoming-events-widget-3.0.4.tgz#ec70f29dcc88fbb1114d66fd3c09e425061a18ce"
-  integrity sha512-e9yi+gcV4LYKrTZb6Cv5OLkf7JzkLFgX/yTjqJoh4jdY0tlXHc1H7/LbJkiD/87MwpyRM/OKUD1fNKsBpIxOww==
+upcoming-events-widget@3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/upcoming-events-widget/-/upcoming-events-widget-3.0.5.tgz#807cff26fbe92f049c3b7d45fe344414e659683f"
+  integrity sha512-KPBe0nlIiMQ3YqcNQss11BYZMhJY/tPwhV8XrFOhkgM/DxbAWai+wjFs2qu4QuDDtLBTanuZMLaPcrsj+efn7g==
   dependencies:
     pure-react-carousel "^1.30.1"
 

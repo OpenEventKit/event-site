@@ -15,7 +15,7 @@ export const fetchEventById = async (summitId, eventId, accessToken = null) => {
     }
 
     apiUrl.addQuery('expand', 'slides, links, videos, media_uploads, type, track, track.allowed_access_levels, location, location.venue, location.floor, speakers, moderator, sponsors, current_attendance, groups, rsvp_template, tags');
-
+    apiUrl.addQuery('evict_cache', 1);
     return fetch(apiUrl.toString(), {
         method: 'GET'
     }).then(async (response) => {
@@ -45,6 +45,8 @@ export const fetchLocationById = async(summitId, locationId, expand, accessToken
     if(expand)
         apiUrl.addQuery('expand', expand);
 
+    apiUrl.addQuery('evict_cache', 1);
+
     return fetch(apiUrl.toString(), {
         method: 'GET'
     }).then(async (response) => {
@@ -67,9 +69,11 @@ export const fetchSpeakerById = async(summitId, speakerId, accessToken = null) =
     let apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/public/v1/summits/${summitId}/speakers/${speakerId}`);
 
     if(accessToken){
-        apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/v1/summits/${summitId}/speaker/${speakerId}`);
+        apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/v1/summits/${summitId}/speakers/${speakerId}`);
         apiUrl.addQuery('access_token', accessToken);
     }
+
+    apiUrl.addQuery('evict_cache', 1);
 
     return fetch(apiUrl.toString(), {
         method: 'GET'
@@ -92,6 +96,7 @@ export const fetchSummitById =  async(summitId, accessToken = null) => {
 
     apiUrl.addQuery('expand', 'event_types,tracks,track_groups,presentation_levels,locations.rooms,locations.floors,order_extra_questions.values,schedule_settings,schedule_settings.filters,schedule_settings.pre_filters');
     apiUrl.addQuery('t', Date.now());
+    apiUrl.addQuery('evict_cache', 1);
 
     return fetch(apiUrl.toString(), {
         method: 'GET'

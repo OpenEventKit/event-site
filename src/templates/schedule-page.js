@@ -91,9 +91,7 @@ const SchedulePage = ({ summit, scheduleState, summitPhase, isLoggedUser, locati
       <div className={`container ${styles.container}`}>
         <div className={`${styles.wrapper} ${showFilters ? styles.showFilters : ""}`}>
           <div className={styles.scheduleWrapper}>
-            <FullSchedule {...schedProps}
-              key={`fullschedule_${lastDataSync}`}
-            />
+            <FullSchedule {...schedProps} lastDataSync={lastDataSync} />
           </div>
           <div ref={filtersWrapperRef} className={styles.filterWrapper}>
             <ScheduleFilters {...filterProps} />
