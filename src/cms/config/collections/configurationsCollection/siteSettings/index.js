@@ -35,13 +35,18 @@ const siteSettings = {
       name: "siteMetadata",
       fields: [
         stringField({
-          label: "title",
+          label: "Title",
           name: "title",
           required: false
         }),
         textField({
-          label: "description",
+          label: "Description",
           name: "description",
+          required: false
+        }),
+        imageField({
+          label: "Image",
+          name: "image",
           required: false
         })
       ]

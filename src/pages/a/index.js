@@ -74,6 +74,6 @@ export const Head = ({
 }) => (
   <Seo
     title={"Lobby"}
-    pathname={location.pathname}
+    location={location}
   />
 );
