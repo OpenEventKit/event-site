@@ -24,18 +24,18 @@ const Seo = ({ title, description, location, children }) => {
   };
   return (
     <Helmet>
-      <title>{seo.title}</title>
-      <meta name="description" content={seo.description} />
+      {seo.title && <title>{seo.title}</title>}
+      {seo.description && <meta name="description" content={seo.description} />}
       {seo.url && <meta property="og:url" content={seo.url} />}
       <meta property="og:type" content="website" />
-      <meta property="og:title" content={seo.title} />
-      <meta property="og:description" content={seo.description} />
-      <meta property="og:image" content={seo.image} />
-      <meta name="twitter:card" content="summary_large_image" />
+      {seo.title && <meta property="og:title" content={seo.title} />}
+      {seo.description && <meta property="og:description" content={seo.description} />}
+      {seo.image && <meta property="og:image" content={seo.image} />}
+      {seo.image && <meta name="twitter:card" content="summary_large_image" />}
       {host && <meta property="twitter:domain" content={host} />}
       {seo.url && <meta property="twitter:url" content={seo.url} />}
-      <meta name="twitter:title" content={seo.title} />
-      <meta name="twitter:description" content={seo.description} />
+      {seo.title && <meta name="twitter:title" content={seo.title} />}
+      {seo.description && <meta name="twitter:description" content={seo.description} />}
       {seo.image && <meta name="twitter:image" content={seo.image} />}
       {children}
     </Helmet>
