@@ -22,13 +22,14 @@ import { getAttendeeData } from '../actions/extra-questions-actions';
 
 const noOpFn = () => {};
 
-export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, attendee, saveAttendeeQuestions }) => {
+export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, attendee, attendeeId, saveAttendeeQuestions }) => {
 
     const { t } = useTranslation();
     const formRef = useRef(null);
     const [triedSubmitting, setTriedSubmitting] = useState(false);
 
-    const ticket = attendee ? attendee.tickets[0] : user.summit_tickets.length > 0 ? user.summit_tickets[user.summit_tickets.length - 1] : null;
+    const ticket = attendee ? attendee.tickets[0]  : user.summit_tickets.length > 0 ? user.summit_tickets[user.summit_tickets.length - 1] : null;
+    console.log('ticket check...', ticket);
     const hasExtraQuestions = extraQuestions.length > 0;
 
     const initialValues = useMemo(() => {
@@ -144,7 +145,7 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
         validateForm();
     };
 
-    if (!ticket) {
+    if (!ticket && !attendeeId) {
         navigate('/');
         return null;
     }
@@ -310,6 +311,7 @@ const ExtraQuestionsPage = (
                 user={user}
                 summit={summit}
                 extraQuestions={extraQuestions}
+                attendeeId={attendeeId || null}
                 attendee={attendeeId ? attendee : null}
                 saveAttendeeQuestions={saveAttendeeQuestions} />
         </Layout>

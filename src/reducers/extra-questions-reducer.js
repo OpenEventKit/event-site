@@ -2,7 +2,7 @@ import { LOGOUT_USER } from 'openstack-uicore-foundation/lib/security/actions';
 import { START_LOADING, STOP_LOADING } from "openstack-uicore-foundation/lib/utils/actions";
 import {
   GET_ATTENDEE_DATA,
-} from '../actions/user-actions';
+} from '../actions/extra-questions-actions';
 import { RESET_STATE } from '../actions/base-actions-definitions';
 
 const DEFAULT_STATE = {
