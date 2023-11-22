@@ -151,7 +151,7 @@ const RegistrationLiteComponent = ({
         goToMyOrders: () => navigate("/a/my-tickets"),
         completedExtraQuestions: async (attendee) => {            
             if(!attendee) return true;
-            await getExtraQuestions();
+            await getExtraQuestions(attendee?.id);
             return checkRequireExtraQuestionsByAttendee(attendee);
         },
         onPurchaseComplete: (order) => {
