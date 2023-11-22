@@ -29,7 +29,6 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
     const [triedSubmitting, setTriedSubmitting] = useState(false);
 
     const ticket = attendee ? attendee.tickets[0]  : user.summit_tickets.length > 0 ? user.summit_tickets[user.summit_tickets.length - 1] : null;
-    console.log('ticket check...', ticket);
     const hasExtraQuestions = extraQuestions.length > 0;
 
     const initialValues = useMemo(() => {
@@ -154,8 +153,9 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
         <>        
             {attendee &&
                 <div className={styles.extraQuestionsAttendeeWarning}>
-                    {`Attention: The following fields reflect info for ${attendee.first_name} ${attendee.last_name}. No additional action is required if you 
-                    prefer ${attendee.first_name} to complete this info. You can manage this ticket on the "My Orders / Tickets"`}
+                    {`Attention: The following fields reflect info for ${attendee.first_name} ${attendee.last_name} 
+                    ${!attendee.firstName && !attendee.last_name ? attendee.email : ''}. No additional action is required if you 
+                    prefer ${attendee.first_name || attendee.email} to complete this info. You can manage this ticket on the "My Orders / Tickets"`}
                 </div>
             }
             <div className={`content columns ${styles.extraQuestionsContainer}`}>
