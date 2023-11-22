@@ -11,6 +11,7 @@ import { getExtraQuestions } from '../actions/summit-actions';
 import { saveAttendeeQuestions } from '../actions/user-actions';
 import { TICKET_ATTENDEE_KEYS as TicketKeys } from '../components/summit-my-orders-tickets/store/actions/ticket-actions';
 import { Input, RegistrationCompanyInput, RawHTML } from 'openstack-uicore-foundation/lib/components';
+import FragmentParser from "openstack-uicore-foundation/lib/utils/fragment-parser";
 import QuestionsSet from 'openstack-uicore-foundation/lib/utils/questions-set';
 import ExtraQuestionsForm from 'openstack-uicore-foundation/lib/components/extra-questions';
 
@@ -294,7 +295,9 @@ const ExtraQuestionsPage = (
     }
 ) => {
 
-    const attendeeId = location.state?.attendeeId || 41863;    
+    const fragmentParser = new FragmentParser();
+
+    const attendeeId = fragmentParser.getParam('attendee') || null;
 
     useEffect(() => {
         getExtraQuestions(attendeeId);

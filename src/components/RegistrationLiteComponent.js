@@ -144,11 +144,7 @@ const RegistrationLiteComponent = ({
             setIsActive(false);
         },
         goToExtraQuestions: (attendeeId) => {
-            navigate("/a/extra-questions", {
-                state: {
-                  attendeeId: attendeeId
-                }
-            });
+            navigate(`/a/extra-questions${attendeeId ? `/#attendee=${attendeeId}` : ''}`);
         },
         goToEvent: () => navigate("/a/"),
         goToRegistration: () => navigate(`${getEnvVariable(REGISTRATION_BASE_URL)}/a/${summit.slug}`),
