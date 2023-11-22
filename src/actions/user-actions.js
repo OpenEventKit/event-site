@@ -434,7 +434,7 @@ export const updatePassword = (password) => async (dispatch) => {
     });
 }
 
-export const saveAttendeeQuestions = (values) => async (dispatch, getState) => {
+export const saveAttendeeQuestions = (values, ticketId = null) => async (dispatch, getState) => {
 
   const { userState: { userProfile: { summit_tickets } } } = getState();  
 
@@ -465,7 +465,7 @@ export const saveAttendeeQuestions = (values) => async (dispatch, getState) => {
   return putRequest(
     null,
     createAction(UPDATE_EXTRA_QUESTIONS),
-    `${window.API_BASE_URL}/api/v1/summits/all/orders/all/tickets/${summit_tickets[0].id}`,
+    `${window.API_BASE_URL}/api/v1/summits/all/orders/all/tickets/${ticketId ? ticketId : summit_tickets[0].id}`,
     normalizedEntity,
     customErrorHandler
   )(params)(dispatch).then(() => {

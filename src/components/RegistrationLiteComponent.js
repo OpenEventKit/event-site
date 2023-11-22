@@ -143,18 +143,20 @@ const RegistrationLiteComponent = ({
             getUserProfile().catch((e) => console.log("getUserProfile error. Not logged in?"));
             setIsActive(false);
         },
-        goToExtraQuestions: () => {
-            navigate("/a/extra-questions");
+        goToExtraQuestions: (attendeeId) => {
+            navigate("/a/extra-questions", {
+                state: {
+                  attendeeId: attendeeId
+                }
+            });
         },
         goToEvent: () => navigate("/a/"),
         goToRegistration: () => navigate(`${getEnvVariable(REGISTRATION_BASE_URL)}/a/${summit.slug}`),
         goToMyOrders: () => navigate("/a/my-tickets"),
-        completedExtraQuestions: async (order) => {
-            const currentUserTicket = order?.tickets.find(t => t?.owner?.email == userProfile?.email);
-            const currentAttendee = attendee ? attendee : (currentUserTicket ? currentUserTicket?.owner : null);
-            if(!currentAttendee) return true;
+        completedExtraQuestions: async (attendee) => {            
+            if(!attendee) return true;
             await getExtraQuestions();
-            return checkRequireExtraQuestionsByAttendee(currentAttendee);
+            return checkRequireExtraQuestionsByAttendee(attendee);
         },
         onPurchaseComplete: (order) => {
             // check if it"s necessary to update profile

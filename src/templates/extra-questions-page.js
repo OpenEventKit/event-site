@@ -17,16 +17,17 @@ import ExtraQuestionsForm from 'openstack-uicore-foundation/lib/components/extra
 import { DefaultScrollBehaviour as ScrollBehaviour } from '@utils/scroll';
 
 import styles from '../styles/extra-questions.module.scss';
+import { getAttendeeData } from '../actions/extra-questions-actions';
 
 const noOpFn = () => {};
 
-export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, saveAttendeeQuestions }) => {
+export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, attendee, saveAttendeeQuestions }) => {
 
     const { t } = useTranslation();
     const formRef = useRef(null);
     const [triedSubmitting, setTriedSubmitting] = useState(false);
 
-    const ticket = user.summit_tickets.length > 0 ? user.summit_tickets[user.summit_tickets.length - 1] : null;
+    const ticket = attendee ? attendee.tickets[0] : user.summit_tickets.length > 0 ? user.summit_tickets[user.summit_tickets.length - 1] : null;
     const hasExtraQuestions = extraQuestions.length > 0;
 
     const initialValues = useMemo(() => {
@@ -69,7 +70,8 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, saveA
 
     const handleSubmit = (values, formikHelpers) => {
         formikHelpers.setSubmitting(true);
-        saveAttendeeQuestions(values).then(() => {
+        const ticketId = attendee ? attendee.tickets[0]?.id : null;
+        saveAttendeeQuestions(values, ticketId).then(() => {
             formikHelpers.setSubmitting(false);
         });
     };
@@ -147,127 +149,135 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, saveA
     }
 
     return (
-        <div className={`content columns ${styles.extraQuestionsContainer}`}>
-            <div className="column is-three-fifths is-offset-one-fifth px-6-desktop py-6-desktop mb-6">
-                <h2>Attendee Information</h2>
-                <div className="columns is-multiline pt-4 pb-5">
-                    <div className={`column is-full-mobile is-half ${styles.extraQuestion}`}>
-                        <label htmlFor={TicketKeys.firstName}>First Name</label>
-                        <Input
-                            id={TicketKeys.firstName}
-                            name={TicketKeys.firstName}
-                            className="form-control"
-                            type="text"
-                            placeholder={'Your First Name'}
-                            value={formik.values[TicketKeys.firstName]}
-                            onBlur={formik.handleBlur}
-                            onChange={!!initialValues[TicketKeys.firstName] ? noOpFn : formik.handleChange}
-                            disabled={!!initialValues[TicketKeys.firstName]}
-                        />
-                        {(formik.touched[TicketKeys.firstName] || triedSubmitting) && formik.errors[TicketKeys.firstName] &&
-                        <p className={styles.errorLabel}>{t("ticket_popup.edit_required")}</p>
-                        }
-                    </div>
-                    <div className={`column is-full-mobile is-half ${styles.extraQuestion}`}>
-                        <label htmlFor={TicketKeys.lastName}>Last Name</label>
-                        <Input
-                            id={TicketKeys.lastName}
-                            name={TicketKeys.lastName}
-                            className="form-control"
-                            type="text"
-                            placeholder={'Your Last Name'}
-                            value={formik.values[TicketKeys.lastName]}
-                            onBlur={formik.handleBlur}
-                            onChange={!!initialValues[TicketKeys.lastName] ? noOpFn : formik.handleChange}
-                            disabled={!!initialValues[TicketKeys.lastName]}
-                        />
-                        {(formik.touched[TicketKeys.lastName] || triedSubmitting) && formik.errors[TicketKeys.lastName] &&
-                        <p className={styles.errorLabel}>{t("ticket_popup.edit_required")}</p>
-                        }
-                    </div>
-                    <div className={`column is-full-mobile is-half ${styles.extraQuestion}`}>
-                        <label htmlFor={TicketKeys.email}>Email</label>
-                        <Input
-                            id={TicketKeys.email}
-                            name={TicketKeys.email}
-                            className="form-control"
-                            type="text"
-                            value={initialValues[TicketKeys.email]}
-                            disabled={true}
-                        />
-                    </div>
-                    <div className={`column is-full-mobile is-half ${styles.extraQuestion}`}>
-                        <label htmlFor={TicketKeys.company}>Company</label>
-                        <RegistrationCompanyInput
-                            id={TicketKeys.company}
-                            name={TicketKeys.company}
-                            summitId={summit.id}
-                            placeholder={'Your Company'}
-                            value={formik.values[TicketKeys.company]}
-                            onBlur={formik.handleBlur}
-                            onChange={!!initialValues[TicketKeys.company].name ? noOpFn : formik.handleChange}
-                            disabled={!!initialValues[TicketKeys.company].name}
-                            tabSelectsValue={false}
-                        />
-                        {(formik.touched[TicketKeys.company] || triedSubmitting) && formik.errors[TicketKeys.company] &&
-                        <p className={styles.errorLabel}>{t("ticket_popup.edit_required")}</p>
-                        }
-                    </div>
+        <>        
+            {attendee &&
+                <div className={styles.extraQuestionsAttendeeWarning}>
+                    {`Attention: The following fields reflect info for ${attendee.first_name} ${attendee.last_name}. No additional action is required if you 
+                    prefer ${attendee.first_name} to complete this info. You can manage this ticket on the "My Orders / Tickets"`}
                 </div>
-                { hasExtraQuestions &&
-                <>
-                    <h2 className="mb-3">Additional Information</h2>
-                    <p>Please answer these additional questions.</p>
-                    <ExtraQuestionsForm
-                        extraQuestions={extraQuestions}
-                        userAnswers={formik.values[TicketKeys.extraQuestions]}
-                        onAnswerChanges={onExtraQuestionsAnswersSet}
-                        ref={formRef}
-                        allowExtraQuestionsEdit={summit.allow_update_attendee_extra_questions}
-                        questionContainerClassName={`columns is-multiline ${styles.extraQuestion} pt-3`}
-                        questionLabelContainerClassName={'column is-full pb-0'}
-                        questionControlContainerClassName={`column is-full pt-0`}
-                        shouldScroll2FirstError={false}
-                        onError={handleExtraQuestionError}
-                    />
-                </>
-                }
-                { summit.registration_disclaimer_content &&
-                <div className="columns">
-                    <div className={`column ${styles.extraQuestion} abc-checkbox`}>
-                        <input
-                            id={TicketKeys.disclaimerAccepted}
-                            name={TicketKeys.disclaimerAccepted}
-                            type="checkbox"
-                            onBlur={formik.handleBlur}
-                            onChange={(e) =>
-                                formik.setFieldTouched(TicketKeys.disclaimerAccepted, true) && formik.handleChange(e)
+            }
+            <div className={`content columns ${styles.extraQuestionsContainer}`}>
+                <div className="column is-three-fifths is-offset-one-fifth px-6-desktop py-6-desktop mb-6">
+                    <h2>Attendee Information</h2>
+                    <div className="columns is-multiline pt-4 pb-5">
+                        <div className={`column is-full-mobile is-half ${styles.extraQuestion}`}>
+                            <label htmlFor={TicketKeys.firstName}>First Name</label>
+                            <Input
+                                id={TicketKeys.firstName}
+                                name={TicketKeys.firstName}
+                                className="form-control"
+                                type="text"
+                                placeholder={'Your First Name'}
+                                value={formik.values[TicketKeys.firstName]}
+                                onBlur={formik.handleBlur}
+                                onChange={!!initialValues[TicketKeys.firstName] ? noOpFn : formik.handleChange}
+                                disabled={!!initialValues[TicketKeys.firstName]}
+                            />
+                            {(formik.touched[TicketKeys.firstName] || triedSubmitting) && formik.errors[TicketKeys.firstName] &&
+                            <p className={styles.errorLabel}>{t("ticket_popup.edit_required")}</p>
                             }
-                            checked={formik.values[TicketKeys.disclaimerAccepted]}
-                        />
-                        <label htmlFor={TicketKeys.disclaimerAccepted}>
-                            {summit.registration_disclaimer_mandatory && <b> *</b>}
-                        </label>
-                        {(formik.touched[TicketKeys.disclaimerAccepted] || triedSubmitting) && formik.errors[TicketKeys.disclaimerAccepted] &&
-                        <p className={styles.errorLabel}>{t("ticket_popup.edit_required")}</p>
-                        }
-                        <div className="mt-3">
-                            <RawHTML>
-                                {summit.registration_disclaimer_content}
-                            </RawHTML>
+                        </div>
+                        <div className={`column is-full-mobile is-half ${styles.extraQuestion}`}>
+                            <label htmlFor={TicketKeys.lastName}>Last Name</label>
+                            <Input
+                                id={TicketKeys.lastName}
+                                name={TicketKeys.lastName}
+                                className="form-control"
+                                type="text"
+                                placeholder={'Your Last Name'}
+                                value={formik.values[TicketKeys.lastName]}
+                                onBlur={formik.handleBlur}
+                                onChange={!!initialValues[TicketKeys.lastName] ? noOpFn : formik.handleChange}
+                                disabled={!!initialValues[TicketKeys.lastName]}
+                            />
+                            {(formik.touched[TicketKeys.lastName] || triedSubmitting) && formik.errors[TicketKeys.lastName] &&
+                            <p className={styles.errorLabel}>{t("ticket_popup.edit_required")}</p>
+                            }
+                        </div>
+                        <div className={`column is-full-mobile is-half ${styles.extraQuestion}`}>
+                            <label htmlFor={TicketKeys.email}>Email</label>
+                            <Input
+                                id={TicketKeys.email}
+                                name={TicketKeys.email}
+                                className="form-control"
+                                type="text"
+                                value={initialValues[TicketKeys.email]}
+                                disabled={true}
+                            />
+                        </div>
+                        <div className={`column is-full-mobile is-half ${styles.extraQuestion}`}>
+                            <label htmlFor={TicketKeys.company}>Company</label>
+                            <RegistrationCompanyInput
+                                id={TicketKeys.company}
+                                name={TicketKeys.company}
+                                summitId={summit.id}
+                                placeholder={'Your Company'}
+                                value={formik.values[TicketKeys.company]}
+                                onBlur={formik.handleBlur}
+                                onChange={!!initialValues[TicketKeys.company].name ? noOpFn : formik.handleChange}
+                                disabled={!!initialValues[TicketKeys.company].name}
+                                tabSelectsValue={false}
+                            />
+                            {(formik.touched[TicketKeys.company] || triedSubmitting) && formik.errors[TicketKeys.company] &&
+                            <p className={styles.errorLabel}>{t("ticket_popup.edit_required")}</p>
+                            }
                         </div>
                     </div>
+                    { hasExtraQuestions &&
+                    <>
+                        <h2 className="mb-3">Additional Information</h2>
+                        <p>Please answer these additional questions.</p>
+                        <ExtraQuestionsForm
+                            extraQuestions={extraQuestions}
+                            userAnswers={formik.values[TicketKeys.extraQuestions]}
+                            onAnswerChanges={onExtraQuestionsAnswersSet}
+                            ref={formRef}
+                            allowExtraQuestionsEdit={summit.allow_update_attendee_extra_questions}
+                            questionContainerClassName={`columns is-multiline ${styles.extraQuestion} pt-3`}
+                            questionLabelContainerClassName={'column is-full pb-0'}
+                            questionControlContainerClassName={`column is-full pt-0`}
+                            shouldScroll2FirstError={false}
+                            onError={handleExtraQuestionError}
+                        />
+                    </>
+                    }
+                    { summit.registration_disclaimer_content &&
+                    <div className="columns">
+                        <div className={`column ${styles.extraQuestion} abc-checkbox`}>
+                            <input
+                                id={TicketKeys.disclaimerAccepted}
+                                name={TicketKeys.disclaimerAccepted}
+                                type="checkbox"
+                                onBlur={formik.handleBlur}
+                                onChange={(e) =>
+                                    formik.setFieldTouched(TicketKeys.disclaimerAccepted, true) && formik.handleChange(e)
+                                }
+                                checked={formik.values[TicketKeys.disclaimerAccepted]}
+                            />
+                            <label htmlFor={TicketKeys.disclaimerAccepted}>
+                                {summit.registration_disclaimer_mandatory && <b> *</b>}
+                            </label>
+                            {(formik.touched[TicketKeys.disclaimerAccepted] || triedSubmitting) && formik.errors[TicketKeys.disclaimerAccepted] &&
+                            <p className={styles.errorLabel}>{t("ticket_popup.edit_required")}</p>
+                            }
+                            <div className="mt-3">
+                                <RawHTML>
+                                    {summit.registration_disclaimer_content}
+                                </RawHTML>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                    <button
+                        className={`${styles.buttonSave} button is-large`}
+                        disabled={formik.isSubmitting}
+                        onClick={triggerSubmit}>
+                        {!formik.isSubmitting && <>Save and Continue</>}
+                        {formik.isSubmitting && <>Saving...</>}
+                    </button>
                 </div>
-                }
-                <button
-                    className={`${styles.buttonSave} button is-large`}
-                    disabled={formik.isSubmitting}
-                    onClick={triggerSubmit}>
-                    {!formik.isSubmitting && <>Save and Continue</>}
-                    {formik.isSubmitting && <>Saving...</>}
-                </button>
             </div>
-        </div>
+        </>
     )
 };
 
@@ -277,13 +287,18 @@ const ExtraQuestionsPage = (
         user,
         summit,
         extraQuestions,
+        attendee,
         saveAttendeeQuestions,
         getExtraQuestions,
+        getAttendeeData
     }
 ) => {
 
+    const attendeeId = location.state?.attendeeId || 41863;    
+
     useEffect(() => {
-        getExtraQuestions();
+        getExtraQuestions(attendeeId);
+        if(attendeeId) getAttendeeData(attendeeId);
     }, [])
 
     return (
@@ -292,6 +307,7 @@ const ExtraQuestionsPage = (
                 user={user}
                 summit={summit}
                 extraQuestions={extraQuestions}
+                attendee={attendeeId ? attendee : null}
                 saveAttendeeQuestions={saveAttendeeQuestions} />
         </Layout>
     )
@@ -307,16 +323,18 @@ ExtraQuestionsPageTemplate.propTypes = {
     saveAttendeeQuestions: PropTypes.func,
 }
 
-const mapStateToProps = ({ userState, summitState }) => ({
+const mapStateToProps = ({ userState, summitState, extraQuestionState }) => ({
     user: userState.userProfile,
     loading: userState.loading,
     summit: summitState.summit,
     extraQuestions: summitState.extra_questions,
+    attendee: extraQuestionState.attendee
 })
 
 export default connect(mapStateToProps,
     {
         saveAttendeeQuestions,
         getExtraQuestions,
+        getAttendeeData
     }
 )(ExtraQuestionsPage);
