@@ -6,6 +6,7 @@ import Layout from '../components/Layout';
 import { useFormik } from 'formik';
 import { useTranslation } from "react-i18next";
 import * as Yup from 'yup';
+import { isEmpty } from "lodash";
 
 import { getExtraQuestions } from '../actions/summit-actions';
 import { saveAttendeeQuestions } from '../actions/user-actions';
@@ -149,13 +150,16 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
         return null;
     }
 
+    const getAttendeeFullname = (attendee) => {
+        return !isEmpty(attendee.first_name) && !isEmpty(attendee.last_name) ? `${attendee.first_name} ${attendee.last_name}` : attendee.email
+    }
+
     return (
         <>        
             {attendee &&
                 <div className={styles.extraQuestionsAttendeeWarning}>
-                    {`Attention: The following fields reflect info for ${attendee.first_name} ${attendee.last_name} 
-                    ${!attendee.firstName && !attendee.last_name ? attendee.email : ''}. No additional action is required if you 
-                    prefer ${attendee.first_name || attendee.email} to complete this info. You can manage this ticket on the "My Orders / Tickets"`}
+                    {`Attention: The following fields reflect info for ${getAttendeeFullname(attendee)}. No additional action is required if you 
+                    prefer ${getAttendeeFullname(attendee)} to complete this info. You can manage this ticket on the "My Orders / Tickets"`}
                 </div>
             }
             <div className={`content columns ${styles.extraQuestionsContainer}`}>
