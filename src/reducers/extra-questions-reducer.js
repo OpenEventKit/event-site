@@ -1,7 +1,7 @@
 import { LOGOUT_USER } from 'openstack-uicore-foundation/lib/security/actions';
 import { START_LOADING, STOP_LOADING } from "openstack-uicore-foundation/lib/utils/actions";
 import {
-    GET_ATTENDEE_DATA,
+    GET_ATTENDEE_DATA, REQUEST_ATTENDEE_DATA
 } from '../actions/extra-questions-actions';
 import { RESET_STATE } from '../actions/base-actions-definitions';
 import { UPDATE_EXTRA_QUESTIONS } from '../actions/user-actions';
