@@ -13,6 +13,7 @@ import {
 import { customErrorHandler } from '../utils/customErrorHandler';
 
 export const GET_ATTENDEE_DATA = 'GET_ATTENDEE_DATA';
+export const REQUEST_ATTENDEE_DATA = 'REQUEST_ATTENDEE_DATA';
 
 export const getAttendeeData = (attendeeId) => async (dispatch, getState) => {
 
@@ -32,7 +33,7 @@ export const getAttendeeData = (attendeeId) => async (dispatch, getState) => {
     dispatch(startLoading());
   
     return getRequest(
-      null,
+      createAction(REQUEST_ATTENDEE_DATA),
       createAction(GET_ATTENDEE_DATA),
       `${window.API_BASE_URL}/api/v1/summits/${window.SUMMIT_ID}/attendees/${attendeeId}/me`,
       customErrorHandler
