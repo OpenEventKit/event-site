@@ -29,12 +29,19 @@ const siteSettingsQuery = graphql`
         }
       }
     }
+    siteFallback: site {
+      siteMetadata {
+        description
+        title
+      }
+    }
   }
 `;
 
 const useSiteSettings = () => {
-  const { siteSettingsJson } = useStaticQuery(siteSettingsQuery);
-  return siteSettingsJson;
+  const { siteSettingsJson, siteFallback } = useStaticQuery(siteSettingsQuery);
+  const siteMetadata = siteSettingsJson.siteMetadata ? siteSettingsJson.siteMetadata : siteFallback.siteMetadata;
+  return {...siteSettingsJson, siteMetadata };
 };
 
 export default useSiteSettings;
