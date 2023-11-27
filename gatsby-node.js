@@ -353,7 +353,22 @@ exports.createSchemaCustomization = ({ actions }) => {
   const { createTypes } = actions;
   // TODO: improve typeDefs to allow theme override
   const typeDefs = require("./src/cms/config/collections/typeDefs");
-  createTypes(typeDefs);
+  // marketing settings typeDefs in case there's no marketing settings for summit
+  const marketingSettingTypeDefs = `
+      type Query {
+        allMarketingSettingsJson: MarketingSettingsQuery
+      }
+
+      type MarketingSetting implements Node {
+        key: String
+        value: String
+      }
+
+      type MarketingSettingsQuery {
+        nodes: [MarketingSetting]
+      }
+    ` 
+  createTypes([typeDefs, marketingSettingTypeDefs].join(""));
 };
 
 exports.onCreateNode = ({ node, actions, getNode }) => {

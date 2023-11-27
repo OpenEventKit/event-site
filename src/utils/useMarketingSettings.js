@@ -36,9 +36,17 @@ const marketingSettingsQuery = graphql`
 `;
 
 const useMarketingSettings = () => {
-  const { allMarketingSettingsJson } = useStaticQuery(marketingSettingsQuery);
+  const marketingSettingsData = useStaticQuery(marketingSettingsQuery);
+
+  if (!marketingSettingsData.allMarketingSettingsJson) {    
+    // if there's no marketing settings, return an empty string as default value
+    return { getSettingByKey: (key) => '' };
+  }
+
+  const { nodes } = marketingSettingsData.allMarketingSettingsJson;
+
   const getSettingByKey = (key) =>
-      allMarketingSettingsJson.nodes.find(setting => setting.key === key)?.value;
+      nodes.find(setting => setting.key === key)?.value;
   return { getSettingByKey };
 };
 
