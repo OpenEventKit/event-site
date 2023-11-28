@@ -11,10 +11,14 @@ export const calculateOrderTotals = ({ order, summit, tickets }) => {
 
     const currencyObject = { currency: order.currency };
 
-    Object.keys(order.tickets_excerpt_by_ticket_type).map((ticket) => {
-        let ticketType = ticket_types.find(tt => tt.name === ticket);
-        ticketSummary.push({ ticket_type_id: ticketType.id, ticket_type: ticketType, name: ticket, qty: order.tickets_excerpt_by_ticket_type[ticket] })
-        purchaseTicketTotal = purchaseTicketTotal + (ticketType.cost * order.tickets_excerpt_by_ticket_type[ticket]);
+    Object.keys(order.tickets_excerpt_by_ticket_type).forEach(ttId => {
+
+        let ticketType = ticket_types.find(tt => tt.id === ttId);
+        if (ticketType) {
+            const { name, qty } = order.tickets_excerpt_by_ticket_type[ttId];
+            ticketSummary.push({ ticket_type_id: ticketType.id, ticket_type: ticketType, name: name, qty: qty })
+            purchaseTicketTotal = purchaseTicketTotal + (ticketType.cost * qty);
+        }
     })
 
     const purchaseTotal = formatCurrency(purchaseTicketTotal, currencyObject);

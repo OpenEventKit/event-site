@@ -82,10 +82,11 @@ export const OrderDetails = ({ order, summit, className }) => {
                     </h5>
 
                     <ul className="order-details__tickets">
-                        {Object.keys(order.tickets_excerpt_by_ticket_type).map((ticket, index) => {
+                        {Object.keys(order.tickets_excerpt_by_ticket_type).map((ttId, index) => {
+                            const { name, qty } = order.tickets_excerpt_by_ticket_type[ttId];
                             return (
                                 <li key={index}>
-                                    x{order.tickets_excerpt_by_ticket_type[ticket]} {ticket}
+                                    x{qty} {name}
                                 </li>
                             )
                         })}

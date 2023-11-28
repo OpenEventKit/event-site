@@ -83,7 +83,6 @@ const orderReducer = (state = DEFAULT_STATE, action) => {
         case GET_USER_ORDERS:
             let { data, current_page, total, last_page } = payload.response;
             return { ...state, memberOrders: data, current_page, total, last_page };
-            break;
         case REFUND_ORDER:
             return { ...state }
         default:
