@@ -157,8 +157,9 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
         <>
             {attendee &&
                 <div className={styles.extraQuestionsAttendeeWarning}>
-                    {`Attention: The following fields reflect info for ${getAttendeeFullname(attendee)}. No additional action is required if you 
-                    prefer ${getAttendeeFullname(attendee)} to complete this info. You can manage this ticket on the "My Orders / Tickets"`}
+                    {`Attention: The info below is for ${getAttendeeFullname(attendee)}. No additional action is required if you 
+                    prefer ${attendee.first_name || attendee.email} to complete this info; they have received an email with instructions. 
+                    You can manage this ticket on the "My Orders / Tickets" page.`}                    
                 </div>
             }
             <div className={`content columns ${styles.extraQuestionsContainer}`}>
