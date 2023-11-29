@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { navigate } from "gatsby";
 import Layout from '../components/Layout';
 import { useFormik } from 'formik';
 import { useTranslation } from "react-i18next";
@@ -20,10 +19,11 @@ import { DefaultScrollBehaviour as ScrollBehaviour } from '@utils/scroll';
 
 import styles from '../styles/extra-questions.module.scss';
 import { getAttendeeData } from '../actions/extra-questions-actions';
+import HeroComponent from "../components/HeroComponent";
 
 const noOpFn = () => {};
 
-export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, attendee, attendeeId, saveAttendeeQuestions }) => {
+export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, attendee, attendeeId, saveAttendeeQuestions, someoneElseLoaded }) => {
 
     const { t } = useTranslation();
     const formRef = useRef(null);
@@ -145,9 +145,8 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
         validateForm();
     };
 
-    if (!ticket && !attendeeId) {
-        navigate('/');
-        return null;
+    if ((!ticket && !attendeeId) || (attendeeId && someoneElseLoaded === false)) {
+        return <HeroComponent title={"Sorry. You don't have a ticket for this event."} redirectTo={"/"} />;
     }
 
     const getAttendeeFullname = (attendee) => {
@@ -155,7 +154,7 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
     }
 
     return (
-        <>        
+        <>
             {attendee &&
                 <div className={styles.extraQuestionsAttendeeWarning}>
                     {`Attention: The following fields reflect info for ${getAttendeeFullname(attendee)}. No additional action is required if you 
@@ -304,9 +303,11 @@ const ExtraQuestionsPage = (
 
     const attendeeId = fragmentParser.getParam('attendee') || null;
 
+    const [someoneElseLoaded, setSomeoneElseLoaded] = useState(null);
+
     useEffect(() => {
         getExtraQuestions(attendeeId);
-        if(attendeeId) getAttendeeData(attendeeId);
+        if(attendeeId) getAttendeeData(attendeeId).then(()=> setSomeoneElseLoaded(true)).catch(()=> setSomeoneElseLoaded(false));
     }, [])
 
     return (
@@ -317,7 +318,9 @@ const ExtraQuestionsPage = (
                 extraQuestions={extraQuestions}
                 attendeeId={attendeeId || null}
                 attendee={attendeeId ? attendee : null}
-                saveAttendeeQuestions={saveAttendeeQuestions} />
+                saveAttendeeQuestions={saveAttendeeQuestions}
+                someoneElseLoaded={someoneElseLoaded}
+            />
         </Layout>
     )
 }
