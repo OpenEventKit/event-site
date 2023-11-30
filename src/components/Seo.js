@@ -1,5 +1,6 @@
 import * as React from "react";
 import PropTypes from "prop-types";
+import useSiteMetadata from "@utils/useSiteMetadata";
 import useSiteSettings from "@utils/useSiteSettings";
 import { getSrc } from "gatsby-plugin-image";
 import { buildUrl } from "@utils/urlFormating";
@@ -7,9 +8,11 @@ import { getEnvVariable, SITE_URL } from "@utils/envVariables";
 
 const Seo = ({ title, description, location, children }) => {
   const {
+    title: siteTitle,
+    description: defaultDescription
+  } = useSiteMetadata();
+  const {
     siteMetadata: {
-      title: siteTitle,
-      description: defaultDescription,
       image
     }
   } = useSiteSettings();
