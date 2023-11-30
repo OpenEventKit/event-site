@@ -139,6 +139,7 @@ const AuthComponent = ({
         allowsOtpAuth: allowsOtpAuth,
         initialEmailValue: initialEmailValue,
         title: 'Enter your email address to login with a one time code',
+        summitData: summit
     };
 
     const passwordlessLoginProps = {
