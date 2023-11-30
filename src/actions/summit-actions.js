@@ -16,7 +16,7 @@ import { customErrorHandler } from '../utils/customErrorHandler';
 
 export const GET_EXTRA_QUESTIONS = 'GET_EXTRA_QUESTIONS';
 
-export const getExtraQuestions = () => async (dispatch, getState) => {
+export const getExtraQuestions = (attendeeId = null) => async (dispatch, getState) => {
 
     dispatch(startLoading());
 
@@ -28,7 +28,7 @@ export const getExtraQuestions = () => async (dispatch, getState) => {
         return Promise.reject(e);
     }
 
-    let apiUrl = URI(`${window.API_BASE_URL}/api/v1/summits/${window.SUMMIT_ID}/attendees/me/allowed-extra-questions`);
+    let apiUrl = URI(`${window.API_BASE_URL}/api/v1/summits/${window.SUMMIT_ID}/attendees/${attendeeId ? attendeeId : 'me'}/allowed-extra-questions`);
     apiUrl.addQuery('expand', '*sub_question_rules,*sub_question,*values')
     apiUrl.addQuery('access_token', accessToken);
     apiUrl.addQuery('order', 'order');

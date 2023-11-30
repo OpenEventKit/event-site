@@ -3,6 +3,12 @@
 @import "bulma/sass/form/_all.sass";
 
 @import "colors.scss";
+
+.extraQuestionsAttendeeWarning {
+  padding: 2rem 6rem;
+  font-weight: bold;  
+}
+
 .extraQuestionsContainer {
 
   h2, h1, h3{

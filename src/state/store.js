@@ -13,6 +13,7 @@ import presentationsReducer from "../reducers/presentations-reducer";
 import eventReducer from "../reducers/event-reducer";
 import speakerReducer from "../reducers/speaker-reducer";
 import sponsorReducer from "../reducers/sponsor-reducer";
+import extraQuestionReducer from "../reducers/extra-questions-reducer";
 
 // get from process.env bc window is not set yet
 const clientId = process.env.GATSBY_OAUTH2_CLIENT_ID;
@@ -44,6 +45,7 @@ const persistedReducers = persistCombineReducers(config, {
   summitState: summitReducer,
   speakerState: speakerReducer,
   sponsorState: sponsorReducer,
+  extraQuestionState: extraQuestionReducer
 });
 
 function appendLoggedUser({ getState }) {

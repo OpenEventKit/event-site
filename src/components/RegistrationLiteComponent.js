@@ -112,14 +112,14 @@ const RegistrationLiteComponent = ({
     const inPersonDisclaimer = getSettingByKey(MARKETING_SETTINGS_KEYS.registrationInPersonDisclaimer);
     const allowPromoCodes = !!Number(getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteAllowPromoCodes));
     const companyDDLPlaceholder = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteCompanyDDLPlaceholder);
-    const showCompanyInputDefaultOptions = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteShowCompanyInputDefaultOptions)
-    const showCompanyInput = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteShowCompanyInput)
-    const initialOrderComplete1stParagraph = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteInitialOrderComplete1stParagraph)
-    const initialOrderComplete2ndParagraph = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteInitialOrderComplete2ndParagraph)
-    const initialOrderCompleteButton = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteInitialOrderCompleteButton)
-    const orderComplete1stParagraph = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteOrderComplete1stParagraph)
-    const orderComplete2ndParagraph = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteOrderComplete2ndParagraph)
-    const orderCompleteButton = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteOrderCompleteButton)
+    const showCompanyInputDefaultOptions = !!Number(getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteShowCompanyInputDefaultOptions));
+    const showCompanyInput = !!Number(getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteShowCompanyInput));
+    const initialOrderComplete1stParagraph = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteInitialOrderComplete1stParagraph);
+    const initialOrderComplete2ndParagraph = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteInitialOrderComplete2ndParagraph);
+    const initialOrderCompleteButton = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteInitialOrderCompleteButton);
+    const orderComplete1stParagraph = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteOrderComplete1stParagraph);
+    const orderComplete2ndParagraph = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteOrderComplete2ndParagraph);
+    const orderCompleteButton = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteOrderCompleteButton);
     const noAllowedTicketsMessage = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteNoAllowedTicketsMessage);
 
     const widgetProps = {
@@ -143,18 +143,16 @@ const RegistrationLiteComponent = ({
             getUserProfile().catch((e) => console.log("getUserProfile error. Not logged in?"));
             setIsActive(false);
         },
-        goToExtraQuestions: () => {
-            navigate("/a/extra-questions");
+        goToExtraQuestions: (attendeeId) => {
+            navigate(`/a/extra-questions${attendeeId ? `/#attendee=${attendeeId}` : ''}`);
         },
         goToEvent: () => navigate("/a/"),
         goToRegistration: () => navigate(`${getEnvVariable(REGISTRATION_BASE_URL)}/a/${summit.slug}`),
         goToMyOrders: () => navigate("/a/my-tickets"),
-        completedExtraQuestions: async (order) => {
-            const currentUserTicket = order?.tickets.find(t => t?.owner?.email == userProfile?.email);
-            const currentAttendee = attendee ? attendee : (currentUserTicket ? currentUserTicket?.owner : null);
-            if(!currentAttendee) return true;
-            await getExtraQuestions();
-            return checkRequireExtraQuestionsByAttendee(currentAttendee);
+        completedExtraQuestions: async (attendee) => {            
+            if(!attendee) return true;
+            await getExtraQuestions(attendee?.id);
+            return checkRequireExtraQuestionsByAttendee(attendee);
         },
         onPurchaseComplete: (order) => {
             // check if it"s necessary to update profile
@@ -188,8 +186,8 @@ const RegistrationLiteComponent = ({
         orderComplete2ndParagraph: orderComplete2ndParagraph,
         orderCompleteButton: orderCompleteButton,
         noAllowedTicketsMessage: noAllowedTicketsMessage,
-        showCompanyInput: showCompanyInput.toString().toLowerCase() == "1",
-        showCompanyInputDefaultOptions: showCompanyInputDefaultOptions.toString().toLowerCase() == "1",
+        showCompanyInput: showCompanyInput,
+        showCompanyInputDefaultOptions: showCompanyInputDefaultOptions,
     };
 
     const { registerButton } = marketingPageSettings.hero.buttons;

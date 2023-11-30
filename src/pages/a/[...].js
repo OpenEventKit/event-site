@@ -14,7 +14,6 @@ import ShowOpenRoute from "../../routes/ShowOpenRoute";
 import WithBadgeRoute from "../../routes/WithBadgeRoute";
 import PosterDetailPage from "../../templates/poster-detail-page";
 import MyTicketsPage from "../../templates/my-tickets-page";
-import WithTicketRoute from "../../routes/WithTicketRoute";
 import withRealTimeUpdates from "../../utils/real_time_updates/withRealTimeUpdates";
 import withFeedsWorker from "../../utils/withFeedsWorker";
 import Seo from "../../components/Seo";
@@ -38,9 +37,7 @@ const App = ({ isLoggedUser, user, summitPhase, allowClick = true }) => {
           <WithAuthRoute path="/" isLoggedIn={isLoggedUser} location={location}>
             <MyTicketsPage path="/my-tickets" isLoggedIn={isLoggedUser} user={user} location={location} />
             <FullProfilePage path="/profile" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location} />
-            <WithTicketRoute path="/extra-questions" location={location}>
-                <ExtraQuestionsPage path="/" isLoggedIn={isLoggedUser} user={user} location={location} />
-            </WithTicketRoute>
+            <ExtraQuestionsPage path="/extra-questions" isLoggedIn={isLoggedUser} user={user} location={location} />
             <WithAuthzRoute path="/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location}>
                 <PostersPage path="/posters" trackGroupId={0} location={location} />
                 <PostersPage path="/posters/:trackGroupId" location={location} />
