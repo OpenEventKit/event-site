@@ -11,11 +11,9 @@ const Seo = ({ title, description, location, children }) => {
     title: siteTitle,
     description: defaultDescription
   } = useSiteMetadata();
-  const {
-    siteMetadata: {
-      image
-    }
-  } = useSiteSettings();
+
+  const siteSettings = useSiteSettings();
+  const image = siteSettings.siteMetadata?.image
 
   const siteUrl = getEnvVariable(SITE_URL);
   const siteUrlInfo = siteUrl ? new URL(siteUrl) : null;
