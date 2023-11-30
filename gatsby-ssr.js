@@ -1,5 +1,5 @@
 import * as React from "react";
-import ReduxWrapper from "./src/state/ReduxWrapper";
+import ReduxSSRWrapper from "./src/state/ReduxSSRWrapper";
 import { 
   HtmlAttributes,
   HeadComponents,
@@ -9,7 +9,7 @@ import {
 import { JSDOM } from "jsdom";
 import { XMLHttpRequest } from "xmlhttprequest";
 
-export const wrapRootElement = ReduxWrapper;
+export const wrapRootElement = ReduxSSRWrapper;
 
 export const onRenderBody = ({
   setHtmlAttributes,
