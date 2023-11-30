@@ -1,9 +1,10 @@
 name: Lint Commit Messages
-on: [pull_request]
+
+on: [push, pull_request]
 
 jobs:
-  commitlint:
+  lint:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: wagoid/commitlint-github-action@v5
+      - uses: ahmadnassri/action-commit-lint@v2
