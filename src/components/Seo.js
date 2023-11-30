@@ -1,9 +1,9 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import useSiteSettings from "@utils/useSiteSettings";
-import { Helmet } from "react-helmet";
 import { getSrc } from "gatsby-plugin-image";
-import { getUrl } from "@utils/urlFormating";
+import { buildUrl } from "@utils/urlFormating";
+import { getEnvVariable, SITE_URL } from "@utils/envVariables";
 
 const Seo = ({ title, description, location, children }) => {
   const {
@@ -13,17 +13,21 @@ const Seo = ({ title, description, location, children }) => {
       image
     }
   } = useSiteSettings();
-  const host = typeof window !== "undefined" ? window.location.host : null;
-  const scheme = typeof window !== "undefined" ? window.location.protocol.replace(":", "") : "https";
+
+  const siteUrl = getEnvVariable(SITE_URL);
+  const siteUrlInfo = siteUrl ? new URL(siteUrl) : null;
+  const scheme = siteUrlInfo ? siteUrlInfo.protocol.replace(":", "") : "https";
+  const host = siteUrlInfo ? siteUrlInfo.host : null;
   const { pathname } = location;
+
   const seo = {
     title: title ? `${siteTitle} - ${title}` : siteTitle,
     description: description || defaultDescription,
-    url: getUrl(scheme, host, pathname),
-    image: host && image ? getUrl(scheme, host, getSrc(image)) : null,
+    url: buildUrl(scheme, host, pathname),
+    image: host && image ? buildUrl(scheme, host, getSrc(image)) : null,
   };
   return (
-    <Helmet>
+    <>
       {seo.title && <title>{seo.title}</title>}
       {seo.description && <meta name="description" content={seo.description} />}
       {seo.url && <meta property="og:url" content={seo.url} />}
@@ -38,7 +42,7 @@ const Seo = ({ title, description, location, children }) => {
       {seo.description && <meta name="twitter:description" content={seo.description} />}
       {seo.image && <meta name="twitter:image" content={seo.image} />}
       {children}
-    </Helmet>
+    </>
   );
 };
 
