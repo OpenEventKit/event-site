@@ -4,6 +4,8 @@
   "version": "2.0.78",
   "author": "Tipit LLC",
   "dependencies": {
+    "@commitlint/cli": "^18.4.3",
+    "@commitlint/config-conventional": "^18.4.3",
     "@mui/base": "^5.0.0-alpha.114",
     "@mux/mux-player-react": "^1.14.1",
     "@ncwidgets/file-relation": "^0.8.0",
