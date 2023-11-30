@@ -140,18 +140,20 @@ export const TicketPopup = ({ ticket, order, summit, onClose, fromTicketList, fr
                             </TabPanel>
                         )}
 
-                        <TabPanel className="ticket-popup-panel ticket-popup-panel--edit">
-                            <div className="ticket-popup-scroll">
-                                <TicketPopupEditDetailsForm
-                                    ticket={ticket}
-                                    summit={summit}
-                                    order={order}
-                                    canEditTicketData={canEditTicketData}
-                                    goToReassignPanel={() => setTabIndex(1)}
-                                    context={fromTicketList ? 'ticket-list' : 'order-list'}
-                                />
-                            </div>
-                        </TabPanel>
+                        {!isUnassigned && (
+                            <TabPanel className="ticket-popup-panel ticket-popup-panel--edit">
+                                <div className="ticket-popup-scroll">
+                                    <TicketPopupEditDetailsForm
+                                        ticket={ticket}
+                                        summit={summit}
+                                        order={order}
+                                        canEditTicketData={canEditTicketData}
+                                        goToReassignPanel={() => setTabIndex(1)}
+                                        context={fromTicketList ? 'ticket-list' : 'order-list'}
+                                    />
+                                </div>
+                            </TabPanel>
+                        )}
 
                         {!isUnassigned && isReassignable && isUserOrderOwner && (
                             <TabPanel className="ticket-popup-panel ticket-popup-panel--reassign">
