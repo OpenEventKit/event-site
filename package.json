@@ -150,7 +150,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "update-libs": "yarn upgrade live-event-widget openstack-uicore-foundation schedule-lite simple-chat-widget speakers-widget attendee-to-attendee-widget",
     "prepare": "husky install",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "precommit": "npx lint-staged --diff=origin/main --verbose"
   },
   "lint-staged": {
     "*.{js,jsx}": "eslint --fix"

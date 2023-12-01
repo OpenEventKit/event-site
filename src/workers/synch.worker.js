@@ -8,17 +8,6 @@ let localAllIDXEvents = null;
 let localAllSpeakers = null;
 let localAllIDXSpeakers = null;
 
-self.onmessage = async (e) => {
-  if (busy) {
-    // wait
-    queue.push(e);
-    return;
-  }
-  // run
-  busy = true;
-  await run(e);
-};
-
 const run = async ({
   data: {
     accessToken,
@@ -53,9 +42,9 @@ const run = async ({
 
     if (
       lastPayload
-            && lastPayload.entity_type === entity_type
-            && lastPayload.entity_operator === entity_operator
-            && lastPayload.entity_id === entity_id) {
+        && lastPayload.entity_type === entity_type
+        && lastPayload.entity_operator === entity_operator
+        && lastPayload.entity_id === entity_id) {
       console.log('synch worker skipping payload (already processed)');
       continue;
     }
@@ -109,4 +98,15 @@ const run = async ({
   localAllIDXEvents = null;
   localAllSpeakers = null;
   localAllIDXSpeakers = null;
+};
+
+self.onmessage = async (e) => {
+  if (busy) {
+    // wait
+    queue.push(e);
+    return;
+  }
+  // run
+  busy = true;
+  await run(e);
 };
