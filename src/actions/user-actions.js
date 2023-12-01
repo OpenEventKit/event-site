@@ -50,6 +50,9 @@ export const UNCAST_PRESENTATION_VOTE_RESPONSE = 'UNCAST_PRESENTATION_VOTE_RESPO
 export const TOGGLE_PRESENTATION_VOTE = 'TOGGLE_PRESENTATION_VOTE';
 export const GET_EXTRA_QUESTIONS = 'GET_EXTRA_QUESTIONS';
 export const TICKET_OWNER_CHANGED = 'TICKET_OWNER_CHANGED';
+export const REQUEST_INVITATION = 'REQUEST_INVITATION';
+export const RECEIVE_INVITATION = 'RECEIVE_INVITATION';
+export const REJECT_INVITATION = 'REJECT_INVITATION';
 
 // shortName is the unique identifier assigned to a Disqus site.
 export const getDisqusSSO = (shortName) => async (dispatch, getState) => {
@@ -577,3 +580,44 @@ export const doVirtualCheckIn = (attendee) => async (dispatch, getState) => {
     return e;
   });
 };
+
+
+/**
+ * Get invitation by token to allow reject
+ * @param token
+ * @returns {function(*=, *): *}
+ */
+export const getInvitation = (token) => async (dispatch) => {
+  dispatch(startLoading());
+
+  return getRequest(
+    createAction(REQUEST_INVITATION),
+    createAction(RECEIVE_INVITATION),
+    `${window.API_BASE_URL}/api/public/v1/summits/${window.SUMMIT_ID}/registration-invitations/${token}`,
+    customErrorHandler
+  )({})(dispatch)
+    .finally(() => dispatch(stopLoading()));
+}
+
+/**
+ * Reject invitation by token
+ * @param token
+ * @returns {function(*=, *): *}
+ */
+export const rejectInvitation = (token) => async (dispatch) => {
+  dispatch(startLoading());
+
+  return deleteRequest(
+    null,
+    createAction(REJECT_INVITATION),
+    `${window.API_BASE_URL}/api/public/v1/summits/${window.SUMMIT_ID}/registration-invitations/${token}/reject`,
+    {},
+    customErrorHandler
+  )({})(dispatch)
+    .then(() => {
+      //redirect ?
+    })
+    .finally(() => dispatch(stopLoading()));
+}
+
+

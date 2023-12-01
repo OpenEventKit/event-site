@@ -16,7 +16,10 @@ import {
   CAST_PRESENTATION_VOTE_RESPONSE,
   UNCAST_PRESENTATION_VOTE_RESPONSE,
   TOGGLE_PRESENTATION_VOTE,
-  TICKET_OWNER_CHANGED
+  TICKET_OWNER_CHANGED,
+  RECEIVE_INVITATION,
+  REQUEST_INVITATION,
+  REJECT_INVITATION
 } from '../actions/user-actions';
 import { RESET_STATE } from '../actions/base-actions-definitions';
 import { isAuthorizedUser } from '../utils/authorizedGroups';
@@ -29,7 +32,8 @@ const DEFAULT_STATE = {
   idpProfile: null,
   isAuthorized: false,
   hasTicket: false,
-  attendee: null
+  attendee: null,
+  invitation: null,
 }
 
 const userReducer = (state = DEFAULT_STATE, action) => {
@@ -106,6 +110,15 @@ const userReducer = (state = DEFAULT_STATE, action) => {
           summit_tickets: [...(currentUserTickets)]
         }
       };
+    }
+    case REQUEST_INVITATION: {
+      return {...state, invitation: null};
+    }
+    case RECEIVE_INVITATION: {
+      return {...state, invitation: payload.response}
+    }
+    case REJECT_INVITATION: {
+      return {...state, invitation: {...state.invitation, status: 'Rejected'}}
     }
     default:
       return state;
