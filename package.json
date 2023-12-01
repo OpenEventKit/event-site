@@ -154,7 +154,8 @@
     "precommit": "npx lint-staged --diff=origin/main --verbose"
   },
   "lint-staged": {
-    "*.{js,jsx}": "eslint --fix"
+    "*.{js,jsx}": "eslint --fix",
+    "**/*": "prettier --write --ignore-unknown"
   },
   "devDependencies": {
     "devcert": "1.1.0",

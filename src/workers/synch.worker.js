@@ -42,17 +42,29 @@ const run = async ({
 
     if (
       lastPayload
-        && lastPayload.entity_type === entity_type
-        && lastPayload.entity_operator === entity_operator
-        && lastPayload.entity_id === entity_id) {
+      && lastPayload.entity_type === entity_type
+      && lastPayload.entity_operator === entity_operator
+      && lastPayload.entity_id === entity_id
+    ) {
       console.log('synch worker skipping payload (already processed)');
       continue;
     }
 
     // micro updates logic goes here ...
-    console.log('synch worker trying to create process strategy for payload ', payload);
+    console.log(
+      'synch worker trying to create process strategy for payload ',
+      payload,
+    );
 
-    const s = SynchStrategyFactory.build(localSummit, localAllEvents, localAllIDXEvents, localAllSpeakers, localAllIDXSpeakers, accessToken, payload);
+    const s = SynchStrategyFactory.build(
+      localSummit,
+      localAllEvents,
+      localAllIDXEvents,
+      localAllSpeakers,
+      localAllIDXSpeakers,
+      accessToken,
+      payload,
+    );
     lastPayload = payload;
     if (s === null) {
       console.log('synch worker missing process strategy for payload', payload);
