@@ -14,7 +14,7 @@ const Configuration = {
      * see https://commitlint.js.org/#/reference-rules
      */
     rules: {
-        'type-enum': [2, 'always', ['build', 'chore', 'ci', 'docs', 'feat', 'fix', 'perf', 'refactor', 'revert', 'style', 'test']],
+        'type-enum': [2, 'always', ['build', 'chore', 'ci', 'docs', 'feat', 'fix', 'perf', 'refactor', 'revert', 'style', 'test', 'wip']],
         'body-empty': [2, 'never']
     },
     /*

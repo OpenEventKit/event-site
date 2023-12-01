@@ -148,7 +148,8 @@
     "develop": "NODE_OPTIONS=--max-old-space-size=8192 npm run gatsby-clean && node --trace-warnings node_modules/.bin/gatsby develop --S -H 0.0.0.0",
     "format": "prettier --trailing-comma es5 --no-semi --single-quote --write \"{gatsby-*.js,src/**/*.js}\"",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "update-libs": "yarn upgrade live-event-widget openstack-uicore-foundation schedule-lite simple-chat-widget speakers-widget attendee-to-attendee-widget"
+    "update-libs": "yarn upgrade live-event-widget openstack-uicore-foundation schedule-lite simple-chat-widget speakers-widget attendee-to-attendee-widget",
+    "check-last-commit": "npx commitlint --from=HEAD~1 --verbose"
   },
   "devDependencies": {
     "@commitlint/cli": "^18.4.3",
