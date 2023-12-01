@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { Redirect } from "@gatsbyjs/reach-router";
 import { getEnvVariable, REGISTRATION_BASE_URL } from "../utils/envVariables";
 import HeroComponent from "../components/HeroComponent";
+import { navigate } from "gatsby";
 
 export const TicketErrorPageTemplate = class extends React.Component {
 
