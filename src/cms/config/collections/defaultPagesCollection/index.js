@@ -5,6 +5,7 @@ import {
 import marketingPage from "./marketingPage";
 import lobbyPage from "./lobbyPage";
 import expoHallPage from "./expoHallPage";
+import invitationsRejectPage from "./invitationsRejectPage";
 
 const defaultPagesCollection = {
   ...collectionDefaults({
@@ -14,7 +15,8 @@ const defaultPagesCollection = {
   files: [
     marketingPage,
     lobbyPage,
-    expoHallPage
+    expoHallPage,
+    invitationsRejectPage
   ]
 };
 

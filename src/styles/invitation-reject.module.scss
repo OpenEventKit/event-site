@@ -1,0 +1,10 @@
+@import "colors.scss";
+
+.container {
+  position: inherit;
+
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+}

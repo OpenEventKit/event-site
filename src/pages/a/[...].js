@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import EventPage from "../../templates/event-page";
 import PostersPage from "../../templates/posters-page";
 import SchedulePage from "../../templates/schedule-page";
+import InvitationsRejectPage from "../../templates/invitations-reject-page";
 import SponsorPage from "../../templates/sponsor-page";
 import ExpoHallPage from "../../templates/expo-hall-page";
 import FullProfilePage from "../../templates/full-profile-page";
@@ -19,8 +20,18 @@ import withFeedsWorker from "../../utils/withFeedsWorker";
 import Seo from "../../components/Seo";
 import Link from "../../components/Link";
 import { titleFromPathname } from "../../utils/urlFormating";
+import {graphql} from "gatsby";
 
-const App = ({ isLoggedUser, user, summitPhase, allowClick = true }) => {
+export const appQuery = graphql`
+  query {
+    invitationsRejectPageJson {
+      title
+      subTitle
+    }
+  }
+`;
+
+const App = ({ isLoggedUser, user, summitPhase, allowClick = true, data }) => {
   return (
     <Location>
       {({ location }) => (
@@ -34,6 +45,7 @@ const App = ({ isLoggedUser, user, summitPhase, allowClick = true }) => {
             }}
             allowClick={allowClick}
           />
+          <InvitationsRejectPage path="/invitations/reject/:invitationToken" location={location} data={data} />
           <WithAuthRoute path="/" isLoggedIn={isLoggedUser} location={location}>
             <MyTicketsPage path="/my-tickets" isLoggedIn={isLoggedUser} user={user} location={location} />
             <FullProfilePage path="/profile" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location} />
