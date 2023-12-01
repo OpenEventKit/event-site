@@ -99,7 +99,10 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
             }
             // extra question
             if (knownErrorRef) {
-                knownErrorRef.scrollIntoView(ScrollBehaviour);
+                knownErrorRef.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center',
+                });
                 return;
             }
             // disclaimer
@@ -159,7 +162,7 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
                 <div className={styles.extraQuestionsAttendeeWarning}>
                     {`Attention: The info below is for ${getAttendeeFullname(attendee)}. No additional action is required if you 
                     prefer ${attendee.first_name || attendee.email} to complete this info; they have received an email with instructions. 
-                    You can manage this ticket on the "My Orders / Tickets" page.`}                    
+                    You can manage this ticket on the "My Orders / Tickets" page.`}
                 </div>
             }
             <div className={`content columns ${styles.extraQuestionsContainer}`}>
@@ -242,7 +245,7 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
                             questionContainerClassName={`columns is-multiline ${styles.extraQuestion} pt-3`}
                             questionLabelContainerClassName={'column is-full pb-0'}
                             questionControlContainerClassName={`column is-full pt-0`}
-                            shouldScroll2FirstError={false}
+                            shouldScroll2FirstError={true}
                             onError={handleExtraQuestionError}
                         />
                     </>
