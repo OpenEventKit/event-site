@@ -149,7 +149,7 @@ export const TicketPopupEditDetailsForm = ({
 
     const scrollToError = (error) => document.querySelector(`label[for="${error}"]`).scrollIntoView(ScrollBehaviour);
 
-    const validateForm = (knownErrorRef = null) => {
+    const validateForm = (errorId = null) => {
         // Validate the formik form
         formik.validateForm().then((errors) => {
             const errorKeys = Object.keys(errors);
@@ -159,11 +159,8 @@ export const TicketPopupEditDetailsForm = ({
                 return;
             }
             // extra question
-            if (knownErrorRef) {
-                knownErrorRef.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'center',
-                });
+            if (errorId) {
+                formRef.current.scroll2QuestionById(errorId);
                 return;
             }
             // disclaimer
@@ -187,8 +184,8 @@ export const TicketPopupEditDetailsForm = ({
         validateForm();
     };
 
-    const handleExtraQuestionError = (_, errorRef) => {
-        validateForm(errorRef);
+    const handleExtraQuestionError = (errors, ref, errorId) => {
+        validateForm(errorId);
     }
 
     const onExtraQuestionsAnswersSet = (answersForm) => {
