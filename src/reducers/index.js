@@ -8,6 +8,7 @@ import presentationsReducer from "./presentations-reducer";
 import eventReducer from "./event-reducer";
 import speakerReducer from "./speaker-reducer";
 import sponsorReducer from "./sponsor-reducer";
+import extraQuestionsReducer from "./extra-questions-reducer";
 
 export {
   loggedUserReducer,
@@ -20,4 +21,5 @@ export {
   eventReducer,
   speakerReducer,
   sponsorReducer,
+  extraQuestionsReducer,
 };

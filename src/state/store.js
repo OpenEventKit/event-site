@@ -35,6 +35,7 @@ const states = {
   eventState: reducers.eventReducer,
   speakerState: reducers.speakerReducer,
   sponsorState: reducers.sponsorReducer,
+  extraQuestionsReducer: reducers.extraQuestionsReducer
 };
 
 const appendLoggedUser = ({ getState }) => (next) => (action) => {
