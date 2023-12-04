@@ -351,28 +351,30 @@ export const TicketPopupEditDetailsForm = ({
                 }
 
                 {summit.registration_disclaimer_content &&
-                <div className="column is-full attendee-info abc-checkbox">
-                    <input
-                        type="checkbox"
-                        id={TicketKeys.disclaimerAccepted}
-                        name={TicketKeys.disclaimerAccepted}
-                        onBlur={formik.handleBlur}
-                        onChange={(e) =>
-                            formik.setFieldTouched(TicketKeys.disclaimerAccepted, true) && formik.handleChange(e)
-                        }
-                        checked={formik.values[TicketKeys.disclaimerAccepted]}
-                    />
-                    <label htmlFor={TicketKeys.disclaimerAccepted}>
-                        {summit.registration_disclaimer_mandatory && <b> *</b>}
-                    </label>
-                    {(formik.touched[TicketKeys.disclaimerAccepted] || triedSubmitting) && formik.errors[TicketKeys.disclaimerAccepted] &&
-                    <p className="error-label">{t("ticket_popup.edit_required")}</p>
-                    }
-                    <div className="mt-3">
+                <div className="column is-full attendee-info abc-checkbox disclaimer mt-3">
+                    <div className='input-wrapper'>
+                        <input
+                            type="checkbox"
+                            id={TicketKeys.disclaimerAccepted}
+                            name={TicketKeys.disclaimerAccepted}
+                            onBlur={formik.handleBlur}
+                            onChange={(e) =>
+                                formik.setFieldTouched(TicketKeys.disclaimerAccepted, true) && formik.handleChange(e)
+                            }
+                            checked={formik.values[TicketKeys.disclaimerAccepted]}
+                        />
+                        <label htmlFor={TicketKeys.disclaimerAccepted}>
+                            {summit.registration_disclaimer_mandatory && <b> *</b>}
+                        </label>
+                    </div>
+                    <div>
                         <RawHTML>
                             {summit.registration_disclaimer_content}
                         </RawHTML>
                     </div>
+                    {(formik.touched[TicketKeys.disclaimerAccepted] || triedSubmitting) && formik.errors[TicketKeys.disclaimerAccepted] &&
+                        <p className="error-label">{t("ticket_popup.edit_required")}</p>
+                    }
                 </div>
                 }
             </div>

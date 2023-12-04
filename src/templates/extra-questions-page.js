@@ -248,8 +248,8 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
                     </>
                     }
                     { summit.registration_disclaimer_content &&
-                    <div className="columns">
-                        <div className={`column ${styles.extraQuestion} abc-checkbox`}>
+                    <div className={`${styles.disclaimer} columns`}>
+                        <div className={`column ${styles.extraQuestion} ${styles.inputWrapper} abc-checkbox`}>
                             <input
                                 id={TicketKeys.disclaimerAccepted}
                                 name={TicketKeys.disclaimerAccepted}
@@ -258,20 +258,20 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
                                 onChange={(e) =>
                                     formik.setFieldTouched(TicketKeys.disclaimerAccepted, true) && formik.handleChange(e)
                                 }
-                                checked={formik.values[TicketKeys.disclaimerAccepted]}
+                                checked={formik.values[TicketKeys.disclaimerAccepted]}                                
                             />
                             <label htmlFor={TicketKeys.disclaimerAccepted}>
                                 {summit.registration_disclaimer_mandatory && <b> *</b>}
-                            </label>
-                            {(formik.touched[TicketKeys.disclaimerAccepted] || triedSubmitting) && formik.errors[TicketKeys.disclaimerAccepted] &&
-                            <p className={styles.errorLabel}>{t("ticket_popup.edit_required")}</p>
-                            }
-                            <div className="mt-3">
-                                <RawHTML>
-                                    {summit.registration_disclaimer_content}
-                                </RawHTML>
-                            </div>
+                            </label>                            
+                        </div>                        
+                        <div className="mt-3">
+                            <RawHTML>
+                                {summit.registration_disclaimer_content}
+                            </RawHTML>
                         </div>
+                        {(formik.touched[TicketKeys.disclaimerAccepted] || triedSubmitting) && formik.errors[TicketKeys.disclaimerAccepted] &&
+                            <p className={styles.errorLabel}>{t("ticket_popup.edit_required")}</p>
+                        }
                     </div>
                     }
                     <button
