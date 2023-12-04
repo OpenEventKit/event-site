@@ -470,7 +470,7 @@ export const saveAttendeeQuestions = (values, ticketId = null) => async (dispatc
     customErrorHandler
   )(params)(dispatch).then(() => {
     dispatch(stopLoading());
-    Swal.fire('Success', "Attendee saved successfully", "success");
+    Swal.fire('Success', "Thank you, information saved", "success");
     dispatch(getUserProfile());
     navigate('/')
   }).catch(e => {
