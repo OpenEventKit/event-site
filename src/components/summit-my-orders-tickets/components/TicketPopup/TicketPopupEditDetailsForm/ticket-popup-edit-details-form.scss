@@ -4,7 +4,7 @@
   h4 {
     font-weight: 700;
   }
-  .attendee-info {
+  .attendee-info {    
     label {
       font-weight: 600;
       b {
@@ -14,7 +14,16 @@
     u {
       cursor: pointer;
     }
-  }
+    &.disclaimer {
+      display: grid;
+      grid-template-columns: 0fr 14fr;
+      grid-template-rows: 1fr;
+      gap: 15px;
+      .input-wrapper {
+        width: 35px;
+      }
+    }
+  } 
   .questions-form {
     padding-bottom: 2em;
   }
