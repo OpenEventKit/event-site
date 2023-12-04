@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, {  useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { CSSTransition } from "react-transition-group";
@@ -30,7 +30,7 @@ export const TicketPopupEditDetailsForm = ({
     order,
     canEditTicketData,
     goToReassignPanel,
-    context    
+    context
 }) => {
     const formRef = useRef(null);
     const { t } = useTranslation();
@@ -126,7 +126,7 @@ export const TicketPopupEditDetailsForm = ({
     };
 
     const handleConfirmAccept = async () => {
-        setShowConfirm(false);        
+        setShowConfirm(false);
         dispatch(removeAttendee({ticket, context})).then((updatedTicket) => {
             onTicketAssignChange(updatedTicket);
             toggleUnassignMessage()
@@ -149,7 +149,7 @@ export const TicketPopupEditDetailsForm = ({
 
     const scrollToError = (error) => document.querySelector(`label[for="${error}"]`).scrollIntoView(ScrollBehaviour);
 
-    const validateForm = (knownErrorRef = null) => {
+    const validateForm = (errorId = null) => {
         // Validate the formik form
         formik.validateForm().then((errors) => {
             const errorKeys = Object.keys(errors);
@@ -159,8 +159,8 @@ export const TicketPopupEditDetailsForm = ({
                 return;
             }
             // extra question
-            if (knownErrorRef) {
-                knownErrorRef.scrollIntoView(ScrollBehaviour);
+            if (errorId) {
+                formRef.current.scroll2QuestionById(errorId);
                 return;
             }
             // disclaimer
@@ -184,8 +184,8 @@ export const TicketPopupEditDetailsForm = ({
         validateForm();
     };
 
-    const handleExtraQuestionError = (_, errorRef) => {
-        validateForm(errorRef);
+    const handleExtraQuestionError = (errors, ref, errorId) => {
+        validateForm(errorId);
     }
 
     const onExtraQuestionsAnswersSet = (answersForm) => {
@@ -207,10 +207,10 @@ export const TicketPopupEditDetailsForm = ({
     };
 
     const canSubmitChanges = () => {
-        const qs = new QuestionsSet(extraQuestions, initialValues[TicketKeys.extraQuestions]);        
+        const qs = new QuestionsSet(extraQuestions, initialValues[TicketKeys.extraQuestions]);
         const unansweredExtraQuestions = !qs.completed();
         return canEditTicketData || isReassignable || unansweredExtraQuestions;
-    }    
+    }
 
     return (
         <div className="ticket-popup-edit-details-form">
@@ -252,7 +252,7 @@ export const TicketPopupEditDetailsForm = ({
                         value={initialValues[TicketKeys.email]}
                         disabled={true}
                     />
-                    {isUserTicketOwner && isReassignable && 
+                    {isUserTicketOwner && isReassignable &&
                     <div className="mt-1">
                         <span onClick={() => goToReassignPanel()}>
                             <u>Reassign</u>
@@ -332,7 +332,7 @@ export const TicketPopupEditDetailsForm = ({
                 </div>
                 }
 
-                {hasExtraQuestions && 
+                {hasExtraQuestions &&
                 <div className="column is-full pt-5">
                     <h4 className="pb-2">{t("ticket_popup.edit_preferences")}</h4>
                     <ExtraQuestionsForm

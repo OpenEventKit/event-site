@@ -88,7 +88,7 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
 
     const scrollToError = (error) => document.querySelector(`label[for="${error}"]`).scrollIntoView(ScrollBehaviour);
 
-    const validateForm = (knownErrorRef = null) => {
+    const validateForm = (errorId = null) => {
         // Validate the formik form
         formik.validateForm().then((errors) => {
             const errorKeys = Object.keys(errors);
@@ -98,8 +98,8 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
                 return;
             }
             // extra question
-            if (knownErrorRef) {
-                knownErrorRef.scrollIntoView(ScrollBehaviour);
+            if (errorId) {
+                formRef.current.scroll2QuestionById(errorId);
                 return;
             }
             // disclaimer
@@ -123,8 +123,8 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
         validateForm();
     };
 
-    const handleExtraQuestionError = (_, errorRef) => {
-        validateForm(errorRef);
+    const handleExtraQuestionError = (errors, ref, errorId) => {
+        validateForm(errorId);
     }
 
     const onExtraQuestionsAnswersSet = (answersForm) => {
@@ -159,7 +159,7 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
                 <div className={styles.extraQuestionsAttendeeWarning}>
                     {`Attention: The info below is for ${getAttendeeFullname(attendee)}. No additional action is required if you 
                     prefer ${attendee.first_name || attendee.email} to complete this info; they have received an email with instructions. 
-                    You can manage this ticket on the "My Orders / Tickets" page.`}                    
+                    You can manage this ticket on the "My Orders / Tickets" page.`}
                 </div>
             }
             <div className={`content columns ${styles.extraQuestionsContainer}`}>
@@ -242,7 +242,7 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
                             questionContainerClassName={`columns is-multiline ${styles.extraQuestion} pt-3`}
                             questionLabelContainerClassName={'column is-full pb-0'}
                             questionControlContainerClassName={`column is-full pt-0`}
-                            shouldScroll2FirstError={false}
+                            shouldScroll2FirstError={true}
                             onError={handleExtraQuestionError}
                         />
                     </>
