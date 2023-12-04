@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
+import { PersistGate } from "./PersistGate";
 import { store, persistor } from "./store";
 
 import { RESET_STATE } from "../actions/base-actions-definitions";

@@ -1,4 +1,4 @@
-import { applyMiddleware, compose, createStore, combineReducers } from "redux";
+import { applyMiddleware, compose, createStore } from "redux";
 import { persistCombineReducers, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import thunk from "redux-thunk";
@@ -48,12 +48,6 @@ const composeEnhancers = typeof window === "object" && window.__REDUX_DEVTOOLS_E
     : compose;
 
 const enhancer = composeEnhancers(applyMiddleware(appendLoggedUser, thunk));
-
-// Create store without persistor
-export const storeWithoutPersistor = createStore(
-    combineReducers(states),
-    enhancer
-);
 
 // Create store with persistor
 export const { store, persistor } = (() => {
