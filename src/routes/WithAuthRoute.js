@@ -1,21 +1,31 @@
-import * as React from "react";
-import { navigate } from "gatsby";
+import React from "react";
+import {connect} from "react-redux";
+import {navigate} from "gatsby";
 
 /**
- * @param {boolean} isLoggedIn - Indicates whether the user is logged in.
- * @param {object} location - The location object from React Router.
- * @param {ReactNode} children - The children components to be rendered.
- * @returns {ReactNode|null} - Returns children if isLoggedIn is true, otherwise redirects to login.
+ *
+ * @param isLoggedIn
+ * @param location
+ * @param children
+ * @returns {null|*}
+ * @constructor
  */
-const WithAuthRoute = ({ isLoggedIn, location, children }) => {
-  React.useEffect(() => {
-    if (!isLoggedIn) {
-      // Use navigate with state to redirect and add data to navigation state
-      navigate("/#login=1", { state: { backUrl: `${location.pathname}` } });
-    }
-  }, [isLoggedIn, location.pathname]);
+const WithAuthRoute = ({
 
-  return isLoggedIn ? children : null;
+                           isLoggedIn,
+                           location,
+                           children
+                       }) => {
+
+    if (!isLoggedIn) {
+        // reject it and redirect with current location to login
+        navigate("/#login=1", {state: {backUrl: `${location.pathname}`,},});
+        return null;
+    }
+
+    return children;
 };
 
-export default WithAuthRoute;
+const mapStateToProps = ({}) => ({});
+
+export default connect(mapStateToProps, {})(WithAuthRoute);

@@ -1,3 +1,4 @@
+import * as React from "react";
 import ReduxWrapper from "./src/state/ReduxWrapper";
 import { 
   HtmlAttributes,
