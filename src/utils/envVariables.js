@@ -1,3 +1,4 @@
+export const SITE_URL = 'SITE_URL';
 export const IDP_BASE_URL = 'IDP_BASE_URL';
 export const SUMMIT_API_BASE_URL = 'SUMMIT_API_BASE_URL';
 export const SUMMIT_ID = 'SUMMIT_ID';
@@ -26,6 +27,15 @@ export const TIMEINTERVALSINCE1970_API_URL = 'TIMEINTERVALSINCE1970_API_URL';
 export const ABLY_API_KEY = 'ABLY_API_KEY';
 
 const processEnv = {
+    /**
+     * Retrieve the site URL from environment variable set by the deploy provider.
+     * See documentation for more details:
+     * - Netlify: {@link https://docs.netlify.com/configure-builds/environment-variables/#deploy-urls-and-metadata}
+     * - Cloudflare Pages: {@link https://developers.cloudflare.com/pages/platform/build-configuration#environment-variables}
+     *
+     * If not available, fallback to user-defined GATSBY_SITE_URL env var.
+     */
+    SITE_URL: process.env.GATSBY_URL || process.env.GATSBY_CF_PAGES_URL || process.env.GATSBY_SITE_URL,
     IDP_BASE_URL: process.env.GATSBY_IDP_BASE_URL,
     SUMMIT_API_BASE_URL: process.env.GATSBY_SUMMIT_API_BASE_URL,
     API_BASE_URL: process.env.GATSBY_SUMMIT_API_BASE_URL,
@@ -62,6 +72,7 @@ export const getEnvVariable = (name) => {
 }
 
 if (typeof window === 'object') {
+    window.SITE_URL = processEnv[SITE_URL];
     window.OAUTH2_FLOW = processEnv[OAUTH2_FLOW];
     window.OAUTH2_CLIENT_ID = processEnv[OAUTH2_CLIENT_ID];
     window.SCOPES = processEnv[SCOPES];

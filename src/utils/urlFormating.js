@@ -1,5 +1,5 @@
 
-export const getUrl = (scheme, host, pathname) => {
+export const buildUrl = (scheme, host, pathname) => {
   if (!host) return null;
   const domain = `${scheme}://${host}`;
   return `${domain}${pathname ?? "/"}`;
