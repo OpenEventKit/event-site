@@ -39,7 +39,7 @@ const SPONSORS_FILE_NAME = "sponsors.json";
 const SPONSORS_FILE_PATH = `${STATIC_CONTENT_DIR_PATH}/${SPONSORS_FILE_NAME}`;
 const CMS_FONT_FILE_PATH = "/static/fonts/"
 const PAYMENTS_FILE_PATH = `${STATIC_CONTENT_DIR_PATH}/payments.json`;
-const APPLE_PAY_DOMAIN_FILE_PATH = `/../../.well-known/`
+const APPLE_PAY_DOMAIN_FILE_PATH = `/static/.well-known/`
 const APPLE_PAY_DOMAIN_FILE_NAME = `apple-developer-merchantid-domain-association`;
 
 exports.REQUIRED_DIR_PATHS = [
