@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import * as React from "react";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./store";
@@ -13,24 +13,12 @@ const onBeforeLift = () => {
   }
 };
 
-const ReduxWrapper = ({ children }) => {
-  const [isClient, setIsClient] = useState(false);
+const ReduxWrapper = ({ element }) => (
+  <Provider store={store}>
+    <PersistGate onBeforeLift={onBeforeLift} persistor={persistor}>
+      {() => element}
+    </PersistGate>
+  </Provider>
+);
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  return (
-    <Provider store={store}>
-      {isClient ? (
-        <PersistGate onBeforeLift={onBeforeLift} persistor={persistor}>
-          {children}
-        </PersistGate>
-      ) : (
-        children
-      )}
-    </Provider>
-  );
-};
-
-export default ({ element }) => <ReduxWrapper>{element}</ReduxWrapper>;
+export default ReduxWrapper;
