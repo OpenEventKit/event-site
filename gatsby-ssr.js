@@ -30,6 +30,4 @@ global.window.matchMedia = () => ({
   addListener: () => {},
   removeListener: () => {}
 });
-global.window.window.requestAnimationFrame = () => {};
-global.window.window.cancelAnimationFrame = () => {};
 global.XMLHttpRequest = XMLHttpRequest;
