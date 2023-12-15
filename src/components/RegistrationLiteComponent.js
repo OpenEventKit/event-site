@@ -149,7 +149,7 @@ const RegistrationLiteComponent = ({
         goToEvent: () => navigate("/a/"),
         goToRegistration: () => navigate(`${getEnvVariable(REGISTRATION_BASE_URL)}/a/${summit.slug}`),
         goToMyOrders: () => navigate("/a/my-tickets"),
-        completedExtraQuestions: async (attendee) => {            
+        completedExtraQuestions: async (attendee) => {
             if(!attendee) return true;
             await getExtraQuestions(attendee?.id);
             return checkRequireExtraQuestionsByAttendee(attendee);
@@ -178,7 +178,7 @@ const RegistrationLiteComponent = ({
         },
         allowPromoCodes: allowPromoCodes,
         companyDDLPlaceholder: companyDDLPlaceholder,
-        supportEmail: getEnvVariable(SUPPORT_EMAIL),
+        supportEmail: summit.support_email || getEnvVariable(SUPPORT_EMAIL),
         initialOrderComplete1stParagraph: initialOrderComplete1stParagraph,
         initialOrderComplete2ndParagraph: initialOrderComplete2ndParagraph,
         initialOrderCompleteButton: initialOrderCompleteButton,
