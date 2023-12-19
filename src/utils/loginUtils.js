@@ -7,7 +7,7 @@ export const getDefaultLocation = (eventRedirect, hasVirtualAccess = false) => {
 
 export const formatThirdPartyProviders = (providersArray) => {
     const providers = [
-        { button_color: '#082238', provider_label: 'Login with FNid', provider_param: '', provider_logo: '../img/logo_fn.svg', provider_logo_size: 35 },
+        { button_color: '#082238', provider_label: 'Sign in with FNid', provider_param: '', provider_logo: '../img/logo_fn.svg', provider_logo_size: 35 },
     ];
 
     const thirdPartyProviders = [
