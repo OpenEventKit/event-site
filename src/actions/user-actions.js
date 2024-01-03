@@ -439,7 +439,7 @@ export const updatePassword = (password) => async (dispatch) => {
 
 export const saveAttendeeQuestions = (values, ticketId = null) => async (dispatch, getState) => {
 
-  const { userState: { userProfile: { summit_tickets } } } = getState();  
+  const { userState: { userProfile: { summit_tickets } } } = getState();
 
   const normalizedEntity = {...values};
 
@@ -456,7 +456,7 @@ export const saveAttendeeQuestions = (values, ticketId = null) => async (dispatc
   } catch (e) {
     console.log('getAccessToken error: ', e);
     return Promise.reject();
-  }  
+  }
 
   let params = {
     access_token: accessToken,
@@ -532,10 +532,11 @@ export const setUserOrder = (order) => (dispatch) => Promise.resolve().then(() =
 export const checkOrderData = (order) => (dispatch, getState) => {
   if (!order) return;
 
-  const { userState: { idpProfile: { company, given_name, family_name } } } = getState();
-  const { owner_company, owner_first_name, owner_last_name } = order || {};
+  const { userState: { idpProfile: { company, given_name, family_name, email } } } = getState();
+  const { owner_company, owner_first_name, owner_last_name, owner_email } = order || {};
 
-  if (owner_company !== company || owner_first_name !== given_name || owner_last_name !== family_name) {
+  // only change data if I am the order owner
+  if (owner_email === email  && (owner_company !== company || owner_first_name !== given_name || owner_last_name !== family_name)) {
     const newProfile = {
       first_name: owner_first_name,
       last_name: owner_last_name,
