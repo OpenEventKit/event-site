@@ -1,4 +1,3 @@
-import * as React from "react";
 import ReduxWrapper from "./src/state/ReduxWrapper";
 import { 
   HtmlAttributes,
@@ -31,6 +30,4 @@ global.window.matchMedia = () => ({
   addListener: () => {},
   removeListener: () => {}
 });
-global.window.window.requestAnimationFrame = () => {};
-global.window.window.cancelAnimationFrame = () => {};
 global.XMLHttpRequest = XMLHttpRequest;
