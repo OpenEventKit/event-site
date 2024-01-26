@@ -1,8 +1,7 @@
 {
-  "title": "Reject Your Invitation or not",
+  "title": "Invitation rejection",
   "notFoundText": "Invitation not found.",
-  "rejectedText": "Invitation has already been rejected.",
+  "rejectedText": "You have rejected your invitation. ",
   "rejectText": "Be certain.  This is your last chance to purchase this ticket...",
   "rejectCTALabel": "Reject"
-
 }
