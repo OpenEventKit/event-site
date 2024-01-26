@@ -13,6 +13,7 @@ const ExpoHallPage = ({
 }) => {
   const { expoHallPageJson: { hero } } = data;
   const style = hero?.background ? { backgroundImage: `url(${getSrc(hero.background.src)})` } : {};
+
   return (
     <Layout location={location}>
       <AttendanceTrackerComponent />
