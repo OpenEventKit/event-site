@@ -138,7 +138,7 @@ const AuthComponent = ({
         allowsNativeAuth: allowsNativeAuth,
         allowsOtpAuth: allowsOtpAuth,
         initialEmailValue: initialEmailValue,
-        title: 'Enter your email address to login with a one time code',
+        title: 'Sign in using the email associated with your account:',
         summitData: summit
     };
 
