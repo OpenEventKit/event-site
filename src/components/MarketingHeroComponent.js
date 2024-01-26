@@ -12,7 +12,7 @@ import styles from "../styles/marketing-hero.module.scss";
 
 const MarketingHeroComponent = ({
   location,
-  marketingPageSettings,
+  data,
 }) => {
 
   const sliderRef = useRef(null);
@@ -32,21 +32,21 @@ const MarketingHeroComponent = ({
 
 
   const getButtons = () => {
-    const { registerButton, loginButton } = marketingPageSettings.hero.buttons;
+    const {
+      registerButton,
+      loginButton
+    } = data?.buttons || {};
 
-    return (
-      <>
-        {registerButton.display &&
-          (
-            <span className={styles.link}>
-              <RegistrationLiteComponent location={location} />
-            </span>
-          )}
-        {loginButton.display && (
-          <AuthComponent location={location} />
-        )}
-      </>
-    );
+    return <>
+      {registerButton?.display &&
+      <span className={styles.link}>
+        <RegistrationLiteComponent location={location} />
+      </span>
+      }
+      {loginButton?.display &&
+        <AuthComponent location={location} />
+      }
+    </>;
   };
 
   const sliderSettings = {
@@ -59,8 +59,8 @@ const MarketingHeroComponent = ({
   };
 
   let heroLeftColumnInlineStyles = {};
-  if (marketingPageSettings.hero?.background?.src) {
-    const imageSrc = getSrc(marketingPageSettings.hero.background.src);
+  if (data?.background?.src) {
+    const imageSrc = getSrc(data.background.src);
     heroLeftColumnInlineStyles.backgroundImage = `url(${imageSrc})`;
   }
 
@@ -73,53 +73,53 @@ const MarketingHeroComponent = ({
         >
           <div className={`${styles.heroMarketingContainer} hero-body`}>
             <div className="container">
-              <h1 className="title">{marketingPageSettings.hero.title}</h1>
-              <h2 className="subtitle">{marketingPageSettings.hero.subTitle}</h2>
+              <h1 className="title">{data?.title}</h1>
+              <h2 className="subtitle">{data?.subTitle}</h2>
               <div
                 className={styles.date}
                 style={{
-                  backgroundColor: marketingPageSettings.hero.dateLayout
+                  backgroundColor: data?.dateLayout
                     ? "var(--color_secondary)"
                     : "",
-                  display: marketingPageSettings.hero.dateLayout
+                  display: data?.dateLayout
                     ? ""
                     : "inline",
-                  transform: marketingPageSettings.hero.dateLayout
+                  transform: data?.dateLayout
                     ? "skew(-25deg)"
                     : "skew(0deg)",
                 }}
               >
-                {marketingPageSettings.hero?.dateLayout ?
-                <div style={{transform: "skew(25deg)"}}>{marketingPageSettings.hero?.date}</div>
+                {data?.dateLayout ?
+                <div style={{transform: "skew(25deg)"}}>{data?.date}</div>
                 :
                 <div style={{transform: "skew(0deg)"}}>
-                  <span>{marketingPageSettings.hero?.date}</span>
+                  <span>{data?.date}</span>
                 </div>
                 }
               </div>
-              <h4>{marketingPageSettings.hero?.time}</h4>
+              <h4>{data?.time}</h4>
               <div className={styles.heroButtons}>
                 {getButtons()}
               </div>
             </div>
           </div>
         </div>
-        {marketingPageSettings.hero?.images?.length > 0 &&
+        {data?.images?.length > 0 &&
         <div className={`${styles.rightColumn} column is-6 px-0`} id="marketing-slider" ref={sliderRef}>
-            {marketingPageSettings.hero?.images?.length > 1 ?
-            <Slider {...sliderSettings}>
-              {marketingPageSettings.hero.images.map((image, index) => {
-                const imageSrc = getSrc(image.src);
-                return (
-                  <div key={index}>
-                    <div className={styles.imageSlider} aria-label={image.alt} style={{ backgroundImage: `url(${imageSrc})`, height: sliderHeight, marginBottom: -6 }} />
-                  </div>
-                );
-              })}
-            </Slider>
-            :
-            <div className={styles.singleImage} aria-label={marketingPageSettings.hero.images[0].alt} style={{ backgroundImage: `url(${getSrc(marketingPageSettings.hero.images[0].src)})`}} >
-            </div>
+          {data?.images?.length > 1 ?
+          <Slider {...sliderSettings}>
+            {data.images.map((image, index) => {
+              const imageSrc = getSrc(image.src);
+              return (
+                <div key={index}>
+                  <div className={styles.imageSlider} aria-label={image.alt} style={{ backgroundImage: `url(${imageSrc})`, height: sliderHeight, marginBottom: -6 }} />
+                </div>
+              );
+            })}
+          </Slider>
+          :
+          <div className={styles.singleImage} aria-label={data.images[0].alt} style={{ backgroundImage: `url(${getSrc(data.images[0].src)})`}} >
+          </div>
           }
         </div>
       }

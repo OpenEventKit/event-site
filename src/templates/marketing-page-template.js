@@ -20,6 +20,15 @@ import { PHASES } from "../utils/phasesUtils";
 
 import styles from "../styles/marketing.module.scss";
 
+const sliderSettings = {
+  autoplay: true,
+  autoplaySpeed: 5000,
+  infinite: true,
+  dots: false,
+  slidesToShow: 1,
+  slidesToScroll: 1
+};
+
 const MarketingPageTemplate = ({
   location,
   data,
@@ -30,44 +39,42 @@ const MarketingPageTemplate = ({
 }) => {
 
   const {
-    marketingPageJson
-  } = data;
+    marketingPageJson: {
+      hero,
+      countdown,
+      widgets,
+      masonry
+    } = {}
+  } = data || {};
 
   let scheduleProps = {};
-  if (marketingPageJson.leftColumn?.schedule && isLoggedUser && summitPhase !== PHASES.BEFORE) {
+  if (widgets?.schedule && isLoggedUser && summitPhase !== PHASES.BEFORE) {
     scheduleProps = {
       ...scheduleProps,
       onEventClick: (ev) => navigate(`/a/event/${ev.id}`),
     }
   }
 
-  const sliderSettings = {
-    autoplay: true,
-    autoplaySpeed: 5000,
-    infinite: true,
-    dots: false,
-    slidesToShow: 1,
-    slidesToScroll: 1
-  };
+  const shouldRenderMasonry = masonry?.display;
 
   return (
     <Layout marketing={true} location={location}>
       <AttendanceTrackerComponent />
       <MarketingHeroComponent
         location={location}
-        marketingPageSettings={marketingPageJson}
+        data={hero}
       />
-      {summit && marketingPageJson.countdown?.display && <Countdown summit={summit} text={marketingPageJson?.countdown?.text} />}
+      {summit && countdown?.display && <Countdown summit={summit} text={countdown?.text} />}
       <div className="columns">
-        <div className={`column is-half mt-3 px-6 py-6 ${styles.leftColumn}`} style={{ position: 'relative' }}>
-          {marketingPageJson.leftColumn?.text?.content && marketingPageJson.leftColumn?.text?.display &&
+        <div className={`column mt-3 px-6 py-6 ${shouldRenderMasonry ? "is-half" : ""} ${styles.leftColumn ? styles.leftColumn : ""}`} style={{ position: 'relative' }}>
+          {widgets?.text?.display && widgets?.text?.content &&
             <Markdown>
-              {marketingPageJson.leftColumn.text.content}
+              {widgets.text.content}
             </Markdown>
           }
-          {marketingPageJson.leftColumn?.schedule?.display &&
+          {widgets?.schedule?.display &&
             <>
-              <h2><b>{marketingPageJson.leftColumn.schedule.title}</b></h2>
+              <h2><b>{widgets.schedule.title}</b></h2>
               <LiteScheduleComponent
                 {...scheduleProps}
                 lastDataSync={lastDataSync}
@@ -79,28 +86,28 @@ const MarketingPageTemplate = ({
               />
             </>
           }
-          {marketingPageJson.leftColumn?.disqus?.display &&
+          {widgets?.disqus?.display &&
             <>
-              <h2><b>{marketingPageJson.leftColumn.disqus.title}</b></h2>
+              <h2><b>{widgets.disqus.title}</b></h2>
               <DisqusComponent page="marketing-site"/>
             </>
           }
-          {marketingPageJson.leftColumn?.image?.display &&
-           marketingPageJson.leftColumn?.image?.image.src &&
+          {widgets?.image?.display &&
+           widgets?.image?.image.src &&
             <>
-              <h2><b>{marketingPageJson.leftColumn.image.title}</b></h2>
+              <h2><b>{widgets.image.title}</b></h2>
               <br />
-              <GatsbyImage image={getImage(marketingPageJson.leftColumn.image.image.src)} alt={marketingPageJson.leftColumn.image.image.alt ?? ""} />
+              <GatsbyImage image={getImage(widgets.image.image.src)} alt={widgets.image.image.alt ?? ""} />
             </>
           }
         </div>
-        <div className={`column is-half px-0 pb-0 ${styles.rightColumn}`}>
+        {shouldRenderMasonry &&
+        <div className={`column is-half px-0 pb-0 ${styles.rightColumn ? styles.rightColumn : ""}`}>
           <Masonry
             breakpointCols={2}
             className="my-masonry-grid"
             columnClassName="my-masonry-grid_column">
-            { marketingPageJson.masonry &&
-              formatMasonry(marketingPageJson.masonry).map((item, index) => {
+            {masonry.items && formatMasonry(masonry.items).map((item, index) => {
               if (item.images && item.images.length === 1) {
                 const image = getImage(item.images[0].src);
                 return (
@@ -141,6 +148,7 @@ const MarketingPageTemplate = ({
             })}
           </Masonry>
         </div>
+        }
       </div>
     </Layout>
   )
