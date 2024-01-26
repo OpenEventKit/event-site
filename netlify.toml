@@ -19,6 +19,3 @@
   for = "/fonts/*"
     [headers.values]
      Access-Control-Allow-Origin = "*"
-[context.deploy-preview.environment]
-  GATSBY_SUMMIT_ID = "57"
-  GATSBY_CMS_BACKEND_BRANCH= "feature/invitation-reject"
