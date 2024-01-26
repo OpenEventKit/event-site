@@ -11,9 +11,12 @@ import styles from "../styles/invitation-reject.module.scss";
 const InvitationsRejectPage = ({data, location, invitationToken, invitation, loading, ...props}) => {
   const [loaded, setLoaded] = useState(false);
   const [rejecting, setRejecting] = useState(false);
-  const {invitationsRejectPageJson: {title, subTitle}} = data;
+  const {invitationsRejectPageJson: {title, notFoundText, rejectedText, rejectText, rejectCTALabel}} = data;
   const titleStr = title || "Reject invitation"
-  const subtitleStr = subTitle || "To reject please click on the button below."
+  const rejectStr = rejectText || "To reject please click on the button below."
+  const rejectCTA = rejectCTALabel || "Reject"
+  const notFoundStr = notFoundText || "Invitation not found."
+  const rejectedStr = rejectedText || "Invitation has already been rejected."
 
   useEffect(() => {
     setLoaded(false);
@@ -37,8 +40,7 @@ const InvitationsRejectPage = ({data, location, invitationToken, invitation, loa
     if (!invitationToken) {
       return (
         <>
-          <h1>Invitation</h1>
-          <div>Missing invitation token.</div>
+          <div>Missing token.</div>
         </>
       );
     }
@@ -46,25 +48,22 @@ const InvitationsRejectPage = ({data, location, invitationToken, invitation, loa
       if (!invitation) {
         return (
           <>
-            <h1>Invitation</h1>
-            <div>Invitation not found.</div>
+            <div>{notFoundStr}</div>
           </>
         );
       } else {
         if (invitation.status === 'Rejected') {
           return (
             <>
-              <h1>Invitation</h1>
-              <div>Invitation has already been rejected.</div>
+              <div>{rejectedStr}</div>
             </>
           )
         } else {
           return (
             <>
-              <h1>{titleStr}</h1>
-              <div>{subtitleStr}</div>
+              <div>{rejectStr}</div>
               <button className="button is-large" onClick={rejectInvitation} disabled={rejecting}>
-                Reject Invitation
+                {rejectCTA}
               </button>
             </>
           )
@@ -81,6 +80,7 @@ const InvitationsRejectPage = ({data, location, invitationToken, invitation, loa
     <Layout location={location}>
       <div className={`container ${styles.container}`}>
         <div className={styles.wrapper}>
+          <h1>{titleStr}</h1>
           {getMessage()}
         </div>
       </div>

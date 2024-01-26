@@ -2,6 +2,9 @@
 module.exports = `
   type InvitationsRejectPageJson implements Node {
     title: String
-    subTitle: String
+    notFoundText: String
+    rejectedText: String
+    rejectText: String
+    rejectCTALabel: String
   }
 `;

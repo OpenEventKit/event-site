@@ -26,7 +26,10 @@ export const appQuery = graphql`
   query {
     invitationsRejectPageJson {
       title
-      subTitle
+      notFoundText
+      rejectedText
+      rejectText
+      rejectCTALabel
     }
   }
 `;

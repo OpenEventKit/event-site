@@ -1,4 +1,8 @@
 {
   "title": "Reject Your Invitation or not",
-  "subTitle": "Be certain.  This is your last chance to purchase this ticket..."
+  "notFoundText": "Invitation not found.",
+  "rejectedText": "Invitation has already been rejected.",
+  "rejectText": "Be certain.  This is your last chance to purchase this ticket...",
+  "rejectCTALabel": "Reject"
+
 }

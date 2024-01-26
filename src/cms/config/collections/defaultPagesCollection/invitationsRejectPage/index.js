@@ -12,12 +12,31 @@ const invitationsRejectPage = {
     stringField({
       label: "Title",
       name: "title",
-      default: "REJECTED thank you"
+      default: "Reject Invitation"
     }),
     stringField({
-      label: "Subtitle",
-      name: "subTitle",
-      required: false
+      label: "Not found text",
+      name: "notFoundText",
+      required: false,
+      default: "Invitation not found."
+    }),
+    stringField({
+      label: "Rejected text",
+      name: "rejectedText",
+      required: false,
+      default: "Invitation has already been rejected."
+    }),
+    stringField({
+      label: "Reject text",
+      name: "rejectText",
+      required: false,
+      default: "To reject please click on the button below."
+    }),
+    stringField({
+      label: "Reject CTA label",
+      name: "rejectCTALabel",
+      required: false,
+      default: "Reject Invitation"
     }),
   ]
 };
