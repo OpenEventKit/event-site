@@ -9,29 +9,34 @@ module.exports = `
     alt: String
     link: String
   }
-  type MarketingPageMasonry {
+  type MarketingPageMasonryItem {
+    display: Boolean
     placement: String
     size: Int
     images: [LinkImageWithAlt]
   }
-  type MarketingPageLeftColumnTextWidget {
+  type MarketingPageMasonry {
     display: Boolean
-    content: String
+    items: [MarketingPageMasonryItem]
   }
-  type MarketingPageLeftColumnWidget {
+  type MarketingPageWidget {
     display: Boolean
     title: String
   }
-  type MarketingPageLeftColumnImageWidget {
+  type MarketingPageTextWidget {
+    display: Boolean
+    content: String
+  }
+  type MarketingPageImageWidget {
     display: Boolean
     title: String
     image: ImageWithAlt
   }
-  type MarketingPageLeftColumn {
-    text: MarketingPageLeftColumnTextWidget
-    schedule: MarketingPageLeftColumnWidget
-    disqus: MarketingPageLeftColumnWidget
-    image: MarketingPageLeftColumnImageWidget
+  type MarketingPageWidgets {
+    text: MarketingPageTextWidget
+    image: MarketingPageImageWidget
+    schedule: MarketingPageWidget
+    disqus: MarketingPageWidget
   }
   type MarketingPageCountdown {
     display: Boolean
@@ -57,9 +62,9 @@ module.exports = `
   }
   type MarketingPageJson implements Node {
     hero: MarketingPageHero
-    leftColumn: MarketingPageLeftColumn
     countdown: MarketingPageCountdown
+    widgets: MarketingPageWidgets
+    masonry: MarketingPageMasonry
     eventRedirect: Int
-    masonry: [MarketingPageMasonry]
   }
 `;

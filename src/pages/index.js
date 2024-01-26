@@ -54,7 +54,7 @@ export const marketingPageQuery = graphql`
         display
         text
       }
-      leftColumn {
+      widgets {
         text {
           content
           display
@@ -84,24 +84,27 @@ export const marketingPageQuery = graphql`
           display
         }
       }
-      eventRedirect
       masonry {
-        placement
-        size
-        images {
-          src {
-            childImageSharp {
-              gatsbyImageData (
-                quality: 100
-                placeholder: BLURRED
-                layout: FULL_WIDTH
-              )
+        display
+        items {
+          placement
+          size
+          images {
+            src {
+              childImageSharp {
+                gatsbyImageData (
+                  quality: 100
+                  placeholder: BLURRED
+                  layout: FULL_WIDTH
+                )
+              }
             }
+            alt
+            link
           }
-          alt
-          link
         }
       }
+      eventRedirect
     }
   }
 `;

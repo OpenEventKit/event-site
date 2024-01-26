@@ -116,7 +116,7 @@ const marketingPage = {
       name: "countdown",
       fields: [
         booleanField({
-          label: "Should Display?",
+          label: "Display",
           name: "display",
           required: false
         }),
@@ -128,7 +128,7 @@ const marketingPage = {
     }),
     objectField({
       label: "Widgets",
-      name: "leftColumn",
+      name: "widgets",
       fields: [
         objectField({
           label: "Text",
@@ -196,41 +196,52 @@ const marketingPage = {
         })
       ]
     }),
+    objectField({
+      label: "Masonry",
+      name: "masonry",
+      fields: [
+        booleanField({
+          label: "Display",
+          name: "display",
+          required: false
+        }),
+        listField({
+          label: "Items",
+          name: "items",
+          fields: [
+            stringField({
+              label: "Placement",
+              name: "placement",
+              required: false
+            }),
+            selectField({
+              label: "Size",
+              name: "size",
+              options: [
+                selectOption({
+                  label: "Single",
+                  value: 1
+                }),
+                selectOption({
+                  label: "Double",
+                  value: 2
+                })
+              ]
+            }),
+            linkImagesField({
+              label: "Images",
+              name: "images",
+              imageRequired: true
+            })
+          ]
+        })
+      ]
+    }),
     numberField({
       label: "Redirect to Event",
       name: "eventRedirect",
       required: false,
       hint: "User will be redirected to this event after login"
-    }),
-    listField({
-      label: "Masonry",
-      name: "masonry",
-      fields: [
-        stringField({
-          label: "Placement",
-          name: "placement",
-          required: false
-        }),
-        selectField({
-          label: "Size",
-          name: "size",
-          options: [
-            selectOption({
-              label: "Single",
-              value: 1
-            }),
-            selectOption({
-              label: "Double",
-              value: 2
-            })
-          ]
-        }),
-        linkImagesField({
-          label: "Images",
-          name: "images",
-          imageRequired: true
-        })
-      ]
     })
   ]
 };
