@@ -14,7 +14,7 @@ import {doLogout} from "openstack-uicore-foundation/lib/security/actions"
 import {getEnvVariable, SUMMIT_API_BASE_URL, OAUTH2_CLIENT_ID, REGISTRATION_BASE_URL, SUPPORT_EMAIL} from "../utils/envVariables"
 import {getUserProfile, setPasswordlessLogin, setUserOrder, checkOrderData} from "../actions/user-actions";
 import {getThirdPartyProviders} from "../actions/base-actions";
-import {formatThirdPartyProviders} from "../utils/loginUtils";
+import { validateIdentityProviderButtons } from "../utils/loginUtils";
 import Swal from "sweetalert2";
 import {checkRequireExtraQuestionsByAttendee} from "../actions/user-actions";
 import {userHasAccessLevel, VirtualAccessLevel} from "../utils/authorizedGroups";
@@ -22,32 +22,33 @@ import {userHasAccessLevel, VirtualAccessLevel} from "../utils/authorizedGroups"
 import { getExtraQuestions } from "../actions/summit-actions";
 
 import useMarketingSettings, { MARKETING_SETTINGS_KEYS }  from "@utils/useMarketingSettings";
+import useSiteSettings from "@utils/useSiteSettings";
 import { SentryFallbackFunction } from "./SentryErrorComponent";
 
-import styles from "../styles/marketing-hero.module.scss"
+import styles from "../styles/marketing-hero.module.scss";
 
 const RegistrationLiteComponent = ({
-                                       registrationProfile,
-                                       userProfile,
-                                       attendee,
-                                       getThirdPartyProviders,
-                                       thirdPartyProviders,
-                                       getUserProfile,
-                                       setPasswordlessLogin,
-                                       setUserOrder,
-                                       checkOrderData,
-                                       loadingProfile,
-                                       loadingIDP,
-                                       summit,
-                                       colorSettings,
-                                       marketingPageSettings,
-                                       allowsNativeAuth,
-                                       allowsOtpAuth,
-                                       checkRequireExtraQuestionsByAttendee,
-                                       getExtraQuestions,
-                                       children,
-                                       ignoreAutoOpen
-                                   }) => {
+   registrationProfile,
+   userProfile,
+   attendee,
+   getThirdPartyProviders,
+   availableThirdPartyProviders,
+   getUserProfile,
+   setPasswordlessLogin,
+   setUserOrder,
+   checkOrderData,
+   loadingProfile,
+   loadingIDP,
+   summit,
+   colorSettings,
+   marketingPageSettings,
+   allowsNativeAuth,
+   allowsOtpAuth,
+   checkRequireExtraQuestionsByAttendee,
+   getExtraQuestions,
+   children,
+   ignoreAutoOpen
+}) => {
     const [isActive, setIsActive] = useState(false);
     const [initialEmailValue, setInitialEmailValue] = useState("");
 
@@ -62,8 +63,8 @@ const RegistrationLiteComponent = ({
     }, []);
 
     useEffect(() => {
-        if (!thirdPartyProviders.length) getThirdPartyProviders();
-    }, [thirdPartyProviders]);
+        if (!availableThirdPartyProviders.length) getThirdPartyProviders();
+    }, [availableThirdPartyProviders]);
 
     const getBackURL = () => {
         let backUrl = "/#registration=1";
@@ -122,13 +123,15 @@ const RegistrationLiteComponent = ({
     const orderCompleteButton = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteOrderCompleteButton);
     const noAllowedTicketsMessage = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteNoAllowedTicketsMessage);
 
+    const siteSettings = useSiteSettings();
+
     const widgetProps = {
         apiBaseUrl: getEnvVariable(SUMMIT_API_BASE_URL),
         clientId: getEnvVariable(OAUTH2_CLIENT_ID),
         summitData: summit,
         profileData: registrationProfile,
         marketingData: colorSettings,
-        loginOptions: formatThirdPartyProviders(thirdPartyProviders),
+        loginOptions: validateIdentityProviderButtons(siteSettings?.identityProviderButtons, availableThirdPartyProviders),
         loading: loadingProfile || loadingIDP,
         // only show info if its not a recent purchase
         ticketOwned: userProfile?.summit_tickets?.length > 0,
@@ -219,22 +222,19 @@ RegistrationLiteComponent.propTypes = {
     ignoreAutoOpen: PropTypes.bool,
 };
 
-
-const mapStateToProps = ({userState, summitState, settingState}) => {
-    return ({
-        registrationProfile: userState.idpProfile,
-        userProfile: userState.userProfile,
-        attendee: userState.attendee,
-        loadingProfile: userState.loading,
-        loadingIDP: userState.loadingIDP,
-        thirdPartyProviders: summitState.third_party_providers,
-        allowsNativeAuth: summitState.allows_native_auth,
-        allowsOtpAuth: summitState.allows_otp_auth,
-        summit: summitState.summit,
-        colorSettings: settingState.colorSettings,
-        marketingPageSettings: settingState.marketingPageSettings
-    })
-};
+const mapStateToProps = ({userState, summitState, settingState}) => ({
+    registrationProfile: userState.idpProfile,
+    userProfile: userState.userProfile,
+    attendee: userState.attendee,
+    loadingProfile: userState.loading,
+    loadingIDP: userState.loadingIDP,
+    availableThirdPartyProviders: summitState.third_party_providers,
+    allowsNativeAuth: summitState.allows_native_auth,
+    allowsOtpAuth: summitState.allows_otp_auth,
+    summit: summitState.summit,
+    colorSettings: settingState.colorSettings,
+    marketingPageSettings: settingState.marketingPageSettings
+});
 
 export default connect(mapStateToProps, {
     getThirdPartyProviders,

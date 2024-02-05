@@ -44,28 +44,24 @@ export const onClientEntry = () => {
       },
       release: process.env.GATSBY_SENTRY_RELEASE,
       integrations: [
-
-          new RewriteFramesIntegration
-          (
-          {
-                  iteratee: (frame) => {
-                    // @see https://github.com/getsentry/sentry-javascript/blob/f46f5660114ee625af6e4db895565ae4a36558ae/packages/integrations/src/rewriteframes.ts#L70
-                    // rewrite frames to remove the dynamic hash version to match the abs_path
-                    if (!frame.filename) {
-                      return frame;
-                    }
-                    const isComponentFrame = /component---src-pages-(\w*)-js(-\w*).js/.test(frame.filename);
-                    if(isComponentFrame){
-                      frame.filename = frame.filename.replace(/(component---src-pages-(\w*)-js)(-\w*).js$/,'$1.js')
-                    }
-                    const isAppFrame = /app(-\w*).js/.test(frame.filename);
-                    if(isAppFrame){
-                      frame.filename = frame.filename.replace(/app(-\w*).js$/,'app.js')
-                    }
-                    return frame;
-                  }
+        new RewriteFramesIntegration({
+          iteratee: (frame) => {
+            // @see https://github.com/getsentry/sentry-javascript/blob/f46f5660114ee625af6e4db895565ae4a36558ae/packages/integrations/src/rewriteframes.ts#L70
+            // rewrite frames to remove the dynamic hash version to match the abs_path
+            if (!frame.filename) {
+              return frame;
+            }
+            const isComponentFrame = /component---src-pages-(\w*)-js(-\w*).js/.test(frame.filename);
+            if(isComponentFrame){
+              frame.filename = frame.filename.replace(/(component---src-pages-(\w*)-js)(-\w*).js$/,'$1.js')
+            }
+            const isAppFrame = /app(-\w*).js/.test(frame.filename);
+            if(isAppFrame){
+              frame.filename = frame.filename.replace(/app(-\w*).js$/,'app.js')
+            }
+            return frame;
           }
-        ),
+        }),
         new Sentry.Replay()
       ],
     });

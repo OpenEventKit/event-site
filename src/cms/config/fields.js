@@ -34,12 +34,14 @@ export const numberField = ({
   label = "Number",
   name = "number",
   required = false,
+  valueType,
   ...rest
 } = {}) => ({
   label,
   name,
   required,
   widget: "number",
+  ...(valueType ? { value_type: valueType } : {}),
   ...rest
 });
 

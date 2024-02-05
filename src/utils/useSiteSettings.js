@@ -28,6 +28,16 @@ const siteSettingsQuery = graphql`
           allowClick
         }
       }
+      identityProviderButtons {
+        buttonColor
+        buttonBorderColor
+        providerLabel
+        providerParam
+        providerLogo {
+          publicURL
+        }
+        providerLogoSize
+      }
     }
   }
 `;

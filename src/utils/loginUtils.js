@@ -1,20 +1,55 @@
-import { getEnvVariable, AUTHORIZED_DEFAULT_PATH } from './envVariables'
+import {
+  getEnvVariable,
+  AUTHORIZED_DEFAULT_PATH
+} from "./envVariables";
 
-export const getDefaultLocation = (eventRedirect, hasVirtualAccess = false) => {
-    const defaultRedirect = hasVirtualAccess ? '/a/' : '/';
-    return eventRedirect ? `/a/event/${eventRedirect}` : getEnvVariable(AUTHORIZED_DEFAULT_PATH) ? getEnvVariable(AUTHORIZED_DEFAULT_PATH) : defaultRedirect;
+export const getDefaultLocation = (
+  eventRedirect,
+  hasVirtualAccess = false
+) => {
+  const defaultRedirect = hasVirtualAccess ? "/a/" : "/";
+  return eventRedirect ? `/a/event/${eventRedirect}` : getEnvVariable(AUTHORIZED_DEFAULT_PATH) ? getEnvVariable(AUTHORIZED_DEFAULT_PATH) : defaultRedirect;
 }
 
-export const formatThirdPartyProviders = (providersArray) => {
-    const providers = [
-        { button_color: '#082238', provider_label: 'Sign in with FNid', provider_param: '', provider_logo: '../img/logo_fn.svg', provider_logo_size: 35 },
-    ];
+const buttonPropertyMapping = {
+  buttonColor: "button_color",
+  buttonBorderColor: "button_border_color",
+  providerLabel: "provider_label",
+  providerParam: "provider_param",
+  providerLogo: "provider_logo",
+  providerLogoSize: "provider_logo_size"
+};
 
-    const thirdPartyProviders = [
-        { button_color: '#1877F2', provider_label: 'Login with Facebook', provider_param: 'facebook', provider_logo: '../img/third-party-idp/logo_facebook.svg', provider_logo_size: 22 },
-        { button_color: '#0A66C2', provider_label: 'Sign in with LinkedIn', provider_param: 'linkedin', provider_logo: '../img/third-party-idp/logo_linkedin.svg', provider_logo_size: 21 },
-        { button_border_color:'var(--color_input_border_color)', button_color: '#000000', provider_label: 'Sign in with Apple', provider_param: 'apple', provider_logo: '../img/third-party-idp/logo_apple.svg', provider_logo_size: 19 }
-    ];
+const mapIdentityProviderButtonProperties = (button) => {
+  const formattedButton = {};
+  for (const key in button) {
+    const mappedKey = buttonPropertyMapping[key] || key;
+    formattedButton[mappedKey] = key === "providerLogo" ? button[key]?.publicURL : button[key];
+  }
+  return formattedButton;
+};
 
-    return [...providers, ...thirdPartyProviders.filter(p => providersArray && providersArray.includes(p.provider_param))];
+/**
+ * Validates identity provider buttons provided in CMS with those social providers available through IDP API.
+ * Filters out invalid or disabled buttons.
+ * @param {Array} indentityProviderButtons Array of identity provider buttons provided by CMS.
+ * @param {Array} availableSocialProviders Array of available social providers provided by IDP API.
+ * @returns {Array} Filtered array of identity provider buttons.
+ */
+export const validateIdentityProviderButtons = (
+  identityProviderButtons,
+  availableSocialProviders
+) => {
+  if (!identityProviderButtons || !availableSocialProviders) {
+    return [];
+  }
+  const filteredButtons = identityProviderButtons
+    .map(mapIdentityProviderButtonProperties)
+    .filter(button =>
+      // default identity provider has no providerParam set
+      !button[buttonPropertyMapping.providerParam] ||
+      availableSocialProviders.includes(button[buttonPropertyMapping.providerParam]) 
+    );
+
+  return filteredButtons;
 };
