@@ -39,8 +39,6 @@ const IdentityProviderParamControl = ({
     fetchOptions();
   }, [field]);
 
-  const handleChange = (e, t) => onChange(e, t) ?? "";
-
   if (loading) {
     return <div>Loading options...</div>;
   }
@@ -63,7 +61,7 @@ const IdentityProviderParamControl = ({
     <SelectControl
       forID={forID}
       value={value || ""}
-      onChange={handleChange}
+      onChange={onChange}
       classNameWrapper={classNameWrapper}
       setActiveStyle={setActiveStyle}
       setInactiveStyle={setInactiveStyle}
