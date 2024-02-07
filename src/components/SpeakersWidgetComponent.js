@@ -9,12 +9,14 @@ import 'speakers-widget/dist/index.css';
 
 import { SentryFallbackFunction } from "./SentryErrorComponent";
 
-const SpeakersWidgetComponent = ({now, colorSettings, allEvents, speakers, ...props}) => {
+const SpeakersWidgetComponent = ({now, colorSettings, allEvents, speakers, schedules, ...props}) => {
+    const scheduleState = schedules?.find( s => s.key === 'schedule-main');
+
     const widgetProps = {
         date: now,
         // featured: true,
         speakersData: speakers,
-        eventsData: allEvents,
+        eventsData: scheduleState.allEvents,
         marketingData: colorSettings,
         ...props
     };
@@ -30,10 +32,10 @@ const SpeakersWidgetComponent = ({now, colorSettings, allEvents, speakers, ...pr
     )
 }
 
-const mapStateToProps = ({ clockState, summitState, allSchedulesState, speakerState, settingState }) => ({
+const mapStateToProps = ({ clockState, allSchedulesState, speakerState, settingState }) => ({
     now: clockState.nowUtc,
     colorSettings: settingState.colorSettings,
-    allEvents: allSchedulesState.allEvents,
+    schedules: allSchedulesState.schedules,
     speakers: speakerState.speakers
 });
 

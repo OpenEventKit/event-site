@@ -586,6 +586,7 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                             yourSchedule={true}
                             showNav={true}
                             eventCount={10}
+                            schedKey="my-schedule-main"
                         />
                     </div>
                 </div>
