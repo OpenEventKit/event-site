@@ -21,9 +21,18 @@ module.exports = `
     schedule: Schedule
     chat: Chat
   }
+  type IdentityProviderButton {
+    buttonColor: String
+    buttonBorderColor: String
+    providerLabel: String
+    providerParam: String
+    providerLogo: File @fileByRelativePath
+    providerLogoSize: Float
+  }
   type SiteSettingsJson implements Node {
     siteMetadata: SiteMetadata
     favicon: Favicon
     widgets: Widgets
+    identityProviderButtons: [IdentityProviderButton]
   }
 `;

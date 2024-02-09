@@ -1,11 +1,13 @@
 import {
   booleanField,
+  numberField,
   stringField,
   textField,
   imageField,
   selectField,
   selectOption,
   objectField,
+  listField,
   fileField
 } from "../../../fields";
 
@@ -14,12 +16,17 @@ import {
   CMS_FONT_FILE_PATH
 } from "@utils/filePath";
 
+import {
+  getEnvVariable,
+  IDP_BASE_URL
+} from "@utils/envVariables";
+
 const FONT_FORMATS = {
   truetype: "ttf",
   opentype: "otf",
   woff: "woff",
   woff2: "woff2",
-  eot: "eot",
+  eot: "eot"
 };
 
 const getFontFormatOptions = () =>
@@ -169,6 +176,47 @@ const siteSettings = {
         }),
       ]
     }),
+    listField({
+      label: "Identity Provider Buttons",
+      name: "identityProviderButtons",
+      summary: "{{providerLabel}}",
+      fields: [
+        stringField({
+          label: "Button Color",
+          name: "buttonColor",
+          required: true
+        }),
+        stringField({
+          label: "Button Border Color",
+          name: "buttonBorderColor"
+        }),
+        stringField({
+          label: "Provider Label",
+          name: "providerLabel",
+          required: true
+        }),
+        {
+          widget: "identityProviderParam",
+          label: "Provider Param",
+          name: "providerParam",
+          endpoint: `${getEnvVariable(IDP_BASE_URL)}/oauth2/.well-known/openid-configuration`,
+          required: false
+        },
+        imageField({
+          label: "Provider Logo",
+          name: "providerLogo",
+          required: true
+        }),
+        numberField({
+          label: "Provider Logo Size",
+          name: "providerLogoSize",
+          default: 20,
+          valueType: "float",
+          min: 0,
+          required: true
+        })
+      ]
+    })
   ]
 };
 

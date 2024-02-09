@@ -9,7 +9,7 @@ import FragmentParser from "openstack-uicore-foundation/lib/utils/fragment-parse
 import { doLogin, passwordlessStart } from 'openstack-uicore-foundation/lib/security/methods'
 import { setPasswordlessLogin, setUserOrder, checkOrderData } from "../actions/user-actions";
 import { getThirdPartyProviders } from "../actions/base-actions";
-import { formatThirdPartyProviders } from "../utils/loginUtils";
+import { validateIdentityProviderButtons } from "../utils/loginUtils";
 import 'summit-registration-lite/dist/index.css';
 import styles from '../styles/login-button.module.scss'
 import PropTypes from 'prop-types'
@@ -19,9 +19,11 @@ import { PHASES } from "@utils/phasesUtils";
 import { getDefaultLocation } from "@utils/loginUtils";
 import { userHasAccessLevel, VirtualAccessLevel } from "../utils/authorizedGroups";
 
+import useSiteSettings from "@utils/useSiteSettings";
+
 const AuthComponent = ({
     getThirdPartyProviders,
-    thirdPartyProviders,
+    availableThirdPartyProviders,
     setPasswordlessLogin,
     summit,
     marketingPageSettings,
@@ -61,8 +63,8 @@ const AuthComponent = ({
     }, []);
 
     useEffect(() => {
-        if (!thirdPartyProviders.length) getThirdPartyProviders();
-    }, [thirdPartyProviders]);
+        if (!availableThirdPartyProviders.length) getThirdPartyProviders();
+    }, [availableThirdPartyProviders]);
 
     const getBackURL = (encode = true) => {
         let backUrl = location.state?.backUrl
@@ -131,8 +133,10 @@ const AuthComponent = ({
         });
     }
 
+    const siteSettings = useSiteSettings();
+
     const loginComponentProps = {
-        loginOptions: formatThirdPartyProviders(thirdPartyProviders),
+        loginOptions: validateIdentityProviderButtons(siteSettings?.identityProviderButtons, availableThirdPartyProviders),
         login: (provider) => onClickLogin(provider),
         getLoginCode: (email) => sendCode(email),
         allowsNativeAuth: allowsNativeAuth,
@@ -210,7 +214,7 @@ const mapStateToProps = ({ userState, summitState, settingState, clockState, log
     return ({
         loadingProfile: userState.loading,
         loadingIDP: userState.loadingIDP,
-        thirdPartyProviders: summitState.third_party_providers,
+        availableThirdPartyProviders: summitState.third_party_providers,
         allowsNativeAuth: summitState.allows_native_auth,
         allowsOtpAuth: summitState.allows_otp_auth,
         summit: summitState.summit,

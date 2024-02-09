@@ -72,22 +72,6 @@ const plugins = [
     }
   },
   {
-    // Add image assets before markdown or json files
-    resolve: "gatsby-source-filesystem",
-    options: {
-      path: `${__dirname}/static/img`,
-      name: "uploads"
-    }
-  },
-  {
-    // Add image assets before markdown or json files
-    resolve: "gatsby-source-filesystem",
-    options: {
-      path: `${__dirname}/src/img`,
-      name: "images"
-    }
-  },
-  {
     // Add font assets before markdown or json files
     resolve: "gatsby-source-filesystem",
     options: {
