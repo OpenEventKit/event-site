@@ -32,7 +32,7 @@ const UpcomingEventsComponent = ({
 
   const componentProps = {
     defaultImage: defaultImage,
-    eventsData: scheduleState.allEvents,
+    eventsData: scheduleState?.allEvents || [],
     summitData: summit,
     marketingData: colorSettings,
     userProfile: userProfile,

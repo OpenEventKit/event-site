@@ -26,7 +26,7 @@ const LiveEventWidgetComponent = ({
   const widgetProps = {
     title: "",
     defaultImage: defaultImage,
-    eventsData: scheduleState.allEvents,
+    eventsData: scheduleState?.allEvents || [],
     summitData: summit,
     marketingData: colorSettings,
     ...rest

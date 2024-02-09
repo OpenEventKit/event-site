@@ -61,7 +61,7 @@ export const filterEventsByTags = (events) => {
 
 export const filterEventsByTicket = (events, user) => {
   const assignedTickets = user?.summit_tickets || [];
-  const ticketTypeIds = uniq(assignedTickets.map(t => t.ticket_type_id));
+  const ticketTypeIds = uniq(assignedTickets.map(t => t.ticket_type?.id));
 
   return events.filter(ev => {
     const hasEventRestriction = ev.allowed_ticket_types.length > 0;

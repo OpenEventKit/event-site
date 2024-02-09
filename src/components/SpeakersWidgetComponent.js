@@ -16,7 +16,7 @@ const SpeakersWidgetComponent = ({now, colorSettings, allEvents, speakers, sched
         date: now,
         // featured: true,
         speakersData: speakers,
-        eventsData: scheduleState.allEvents,
+        eventsData: scheduleState?.allEvents || [],
         marketingData: colorSettings,
         ...props
     };
