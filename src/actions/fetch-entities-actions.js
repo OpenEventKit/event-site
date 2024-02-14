@@ -27,6 +27,32 @@ export const fetchEventById = async (summitId, eventId, accessToken = null) => {
 }
 
 /**
+ * @param summitId
+ * @param eventTypeId
+ * @param accessToken
+ * @returns {Promise<Response>}
+ */
+export const fetchEventTypeById = async (summitId, eventTypeId, accessToken = null) => {
+
+    let apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/public/v1/summits/${summitId}/event-types/${eventTypeId}`);
+    if(accessToken){
+        apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/v1/summits/${summitId}/event-types/${eventTypeId}`);
+        apiUrl.addQuery('access_token', accessToken);
+    }
+
+    apiUrl.addQuery('evict_cache', 1);
+    return fetch(apiUrl.toString(), {
+        method: 'GET'
+    }).then(async (response) => {
+        if (response.status === 200) {
+            return await response.json();
+        }
+        return null;
+    });
+}
+
+
+/**
  *
  * @param summitId
  * @param locationId
