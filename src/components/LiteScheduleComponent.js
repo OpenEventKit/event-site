@@ -21,16 +21,19 @@ const LiteScheduleComponent = ({
    page,
    addToSchedule,
    removeFromSchedule,
-   allScheduleEvents,
+   schedules,
    summit,
+   schedKey = 'schedule-main',
    ...rest
 }) => {
   const wrapperClass = page === 'marketing-site' ? 'schedule-container-marketing' : 'schedule-container';
   const { getSettingByKey } = useMarketingSettings();
   const defaultImage = getSettingByKey(MARKETING_SETTINGS_KEYS.schedultDefaultImage);
+  const scheduleState = schedules?.find( s => s.key === schedKey);
+
   const componentProps = {
     defaultImage: defaultImage,
-    eventsData: allScheduleEvents,
+    eventsData: scheduleState?.allEvents || [],
     summitData: summit,
     marketingData: colorSettings,
     userProfile: userProfile,
@@ -60,7 +63,7 @@ const LiteScheduleComponent = ({
 
 const mapStateToProps = ({userState, summitState, allSchedulesState, settingState}) => ({
   userProfile: userState.userProfile,
-  allScheduleEvents: allSchedulesState.allScheduleEvents,
+  schedules: allSchedulesState.schedules,
   summit: summitState.summit,
   colorSettings: settingState.colorSettings
 });

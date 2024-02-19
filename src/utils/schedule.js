@@ -4,6 +4,7 @@ import { epochToMomentTimeZone , getFromLocalStorage, putOnLocalStorage }
 import { isString } from "lodash";
 import { getEnvVariable, SCHEDULE_EXCLUDING_TAGS } from "./envVariables";
 import {getUserAccessLevelIds, isAuthorizedUser} from './authorizedGroups';
+import {uniq} from "lodash";
 
 const groupByDay = (events) => {
   let groupedEvents = [];
@@ -58,6 +59,19 @@ export const filterEventsByTags = (events) => {
       : events;
 };
 
+export const filterEventsByTicket = (events, user) => {
+  const assignedTickets = user?.summit_tickets || [];
+  const ticketTypeIds = uniq(assignedTickets.map(t => t.ticket_type?.id));
+
+  return events.filter(ev => {
+    const hasEventRestriction = ev.allowed_ticket_types.length > 0;
+    const typeAllowed = ev.type.allowed_ticket_types.length === 0 || ev.type.allowed_ticket_types.some(att => ticketTypeIds.includes(att));
+    const eventAllowed = !hasEventRestriction || ev.allowed_ticket_types.some(att => ticketTypeIds.includes(att));
+
+    return hasEventRestriction ? eventAllowed : typeAllowed;
+  });
+};
+
 const filterMyEvents = (myEvents, events) => {
   const myEventsIds = myEvents?.map(ev => ev.id) || [];
   return events.filter(ev =>  myEventsIds.includes(ev.id));
@@ -74,6 +88,8 @@ export const preFilterEvents = (events, filters, summitTimezone, userProfile, fi
   if (filterByAccessLevel) {
     result = filterEventsByAccessLevel(result, userProfile);
   }
+
+  result = filterEventsByTicket(result, userProfile);
 
   return getFilteredEvents(result, filters, summitTimezone, hidePast);
 };

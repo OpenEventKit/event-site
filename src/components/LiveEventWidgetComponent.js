@@ -13,7 +13,7 @@ import useMarketingSettings, { MARKETING_SETTINGS_KEYS } from "@utils/useMarketi
 import { SentryFallbackFunction } from "./SentryErrorComponent";
 
 const LiveEventWidgetComponent = ({
-  allEvents,
+  schedules,
   summit,
   colorSettings,
   className = "live-event-container",
@@ -21,10 +21,12 @@ const LiveEventWidgetComponent = ({
 }) => {
   const { getSettingByKey } = useMarketingSettings();
   const defaultImage = getSettingByKey(MARKETING_SETTINGS_KEYS.schedultDefaultImage);
+  const scheduleState = schedules?.find( s => s.key === 'schedule-main');
+
   const widgetProps = {
     title: "",
     defaultImage: defaultImage,
-    eventsData: allEvents,
+    eventsData: scheduleState?.allEvents || [],
     summitData: summit,
     marketingData: colorSettings,
     ...rest
@@ -41,7 +43,7 @@ const LiveEventWidgetComponent = ({
 
 const mapStateToProps = ({ summitState, allSchedulesState, settingState }) => ({
   summit: summitState.summit,
-  allEvents: allSchedulesState.allEvents,
+  schedules: allSchedulesState.schedules,
   colorSettings: settingState.colorSettings
 });
 

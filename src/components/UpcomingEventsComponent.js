@@ -21,16 +21,18 @@ const UpcomingEventsComponent = ({
   addToSchedule,
   removeFromSchedule,
   colorSettings,
-  allEvents,
+  schedules,
   summit,
   ...rest
 }) => {
   const wrapperClass = page === "marketing-site" ? "schedule-container-marketing" : "schedule-container";
   const { getSettingByKey } = useMarketingSettings();
   const defaultImage = getSettingByKey(MARKETING_SETTINGS_KEYS.schedultDefaultImage);
+  const scheduleState = schedules?.find( s => s.key === 'schedule-main');
+
   const componentProps = {
     defaultImage: defaultImage,
-    eventsData: allEvents,
+    eventsData: scheduleState?.allEvents || [],
     summitData: summit,
     marketingData: colorSettings,
     userProfile: userProfile,
@@ -62,7 +64,7 @@ const mapStateToProps = ({ userState, summitState, allSchedulesState, settingSta
   userProfile: userState.userProfile,
   colorSettings: settingState.colorSettings,
   summit: summitState.summit,
-  allEvents: allSchedulesState.allEvents,
+  schedules: allSchedulesState.schedules,
 });
 
 export default connect(mapStateToProps, {

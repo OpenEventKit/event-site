@@ -131,6 +131,7 @@ export const LobbyPageTemplate = class extends React.Component {
                 yourSchedule={true}
                 showNav={true}
                 eventCount={10}
+                schedKey="my-schedule-main"
               />
               <AdvertiseComponent section="lobby" column="right"/>
             </div>
