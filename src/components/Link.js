@@ -24,16 +24,12 @@ const Link = ({ children, to, activeClassName, partiallyActive, ...other }) => {
     );
   }
   if (email) {
-    const emailPrefix = /^mailto:/.test(to);
-    if (emailPrefix) {
-      return <a href={to}>{children}</a>
-    } else {
-      return (
-        <a href={`mailto:${to}`} {...other}>
+    const href = /^mailto:/.test(to) ? to : `mailto:${to}`;
+    return (
+        <a href={href} {...other}>
           {children}
         </a>
       );
-    }
   }
   return (
     <a href={to} {...other} target="_blank" rel="noreferrer">
