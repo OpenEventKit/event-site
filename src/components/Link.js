@@ -4,6 +4,7 @@ import { Link as GatsbyLink } from "gatsby";
 // and partiallyActive, destructure the prop here and
 // pass it only to GatsbyLink
 const Link = ({ children, to, activeClassName, partiallyActive, ...other }) => {
+  console.log('LINK');
   // Tailor the following test to your environment.
   // This example assumes that any internal link (intended for Gatsby)
   // will start with exactly one slash, and that anything else is external.
@@ -24,11 +25,16 @@ const Link = ({ children, to, activeClassName, partiallyActive, ...other }) => {
     );
   }
   if (email) {
-    return (
-      <a href={`mailto:${to}`} {...other}>
-        {children}
-      </a>
-    );
+    const emailPrefix = /^mailto:/.test(to);
+    if (emailPrefix) {
+      return <a href={to}>{children}</a>
+    } else {
+      return (
+        <a href={`mailto:${to}`} {...other}>
+          {children}
+        </a>
+      );
+    }
   }
   return (
     <a href={to} {...other} target="_blank" rel="noreferrer">
