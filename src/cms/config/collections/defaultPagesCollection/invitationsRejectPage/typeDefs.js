@@ -6,5 +6,7 @@ module.exports = `
     rejectedText: String
     rejectText: String
     rejectCTALabel: String
+    alreadyAcceptedInvitationError: String
+    alreadyRejectedInvitationError: String
   }
 `;

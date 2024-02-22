@@ -30,6 +30,8 @@ export const appQuery = graphql`
       rejectedText
       rejectText
       rejectCTALabel
+      alreadyAcceptedInvitationError
+      alreadyRejectedInvitationError
     }
   }
 `;
