@@ -3,5 +3,7 @@
   "notFoundText": "Invitation not found.",
   "rejectedText": "You have rejected your invitation. ",
   "rejectText": "Be certain.  This is your last chance to purchase this ticket...",
-  "rejectCTALabel": "Reject"
+  "rejectCTALabel": "Reject",
+  "alreadyAcceptedInvitationError": "Invitation Already Accepted!",
+  "alreadyRejectedInvitationError": "Invitation Already Rejected!"
 }
