@@ -22,6 +22,7 @@ import axios from "axios";
 import { navigate } from 'gatsby';
 import { customErrorHandler, customBadgeHandler, voidErrorHandler } from '../utils/customErrorHandler';
 import { getEnvVariable, SUMMIT_API_BASE_URL, SUMMIT_ID } from "../utils/envVariables";
+import expiredToken from "../utils/expiredToken";
 
 export const GET_DISQUS_SSO = 'GET_DISQUS_SSO';
 export const GET_USER_PROFILE = 'GET_USER_PROFILE';
@@ -586,7 +587,6 @@ export const doVirtualCheckIn = (attendee) => async (dispatch, getState) => {
   });
 };
 
-
 /**
  * Get invitation by token to allow reject
  * @param token
@@ -594,12 +594,11 @@ export const doVirtualCheckIn = (attendee) => async (dispatch, getState) => {
  */
 export const getInvitation = (token) => async (dispatch) => {
   dispatch(startLoading());
-
   return getRequest(
     createAction(REQUEST_INVITATION),
     createAction(RECEIVE_INVITATION),
     `${window.API_BASE_URL}/api/public/v1/summits/${window.SUMMIT_ID}/registration-invitations/${token}`,
-    customErrorHandler
+    null
   )({})(dispatch)
     .finally(() => dispatch(stopLoading()));
 }
@@ -611,17 +610,13 @@ export const getInvitation = (token) => async (dispatch) => {
  */
 export const rejectInvitation = (token) => async (dispatch) => {
   dispatch(startLoading());
-
   return deleteRequest(
     null,
     createAction(REJECT_INVITATION),
     `${window.API_BASE_URL}/api/public/v1/summits/${window.SUMMIT_ID}/registration-invitations/${token}/reject`,
     {},
-    customErrorHandler
+    null
   )({})(dispatch)
-    .then(() => {
-      //redirect ?
-    })
     .finally(() => dispatch(stopLoading()));
 }
 

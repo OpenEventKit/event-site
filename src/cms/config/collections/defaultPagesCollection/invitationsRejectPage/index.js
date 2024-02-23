@@ -38,8 +38,19 @@ const invitationsRejectPage = {
       required: false,
       default: "Reject Invitation"
     }),
+    stringField({
+      label: "Already Accepted Invitation Error",
+      name: "alreadyAcceptedInvitationError",
+      required: false,
+      default: "This invitation has already been accepted. Please contact the event organizer if you feel this is an error."
+    }),
+    stringField({
+      label: "Already Rejected Invitation Error",
+      name: "alreadyRejectedInvitationError",
+      required: false,
+      default: "This invitation has already been declined. Please contact the event organizer if you feel this is an error."
+    }),
   ]
 };
 
 export default invitationsRejectPage;
-  
