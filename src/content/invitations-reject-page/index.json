@@ -1,9 +1,9 @@
 {
-  "title": "Invitation rejection1",
-  "notFoundText": "Invitation not found.1",
-  "rejectedText": "You have rejected your invitation. 1",
-  "rejectText": "Be certain.  This is your last chance to purchase this ticket...1",
-  "rejectCTALabel": "Reject 1 ",
-  "alreadyAcceptedInvitationError": "Invitation Already Accepted! 1",
-  "alreadyRejectedInvitationError": "Invitation Already Rejected! 1 "
+  "title": "Invitation rejection3",
+  "notFoundText": "Invitation not found.3",
+  "rejectedText": "You have rejected your invitation. 3",
+  "rejectText": "Be certain.  This is your last chance to purchase this ticket...3",
+  "rejectCTALabel": "Reject 3",
+  "alreadyAcceptedInvitationError": "Invitation Already Accepted! 3",
+  "alreadyRejectedInvitationError": "Invitation Already Rejected! 3"
 }
