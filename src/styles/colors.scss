@@ -24,6 +24,8 @@ $color_horizontal_rule_dark: #7B7B7B;
 $color_horizontal_rule_light: #E5E5E5;
 $color_text_input_hints_light:#7B7B7B;
 $color_text_input_hints_dark:#7B7B7B;
+$color_button_background_color:#ffffff;
+$color_button_color:#000000;
 
 :root {
   --color_primary: #{$color_primary};
@@ -45,6 +47,8 @@ $color_text_input_hints_dark:#7B7B7B;
   --color_text_input_hints: #{$color_text_input_hints_light};
   --color_horizontal_rule: #{$color_horizontal_rule_light};
   --color_icon_light: #{$color_icon_light};
+  --color_button_background_color: #{$color_button_background_color};
+  --color_button_color: #{$color_button_color};
 }
 
 html[data-theme="DARK"] {
