@@ -337,7 +337,7 @@ exports.onPreBootstrap = async () => {
   if(siteFonts && Object.keys(siteFonts).length > 0) {
     // Generate the SCSS file
     const scssFontsFile = generateFontFile(siteFonts);
-    if(scssFontsFile) {
+    if (scssFontsFile) {
       const standalone = __dirname === path.resolve();
       let fontFilePath = FONTS_SCSS_FILE_PATH;
       if (!standalone) {
