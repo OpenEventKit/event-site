@@ -29,6 +29,7 @@ const FullSchedule = ({
   const { getSettingByKey } = useMarketingSettings();
   const defaultImage = getSettingByKey(MARKETING_SETTINGS_KEYS.schedultDefaultImage);
   const summitLogoPrint = getSettingByKey(MARKETING_SETTINGS_KEYS.fullScheduleSummitLogoPrint);
+  const moderatorPillColor = getSettingByKey(MARKETING_SETTINGS_KEYS.fullScheduleModeratorPillColor);
   const componentProps = {
     title: "Schedule",
     summit,
@@ -37,6 +38,7 @@ const FullSchedule = ({
     withThumbs: false,
     defaultImage: defaultImage,
     summitLogoPrint: summitLogoPrint ? summitLogoPrint : null,
+    moderatorPillColor: moderatorPillColor ? moderatorPillColor : null,
     showSendEmail: false,
     onStartChat: null,
     shareLink: getShareLink(filters, view),
