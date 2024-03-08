@@ -26,6 +26,7 @@ $color_text_input_hints_light:#7B7B7B;
 $color_text_input_hints_dark:#7B7B7B;
 $color_button_background_color:#ffffff;
 $color_button_color:#000000;
+$color_alerts:#FF0000;
 
 :root {
   --color_primary: #{$color_primary};
@@ -49,6 +50,7 @@ $color_button_color:#000000;
   --color_icon_light: #{$color_icon_light};
   --color_button_background_color: #{$color_button_background_color};
   --color_button_color: #{$color_button_color};
+  --color_alerts: #{$color_alerts};
 }
 
 html[data-theme="DARK"] {
