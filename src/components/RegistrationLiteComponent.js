@@ -158,6 +158,14 @@ const RegistrationLiteComponent = ({
             return checkRequireExtraQuestionsByAttendee(attendee);
         },
         onPurchaseComplete: (order) => {
+
+            if (window != null) {
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                    'event': 'purchase_complete',
+                    'order': order
+                });
+            }
             // check if it"s necessary to update profile
             setUserOrder(order).then(()=> checkOrderData(order));
         },
