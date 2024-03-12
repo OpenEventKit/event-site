@@ -10,6 +10,7 @@
     "@ncwidgets/id": "^0.8.1",
     "@react-pdf/renderer": "^3.1.12",
     "@react-spring/web": "^9.4.3",
+    "@segment/analytics-next": "^1.66.0",
     "@sentry/browser": "^7.39.0",
     "@sentry/cli": "^2.13.0",
     "@sentry/gatsby": "7.39.0",

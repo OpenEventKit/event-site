@@ -25,6 +25,8 @@ import useMarketingSettings, { MARKETING_SETTINGS_KEYS }  from "@utils/useMarket
 import useSiteSettings from "@utils/useSiteSettings";
 import { SentryFallbackFunction } from "./SentryErrorComponent";
 
+import { analytics } from "@utils/analytics";
+
 import styles from "../styles/marketing-hero.module.scss";
 
 const RegistrationLiteComponent = ({
@@ -158,6 +160,11 @@ const RegistrationLiteComponent = ({
             return checkRequireExtraQuestionsByAttendee(attendee);
         },
         onPurchaseComplete: (order) => {
+
+            analytics.track("purchase_complete", {
+                order: order
+            });
+
             // check if it"s necessary to update profile
             setUserOrder(order).then(()=> checkOrderData(order));
         },
