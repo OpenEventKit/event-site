@@ -26,10 +26,10 @@ const Link = ({ children, to, activeClassName, partiallyActive, ...other }) => {
   if (email) {
     const href = /^mailto:/.test(to) ? to : `mailto:${to}`;
     return (
-        <a href={href} {...other}>
-          {children}
-        </a>
-      );
+      <a href={href} {...other}>
+        {children}
+      </a>
+    );
   }
   return (
     <a href={to} {...other} target="_blank" rel="noreferrer">
