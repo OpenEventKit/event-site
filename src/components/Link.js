@@ -24,8 +24,9 @@ const Link = ({ children, to, activeClassName, partiallyActive, ...other }) => {
     );
   }
   if (email) {
+    const href = /^mailto:/.test(to) ? to : `mailto:${to}`;
     return (
-      <a href={`mailto:${to}`} {...other}>
+      <a href={href} {...other}>
         {children}
       </a>
     );
