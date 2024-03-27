@@ -10,8 +10,8 @@ class GoogleTagManagerProvider extends AnalyticsProvider {
     this.dataLayer = (typeof window !== 'undefined' && window.dataLayer) || [];
   }
 
-  gtag = (...args) => {
-    this.dataLayer.push(...args);
+  gtag() {
+    this.dataLayer.push(arguments);
   };
 
   trackEvent = (eventName, eventParams) => {
