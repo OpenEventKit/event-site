@@ -161,7 +161,7 @@ const RegistrationLiteComponent = ({
         },
         onPurchaseComplete: (order) => {
 
-            AnalyticsManager.trackEvent("purchase", { order });
+            AnalyticsManager.trackEvent("purchase_complete", { order });
 
             // check if it"s necessary to update profile
             setUserOrder(order).then(()=> checkOrderData(order));
