@@ -160,9 +160,7 @@ const RegistrationLiteComponent = ({
             return checkRequireExtraQuestionsByAttendee(attendee);
         },
         onPurchaseComplete: (order) => {
-
             AnalyticsManager.trackEvent("purchase_complete", { order });
-
             // check if it"s necessary to update profile
             setUserOrder(order).then(()=> checkOrderData(order));
         },

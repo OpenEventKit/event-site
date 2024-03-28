@@ -1,5 +1,6 @@
 import AnalyticsProvider from "../AnalyticsProvider";
 import { getEnvVariable, GOOGLE_TAGMANAGER_ID } from "@utils/envVariables";
+import { normalizeData } from "@utils/dataNormalization";
 
 class GoogleTagManagerProvider extends AnalyticsProvider {
   constructor() {
@@ -7,7 +8,7 @@ class GoogleTagManagerProvider extends AnalyticsProvider {
     if (!getEnvVariable(GOOGLE_TAGMANAGER_ID)) {
       console.warn("GoogleTagManagerProvider: GOOGLE_TAGMANAGER_ID environment variable is not set. Tracking will be disabled.");
     }
-    this.dataLayer = (typeof window !== 'undefined' && window.dataLayer) || [];
+    this.dataLayer = (typeof window !== "undefined" && window.dataLayer) || [];
   }
 
   gtag() {
@@ -15,7 +16,7 @@ class GoogleTagManagerProvider extends AnalyticsProvider {
   };
 
   trackEvent = (eventName, eventParams) => {
-    this.gtag("event", eventName, eventParams);
+    this.gtag("event", eventName, normalizeData(eventParams));
   };
 
   config = (targetId, additionalConfig) => {
