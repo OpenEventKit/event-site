@@ -68,6 +68,7 @@ const App = ({ isLoggedUser, user, summitPhase, allowClick = true, data }) => {
                   scheduleProps={{
                     title: "My Schedule",
                     showSync: true,
+                    showShare: false,
                     subtitle: <Link to={"/a/schedule"}>Show Schedule</Link>
                   }}
                   schedKey="my-schedule-main"
