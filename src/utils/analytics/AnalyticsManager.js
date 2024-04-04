@@ -1,5 +1,6 @@
 import AnalyticsProvider from "./AnalyticsProvider";
-import GoogleTagManagerProvider from "./providers/GoogleTagManagerProvider";
+import { CustomEventManager, ANALYTICS_TRACK_EVENT } from "../customEvents";
+import { normalizeData } from "@utils/dataNormalization";
 
 class AnalyticsManager {
   constructor(analyticsProvider) {
@@ -7,18 +8,21 @@ class AnalyticsManager {
       throw new Error("An instance of AnalyticsProvider is required.");
     }
     this.analyticsProvider = analyticsProvider;
+    CustomEventManager.addEventListener(ANALYTICS_TRACK_EVENT, this.handleTrackEvent.bind(this));
   }
 
   get provider() {
     return this.analyticsProvider;
   }
 
-  trackEvent(eventName, eventParams) {
-    this.analyticsProvider.trackEvent(eventName, eventParams);
+  handleTrackEvent = (event) => {
+    const { eventName, eventParams } = event.detail;
+    this.trackEvent(eventName, eventParams);
+  }
+
+  trackEvent = (eventName, eventParams) => {
+    this.analyticsProvider.trackEvent(eventName, normalizeData(eventParams));
   }
 }
 
-const googleTagManagerProvider = new GoogleTagManagerProvider();
-const analyticsManager = new AnalyticsManager(googleTagManagerProvider);
-
-export default analyticsManager;
+export default AnalyticsManager;

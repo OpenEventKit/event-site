@@ -1,6 +1,5 @@
 import AnalyticsProvider from "../AnalyticsProvider";
 import { getEnvVariable, GOOGLE_TAGMANAGER_ID } from "@utils/envVariables";
-import { normalizeData } from "@utils/dataNormalization";
 
 class GoogleTagManagerProvider extends AnalyticsProvider {
   constructor() {
@@ -16,7 +15,7 @@ class GoogleTagManagerProvider extends AnalyticsProvider {
   };
 
   trackEvent = (eventName, eventParams) => {
-    this.gtag("event", eventName, normalizeData(eventParams));
+    this.gtag("event", eventName, eventParams);
   };
 
   config = (targetId, additionalConfig) => {
