@@ -2,6 +2,9 @@ import * as Sentry from "@sentry/gatsby";
 import { RewriteFrames as RewriteFramesIntegration } from "@sentry/integrations";
 import ReduxWrapper from "./src/state/ReduxWrapper";
 
+import AnalyticsManager from "./src/utils/analytics/AnalyticsManager";
+import GoogleTagManagerProvider from "./src/utils/analytics/providers/GoogleTagManagerProvider";
+
 import smoothscroll from "smoothscroll-polyfill";
 import "what-input";
 
@@ -14,6 +17,9 @@ import marketingSettings from "data/marketing-settings.json";
 
 // smooth scroll polyfill needed for Safari
 smoothscroll.polyfill();
+
+const googleTagManagerProvider = new GoogleTagManagerProvider();
+const analyticsManager = new AnalyticsManager(googleTagManagerProvider);
 
 export const wrapRootElement = ReduxWrapper;
 

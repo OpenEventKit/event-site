@@ -25,6 +25,9 @@ import useMarketingSettings, { MARKETING_SETTINGS_KEYS }  from "@utils/useMarket
 import useSiteSettings from "@utils/useSiteSettings";
 import { SentryFallbackFunction } from "./SentryErrorComponent";
 
+import { triggerAnalyticsTrackEvent } from "@utils/customEvents";
+import { PURCHASE_COMPLETE } from "@utils/analytics/events";
+
 import styles from "../styles/marketing-hero.module.scss";
 
 const RegistrationLiteComponent = ({
@@ -153,11 +156,12 @@ const RegistrationLiteComponent = ({
         goToRegistration: () => navigate(`${getEnvVariable(REGISTRATION_BASE_URL)}/a/${summit.slug}`),
         goToMyOrders: () => navigate("/a/my-tickets"),
         completedExtraQuestions: async (attendee) => {
-            if(!attendee) return true;
+            if (!attendee) return true;
             await getExtraQuestions(attendee?.id);
             return checkRequireExtraQuestionsByAttendee(attendee);
         },
         onPurchaseComplete: (order) => {
+            triggerAnalyticsTrackEvent(PURCHASE_COMPLETE, { order });
             // check if it"s necessary to update profile
             setUserOrder(order).then(()=> checkOrderData(order));
         },

@@ -39,6 +39,16 @@ const manifestPlugin = faviconAsset ? [
   }
 ] : [];
 
+const googleTagManagerPlugin = process.env.GATSBY_GOOGLE_TAGMANAGER_ID ? [
+  {
+    resolve: "gatsby-plugin-google-tagmanager",
+    options: {
+      id: process.env.GATSBY_GOOGLE_TAGMANAGER_ID,
+      includeInDevelopment: true
+    }
+  }
+] : [];
+
 const plugins = [
   ...manifestPlugin,
   {
@@ -177,6 +187,7 @@ const plugins = [
       }
     }
   },
+  ...googleTagManagerPlugin,
   "gatsby-plugin-netlify", // make sure to keep it last in the array
 ];
 
