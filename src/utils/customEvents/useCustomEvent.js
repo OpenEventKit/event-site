@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import CustomEventManager from "./customEventManager";
+import CustomEventManager from "./CustomEventManager";
 
 const useCustomEvent = (eventName, callback) => {
   useEffect(() => {

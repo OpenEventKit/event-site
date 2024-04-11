@@ -1,5 +1,5 @@
 import useCustomEvent from "./useCustomEvent";
-import CustomEventManager from "./customEventManager";
+import CustomEventManager from "./CustomEventManager";
 
 export { useCustomEvent, CustomEventManager };
 
