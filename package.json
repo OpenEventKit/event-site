@@ -36,7 +36,6 @@
     "core-js": "^2.6.11",
     "cross-env": "^7.0.3",
     "crypto-js": "^4.1.1",
-    "data-guardian": "^1.1.2",
     "disqus-react": "1.0.10",
     "dotenv": "^8.2.0",
     "dropzone": "^5.7.2",
@@ -150,12 +149,58 @@
     "build": "NODE_ENV=production NODE_OPTIONS=--max-old-space-size=10240 cross-env node --trace-warnings node_modules/.bin/gatsby build --log-pages",
     "develop": "NODE_OPTIONS=--max-old-space-size=8192 npm run gatsby-clean && node --trace-warnings node_modules/.bin/gatsby develop --S -H 0.0.0.0",
     "format": "prettier --trailing-comma es5 --no-semi --single-quote --write \"{gatsby-*.js,src/**/*.js}\"",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "update-libs": "yarn upgrade live-event-widget openstack-uicore-foundation schedule-lite simple-chat-widget speakers-widget attendee-to-attendee-widget"
   },
   "devDependencies": {
+    "@testing-library/dom": "^10.0.0",
+    "@testing-library/jest-dom": "^6.4.2",
+    "@testing-library/react": "^15.0.2",
+    "@testing-library/user-event": "^14.5.2",
+    "babel-jest": "^29.7.0",
     "devcert": "1.1.0",
     "gatsby-plugin-webpack-speed-measure": "^0.1.1",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^28.1.0",
+    "jest-environment-jsdom": "^28.1.0",
+    "jest-transform-stub": "^2.0.0",
+    "js-yaml": "^4.1.0",
+    "js-yaml-loader": "^1.2.2",
     "prettier": "^2.0.5"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,mjs}"
+    ],
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|scss)$": "identity-obj-proxy"
+    },
+    "testMatch": [
+      "<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs}",
+      "<rootDir>/src/**/?(*.)(spec|test).{js,jsx,mjs}"
+    ],
+    "transform": {
+      "\\.[jt]sx?$": "babel-jest",
+      ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub"
+    },
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ],
+    "moduleFileExtensions": [
+      "web.js",
+      "js",
+      "json",
+      "web.jsx",
+      "jsx",
+      "node",
+      "mjs"
+    ],
+    "globals": {
+      "window": {},
+      "console": {}
+    },
+    "testEnvironment": "jsdom"
   }
 }
