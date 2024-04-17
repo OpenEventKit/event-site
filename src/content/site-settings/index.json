@@ -13,6 +13,11 @@
   "favicon": {
     "asset": "icon.png"
   },
+  "idpLogo": {
+    "idpLogoDark": "",
+    "idpLogoLight": "",
+    "idpLogoAlt": ""
+  },
   "identityProviderButtons": [
     {
       "buttonColor": "#082238",

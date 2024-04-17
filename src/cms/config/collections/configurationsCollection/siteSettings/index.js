@@ -176,6 +176,27 @@ const siteSettings = {
         }),
       ]
     }),
+    objectField({
+      label: "IDP Logo",
+      name: "idpLogo",
+      fields: [
+        imageField({
+          label: "Logo Dark",
+          name: "idpLogoDark",
+          required: false
+        }),
+        imageField({
+          label: "Logo Light",
+          name: "idpLogoLight",
+          required: false
+        }),
+        stringField({
+          label: "Logo Alt",
+          name: "idpLogoAlt",
+          required: false
+        }),
+      ]
+    }),
     listField({
       label: "Identity Provider Buttons",
       name: "identityProviderButtons",
