@@ -16,7 +16,7 @@
   "idpLogo": {
     "idpLogoDark": "",
     "idpLogoLight": "",
-    "idpLogoAlt": ""
+    "idpLogoAlt": "alternate text"
   },
   "identityProviderButtons": [
     {
