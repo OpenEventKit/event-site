@@ -143,7 +143,10 @@ const AuthComponent = ({
         allowsOtpAuth: allowsOtpAuth,
         initialEmailValue: initialEmailValue,
         title: 'Sign in using the email associated with your account:',
-        summitData: summit
+        summitData: summit,
+        idpLogoLight: siteSettings?.idpLogo?.idpLogoLight,
+        idpLogoDark: siteSettings?.idpLogo?.idpLogoDark,
+        idpLogoAlt: siteSettings?.idpLogo?.idpLogoAlt,
     };
 
     const passwordlessLoginProps = {
