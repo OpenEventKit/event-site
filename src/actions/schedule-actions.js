@@ -8,6 +8,7 @@ export const UPDATE_FILTERS = "UPDATE_FILTERS";
 export const CLEAR_FILTERS = "CLEAR_FILTERS";
 export const CHANGE_VIEW = "CHANGE_VIEW";
 export const CHANGE_TIMEZONE = "CHANGE_TIMEZONE";
+export const CHANGE_TIME_FORMAT = "CHANGE_TIME_FORMAT";
 
 /**
  * This action is defined to just reinitialize the allScheduleReducer state
