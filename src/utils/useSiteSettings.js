@@ -29,8 +29,12 @@ const siteSettingsQuery = graphql`
         }
       }
       idpLogo {
-        idpLogoDark
-        idpLogoLight
+        idpLogoDark {
+          publicURL
+        }
+        idpLogoLight {
+          publicURL
+        }
         idpLogoAlt
       }
       identityProviderButtons {
