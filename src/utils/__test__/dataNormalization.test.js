@@ -137,6 +137,8 @@ const testOrder = {
   }]
 };
 
+const testArrayOrderData = [testOrder];
+
 describe("data normalization", () => {
   test("remove email from order data", () => {
     expect(testOrder.hasOwnProperty("owner_email")).toBeTruthy();
@@ -144,6 +146,18 @@ describe("data normalization", () => {
     const data = normalizeData(testOrder);
     expect(data.hasOwnProperty("owner_email")).toBeFalsy();
     expect(data.tickets[0].owner.hasOwnProperty("email") ).toBeFalsy();
+  });
+  test("remove qr from order data", () => {
+    expect(testOrder.tickets[0].hasOwnProperty("qr_code") ).toBeTruthy();
+    const data = normalizeData(testOrder);
+    expect(data.tickets[0].hasOwnProperty("qr_code") ).toBeFalsy();
+  });
+  test("remove qr from array of orders", () => {
+    expect(Array.isArray(testArrayOrderData)).toBeTruthy();
+    expect(testArrayOrderData[0].tickets[0].hasOwnProperty("qr_code") ).toBeTruthy();
+    const data = normalizeData(testArrayOrderData);
+    expect(Array.isArray(data)).toBeTruthy();
+    expect(data[0].tickets[0].hasOwnProperty("qr_code") ).toBeFalsy();
   });
 })
 

@@ -6,6 +6,7 @@ const EMAIL_KEY = "email";
 const OWNER_FIRST_NAME_KEY = `owner_${FIRST_NAME_KEY}`;
 const OWNER_LAST_NAME_KEY = `owner_${LAST_NAME_KEY}`;
 const OWNER_EMAIL_KEY = `owner_${EMAIL_KEY}`;
+const QR_CODE_KEY = "qr_code";
 
 const excludeKeys = [
   FIRST_NAME_KEY,
@@ -14,6 +15,7 @@ const excludeKeys = [
   OWNER_FIRST_NAME_KEY,
   OWNER_LAST_NAME_KEY,
   OWNER_EMAIL_KEY,
+  QR_CODE_KEY,
 ];
 
 const deepOmit = (obj, keysToOmit) => {
