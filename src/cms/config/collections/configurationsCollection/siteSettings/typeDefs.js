@@ -21,7 +21,7 @@ module.exports = `
     schedule: Schedule
     chat: Chat
   }
-  type idpLogo {
+  type IdpLogo {
     idpLogoDark: File @fileByRelativePath
     idpLogoLight: File @fileByRelativePath
     idpLogoAlt: String
@@ -38,6 +38,7 @@ module.exports = `
     siteMetadata: SiteMetadata
     favicon: Favicon
     widgets: Widgets
+    idpLogo: IdpLogo
     identityProviderButtons: [IdentityProviderButton]
   }
 `;
