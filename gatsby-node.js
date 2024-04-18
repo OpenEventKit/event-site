@@ -87,7 +87,8 @@ const SSR_getEvents = async (baseUrl, summitId, accessToken) => {
     access_token: accessToken,
     per_page: 50,
     page: 1,
-    expand: "slides, links, videos, media_uploads, type, track, track.subtracks, track.allowed_access_levels, location, location.venue, location.floor, speakers, moderator, sponsors, current_attendance, groups, rsvp_template, tags",
+    expand: "slides,links,videos,media_uploads,type,track,track.subtracks,track.allowed_access_levels,location,location.venue,location.floor,speakers,moderator,sponsors,current_attendance,groups,rsvp_template,tags",
+    relations: "speakers.badge_features,speakers.affiliations,speakers.languages,speakers.other_presentation_links,speakers.areas_of_expertise,speakers.travel_preferences,speakers.organizational_roles,speakers.all_presentations,speakers.all_moderated_presentations",
   }
 
   return await axios.get(endpoint, { params }).then(async ({data}) => {
@@ -155,6 +156,7 @@ const SSR_getSpeakers = async (baseUrl, summitId, accessToken, filter = null) =>
     access_token: accessToken,
     per_page: 30,
     page: 1,
+    relations: 'badge_features,affiliations,languages,other_presentation_links,areas_of_expertise,travel_preferences,organizational_roles,all_presentations,all_moderated_presentations',
   };
 
   const endpoint = `${baseUrl}/api/v1/summits/${summitId}/speakers/on-schedule`;
@@ -180,7 +182,7 @@ const SSR_getSpeakers = async (baseUrl, summitId, accessToken, filter = null) =>
 const SSR_getSummit = async (baseUrl, summitId) => {
 
   const params = {
-    expand: "event_types,tracks, tracks.subtracks,track_groups,presentation_levels,locations.rooms,locations.floors,order_extra_questions.values,schedule_settings,schedule_settings.filters,schedule_settings.pre_filters",
+    expand: "event_types,tracks,tracks.subtracks,track_groups,presentation_levels,locations.rooms,locations.floors,order_extra_questions.values,schedule_settings,schedule_settings.filters,schedule_settings.pre_filters",
     t: Date.now()
   };
 
@@ -201,7 +203,7 @@ const SSR_getVoteablePresentations = async (baseUrl, summitId, accessToken) => {
     per_page: 50,
     page: 1,
     filter: "published==1",
-    expand: "slides, links, videos, media_uploads, type, track, track.allowed_access_levels, location, location.venue, location.floor, speakers, moderator, sponsors, current_attendance, groups, rsvp_template, tags",
+    expand: "slides,links,videos,media_uploads,type,track,track.allowed_access_levels,location,location.venue,location.floor,speakers,moderator,sponsors,current_attendance,groups,rsvp_template,tags",
   };
 
   return await axios.get(endpoint,

@@ -16,6 +16,8 @@ export const fetchEventById = async (summitId, eventId, accessToken = null) => {
 
     apiUrl.addQuery('expand', 'slides, links, videos, media_uploads, type, track, track.allowed_access_levels, location, location.venue, location.floor, speakers, moderator, sponsors, current_attendance, groups, rsvp_template, tags');
     apiUrl.addQuery('evict_cache', 1);
+    apiUrl.addQuery('relations', "speakers.badge_features,speakers.affiliations,speakers.languages,speakers.other_presentation_links,speakers.areas_of_expertise,speakers.travel_preferences,speakers.organizational_roles,speakers.all_presentations,speakers.all_moderated_presentations");
+
     return fetch(apiUrl.toString(), {
         method: 'GET'
     }).then(async (response) => {
@@ -73,6 +75,7 @@ export const fetchSpeakerById = async(summitId, speakerId, accessToken = null) =
         apiUrl.addQuery('access_token', accessToken);
     }
 
+    apiUrl.addQuery('relations', 'badge_features,affiliations,languages,other_presentation_links,areas_of_expertise,travel_preferences,organizational_roles,all_presentations,all_moderated_presentations');
     apiUrl.addQuery('evict_cache', 1);
 
     return fetch(apiUrl.toString(), {
