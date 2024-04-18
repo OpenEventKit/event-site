@@ -143,7 +143,7 @@ const AuthComponent = ({
         allowsOtpAuth: allowsOtpAuth,
         initialEmailValue: initialEmailValue,
         title: 'Sign in using the email associated with your account:',
-        summitData: summit
+        summitData: summit,
     };
 
     const passwordlessLoginProps = {
@@ -158,6 +158,9 @@ const AuthComponent = ({
         codeError: otpError,
         goToLogin: () => setOtpLogin(false),
         getLoginCode: (email) => sendCode(email),
+        idpLogoLight: siteSettings?.idpLogo?.idpLogoLight?.publicURL,
+        idpLogoDark: siteSettings?.idpLogo?.idpLogoDark?.publicURL,
+        idpLogoAlt: siteSettings?.idpLogo?.idpLogoAlt
     }
 
     const { loginButton } = marketingPageSettings.hero.buttons;

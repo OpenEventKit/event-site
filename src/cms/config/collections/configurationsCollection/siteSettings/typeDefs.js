@@ -21,6 +21,11 @@ module.exports = `
     schedule: Schedule
     chat: Chat
   }
+  type IdpLogo {
+    idpLogoDark: File @fileByRelativePath
+    idpLogoLight: File @fileByRelativePath
+    idpLogoAlt: String
+  }
   type IdentityProviderButton {
     buttonColor: String
     buttonBorderColor: String
@@ -33,6 +38,7 @@ module.exports = `
     siteMetadata: SiteMetadata
     favicon: Favicon
     widgets: Widgets
+    idpLogo: IdpLogo
     identityProviderButtons: [IdentityProviderButton]
   }
 `;

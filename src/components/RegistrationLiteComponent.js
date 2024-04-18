@@ -195,6 +195,9 @@ const RegistrationLiteComponent = ({
         noAllowedTicketsMessage: noAllowedTicketsMessage,
         showCompanyInput: showCompanyInput,
         showCompanyInputDefaultOptions: showCompanyInputDefaultOptions,
+        idpLogoLight: siteSettings?.idpLogo?.idpLogoLight?.publicURL,
+        idpLogoDark: siteSettings?.idpLogo?.idpLogoDark?.publicURL,
+        idpLogoAlt: siteSettings?.idpLogo?.idpLogoAlt
     };
 
     const { registerButton } = marketingPageSettings.hero.buttons;

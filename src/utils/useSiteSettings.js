@@ -28,6 +28,15 @@ const siteSettingsQuery = graphql`
           allowClick
         }
       }
+      idpLogo {
+        idpLogoDark {
+          publicURL
+        }
+        idpLogoLight {
+          publicURL
+        }
+        idpLogoAlt
+      }
       identityProviderButtons {
         buttonColor
         buttonBorderColor
