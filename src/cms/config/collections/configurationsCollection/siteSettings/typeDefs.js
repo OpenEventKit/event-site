@@ -21,6 +21,11 @@ module.exports = `
     schedule: Schedule
     chat: Chat
   }
+  type idpLogo {
+    idpLogoDark: File @fileByRelativePath
+    idpLogoLight: File @fileByRelativePath
+    idpLogoAlt: String
+  }
   type IdentityProviderButton {
     buttonColor: String
     buttonBorderColor: String
