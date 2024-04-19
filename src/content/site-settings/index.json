@@ -15,7 +15,7 @@
   },
   "idpLogo": {
     "idpLogoDark": "logo_apple.svg",
-    "idpLogoLight": "main-qimg-37b6706fe195f8a59d7ded07c3da84bc-c.png",
+    "idpLogoLight": "openinfra-logo-rgb.svg",
     "idpLogoAlt": "alternate text"
   },
   "identityProviderButtons": [
