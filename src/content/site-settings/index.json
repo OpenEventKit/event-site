@@ -15,7 +15,7 @@
   },
   "idpLogo": {
     "idpLogoDark": "logo_apple.svg",
-    "idpLogoLight": "",
+    "idpLogoLight": "logo_linkedin.svg",
     "idpLogoAlt": "alternate text"
   },
   "identityProviderButtons": [
