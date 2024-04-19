@@ -14,7 +14,7 @@
     "asset": "icon.png"
   },
   "idpLogo": {
-    "idpLogoDark": "logo_apple.svg",
+    "idpLogoDark": "openinfra-logo-rgb.svg",
     "idpLogoLight": "openinfra-logo-rgb.svg",
     "idpLogoAlt": "alternate text"
   },
