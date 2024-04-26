@@ -165,6 +165,7 @@ const RegistrationLiteComponent = ({
             // check if it"s necessary to update profile
             setUserOrder(order).then(()=> checkOrderData(order));
         },
+        trackEvent: triggerAnalyticsTrackEvent,
         inPersonDisclaimer: inPersonDisclaimer,
         handleCompanyError: () => handleCompanyError,
         allowsNativeAuth: allowsNativeAuth,

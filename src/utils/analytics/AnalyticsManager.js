@@ -17,6 +17,7 @@ class AnalyticsManager {
 
   handleTrackEvent = (event) => {
     const { eventName, eventParams } = event.detail;
+    console.log('TRACK EVENT: ', event);
     this.trackEvent(eventName, eventParams);
   }
 
