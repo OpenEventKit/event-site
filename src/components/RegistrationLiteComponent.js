@@ -26,7 +26,6 @@ import useSiteSettings from "@utils/useSiteSettings";
 import { SentryFallbackFunction } from "./SentryErrorComponent";
 
 import { triggerAnalyticsTrackEvent } from "@utils/customEvents";
-import { PURCHASE_COMPLETE } from "@utils/analytics/events";
 
 import styles from "../styles/marketing-hero.module.scss";
 
@@ -161,7 +160,6 @@ const RegistrationLiteComponent = ({
             return checkRequireExtraQuestionsByAttendee(attendee);
         },
         onPurchaseComplete: (order) => {
-            triggerAnalyticsTrackEvent(PURCHASE_COMPLETE, { order });
             // check if it"s necessary to update profile
             setUserOrder(order).then(()=> checkOrderData(order));
         },
