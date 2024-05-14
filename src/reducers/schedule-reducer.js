@@ -15,7 +15,7 @@ const INITIAL_STATE = {
     baseFilters: [],
     view: 'calendar',
     timezone: 'show',
-    timeFormat: '12h',
+    timeFormat: null,
     colorSource: 'track',
     is_my_schedule: false,
     only_events_with_attendee_access: false,
@@ -46,7 +46,8 @@ const scheduleReducer = (state = INITIAL_STATE, action) => {
                 hide_past_events_with_show_always_on_schedule,
                 is_my_schedule,
                 userProfile,
-                isLoggedUser
+                isLoggedUser,
+                time_format
             } = payload; // data from JSON
 
             const filterByAccessLevel = only_events_with_attendee_access && isLoggedUser;
@@ -64,7 +65,8 @@ const scheduleReducer = (state = INITIAL_STATE, action) => {
                 events,
                 is_my_schedule,
                 only_events_with_attendee_access,
-                hide_past_events_with_show_always_on_schedule
+                hide_past_events_with_show_always_on_schedule,
+                timeFormat: state.timeFormat || time_format || '12h'
             };
         }
         case `SCHED_UPDATE_FILTER`: {
