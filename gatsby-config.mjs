@@ -1,6 +1,13 @@
-const path = require("path");
+import path, { dirname } from "path";
+import dotenv from "dotenv";
+import { createRequire } from "module";
+import { fileURLToPath } from "url";
+import remarkGfm from "remark-gfm"
 
-require("dotenv").config({
+const require = createRequire(import.meta.url);
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+dotenv.config({
   path: `.env.${process.env.NODE_ENV}`
 });
 
@@ -122,19 +129,26 @@ const plugins = [
   "gatsby-transformer-sharp",
   "gatsby-transformer-json",
   {
-    resolve: "gatsby-transformer-remark",
+    resolve: "gatsby-plugin-mdx",
     options: {
-      plugins: [
+      extensions: [".mdx", ".md"],
+      gatsbyRemarkPlugins: [
         {
           resolve: "gatsby-remark-images",
           options: {
-            // It"s important to specify the maxWidth (in pixels) of
+            // It's important to specify the maxWidth (in pixels) of
             // the content container as this plugin uses this as the
             // base for generating different widths of each image.
             maxWidth: 2048
           }
         }
-      ]
+      ],
+      mdxOptions: {
+        remarkPlugins: [
+          // Add GitHub Flavored Markdown (GFM) support
+          remarkGfm
+        ]
+      }
     }
   },
   {
@@ -191,10 +205,9 @@ const plugins = [
   "gatsby-plugin-netlify", // make sure to keep it last in the array
 ];
 
-module.exports = {
-  siteMetadata: {
-    title,
-    description
-  },
-  plugins
+const siteMetadata = {
+  title,
+  description
 };
+
+export { siteMetadata, plugins };

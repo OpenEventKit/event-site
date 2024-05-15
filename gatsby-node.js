@@ -360,17 +360,17 @@ exports.createSchemaCustomization = ({ actions }) => {
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
   const { createNodeField } = actions;
-  if (node.internal.type === "MarkdownRemark") {
+  if (node.internal.type === "Mdx") {
     const value = createFilePath({ node, getNode });
     createNodeField({
       name: "slug",
       node,
-      value,
+      value
     })
   }
 };
 
-exports.createPages = ({ actions, graphql }) => {
+exports.createPages = async ({ actions, graphql }) => {
   const { createPage, createRedirect } = actions;
 
   const maintenanceMode = fs.existsSync(MAINTENANCE_FILE_PATH) ?
@@ -384,61 +384,48 @@ exports.createPages = ({ actions, graphql }) => {
     });
   }
 
-  return graphql(`
+  const result = await graphql(`
     {
-      allMarkdownRemark(limit: 1000) {
-        edges {
-          node {
-            id
-            fields {
-              slug
-            }
-            frontmatter {
-              templateKey
-            }
+      allMdx(
+        limit: 1000
+      ) {
+        nodes {
+          id
+          fields {
+            slug
+          }
+          frontmatter {
+            templateKey
+          }
+          internal {
+            contentFilePath
           }
         }
       }
     }
-  `).then((result) => {
-    const {
-      errors,
-      data: {
-        allMarkdownRemark: {
-          edges
-        }
+  `);
+
+  if (result.errors) {
+    result.errors.forEach((e) => console.error(e.toString()));
+    return Promise.reject(result.errors);
+  }
+
+  const nodes = result.data.allMdx.nodes;
+
+  nodes.forEach((node) => {
+    const { id, fields: { slug }, frontmatter: { templateKey }, internal: { contentFilePath } } = node;
+    const template = require.resolve(`./src/templates/${String(templateKey)}`);
+    const page = {
+      path: slug.match(/content-pages/) ? slug.replace("/content-pages/", "/") : slug,
+      component: `${template}?__contentFilePath=${contentFilePath}`,
+      context: {
+        id
       }
-    } = result;
-
-    if (errors) {
-      errors.forEach((e) => console.error(e.toString()));
-      return Promise.reject(errors);
-    }
-
-    edges.forEach((edge) => {
-      const { id, fields, frontmatter: { templateKey } } = edge.node;
-
-      var slug = fields.slug;
-      if (slug.match(/content-pages/)) {
-        slug = slug.replace("/content-pages/", "/");
-      }
-
-      const page = {
-        path: slug,
-        component: require.resolve(
-          `./src/templates/${String(templateKey)}.js`
-        ),
-        context: {
-          id,
-        },
-      };
-
-      // dont create pages if maintenance mode enabled
-      // gatsby disregards redirect if pages created for path
-      if (maintenanceMode.enabled && !page.path.match(/maintenance/)) return;
-
-      createPage(page);
-    });
+    };
+    // dont create pages if maintenance mode enabled
+    // gatsby disregards redirect if pages created for path
+    if (maintenanceMode.enabled && !page.path.match(/maintenance/)) return;
+    createPage(page);
   });
 };
 
