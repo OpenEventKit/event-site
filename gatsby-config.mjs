@@ -2,7 +2,7 @@ import path, { dirname } from "path";
 import dotenv from "dotenv";
 import { createRequire } from "module";
 import { fileURLToPath } from "url";
-import remarkGfm from "remark-gfm"
+import remarkGfm from "remark-gfm";
 
 const require = createRequire(import.meta.url);
 const __dirname = dirname(fileURLToPath(import.meta.url));
