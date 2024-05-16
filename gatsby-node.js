@@ -380,15 +380,15 @@ exports.createPages = async ({ actions, graphql }) => {
   if (maintenanceMode.enabled) {
     createRedirect({
       fromPath: "/*",
-      toPath: "/maintenance/"
+      toPath: "/maintenance/",
+      isPermanent: false,
+      statusCode: 302
     });
   }
 
   const result = await graphql(`
     {
-      allMdx(
-        limit: 1000
-      ) {
+      allMdx {
         nodes {
           id
           fields {
@@ -416,11 +416,9 @@ exports.createPages = async ({ actions, graphql }) => {
     const { id, fields: { slug }, frontmatter: { templateKey }, internal: { contentFilePath } } = node;
     const template = require.resolve(`./src/templates/${String(templateKey)}`);
     const page = {
-      path: slug.match(/content-pages/) ? slug.replace("/content-pages/", "/") : slug,
+      path: slug.replace("/content-pages/", "/"),
       component: `${template}?__contentFilePath=${contentFilePath}`,
-      context: {
-        id
-      }
+      context: { id }
     };
     // dont create pages if maintenance mode enabled
     // gatsby disregards redirect if pages created for path
