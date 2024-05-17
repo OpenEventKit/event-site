@@ -8,6 +8,7 @@ import ContentPageTemplate from "./template";
 import Layout from "../../components/Layout";
 import Seo from "../../components/Seo";
 import { titleFromPathname } from "../../utils/urlFormating";
+
 import { USER_REQUIREMENTS } from "../../cms/config/collections/contentPagesCollection";
 
 const ContentPage = ({
@@ -18,7 +19,6 @@ const ContentPage = ({
   children
 }) => {
   const { frontmatter: { title, userRequirement } } = data.mdx;
-  console.log(data)
   if (!isAuthorized && (
     (userRequirement === USER_REQUIREMENTS.loggedIn && !isLoggedUser) ||
     (userRequirement === USER_REQUIREMENTS.hasTicket && !hasTicket)
@@ -49,7 +49,7 @@ const mapStateToProps = ({ loggedUserState, userState }) => ({
   isAuthorized: userState.isAuthorized
 });
 
-const StoreConnectedContentPage = connect(mapStateToProps)(ContentPage)
+const StoreConnectedContentPage = connect(mapStateToProps)(ContentPage);
 
 export default StoreConnectedContentPage;
 

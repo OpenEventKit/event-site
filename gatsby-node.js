@@ -22,7 +22,7 @@ const {
   SPEAKERS_IDX_FILE_PATH,
   VOTEABLE_PRESENTATIONS_FILE_PATH,
   MARKETING_SETTINGS_FILE_PATH,
-  MAINTENANCE_FILE_PATH,
+  CONTENT_PAGES_PATH_NAME,
   SPONSORS_FILE_PATH,
   FONTS_SCSS_FILE_PATH
 } = require("./src/utils/filePath");
@@ -226,7 +226,7 @@ exports.onPreBootstrap = async () => {
   const summitApiBaseUrl = process.env.GATSBY_SUMMIT_API_BASE_URL;
   let   marketingSettings = await SSR_getMarketingSettings(process.env.GATSBY_MARKETING_API_BASE_URL, summitId);
   const colorSettings = fs.existsSync(COLORS_FILE_PATH) ? JSON.parse(fs.readFileSync(COLORS_FILE_PATH)) : require(`./${DEFAULT_COLORS_FILE_PATH}`);
-  const globalSettings = fs.existsSync(SITE_SETTINGS_FILE_PATH) ? JSON.parse(fs.readFileSync(SITE_SETTINGS_FILE_PATH)) : {};
+  const siteSettings = fs.existsSync(SITE_SETTINGS_FILE_PATH) ? JSON.parse(fs.readFileSync(SITE_SETTINGS_FILE_PATH)) : {};
 
   const config = {
     client: {
@@ -328,13 +328,13 @@ exports.onPreBootstrap = async () => {
   fs.writeFileSync(VOTEABLE_PRESENTATIONS_FILE_PATH, JSON.stringify(allVoteablePresentations), "utf8");
 
   // setting build times
-  globalSettings.staticJsonFilesBuildTime = fileBuildTimes;
-  globalSettings.lastBuild = Date.now();
+  siteSettings.staticJsonFilesBuildTime = fileBuildTimes;
+  siteSettings.lastBuild = Date.now();
 
-  fs.writeFileSync(SITE_SETTINGS_FILE_PATH, JSON.stringify(globalSettings), "utf8");
+  fs.writeFileSync(SITE_SETTINGS_FILE_PATH, JSON.stringify(siteSettings), "utf8");
 
   // Read fonts from site settings
-  const siteFonts = globalSettings.siteFont;
+  const siteFonts = siteSettings.siteFont;
 
   if(siteFonts && Object.keys(siteFonts).length > 0) {
     // Generate the SCSS file
@@ -373,19 +373,6 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 exports.createPages = async ({ actions, graphql }) => {
   const { createPage, createRedirect } = actions;
 
-  const maintenanceMode = fs.existsSync(MAINTENANCE_FILE_PATH) ?
-    JSON.parse(fs.readFileSync(MAINTENANCE_FILE_PATH)) : { enabled: false };
-
-  // create a catch all redirect
-  if (maintenanceMode.enabled) {
-    createRedirect({
-      fromPath: "/*",
-      toPath: "/maintenance/",
-      isPermanent: false,
-      statusCode: 302
-    });
-  }
-
   const result = await graphql(`
     {
       allMdx {
@@ -415,14 +402,13 @@ exports.createPages = async ({ actions, graphql }) => {
   nodes.forEach((node) => {
     const { id, fields: { slug }, frontmatter: { templateKey }, internal: { contentFilePath } } = node;
     const template = require.resolve(`./src/templates/${String(templateKey)}`);
+    // remove content pages namespace from path 
+    const path = slug.replace(`${CONTENT_PAGES_PATH_NAME}`, "/");
     const page = {
-      path: slug.replace("/content-pages/", "/"),
+      path: path,
       component: `${template}?__contentFilePath=${contentFilePath}`,
       context: { id }
     };
-    // dont create pages if maintenance mode enabled
-    // gatsby disregards redirect if pages created for path
-    if (maintenanceMode.enabled && !page.path.match(/maintenance/)) return;
     createPage(page);
   });
 };

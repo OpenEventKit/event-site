@@ -13,7 +13,9 @@ dotenv.config({
 
 const {
   STATIC_CONTENT_DIR_PATH,
+  PAGES_DIR_PATH,
   CONTENT_PAGES_DIR_PATH,
+  CONTENT_PAGES_PATH_NAME,
   SITE_SETTINGS_FILE_PATH,
   SITE_SETTINGS_DIR_PATH,
   MARKETING_SETTINGS_FILE_PATH
@@ -122,6 +124,13 @@ const plugins = [
     options: {
       path: path.resolve(MARKETING_SETTINGS_FILE_PATH),
       name: "marketingSettings"
+    }
+  },
+  {
+    resolve: "gatsby-plugin-page-creator",
+    options: {
+      path: path.resolve(PAGES_DIR_PATH),
+      ignore: [`**/${CONTENT_PAGES_PATH_NAME}/**`],
     }
   },
   "gatsby-plugin-image",
