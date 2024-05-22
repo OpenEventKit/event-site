@@ -406,7 +406,7 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                                         <input
                                             className={`${styles.input} ${styles.isLarge}`}
                                             type="text"
-                                            placeholder="Twitter"
+                                            placeholder="Twitter/X"
                                             onChange={e => setPersonalProfile({ ...personalProfile, twitter: e.target.value })}
                                             value={personalProfile.twitter}
                                         />
