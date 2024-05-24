@@ -1,8 +1,15 @@
-if (typeof window !== "undefined") {
-  // add admin.css
-  const link = document.createElement("link");
-  link.type = "text/css";
-  link.rel = "stylesheet";
-  link.href = "/admin/admin.css";
-  document.head.appendChild(link);
-}
+/*
+  Workaround for text editor
+  @see https://github.com/decaporg/decap-cms/issues/5092
+*/
+const injectCustomStyle = () => {
+  const style = document.createElement("style");
+  style.innerHTML = `
+    div[data-slate-editor] {
+      -webkit-user-modify: read-write !important;
+    }
+  `;
+  document.head.appendChild(style);
+};
+
+injectCustomStyle();

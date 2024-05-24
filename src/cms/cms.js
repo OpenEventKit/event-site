@@ -1,4 +1,4 @@
-import CMS from "netlify-cms-app";
+import CMS from "decap-cms-app";
 import config from "./config";
 
 import "./cms-utils";

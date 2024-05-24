@@ -2,6 +2,7 @@ import path, { dirname } from "path";
 import dotenv from "dotenv";
 import { createRequire } from "module";
 import { fileURLToPath } from "url";
+import webpack from "webpack";
 import remarkGfm from "remark-gfm";
 
 const require = createRequire(import.meta.url);
@@ -161,7 +162,7 @@ const plugins = [
     }
   },
   {
-    resolve: "gatsby-plugin-netlify-cms",
+    resolve: "gatsby-plugin-decap-cms",
     options: {
       modulePath: `${__dirname}/src/cms/cms.js`,
       manualInit: true,
@@ -204,9 +205,21 @@ const plugins = [
           ...config.resolve,
           fallback: {
             ...config.resolve.fallback,
-            path: require.resolve("path-browserify")
+            fs: false,
+            path: require.resolve("path-browserify"),
+            assert: require.resolve("assert"),
+            "object.assign/polyfill": require.resolve("object.assign/polyfill")
           }
         };
+        config.plugins = [
+          ...config.plugins,
+          new webpack.ProvidePlugin({
+            process: "process/browser"
+          }),
+          new webpack.ProvidePlugin({
+            Buffer: ["buffer", "Buffer"]
+          })
+        ];
       }
     }
   },

@@ -2,7 +2,7 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import { MDXProvider } from "@mdx-js/react";
 
-import shortcodes from "./shortcodes"; 
+import shortcodes from "./shortcodes";
 
 const ContentPageTemplate = ({ title, content }) => (
   <div className="content">
