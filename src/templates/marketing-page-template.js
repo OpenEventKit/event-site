@@ -2,7 +2,7 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import { navigate } from "gatsby";
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
-import Markdown from "markdown-to-jsx";
+import Mdx from "@mdx-js/runtime";
 
 import Layout from "../components/Layout";
 import AttendanceTrackerComponent from "../components/AttendanceTrackerComponent";
@@ -66,39 +66,39 @@ const MarketingPageTemplate = ({
       />
       {summit && countdown?.display && <Countdown summit={summit} text={countdown?.text} />}
       <div className="columns">
-        <div className={`column mt-3 px-6 py-6 ${shouldRenderMasonry ? "is-half" : ""} ${styles.leftColumn ? styles.leftColumn : ""}`} style={{ position: 'relative' }}>
+        <div className={`column mt-3 px-6 py-6 ${shouldRenderMasonry ? "is-half" : ""} ${styles.leftColumn ? styles.leftColumn : ""}`} style={{ position: "relative" }}>
           {widgets?.text?.display && widgets?.text?.content &&
-            <Markdown>
-              {widgets.text.content}
-            </Markdown>
+          <Mdx>
+            {widgets.text.content}
+          </Mdx>
           }
           {widgets?.schedule?.display &&
-            <>
-              <h2><b>{widgets.schedule.title}</b></h2>
-              <LiteScheduleComponent
-                {...scheduleProps}
-                lastDataSync={lastDataSync}
-                id={`marketing_lite_schedule_${lastDataSync}`}
-                page="marketing-site"
-                showAllEvents={true}
-                showSearch={false}
-                showNav={true}
-              />
-            </>
+          <>
+            <h2><b>{widgets.schedule.title}</b></h2>
+            <LiteScheduleComponent
+              {...scheduleProps}
+              lastDataSync={lastDataSync}
+              id={`marketing_lite_schedule_${lastDataSync}`}
+              page="marketing-site"
+              showAllEvents={true}
+              showSearch={false}
+              showNav={true}
+            />
+          </>
           }
           {widgets?.disqus?.display &&
-            <>
-              <h2><b>{widgets.disqus.title}</b></h2>
-              <DisqusComponent page="marketing-site"/>
-            </>
+          <>
+            <h2><b>{widgets.disqus.title}</b></h2>
+            <DisqusComponent page="marketing-site"/>
+          </>
           }
           {widgets?.image?.display &&
            widgets?.image?.image.src &&
-            <>
-              <h2><b>{widgets.image.title}</b></h2>
-              <br />
-              <GatsbyImage image={getImage(widgets.image.image.src)} alt={widgets.image.image.alt ?? ""} />
-            </>
+          <>
+            <h2><b>{widgets.image.title}</b></h2>
+            <br />
+            <GatsbyImage image={getImage(widgets.image.image.src)} alt={widgets.image.image.alt ?? ""} />
+          </>
           }
         </div>
         {shouldRenderMasonry &&

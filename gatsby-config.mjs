@@ -194,29 +194,26 @@ const plugins = [
           jsRule
         ];
          /**
-         * Fixes Module not found: Error: Can"t resolve "path" bug.
-         * Webpack 5 doesn"t include browser polyfills for node APIs by default anymore,
-         * so we need to provide them ourselves.
-         * @see https://github.com/postcss/postcss/issues/1509#issuecomment-772097567
-         * @see https://github.com/gatsbyjs/gatsby/issues/31475
-         * @see https://github.com/gatsbyjs/gatsby/issues/31179#issuecomment-844588682
+         * Webpack removed automatic polyfills for these node APIs in v5,
+         * so we need to patch them in the browser.
+         * @see https://www.gatsbyjs.com/docs/reference/release-notes/migrating-from-v2-to-v3/#webpack-5-node-configuration-changed-nodefs-nodepath-
+         * @see https://viglucci.io/how-to-polyfill-buffer-with-webpack-5
          */
         config.resolve = {
           ...config.resolve,
           fallback: {
             ...config.resolve.fallback,
             fs: false,
-            path: require.resolve("path-browserify"),
             assert: require.resolve("assert"),
+            buffer: require.resolve("buffer/"),
+            path: require.resolve("path-browserify"),
             "object.assign/polyfill": require.resolve("object.assign/polyfill")
           }
         };
         config.plugins = [
           ...config.plugins,
           new webpack.ProvidePlugin({
-            process: "process/browser"
-          }),
-          new webpack.ProvidePlugin({
+            process: "process",
             Buffer: ["buffer", "Buffer"]
           })
         ];

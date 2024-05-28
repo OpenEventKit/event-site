@@ -415,7 +415,6 @@ exports.createPages = async ({ actions, graphql }) => {
 
 exports.onCreateWebpackConfig = ({
   actions,
-  plugins,
   loaders,
   getConfig
 }) => {
@@ -453,35 +452,32 @@ exports.onCreateWebpackConfig = ({
        * @see https://viglucci.io/how-to-polyfill-buffer-with-webpack-5
        */
       fallback: {
+        fs: false,
+        assert: require.resolve("assert"),
+        buffer: require.resolve("buffer/"),
         path: require.resolve("path-browserify"),
         stream: require.resolve("stream-browserify"),
-        buffer: require.resolve("buffer/")
+        "object.assign/polyfill": require.resolve("object.assign/polyfill")
       },
       // allows content and data imports to correctly resolve when theming
-      modules: [path.resolve("src")]
+      modules: [
+        path.resolve("src")
+      ]
     },
     // devtool: "source-map",
     plugins: [
-      plugins.define({
-        "global.GENTLY": false,
-        "global.BLOB": false
-      }),
       new webpack.ProvidePlugin({
-        Buffer: ["buffer", "Buffer"],
-      }),
-      // ignore unused jsdom dependency
-      new webpack.IgnorePlugin({
-        resourceRegExp: /canvas/,
-        contextRegExp: /jsdom$/
+        process: "process",
+        Buffer: ["buffer", "Buffer"]
       }),
       // upload source maps only if we have an sentry auth token and we are at production
-      ...("GATSBY_SENTRY_AUTH_TOKEN" in process.env && process.env.NODE_ENV === "production") ?[
-          new SentryWebpackPlugin({
-        org: process.env.GATSBY_SENTRY_ORG,
-        project: process.env.GATSBY_SENTRY_PROJECT,
-        ignore: ["app-*", "polyfill-*", "framework-*", "webpack-runtime-*", "~partytown"],
-        // Specify the directory containing build artifacts
-        include: [
+      ...("GATSBY_SENTRY_AUTH_TOKEN" in process.env && process.env.NODE_ENV === "production") ? [
+        new SentryWebpackPlugin({
+          org: process.env.GATSBY_SENTRY_ORG,
+          project: process.env.GATSBY_SENTRY_PROJECT,
+          ignore: ["app-*", "polyfill-*", "framework-*", "webpack-runtime-*", "~partytown"],
+          // Specify the directory containing build artifacts
+          include: [
             {
               paths: ["src","public",".cache"],
               urlPrefix: "~/",
@@ -521,14 +517,15 @@ exports.onCreateWebpackConfig = ({
             {
               paths: ["node_modules/speakers-widget/dist"],
               urlPrefix: "~/node_modules/speakers-widget/dist",
-            },
-        ],
-        // Auth tokens can be obtained from https://sentry.io/settings/account/api/auth-tokens/
-        // and needs the `project:releases` and `org:read` scopes
-        authToken: process.env.GATSBY_SENTRY_AUTH_TOKEN,
-        // Optionally uncomment the line below to override automatic release name detection
-        release: process.env.GATSBY_SENTRY_RELEASE,
-      })]:[],
+            }
+          ],
+          // Auth tokens can be obtained from https://sentry.io/settings/account/api/auth-tokens/
+          // and needs the `project:releases` and `org:read` scopes
+          authToken: process.env.GATSBY_SENTRY_AUTH_TOKEN,
+          // Optionally uncomment the line below to override automatic release name detection
+          release: process.env.GATSBY_SENTRY_RELEASE,
+        })
+      ] : []
     ]
   });
 };

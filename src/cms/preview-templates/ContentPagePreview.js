@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import MDX from "@mdx-js/runtime";
+import Mdx from "@mdx-js/runtime";
 import ContentPageTemplate from "../../templates/content-page/template";
 import shortcodes from "../../templates/content-page/shortcodes";
 
@@ -21,11 +21,11 @@ const transformContent = (mdx, getAsset) => {
   });
 };
 
-// function to render transformed content with MDX
+// function to render transformed content with Mdx
 const renderContent = (mdx, getAsset) => (
-  <MDX components={shortcodes}>
+  <Mdx components={shortcodes}>
     {transformContent(mdx, getAsset)}
-  </MDX>
+  </Mdx>
 );
 
 const ContentPagePreview = ({ entry, getAsset }) => {
