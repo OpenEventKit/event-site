@@ -49,6 +49,10 @@ export const isSummitEventDataUpdate = (entity_type) => {
     return entity_type === 'Presentation' || entity_type === 'SummitEvent' || entity_type === 'SummitEventWithFile';
 }
 
+export const isSummitEventTypeDataUpdate = (entity_type) => {
+    return entity_type === 'SummitEventType' || entity_type === 'PresentationType';
+}
+
 /**
  * @param summitId
  * @param bucketKey
