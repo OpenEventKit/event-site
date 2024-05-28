@@ -348,7 +348,7 @@ const ProfilePopupComponent = ({ userProfile, idpLoading, closePopup, showProfil
                     <input
                         className={`${styles.input} ${styles.isMedium}`}
                         type="text"
-                        placeholder="Twitter"
+                        placeholder="Twitter/X"
                         onChange={e => setTwitter(e.target.value)}
                         value={twitter} />
                   </div>
