@@ -18365,10 +18365,10 @@ sudo-prompt@^8.2.0:
   resolved "https://registry.yarnpkg.com/sudo-prompt/-/sudo-prompt-8.2.5.tgz#cc5ef3769a134bb94b24a631cc09628d4d53603e"
   integrity sha512-rlBo3HU/1zAJUrkY6jNxDOC9eVYliG6nS4JA8u8KAshITd07tafMc/Br7xQwCSseXwJ2iCcHCE8SNWX3q8Z+kw==
 
-summit-registration-lite@5.0.32:
-  version "5.0.32"
-  resolved "https://registry.yarnpkg.com/summit-registration-lite/-/summit-registration-lite-5.0.32.tgz#a86ff9e26ffb3d28285457102feb803c2eab5810"
-  integrity sha512-t0WTAy6kVakTvFVMQoO9Wa4MdarrH65k3wDzZXBcLi7bhPnc08Kburh5zAoTOWRS7U2GIei+j4K0PSQjhxH1/w==
+summit-registration-lite@5.0.33:
+  version "5.0.33"
+  resolved "https://registry.yarnpkg.com/summit-registration-lite/-/summit-registration-lite-5.0.33.tgz#7c0aba61fdd3b983f17da9004ccc2b3b9ed3dc87"
+  integrity sha512-NEqJwuKvAhPzrpdMZE4vYQcp/sjAq783uG5OPaUo4o7qe4tiwvS2NTExWOqx0PaLjoSNXJ/W6JgPgJUyZKLgVg==
   dependencies:
     "@emotion/react" "^11.11.1"
     "@emotion/styled" "^11.11.0"
