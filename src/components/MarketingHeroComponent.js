@@ -78,9 +78,6 @@ const MarketingHeroComponent = ({
               <div
                 className={styles.date}
                 style={{
-                  backgroundColor: data?.dateLayout
-                    ? "var(--color_secondary)"
-                    : "",
                   display: data?.dateLayout
                     ? ""
                     : "inline",
