@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { navigate } from "gatsby";
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
@@ -11,6 +11,7 @@ import LiteScheduleComponent from "../components/LiteScheduleComponent";
 import DisqusComponent from "../components/DisqusComponent";
 import Countdown from "../components/Countdown";
 import Link from "../components/Link";
+import ResponsiveImage from "../components/ResponsiveImage";
 
 import Masonry from "react-masonry-css";
 import Slider from "react-slick";
@@ -29,6 +30,11 @@ const sliderSettings = {
   slidesToScroll: 1
 };
 
+const shortcodes = {
+  a: Link,
+  img: ResponsiveImage
+};
+
 const MarketingPageTemplate = ({
   location,
   data,
@@ -37,6 +43,20 @@ const MarketingPageTemplate = ({
   summitPhase,
   isLoggedUser,
 }) => {
+  const rightColumnRef = useRef(null);
+  const [rightColumnHeight, setRightColumnHeight] = useState(0);
+
+  const onResize = () => {
+    rightColumnRef?.current && setRightColumnHeight(rightColumnRef.current.firstChild.clientHeight);
+  };
+
+  useEffect(() => {
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("resize", onResize);
+    };
+  }, [rightColumnRef]);
 
   const {
     marketingPageJson: {
@@ -66,10 +86,13 @@ const MarketingPageTemplate = ({
       />
       {summit && countdown?.display && <Countdown summit={summit} text={countdown?.text} />}
       <div className="columns">
-        <div className={`column mt-3 px-6 py-6 ${shouldRenderMasonry ? "is-half" : ""} ${styles.leftColumn ? styles.leftColumn : ""}`} style={{ position: "relative" }}>
-          {widgets?.text?.display && widgets?.text?.content &&
-          <Mdx>
-            {widgets.text.content}
+        <div
+          className={`column mt-3 px-6 py-6 ${shouldRenderMasonry ? "is-half" : ""} ${styles.leftColumn ? styles.leftColumn : ""}`}
+          style={{ maxHeight: rightColumnHeight }}
+        >
+          {widgets?.content?.display && widgets?.content?.body &&
+          <Mdx components={shortcodes}>
+            {widgets.content.body}
           </Mdx>
           }
           {widgets?.schedule?.display &&
@@ -93,7 +116,7 @@ const MarketingPageTemplate = ({
           </>
           }
           {widgets?.image?.display &&
-           widgets?.image?.image.src &&
+          widgets?.image?.image.src &&
           <>
             <h2><b>{widgets.image.title}</b></h2>
             <br />
@@ -102,7 +125,10 @@ const MarketingPageTemplate = ({
           }
         </div>
         {shouldRenderMasonry &&
-        <div className={`column is-half px-0 pb-0 ${styles.rightColumn ? styles.rightColumn : ""}`}>
+        <div
+          ref={rightColumnRef}
+          className={`column px-0 pb-0 is-half ${styles.rightColumn ? styles.rightColumn : ""}`}
+        >
           <Masonry
             breakpointCols={2}
             className="my-masonry-grid"
@@ -111,7 +137,7 @@ const MarketingPageTemplate = ({
               if (item.images && item.images.length === 1) {
                 const image = getImage(item.images[0].src);
                 return (
-                  <div className={'single'} key={index}>
+                  <div className={"single"} key={index}>
                     {item.images[0].link ?
                       <Link to={item.images[0].link}>
                         <GatsbyImage image={image} alt={item.images[0].alt ?? ""} />

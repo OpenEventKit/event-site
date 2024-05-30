@@ -1,8 +1,11 @@
 const axios = require("axios");
 const path = require("path");
-const fs = require("fs");
+const fs = require("fs-extra");
 const webpack = require("webpack");
-const { createFilePath } = require("gatsby-source-filesystem");
+const {
+  createFilePath,
+  createRemoteFileNode
+} = require("gatsby-source-filesystem");
 const SentryWebpackPlugin = require("@sentry/webpack-plugin");
 const { ClientCredentials } = require("simple-oauth2");
 
@@ -351,8 +354,52 @@ exports.onPreBootstrap = async () => {
   }
 };
 
-exports.createSchemaCustomization = ({ actions }) => {
-  const { createTypes } = actions;
+exports.createSchemaCustomization = async ({ actions, reporter, getNodeAndSavePathDependency }) => {
+  const { createFieldExtension, createTypes } = actions;
+  createFieldExtension({
+    name: "resolveImages",
+    extend: () => ({
+      async resolve(source, args, context, info) {
+        const content = source[info.fieldName];
+        const imageRegex = /!\[([^\]]*)\]\(([^)]+)\)/g;
+        let match;
+        let transformedContent = content;
+        while ((match = imageRegex.exec(content)) !== null) {
+          const [, alt, url] = match;
+          if (url.startsWith("http://") || url.startsWith("https://")) {
+            continue;
+          }
+          const node = await context.nodeModel.findOne({
+            type: "File",
+            query: { filter: { base: { eq: url } } }
+          });
+          if (!node) {
+            reporter.warn(`File node not found for ${url}`);
+            continue;
+          }
+          const absolutePath = path.resolve(node.dir, url);
+          if (!fs.existsSync(absolutePath)) {
+            reporter.warn(`File not found at path ${absolutePath}`);
+            continue;
+          }
+          const details = getNodeAndSavePathDependency(node.id, context.path);
+          const fileName = `${node.internal.contentDigest}/${details.base}`;
+          const publicStaticDir = path.join(process.cwd(), "public", "static");
+          const publicPath = path.join(publicStaticDir, fileName);
+          if (!fs.existsSync(publicPath)) {
+            try {
+              await fs.copy(details.absolutePath, publicPath, { dereference: true });
+            } catch (err) {
+              reporter.panic(`Error copying file from ${details.absolutePath} to ${publicPath}: ${err.message}`);
+              continue;
+            }
+          }
+          transformedContent = transformedContent.replace(url, `/static/${fileName}`);
+        }
+        return transformedContent;
+      }
+    })
+  });
   // TODO: improve typeDefs to allow theme override
   const typeDefs = require("./src/cms/config/collections/typeDefs");
   createTypes(typeDefs);

@@ -542,22 +542,6 @@ div.event-feedback-container {
       padding-right: 20px;
     }
   }
-
-  .schedule-container {
-    &-marketing {
-      display: flex;
-      flex-direction: column;
-      margin-top: 15px;
-      position: absolute;
-      overflow-y: auto;
-      top: 95px;
-      right: 0;
-      left: 20px;
-      bottom: 0;
-      padding-right: 20px;
-      padding-bottom: 30px;
-    }
-  }
 }
 
 /* extra questions */
