@@ -58,11 +58,6 @@ const marketingPage = {
           name: "date",
           required: false
         }),
-        booleanField({
-          label: "Date Layout",
-          name: "dateLayout",
-          required: false
-        }),
         stringField({
           label: "Time",
           name: "time",
