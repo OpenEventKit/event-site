@@ -2,7 +2,6 @@
   "hero": {
     "title": "",
     "date": "",
-    "dateLayout": false,
     "time": "",
     "buttons": {
       "registerButton": {

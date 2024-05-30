@@ -78,21 +78,13 @@ const MarketingHeroComponent = ({
               <div
                 className={styles.date}
                 style={{
-                  display: data?.dateLayout
-                    ? ""
-                    : "inline",
-                  transform: data?.dateLayout
-                    ? "skew(-25deg)"
-                    : "skew(0deg)",
+                  display: "inline",
+                  transform: "skew(0deg)",
                 }}
-              >
-                {data?.dateLayout ?
-                <div style={{transform: "skew(25deg)"}}>{data?.date}</div>
-                :
+              >                
                 <div style={{transform: "skew(0deg)"}}>
                   <span>{data?.date}</span>
                 </div>
-                }
               </div>
               <h4>{data?.time}</h4>
               <div className={styles.heroButtons}>
