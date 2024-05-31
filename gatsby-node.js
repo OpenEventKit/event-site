@@ -25,6 +25,7 @@ const {
   SPEAKERS_IDX_FILE_PATH,
   VOTEABLE_PRESENTATIONS_FILE_PATH,
   MARKETING_SETTINGS_FILE_PATH,
+  MAINTENANCE_PATH_NAME,
   CONTENT_PAGES_PATH_NAME,
   SPONSORS_FILE_PATH,
   FONTS_SCSS_FILE_PATH
@@ -420,6 +421,29 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 exports.createPages = async ({ actions, graphql }) => {
   const { createPage, createRedirect } = actions;
 
+  const siteSettings = fs.existsSync(SITE_SETTINGS_FILE_PATH) ? JSON.parse(fs.readFileSync(SITE_SETTINGS_FILE_PATH)) : {};
+  const maintenanceMode = siteSettings.maintenanceMode ?? { enabled: false };
+  const maintenancePath = `/${MAINTENANCE_PATH_NAME}/`;
+
+  if (maintenanceMode.enabled) {
+    // create a catch all redirect
+    createRedirect({
+      fromPath: "/*",
+      toPath: maintenancePath,
+      isPermanent: false,
+      statusCode: 302
+    });
+    // end execution, dont create any page from md/mdx
+    return;
+  } else {
+    createRedirect({
+      fromPath: maintenancePath,
+      toPath: "/",
+      isPermanent: false,
+      statusCode: 302
+    });
+  }
+
   const result = await graphql(`
     {
       allMdx {
@@ -458,6 +482,21 @@ exports.createPages = async ({ actions, graphql }) => {
     };
     createPage(page);
   });
+};
+
+exports.onCreatePage = async ({ page, actions }) => {
+  const { deletePage } = actions;
+
+  const siteSettings = fs.existsSync(SITE_SETTINGS_FILE_PATH) ? JSON.parse(fs.readFileSync(SITE_SETTINGS_FILE_PATH)) : {};
+  const maintenanceMode = siteSettings.maintenanceMode ?? { enabled: false };
+  const maintenancePath = `/${MAINTENANCE_PATH_NAME}/`;
+
+  const shouldDeletePage = (maintenanceMode.enabled && page.path !== maintenancePath) ||
+                           (!maintenanceMode.enabled && page.path === maintenancePath);
+
+  if (shouldDeletePage) {
+    deletePage(page);
+  }
 };
 
 exports.onCreateWebpackConfig = ({

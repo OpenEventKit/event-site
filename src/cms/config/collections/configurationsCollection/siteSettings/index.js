@@ -121,9 +121,9 @@ const siteSettings = {
               name: "allowClick",
               required: false,
               default: true
-            }),
+            })
           ]
-        }),
+        })
       ]
     }),
     objectField({
@@ -172,8 +172,8 @@ const siteSettings = {
               required: false,
               options: getFontFormatOptions()
             })
-          ],
-        }),
+          ]
+        })
       ]
     }),
     objectField({
@@ -194,7 +194,7 @@ const siteSettings = {
           label: "Logo Alt",
           name: "idpLogoAlt",
           required: false
-        }),
+        })
       ]
     }),
     listField({
@@ -235,6 +235,26 @@ const siteSettings = {
           valueType: "float",
           min: 0,
           required: true
+        })
+      ]
+    }),
+    objectField({
+      label: "Maintenance Mode",
+      name: "maintenanceMode",
+      fields: [
+        booleanField({
+          label: "Enabled",
+          name: "enabled",
+          required: false,
+          default: false
+        }),
+        stringField({
+          label: "Title",
+          name: "title"
+        }),
+        stringField({
+          label: "Subtitle",
+          name: "subtitle"
         })
       ]
     })
