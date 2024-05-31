@@ -4,6 +4,7 @@ import { createRequire } from "module";
 import { fileURLToPath } from "url";
 import webpack from "webpack";
 import remarkGfm from "remark-gfm";
+import rehypeMdxImportMedia from "rehype-mdx-import-media";
 
 const require = createRequire(import.meta.url);
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -157,6 +158,9 @@ const plugins = [
         remarkPlugins: [
           // Add GitHub Flavored Markdown (GFM) support
           remarkGfm
+        ],
+        rehypePlugins: [
+          rehypeMdxImportMedia 
         ]
       }
     }

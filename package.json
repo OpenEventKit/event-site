@@ -106,6 +106,7 @@
     "redux": "^4.1.2",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.1",
+    "rehype-mdx-import-media": "^1.2.0",
     "remark-gfm": "^4.0.0",
     "sass": "^1.49.9",
     "schedule-filter-widget": "3.0.1",
