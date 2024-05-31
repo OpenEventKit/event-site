@@ -47,6 +47,10 @@ const siteSettingsQuery = graphql`
         }
         providerLogoSize
       }
+      maintenanceMode {
+        title
+        subtitle
+      }
     }
   }
 `;

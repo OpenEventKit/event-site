@@ -46,5 +46,10 @@
       "providerLogo": "logo_facebook.svg",
       "providerLogoSize": 20
     }
-  ]
+  ],
+  "maintenanceMode" : {
+    "enabled": false,
+    "title": "Site under maintenance",
+    "subtitle": "Please reload page shortly"
+  }
 }

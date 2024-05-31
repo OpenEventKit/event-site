@@ -1,8 +1,10 @@
 
-.left-column {
+.leftColumn {
+  overflow-y: auto;
 }
-.right-column {
-  .image-slider {
+
+.rightColumn {
+  .imageSlider {
     height: auto;
     background-position: center;
     background-repeat: no-repeat;

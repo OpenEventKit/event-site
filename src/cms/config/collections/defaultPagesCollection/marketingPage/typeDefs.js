@@ -23,9 +23,9 @@ module.exports = `
     display: Boolean
     title: String
   }
-  type MarketingPageTextWidget {
+  type MarketingPageContentWidget {
     display: Boolean
-    content: String
+    body: String @resolveImages
   }
   type MarketingPageImageWidget {
     display: Boolean
@@ -33,10 +33,10 @@ module.exports = `
     image: ImageWithAlt
   }
   type MarketingPageWidgets {
-    text: MarketingPageTextWidget
-    image: MarketingPageImageWidget
+    content: MarketingPageContentWidget
     schedule: MarketingPageWidget
     disqus: MarketingPageWidget
+    image: MarketingPageImageWidget
   }
   type MarketingPageCountdown {
     display: Boolean

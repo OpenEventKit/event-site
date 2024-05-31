@@ -22,7 +22,7 @@ import { DefaultScrollBehaviour as ScrollBehaviour } from '@utils/scroll';
 import './ticket-popup-edit-details-form.scss';
 import { useTicketAssignedContext } from '../../../context/TicketAssignedContext';
 
-const noOpFn = () => {};
+const noop = () => {};
 
 export const TicketPopupEditDetailsForm = ({
     ticket,
@@ -277,7 +277,7 @@ export const TicketPopupEditDetailsForm = ({
                         placeholder={t("ticket_popup.edit_first_name_placeholder")}
                         value={formik.values[TicketKeys.firstName]}
                         onBlur={formik.handleBlur}
-                        onChange={!!initialValues[TicketKeys.firstName] ? noOpFn : formik.handleChange}
+                        onChange={!!initialValues[TicketKeys.firstName] ? noop : formik.handleChange}
                         disabled={!!initialValues[TicketKeys.firstName]}
                     />
                     {(formik.touched[TicketKeys.firstName] || triedSubmitting) && formik.errors[TicketKeys.firstName] &&
@@ -297,7 +297,7 @@ export const TicketPopupEditDetailsForm = ({
                         placeholder={t("ticket_popup.edit_last_name_placeholder")}
                         value={formik.values[TicketKeys.lastName]}
                         onBlur={formik.handleBlur}
-                        onChange={!!initialValues[TicketKeys.lastName] ? noOpFn : formik.handleChange}
+                        onChange={!!initialValues[TicketKeys.lastName] ? noop : formik.handleChange}
                         disabled={!!initialValues[TicketKeys.lastName]}
                     />
                     {(formik.touched[TicketKeys.lastName] || triedSubmitting) && formik.errors[TicketKeys.lastName] &&
@@ -317,7 +317,7 @@ export const TicketPopupEditDetailsForm = ({
                         placeholder={t("ticket_popup.edit_company_placeholder")}
                         value={formik.values[TicketKeys.company]}
                         onBlur={formik.handleBlur}
-                        onChange={!!initialValues[TicketKeys.company].name ? noOpFn : formik.handleChange}
+                        onChange={!!initialValues[TicketKeys.company].name ? noop : formik.handleChange}
                         disabled={!!initialValues[TicketKeys.company].name}
                         tabSelectsValue={false}
                     />
