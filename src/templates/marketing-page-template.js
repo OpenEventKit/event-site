@@ -44,10 +44,12 @@ const MarketingPageTemplate = ({
   isLoggedUser,
 }) => {
   const rightColumnRef = useRef(null);
-  const [rightColumnHeight, setRightColumnHeight] = useState(0);
+  const [rightColumnHeight, setRightColumnHeight] = useState();
 
   const onResize = () => {
-    rightColumnRef?.current && setRightColumnHeight(rightColumnRef.current.firstChild.clientHeight);
+    if (rightColumnRef?.current) {
+      setRightColumnHeight(rightColumnRef.current.firstChild.clientHeight);
+    }
   };
 
   useEffect(() => {
@@ -56,7 +58,7 @@ const MarketingPageTemplate = ({
     return () => {
       window.removeEventListener("resize", onResize);
     };
-  }, [rightColumnRef]);
+  }, [data, rightColumnRef]);
 
   const {
     marketingPageJson: {
@@ -71,8 +73,8 @@ const MarketingPageTemplate = ({
   if (widgets?.schedule && isLoggedUser && summitPhase !== PHASES.BEFORE) {
     scheduleProps = {
       ...scheduleProps,
-      onEventClick: (ev) => navigate(`/a/event/${ev.id}`),
-    }
+      onEventClick: (ev) => navigate(`/a/event/${ev.id}`)
+    };
   }
 
   const shouldRenderMasonry = masonry?.display;
@@ -87,8 +89,8 @@ const MarketingPageTemplate = ({
       {summit && countdown?.display && <Countdown summit={summit} text={countdown?.text} />}
       <div className="columns">
         <div
-          className={`column mt-3 px-6 py-6 ${shouldRenderMasonry ? "is-half" : ""} ${styles.leftColumn ? styles.leftColumn : ""}`}
-          style={{ maxHeight: rightColumnHeight }}
+          className={`column mt-3 px-6 py-6 ${shouldRenderMasonry ? "is-half" : ""} ${styles.leftColumn || ""}`}
+          style={{ maxHeight: shouldRenderMasonry && rightColumnHeight ? rightColumnHeight : "none" }}
         >
           {widgets?.content?.display && widgets?.content?.body &&
           <Mdx components={shortcodes}>
@@ -127,7 +129,7 @@ const MarketingPageTemplate = ({
         {shouldRenderMasonry &&
         <div
           ref={rightColumnRef}
-          className={`column px-0 pb-0 is-half ${styles.rightColumn ? styles.rightColumn : ""}`}
+          className={`column px-0 pb-0 is-half ${styles.rightColumn || ""}`}
         >
           <Masonry
             breakpointCols={2}
@@ -146,7 +148,7 @@ const MarketingPageTemplate = ({
                       <GatsbyImage image={image} alt={item.images[0].alt ?? ""} />
                     }
                   </div>
-                )
+                );
               } else if (item.images && item.images.length > 1) {
                 return (
                   <Slider {...sliderSettings} key={index}>
@@ -162,14 +164,14 @@ const MarketingPageTemplate = ({
                             <GatsbyImage image={img} alt={image.alt ?? ""} />
                           }
                         </div>
-                      )
+                      );
                     })}
                   </Slider>
-                )
+                );
               } else {
                 return (
                   <div className="single" key={index} />
-                )
+                );
               }
             })}
           </Masonry>
@@ -177,7 +179,7 @@ const MarketingPageTemplate = ({
         }
       </div>
     </Layout>
-  )
+  );
 };
 
 MarketingPageTemplate.propTypes = {
