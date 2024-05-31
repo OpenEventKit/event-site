@@ -12,7 +12,6 @@ export const marketingPageQuery = graphql`
       hero {
         title
         subTitle
-        dateLayout
         date
         time
         background {

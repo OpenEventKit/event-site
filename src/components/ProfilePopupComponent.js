@@ -343,12 +343,12 @@ const ProfilePopupComponent = ({ userProfile, idpLoading, closePopup, showProfil
                   </div>
                 </div>
                 <div className={`columns is-mobile ${styles.inputRow}`}>
-                  <div className='column is-one-quarter'>Twitter</div>
+                  <div className='column is-one-quarter'>X</div>
                   <div className='column is-two-thirds'>
                     <input
                         className={`${styles.input} ${styles.isMedium}`}
                         type="text"
-                        placeholder="Twitter"
+                        placeholder="Twitter/X"
                         onChange={e => setTwitter(e.target.value)}
                         value={twitter} />
                   </div>

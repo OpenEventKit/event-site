@@ -55,7 +55,6 @@ module.exports = `
     subTitle: String
     date: String
     time: String
-    dateLayout: Boolean
     images: [ImageWithAlt]
     background: ImageWithAlt
     buttons: MarketingPageHeroButtons
