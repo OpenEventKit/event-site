@@ -3,8 +3,7 @@ const path = require("path");
 const fs = require("fs-extra");
 const webpack = require("webpack");
 const {
-  createFilePath,
-  createRemoteFileNode
+  createFilePath
 } = require("gatsby-source-filesystem");
 const SentryWebpackPlugin = require("@sentry/webpack-plugin");
 const { ClientCredentials } = require("simple-oauth2");
@@ -473,7 +472,7 @@ exports.createPages = async ({ actions, graphql }) => {
   nodes.forEach((node) => {
     const { id, fields: { slug }, frontmatter: { templateKey }, internal: { contentFilePath } } = node;
     const template = require.resolve(`./src/templates/${String(templateKey)}`);
-    // remove content pages namespace from path 
+    // remove content pages namespace from path
     const path = slug.replace(`${CONTENT_PAGES_PATH_NAME}`, "/");
     const page = {
       path: path,
