@@ -12,6 +12,8 @@ import {
     faYoutube
 } from "@fortawesome/free-brands-svg-icons"
 
+import "font-awesome/css/font-awesome.css";
+
 library.add(
     faTwitter,
     faFacebook, 

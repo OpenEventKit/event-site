@@ -7,13 +7,6 @@ export const HtmlAttributes = {
 
 export const HeadComponents = [
   <link
-    key="font-awesome"
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw=="
-    crossOrigin="anonymous"
-    referrerPolicy="no-referrer"
-  />,
-  <link
     key="awesome-bootstrap-checkbox"
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/awesome-bootstrap-checkbox/1.0.2/awesome-bootstrap-checkbox.min.css" integrity="sha512-zAQ4eQ+PGbYf6BknDx0m2NhTcOnHWpMdJCFaPvcv5BpMTR5edqr/ZRuluUcNave6IEpRCoT67/3hVVmm5ODpqA=="
