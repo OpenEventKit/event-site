@@ -23,7 +23,7 @@ const FooterMarketing = () => (
       {footerContent.social.networks.map((net, index) => (
         net.display &&
         <Link href={net.link} className={styles.link} key={index}>
-          <FontAwesomeIcon icon={`fa-brands ${net.icon}`} />
+          <FontAwesomeIcon icon={`fa-brands ${net.icon}`} size="lg" />
         </Link>
       ))}
     </div>
