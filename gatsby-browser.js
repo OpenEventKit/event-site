@@ -12,6 +12,9 @@ import "what-input";
 import "./src/styles/bulma.scss";
 // import base styles
 import "./src/styles/style.scss";
+// import global fontawesome
+import "./src/utils/fontAwesome";
+
 import colors from "data/colors.json";
 import marketingSettings from "data/marketing-settings.json";
 
