@@ -14,6 +14,8 @@ import "./src/styles/bulma.scss";
 import "./src/styles/style.scss";
 import colors from "data/colors.json";
 import marketingSettings from "data/marketing-settings.json";
+// import global fontawesome
+import "./src/utils/fontAwesome";
 
 // smooth scroll polyfill needed for Safari
 smoothscroll.polyfill();
