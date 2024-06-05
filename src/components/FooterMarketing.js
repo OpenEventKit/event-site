@@ -1,6 +1,8 @@
 import * as React from "react";
 import Link from "./Link";
 
+import { getFASocialIcons } from '../utils/helpers';
+
 import footerContent from "content/footer/index.json";
 
 import styles from "../styles/footer.module.scss";
@@ -22,7 +24,7 @@ const FooterMarketing = () => (
       {footerContent.social.networks.map((net, index) => (
         net.display &&
         <Link href={net.link} className={styles.link} key={index}>
-          <i className={`fa icon is-large ${net.icon}`} />
+          {getFASocialIcons(net.icon)}
         </Link>
       ))}
     </div>
