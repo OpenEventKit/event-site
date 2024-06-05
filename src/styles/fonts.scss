@@ -1,31 +1,26 @@
-$font-family: "proximanova";
+/**
+* Warning:
+* Dont edit this file by hand, this file is used as default font implementation for the whole site
+* and it been re generated if font settings are set through CMS on gatsby-node.js line # 346
+**/
+
+$font-family: 'Nunito Sans', sans-serif;
 
 :root {
-  --font_family: "proximanova" !important;
+  --font_family: #{$font-family};
 }
 
-@font-face {
-  font-family: "proximanova";
-  src: url("/fonts/proximanovaregular.otf") format("opentype");
-  font-weight: normal;
-}
-@font-face {
-  font-family: "proximanova";
-  src: url("/fonts/proximanovabold.otf") format("opentype");
-  font-weight: bold;
-}
-  
 %font-regular {
-  font-family: var(--font_family);
+  font-family: 'Nunito Sans', sans-serif;
   font-weight: 400;
 }
 
 %font-semi {
-  font-family: var(--font_family);
+  font-family: 'Nunito Sans', sans-serif;
   font-weight: 600;
 }
 
 %font-bold {
-  font-family: var(--font_family);
+  font-family: 'Nunito Sans', sans-serif;
   font-weight: 700;
 }
