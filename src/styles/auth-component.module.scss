@@ -1,0 +1,37 @@
+@import "colors.scss";
+
+.authComponent {
+  #modal {
+    padding: 100px 0;
+  }
+  .modalContent {
+    overflow: initial;
+  }
+  .outerWrapper {
+    border: 1px solid var(--color_input_border_color);
+    background-color: var(--color_background_light);
+    border-radius: 5px;
+  }
+  .innerWrapper {
+    padding: 10px;
+  }
+  .title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid var(--color_input_border_color);
+    margin: 0px -10px;
+    padding: 0px 15px 5px;
+    i {
+      cursor: pointer;
+      margin-left: auto;
+    }
+    span {
+      width: 100%;
+      font-weight: bold;
+      font-size: 18px;
+      text-align: center;
+      color: var(--color_text_dark);
+    }
+  }
+}

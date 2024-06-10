@@ -1,34 +1,34 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import * as Sentry from "@sentry/react";
-import { navigate, withPrefix } from "gatsby"
+import { navigate, withPrefix } from "gatsby";
 import { connect } from "react-redux";
 import URI from "urijs";
-import PropTypes from 'prop-types';
+import Swal from "sweetalert2";
 
+import FragmentParser from "openstack-uicore-foundation/lib/utils/fragment-parser";
+import { doLogin, passwordlessStart, getAccessToken } from "openstack-uicore-foundation/lib/security/methods"
+import { doLogout } from "openstack-uicore-foundation/lib/security/actions"
+import { getUserProfile, setPasswordlessLogin, setUserOrder, checkOrderData } from "../actions/user-actions";
+import { getThirdPartyProviders } from "../actions/base-actions";
+import { checkRequireExtraQuestionsByAttendee } from "../actions/user-actions";
+import { getExtraQuestions } from "../actions/summit-actions";
+
+import IconButton from "./IconButton";
+import iconButtonStyles from "./IconButton/styles.module.scss";
+
+import { SentryFallbackFunction } from "./SentryErrorComponent";
 // these two libraries are client-side only
 import RegistrationLiteWidget from "summit-registration-lite/dist";
 import "summit-registration-lite/dist/index.css";
-import FragmentParser from "openstack-uicore-foundation/lib/utils/fragment-parser";
-import {doLogin, passwordlessStart, getAccessToken} from "openstack-uicore-foundation/lib/security/methods"
-import {doLogout} from "openstack-uicore-foundation/lib/security/actions"
-import {getEnvVariable, SUMMIT_API_BASE_URL, OAUTH2_CLIENT_ID, REGISTRATION_BASE_URL, SUPPORT_EMAIL} from "../utils/envVariables"
-import {getUserProfile, setPasswordlessLogin, setUserOrder, checkOrderData} from "../actions/user-actions";
-import {getThirdPartyProviders} from "../actions/base-actions";
-import { validateIdentityProviderButtons } from "../utils/loginUtils";
-import Swal from "sweetalert2";
-import {checkRequireExtraQuestionsByAttendee} from "../actions/user-actions";
-import {userHasAccessLevel, VirtualAccessLevel} from "../utils/authorizedGroups";
 
-import { getExtraQuestions } from "../actions/summit-actions";
-
-import useMarketingSettings, { MARKETING_SETTINGS_KEYS }  from "@utils/useMarketingSettings";
 import useSiteSettings from "@utils/useSiteSettings";
-import { SentryFallbackFunction } from "./SentryErrorComponent";
-
+import useMarketingSettings, { MARKETING_SETTINGS_KEYS }  from "@utils/useMarketingSettings";
+import { getEnvVariable, SUMMIT_API_BASE_URL, OAUTH2_CLIENT_ID, REGISTRATION_BASE_URL, SUPPORT_EMAIL } from "@utils/envVariables";
+import { userHasAccessLevel, VirtualAccessLevel } from "@utils/authorizedGroups";
+import { validateIdentityProviderButtons } from "@utils/loginUtils";
 import { triggerAnalyticsTrackEvent } from "@utils/customEvents";
 import { PURCHASE_COMPLETE } from "@utils/analytics/events";
-
-import styles from "../styles/marketing-hero.module.scss";
 
 const RegistrationLiteComponent = ({
    registrationProfile,
@@ -208,11 +208,13 @@ const RegistrationLiteComponent = ({
                 React.cloneElement(children, { onClick: handleOpenPopup })
                 :
                 registerButton.display &&
-                <button className={`${styles.button} button is-large`} disabled={isActive}
-                        onClick={handleOpenPopup}>
-                    <i className={`fa fa-2x fa-edit icon is-large`}/>
-                    <b>{registerButton.text}</b>
-                </button>
+                <IconButton
+                    className={iconButtonStyles.register}
+                    iconClass="fa fa-2x fa-edit"
+                    buttonText={registerButton.text}
+                    onClick={handleOpenPopup}
+                    disabled={isActive}
+                />
             }
             <Sentry.ErrorBoundary fallback={SentryFallbackFunction({componentName: "Registration Lite"})}>
                 {isActive && <RegistrationLiteWidget {...widgetProps} />}

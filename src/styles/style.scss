@@ -188,41 +188,6 @@ h2 {
   }
 }
 
-#marketing-slider {
-  .slick-track {
-    height: inherit;
-  }
-}
-
-.my-masonry-grid {
-  display: -webkit-box;
-  /* Not needed if autoprefixing */
-  display: -ms-flexbox;
-  /* Not needed if autoprefixing */
-  display: flex;
-  width: auto;
-}
-
-.my-masonry-grid_column {
-  padding-left: 0px;
-  /* gutter size */
-  background-clip: padding-box;
-
-  .slick-slider {
-    margin-bottom: -5px;
-  }
-}
-
-/* Style your items */
-.my-masonry-grid_column > div {
-  /* change div to reference your elements you put in <Masonry> */
-  margin-bottom: 0px;
-
-  img {
-    width: 100%;
-  }
-}
-
 .sponsor-carousel {
   .slick-track {
     display: flex;
@@ -488,23 +453,9 @@ div.event-feedback-container {
   }
 }
 
-@media (max-width: 978px) {
-  #marketing-slider {
-    .slick-track {
-      height: 520px;
-    }
-  }
-}
-
 @media (max-width: 768px) {
   div.login-form {
     width: auto;
-  }
-
-  #marketing-slider {
-    .slick-track {
-      height: 250px;
-    }
   }
 
   .join-zoom-container {
