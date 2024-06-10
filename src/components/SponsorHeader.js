@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from "react";
+import Link from "./Link";
+import { useResize } from "@utils/hooks";
 
-import Link from './Link'
-
-import styles from '../styles/sponsor-page.module.scss'
+import styles from "../styles/sponsor-page.module.scss";
 
 const SponsorHeader = ({ sponsor, scanBadge }) => {
 
@@ -15,24 +15,13 @@ const SponsorHeader = ({ sponsor, scanBadge }) => {
   const setIsMuted = (isMuted) => {
     const player = videoParentRef.current.children[0];
     player.muted = isMuted;
-    _setIsMuted(isMuted)
+    _setIsMuted(isMuted);
   };
 
   const onResize = () => {
-    if (window.innerWidth <= 768) {
-      setIsMobile(true);
-    } else {
-      setIsMobile(false);
-    }
+    setIsMobile(window.innerWidth <= 768);
   };
-
-  useEffect(() => {
-    onResize();
-    window.addEventListener("resize", onResize);
-    return () => {
-      window.removeEventListener("resize", onResize);
-    };
-  });
+  useResize(onResize);
 
   return (
     <section className={styles.hero}>
@@ -107,8 +96,8 @@ const SponsorHeader = ({ sponsor, scanBadge }) => {
           </div>
         </div>
       }
-    </section >
+    </section>
   )
-}
+};
 
-export default SponsorHeader
+export default SponsorHeader;
