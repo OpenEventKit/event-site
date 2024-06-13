@@ -37,7 +37,7 @@ const MarketingHero = ({ location, data }) => {
 };
 
 MarketingHero.propTypes = {
-  location: PropTypes.string.isRequired,
+  location: PropTypes.object.isRequired,
   data: PropTypes.object
 };
 
