@@ -31,8 +31,8 @@ catch (e) {
   console.log("Falling back to default site settings.")
 }
 
-const title = siteSettings?.siteMetadata?.title || process.env.GATSBY_METADATA_TITLE || "Event Site";
-const description = siteSettings?.siteMetadata?.description || process.env.GATSBY_METADATA_DESCRIPTION || "Event Site";
+const title = siteSettings?.siteMetadata?.title || process.env.GATSBY_METADATA_TITLE || "";
+const description = siteSettings?.siteMetadata?.description || process.env.GATSBY_METADATA_DESCRIPTION || "";
 const faviconAsset = siteSettings?.favicon?.asset;
 
 const manifestPlugin = faviconAsset ? [
