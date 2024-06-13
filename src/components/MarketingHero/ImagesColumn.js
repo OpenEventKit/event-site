@@ -22,7 +22,7 @@ const ImagesColumn = ({ images }) => {
           <img
             key={index}
             src={getSrc(image.src)}
-            alt={image.alt}
+            alt={image.alt ?? ""}
           />
           ))}
         </Slider>
@@ -30,7 +30,7 @@ const ImagesColumn = ({ images }) => {
         <GatsbyImage
           className={styles.singleImage}
           image={getImage(images[0].src)}
-          alt={images[0].alt}
+          alt={images[0].alt ?? ""}
         />
       )}
     </div>
