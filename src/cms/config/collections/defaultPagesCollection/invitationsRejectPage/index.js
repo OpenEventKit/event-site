@@ -21,16 +21,16 @@ const invitationsRejectPage = {
       default: "Invitation not found."
     }),
     stringField({
-      label: "Rejected text",
-      name: "rejectedText",
-      required: false,
-      default: "Invitation has already been rejected."
-    }),
-    stringField({
       label: "Reject text",
       name: "rejectText",
       required: false,
       default: "To reject please click on the button below."
+    }),
+    stringField({
+      label: "Reject Confirmation Text",
+      name: "rejectedText",
+      required: false,
+      default: "Invitation has already been rejected."
     }),
     stringField({
       label: "Reject CTA label",
