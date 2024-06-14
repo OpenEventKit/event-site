@@ -1,6 +1,6 @@
 import * as React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "./Link";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import footerContent from "content/footer/index.json";
 

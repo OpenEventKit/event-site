@@ -1,4 +1,5 @@
 import * as React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FooterMarketing from "../FooterMarketing";
 import Link from "../Link";
 
@@ -29,7 +30,7 @@ const FooterTemplate = ({ data, summit, marketing }) => {
                         {data.social.networks.map((net, index) => (
                           net.display &&
                           <Link to={net.link} key={index}>
-                            <i className={`fa icon is-large ${net.icon}`}></i>
+                            <FontAwesomeIcon icon={`fa-brands ${net.icon}`} size="lg" />
                           </Link>
                         ))}
                       </div>
@@ -81,7 +82,7 @@ const FooterTemplate = ({ data, summit, marketing }) => {
                     {data.social.networks.map((net, index) => (
                       net.display &&
                       <Link to={net.link} className={styles.link} key={index}>
-                        <i className={`fa icon is-large ${net.icon}`} />
+                        <FontAwesomeIcon icon={`fa-brands ${net.icon}`} size="lg" />
                       </Link>
                     ))}
                   </div>
