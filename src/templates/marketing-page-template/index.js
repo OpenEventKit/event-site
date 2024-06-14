@@ -7,7 +7,6 @@ import Countdown from "../../components/Countdown";
 import MainColumn from "./MainColumn";
 import Masonry from "./Masonry";
 import { useResize } from "@utils/hooks";
-import { PHASES } from "@utils/phasesUtils";
 
 import styles from "./styles.module.scss";
 

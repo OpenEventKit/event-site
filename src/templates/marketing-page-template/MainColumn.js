@@ -9,6 +9,8 @@ import DisqusComponent from "../../components/DisqusComponent";
 import ResponsiveImage from "../../components/ResponsiveImage";
 import Link from "../../components/Link";
 
+import { PHASES } from "@utils/phasesUtils";
+
 import styles from "./styles.module.scss";
 
 const shortcodes = {
