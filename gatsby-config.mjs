@@ -26,26 +26,27 @@ const {
 let siteSettings = require(`./${SITE_SETTINGS_FILE_PATH}`);
 try {
   siteSettings = require(path.resolve(SITE_SETTINGS_FILE_PATH));
-}
-catch (e) {
+} catch (e) {
   console.log("Falling back to default site settings.")
 }
 
-const title = siteSettings?.siteMetadata?.title || process.env.GATSBY_METADATA_TITLE || "";
-const description = siteSettings?.siteMetadata?.description || process.env.GATSBY_METADATA_DESCRIPTION || "";
+const packageJson = require(path.resolve(__dirname, "package.json"));
+
+const title = siteSettings?.siteMetadata?.title || process.env.GATSBY_METADATA_TITLE;
+const description = siteSettings?.siteMetadata?.description || process.env.GATSBY_METADATA_DESCRIPTION;
 const faviconAsset = siteSettings?.favicon?.asset;
 
 const manifestPlugin = faviconAsset ? [
   {
     resolve: "gatsby-plugin-manifest",
     options: {
-      name: title,
-      short_name: title,
-      description: description,
+      name: title ?? packageJson.name,
+      short_name: title ?? packageJson.name,
       start_url: "/",
       display: "minimal-ui",
       icon: path.join(SITE_SETTINGS_DIR_PATH, faviconAsset),
-      include_favicon: true
+      include_favicon: true,
+      ...description && { description }
     }
   }
 ] : [];
