@@ -40,8 +40,8 @@ const manifestPlugin = faviconAsset ? [
   {
     resolve: "gatsby-plugin-manifest",
     options: {
-      name: title ?? packageJson.name,
-      short_name: title ?? packageJson.name,
+      name: title ?? packageJson.description,
+      short_name: title ?? packageJson.description,
       start_url: "/",
       display: "minimal-ui",
       icon: path.join(SITE_SETTINGS_DIR_PATH, faviconAsset),
