@@ -10,11 +10,7 @@ const siteSettingsQuery = graphql`
         title,
         description,
         image {
-          childImageSharp {
-            gatsbyImageData (
-              quality: 100
-            )
-          }
+          publicURL
         }
       }
       widgets {

@@ -2,7 +2,6 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import useSiteMetadata from "@utils/useSiteMetadata";
 import useSiteSettings from "@utils/useSiteSettings";
-import { getSrc } from "gatsby-plugin-image";
 import { buildUrl } from "@utils/urlFormating";
 import { getEnvVariable, SITE_URL } from "@utils/envVariables";
 
@@ -13,7 +12,7 @@ const Seo = ({ title, description, location, children }) => {
   } = useSiteMetadata();
 
   const siteSettings = useSiteSettings();
-  const image = siteSettings?.siteMetadata?.image
+  const image = siteSettings?.siteMetadata?.image;
 
   const siteUrl = getEnvVariable(SITE_URL);
   const siteUrlInfo = siteUrl ? new URL(siteUrl) : null;
@@ -25,7 +24,7 @@ const Seo = ({ title, description, location, children }) => {
     title: title ? `${siteTitle} - ${title}` : siteTitle,
     description: description || defaultDescription,
     url: buildUrl(scheme, host, pathname),
-    image: host && image ? buildUrl(scheme, host, getSrc(image)) : null,
+    image: host && image ? buildUrl(scheme, host, image.publicURL) : null,
   };
   return (
     <>
