@@ -34,9 +34,9 @@ export const onClientEntry = () => {
     document.documentElement.style.setProperty(`--${key}50`, `${value}50`);
   });
   // set theme
-  const themeSetting = marketingSettings.find(ms => ms.key === 'EVENT_SITE_COLOR_SCHEME');
-  const theme = themeSetting?.value || 'LIGHT';
-  document.documentElement.setAttribute('data-theme', theme);
+  const themeSetting = marketingSettings.find(ms => ms.key === "EVENT_SITE_COLOR_SCHEME");
+  const theme = themeSetting?.value || "LIGHT";
+  document.documentElement.setAttribute("data-theme", theme);
 
   // init sentry
   const GATSBY_SENTRY_DSN = process.env.GATSBY_SENTRY_DSN;

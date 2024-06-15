@@ -26,6 +26,7 @@ const Seo = ({ title, description, location, children }) => {
     url: buildUrl(scheme, host, pathname),
     image: host && image ? buildUrl(scheme, host, image.publicURL) : null,
   };
+
   return (
     <>
       {seo.title && <title>{seo.title}</title>}

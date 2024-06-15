@@ -1,6 +1,6 @@
 const axios = require("axios");
 const path = require("path");
-const fs = require("fs-extra");
+const fs = require("fs");
 const webpack = require("webpack");
 const {
   createFilePath
@@ -16,6 +16,7 @@ const {
   REQUIRED_DIR_PATHS,
   DEFAULT_COLORS_FILE_PATH,
   COLORS_FILE_PATH,
+  COLORS_SCSS_FILE_PATH,
   SITE_SETTINGS_FILE_PATH,
   SUMMIT_FILE_PATH,
   EVENTS_FILE_PATH,
@@ -29,7 +30,12 @@ const {
   SPONSORS_FILE_PATH,
   FONTS_SCSS_FILE_PATH
 } = require("./src/utils/filePath");
-const { generateFontFile } = require("./src/utils/cssUtils");
+
+const {
+  generateAndWriteScssFile,
+  generateFontScssFile,
+  generateColorsScssFile
+} = require("./src/utils/scssUtils");
 
 const fileBuildTimes = [];
 
@@ -228,8 +234,8 @@ exports.onPreBootstrap = async () => {
   const summitId = process.env.GATSBY_SUMMIT_ID;
   const summitApiBaseUrl = process.env.GATSBY_SUMMIT_API_BASE_URL;
   let   marketingSettings = await SSR_getMarketingSettings(process.env.GATSBY_MARKETING_API_BASE_URL, summitId);
-  const colorSettings = fs.existsSync(COLORS_FILE_PATH) ? JSON.parse(fs.readFileSync(COLORS_FILE_PATH)) : require(`./${DEFAULT_COLORS_FILE_PATH}`);
   const siteSettings = fs.existsSync(SITE_SETTINGS_FILE_PATH) ? JSON.parse(fs.readFileSync(SITE_SETTINGS_FILE_PATH)) : {};
+  const colors = fs.existsSync(COLORS_FILE_PATH) ? JSON.parse(fs.readFileSync(COLORS_FILE_PATH)) : require(`./${DEFAULT_COLORS_FILE_PATH}`);
 
   const config = {
     client: {
@@ -247,12 +253,12 @@ exports.onPreBootstrap = async () => {
 
   const accessToken = await getAccessToken(config, process.env.GATSBY_BUILD_SCOPES).then(({ token }) => token.access_token);
 
-  const FileType = 'FILE';
+  const FileType = "FILE";
   // extract colors from marketing settings
-  marketingSettings = marketingSettings.map( entry => {
-    if (entry.key.startsWith("color_")) colorSettings[entry.key] = entry.value;
-    if(entry.type === FileType) return {...entry, value: entry.file};
-    return {...entry};
+  marketingSettings = marketingSettings.map(entry => {
+    if (entry.key.startsWith("color_")) colors[entry.key] = entry.value;
+    if (entry.type === FileType) return { ...entry, value: entry.file };
+    return { ...entry };
   });
 
   // create required directories
@@ -263,7 +269,17 @@ exports.onPreBootstrap = async () => {
   });
 
   fs.writeFileSync(MARKETING_SETTINGS_FILE_PATH, JSON.stringify(marketingSettings), "utf8");
-  fs.writeFileSync(COLORS_FILE_PATH, JSON.stringify(colorSettings), "utf8");
+
+  // write colors json used to set runtime colors in gatsby-browser
+  fs.writeFileSync(COLORS_FILE_PATH, JSON.stringify(colors), "utf8");
+
+  // generate and write colors SCSS file used by built styles 
+  generateAndWriteScssFile(generateColorsScssFile, colors, COLORS_SCSS_FILE_PATH);
+
+  if (siteSettings.siteFont) {    
+    // generate and write font SCSS file used by built styles 
+    generateAndWriteScssFile(generateFontScssFile, siteSettings.siteFont, FONTS_SCSS_FILE_PATH);
+  }
 
   // summit
   const summit = await SSR_getSummit(summitApiBaseUrl, summitId);
@@ -291,7 +307,6 @@ exports.onPreBootstrap = async () => {
     "build_time": Date.now()
   });
   fs.writeFileSync(EVENTS_IDX_FILE_PATH, JSON.stringify(allEventsIDX), "utf8");
-
 
   // Show Speakers
   const allSpeakers = await SSR_getSpeakers(summitApiBaseUrl, summitId, accessToken);
@@ -335,23 +350,6 @@ exports.onPreBootstrap = async () => {
   siteSettings.lastBuild = Date.now();
 
   fs.writeFileSync(SITE_SETTINGS_FILE_PATH, JSON.stringify(siteSettings), "utf8");
-
-  // Read fonts from site settings
-  const siteFonts = siteSettings.siteFont;
-
-  if(siteFonts && Object.keys(siteFonts).length > 0) {
-    // Generate the SCSS file
-    const scssFontsFile = generateFontFile(siteFonts);
-    if (scssFontsFile) {
-      const standalone = __dirname === path.resolve();
-      let fontFilePath = FONTS_SCSS_FILE_PATH;
-      if (!standalone) {
-        fontFilePath = `${__dirname}/${fontFilePath}`;
-      }
-      fs.writeFileSync(fontFilePath, scssFontsFile);
-      console.log(`CUSTOM FONT FILE ${fontFilePath} generated.`);
-    }
-  }
 };
 
 exports.createSchemaCustomization = async ({ actions, reporter, getNodeAndSavePathDependency }) => {

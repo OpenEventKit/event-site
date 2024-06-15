@@ -1,1 +1,50 @@
-{"widgets":{"chat":{"enabled":true,"showQA":false,"showHelp":false,"defaultScope":"page"},"schedule":{"allowClick":true}},"favicon":{"asset":"icon.png"},"idpLogo":{"idpLogoDark":"","idpLogoLight":"","idpLogoAlt":""},"identityProviderButtons":[{"buttonColor":"#082238","providerLabel":"Continue with FNid","providerLogo":"logo_fn.svg","providerLogoSize":27},{"buttonColor":"#0A66C2","providerLabel":"Sign in with LinkedIn","providerParam":"linkedin","providerLogo":"logo_linkedin.svg","providerLogoSize":18},{"buttonColor":"#000000","providerLabel":"Sign in with Apple","providerParam":"apple","providerLogoSize":17,"providerLogo":"logo_apple.svg"},{"buttonColor":"#1877F2","providerLabel":"Login with Facebook","providerParam":"facebook","providerLogo":"logo_facebook.svg","providerLogoSize":20}],"maintenanceMode":{"enabled":false,"title":"Site under maintenance","subtitle":"Please reload page shortly"},"staticJsonFilesBuildTime":[{"file":"src/data/summit.json","build_time":1717432857795},{"file":"src/data/events.json","build_time":1717432863110},{"file":"src/data/events.idx.json","build_time":1717432863115},{"file":"src/data/speakers.json","build_time":1717432864148},{"file":"src/data/speakers.idx.json","build_time":1717432864149},{"file":"src/content/sponsors.json","build_time":1717432868235},{"file":"src/data/voteable-presentations.json","build_time":1717432868631}],"lastBuild":1717432868632}
+{
+  "favicon": {
+    "asset": "icon.png"
+  },
+  "widgets": {
+    "chat": {
+      "enabled": true,
+      "showQA": false,
+      "showHelp": false,
+      "defaultScope": "page"
+    },
+    "schedule": {
+      "allowClick": true
+    }
+  },
+  "identityProviderButtons": [
+    {
+      "buttonColor": "#082238",
+      "providerLabel": "Continue with FNid",
+      "providerLogo": "logo_fn.svg",
+      "providerLogoSize": 27
+    },
+    {
+      "buttonColor": "#0A66C2",
+      "providerLabel": "Sign in with LinkedIn",
+      "providerParam": "linkedin",
+      "providerLogo": "logo_linkedin.svg",
+      "providerLogoSize": 18
+    },
+    {
+      "buttonColor": "#000000",
+      "providerLabel": "Sign in with Apple",
+      "providerParam": "apple",
+      "providerLogoSize": 17,
+      "providerLogo": "logo_apple.svg"
+    },
+    {
+      "buttonColor": "#1877F2",
+      "providerLabel": "Login with Facebook",
+      "providerParam": "facebook",
+      "providerLogo": "logo_facebook.svg",
+      "providerLogoSize": 20
+    }
+  ],
+  "maintenanceMode": {
+    "enabled": false,
+    "title": "Site under maintenance",
+    "subtitle": "Please reload page shortly"
+  }
+}
