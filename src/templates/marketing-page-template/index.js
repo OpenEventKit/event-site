@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import PropTypes from "prop-types";
+import { NoSsr } from "@mui/base/NoSsr";
 import Layout from "../../components/Layout";
 import AttendanceTrackerComponent from "../../components/AttendanceTrackerComponent";
 import MarketingHero from "../../components/MarketingHero";
@@ -37,7 +38,11 @@ const MarketingPageTemplate = ({ data, location, summit, summitPhase, isLoggedUs
     <Layout marketing={true} location={location}>
       <AttendanceTrackerComponent />
       <MarketingHero location={location} data={hero} />
-      {summit && countdown?.display && <Countdown summit={summit} text={countdown?.text} />}
+      {summit && countdown?.display &&
+      <NoSsr>
+        <Countdown summit={summit} text={countdown?.text} />
+      </NoSsr>
+      }
       <div className="columns is-marginless">
         <MainColumn
           widgets={widgets}
