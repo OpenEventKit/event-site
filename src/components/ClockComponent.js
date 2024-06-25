@@ -10,9 +10,6 @@ const ClockComponent = ({
   updateClock,
   userProfile,
 }) => {
-
-  console.log('check authtorized...', userProfile ? isAuthorizedUser(userProfile.groups) : false);
-  
   return (
     <div>
       {active && summit &&
