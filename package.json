@@ -74,6 +74,7 @@
     "immutability-helper": "2.9.1",
     "immutable": "^5.0.0-beta.5",
     "jsdom": "^24.1.0",
+    "klaro": "^0.7.21",
     "lite-schedule-widget": "3.0.3",
     "live-event-widget": "4.0.2",
     "lodash": "^4.17.19",
