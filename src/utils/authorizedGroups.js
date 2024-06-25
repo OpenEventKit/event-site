@@ -16,6 +16,13 @@ export const isAuthorizedUser = (groups) => {
     : false;
 };
 
+export const isUserAdminOrTester = (groups) => {
+    let authorizedGroups = ["tester-groups", "administrators", "super-admins"];    
+    return groups
+      ? groups.some((group) => authorizedGroups.includes(group.code))
+      : false;
+  };
+
 export const userHasAccessLevel = (summitTickets, accessLevel) => {
     if (summitTickets) {
         return summitTickets

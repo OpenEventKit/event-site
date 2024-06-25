@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Clock from 'openstack-uicore-foundation/lib/components/clock';
 import { updateClock } from '../actions/clock-actions';
-import { isAuthorizedUser } from '../utils/authorizedGroups';
+import { isUserAdminOrTester } from '../utils/authorizedGroups';
 
 const ClockComponent = ({
   active,
@@ -13,7 +13,7 @@ const ClockComponent = ({
   return (
     <div>
       {active && summit &&
-        <Clock canUseNowParam={() => userProfile ? isAuthorizedUser(userProfile.groups) : false} onTick={(timestamp) => updateClock(timestamp)} timezone={summit.time_zone_id} />
+        <Clock canUseNowParam={() => userProfile ? isUserAdminOrTester(userProfile.groups) : false} onTick={(timestamp) => updateClock(timestamp)} timezone={summit.time_zone_id} />
       }
     </div>
   );
