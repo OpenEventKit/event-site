@@ -13,7 +13,7 @@ const ClockComponent = ({
   return (
     <div>
       {active && summit &&
-        <Clock canUseNowParam={() => userProfile ? isUserAdminOrTester(userProfile.groups) : false} onTick={(timestamp) => updateClock(timestamp)} timezone={summit.time_zone_id} />
+        <Clock canUseNowParam={() => isUserAdminOrTester(userProfile?.groups)} onTick={(timestamp) => updateClock(timestamp)} timezone={summit.time_zone_id} />
       }
     </div>
   );
