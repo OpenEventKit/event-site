@@ -2,19 +2,28 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Clock from 'openstack-uicore-foundation/lib/components/clock';
 import { updateClock } from '../actions/clock-actions';
+import { isAuthorizedUser } from '../utils/authorizedGroups';
 
 const ClockComponent = ({
   active,
   summit,
-  updateClock
+  updateClock,
+  userProfile,
 }) => {
+
+  console.log('check authtorized...', userProfile ? isAuthorizedUser(userProfile.groups) : false);
+  
   return (
     <div>
       {active && summit &&
-      <Clock onTick={(timestamp) => updateClock(timestamp)} timezone={summit.time_zone_id} />
+        <Clock canUseNowParam={() => userProfile ? isAuthorizedUser(userProfile.groups) : false} onTick={(timestamp) => updateClock(timestamp)} timezone={summit.time_zone_id} />
       }
     </div>
   );
 }
 
-export default connect(null, { updateClock })(ClockComponent);
+const mapStateToProps = ({ userState }) => ({
+  userProfile: userState.userProfile,
+});
+
+export default connect(mapStateToProps, { updateClock })(ClockComponent);
