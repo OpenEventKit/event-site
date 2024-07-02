@@ -24,13 +24,14 @@ const services = [
     title: "Google Analytics",
     purposes: ["analytics"],
     cookies: [/^_ga(_.*)?/],
+    required: true,
     onAccept: () => {
       triggerTagManagerConsentEvent("update", { "analytics_storage": "granted" });
     },
     onDecline: () => {
       triggerTagManagerConsentEvent("update", { "analytics_storage": "denied" });
     }
-  },
+  }/*,
   {
     name: "google-ads",
     title: "Google Ads",
@@ -50,7 +51,7 @@ const services = [
         "ad_personalization": "denied"
       });
     }
-  }
+  }*/
 ];
 
 export default services;
