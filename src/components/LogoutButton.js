@@ -1,13 +1,13 @@
-import React from 'react'
-import { navigate } from "gatsby"
-import {triggerOnInitLogout} from "../utils/customEvents";
+import React from "react";
+import { navigate } from "gatsby";
+import { triggerLogoutEvent } from "@utils/eventTriggers";
 
 export default class
   LogoutButton extends React.Component {
 
   onClickLogout() {
-    triggerOnInitLogout();
-    navigate('/auth/logout', {
+    triggerLogoutEvent();
+    navigate("/auth/logout", {
       state: {
         backUrl: window.location.pathname
       }
@@ -19,10 +19,9 @@ export default class
 
     if (isLoggedUser) {
       return (
-
         <div className={styles.buttons}>
           <button className={`link ${styles.userIcon}`} title="Logout" onClick={() => this.onClickLogout()}>
-            <i className="fa fa-sign-out icon is-medium" style={{fontSize: '1.5rem'}} />
+            <i className="fa fa-sign-out icon is-medium" style={{ fontSize: "1.5rem" }} />
           </button>
         </div>
       );

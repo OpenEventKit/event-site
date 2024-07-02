@@ -26,7 +26,7 @@ import useMarketingSettings, { MARKETING_SETTINGS_KEYS }  from "@utils/useMarket
 import { getEnvVariable, SUMMIT_API_BASE_URL, OAUTH2_CLIENT_ID, REGISTRATION_BASE_URL, SUPPORT_EMAIL } from "@utils/envVariables";
 import { userHasAccessLevel, VirtualAccessLevel } from "@utils/authorizedGroups";
 import { validateIdentityProviderButtons } from "@utils/loginUtils";
-import { triggerAnalyticsTrackEvent } from "@utils/customEvents";
+import { triggerTagManagerTrackEvent } from "@utils/eventTriggers";
 
 const RegistrationLiteComponent = ({
    registrationProfile,
@@ -162,7 +162,7 @@ const RegistrationLiteComponent = ({
             // check if it"s necessary to update profile
             setUserOrder(order).then(()=> checkOrderData(order));
         },
-        trackEvent: triggerAnalyticsTrackEvent,
+        trackEvent: triggerTagManagerTrackEvent,
         inPersonDisclaimer: inPersonDisclaimer,
         handleCompanyError: () => handleCompanyError,
         allowsNativeAuth: allowsNativeAuth,

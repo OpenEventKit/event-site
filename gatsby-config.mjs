@@ -56,7 +56,10 @@ const googleTagManagerPlugin = process.env.GATSBY_GOOGLE_TAGMANAGER_ID ? [
     resolve: "gatsby-plugin-google-tagmanager",
     options: {
       id: process.env.GATSBY_GOOGLE_TAGMANAGER_ID,
-      includeInDevelopment: true
+      includeInDevelopment: true,
+      // defer script tags loading to after consent is given
+      // managed by Klaro cookie manager
+      deferLoading: true
     }
   }
 ] : [];
