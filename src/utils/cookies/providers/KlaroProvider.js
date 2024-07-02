@@ -21,7 +21,11 @@ class KlaroProvider extends CookieManagerProvider {
           analytics: "Analytics",
           marketing: "Marketing",
           styling: "Styling"
-        }
+        },
+        consentNotice: {
+          description:
+            "Hi! Could we please enable cookies for anonymous {purposes} to improve your user experience?"
+        },
       }
     },
     services: services.map(service => ({
