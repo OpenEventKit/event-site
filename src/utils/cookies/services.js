@@ -1,22 +1,22 @@
-import GoogleTagManagerProvider from "../tag-manager/providers/GoogleTagManagerProvider";
+//import GoogleTagManagerProvider from "../tag-manager/providers/GoogleTagManagerProvider";
 import { triggerTagManagerConsentEvent } from "../eventTriggers";
 
-const googleTagManagerProvider = new GoogleTagManagerProvider();
+//const googleTagManagerProvider = new GoogleTagManagerProvider();
 
 const services = [
   {
     name: "google-tag-manager",
     title: "Google Tag Manager",
     purposes: ["marketing"],
-    required: true,
+    default: true,
     onInit: () => {
       triggerTagManagerConsentEvent("default", {
-        "ad_storage": "denied",
+        //"ad_storage": "denied",
         "analytics_storage": "denied",
-        "ad_user_data": "denied",
-        "ad_personalization": "denied"
+        //"ad_user_data": "denied",
+        //"ad_personalization": "denied"
       });
-      googleTagManagerProvider.set("ads_data_redaction", true);
+      //googleTagManagerProvider.set("ads_data_redaction", true);
     }
   },
   {
@@ -24,7 +24,7 @@ const services = [
     title: "Google Analytics",
     purposes: ["analytics"],
     cookies: [/^_ga(_.*)?/],
-    required: true,
+    default: true,
     onAccept: () => {
       triggerTagManagerConsentEvent("update", { "analytics_storage": "granted" });
     },
