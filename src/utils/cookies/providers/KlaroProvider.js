@@ -2,15 +2,20 @@ import * as klaro from "klaro";
 import CookieManagerProvider from "../CookieManagerProvider";
 import { triggerTagManagerTrackEvent } from "../../eventTriggers";
 
-
 class KlaroProvider extends CookieManagerProvider {
   init = (services) => {
-    const config = this.formatConfig(services);
-    this.consentManager = klaro.getManager(config);
-    klaro.setup(config);
+    /**
+     * For api methods
+     * @see https://github.com/klaro-org/klaro-js/blob/master/src/lib.js
+     **/
+    this.api = klaro;
+    this.config = this.formatConfig(services);
+    this.consentManager = this.api.getManager(this.config);
   };
 
   getConsents = () => this.consentManager ? this.consentManager.consents : {};
+
+  show = () => this.api.render(this.config);
 
   /**
    * @see https://klaro.org/docs/integration/annotated-configuration

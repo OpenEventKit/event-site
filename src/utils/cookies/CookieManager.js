@@ -20,6 +20,8 @@ class CookieManager {
   }
 
   getConsents = () => this.provider.getConsents();
+
+  show = () => this.provider.show();
 }
 
 export default CookieManager;

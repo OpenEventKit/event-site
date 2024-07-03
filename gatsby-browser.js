@@ -33,6 +33,7 @@ export const onClientEntry = () => {
   // Initialize Cookie Manager with Klaro provider
   const klaroProvider = new KlaroProvider();
   const cookieManager = new CookieManager(klaroProvider, cookieServices);
+  cookieManager.show();
 
   // Apply colors
   Object.entries(colors).forEach(([key, value]) => {
