@@ -12,6 +12,9 @@ class KlaroProvider extends CookieManagerProvider {
 
   getConsents = () => this.consentManager ? this.consentManager.consents : {};
 
+  /**
+   * @see https://klaro.org/docs/integration/annotated-configuration
+   **/
   formatConfig = (services) => ({
     acceptAll: true,
     hideLearnMore: true,
