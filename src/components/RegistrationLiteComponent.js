@@ -21,14 +21,12 @@ import { SentryFallbackFunction } from "./SentryErrorComponent";
 // these two libraries are client-side only
 import RegistrationLiteWidget from "summit-registration-lite/dist";
 import "summit-registration-lite/dist/index.css";
-
 import useSiteSettings from "@utils/useSiteSettings";
 import useMarketingSettings, { MARKETING_SETTINGS_KEYS }  from "@utils/useMarketingSettings";
 import { getEnvVariable, SUMMIT_API_BASE_URL, OAUTH2_CLIENT_ID, REGISTRATION_BASE_URL, SUPPORT_EMAIL } from "@utils/envVariables";
 import { userHasAccessLevel, VirtualAccessLevel } from "@utils/authorizedGroups";
 import { validateIdentityProviderButtons } from "@utils/loginUtils";
-import { triggerAnalyticsTrackEvent } from "@utils/customEvents";
-import { PURCHASE_COMPLETE } from "@utils/analytics/events";
+import { triggerTagManagerTrackEvent } from "@utils/eventTriggers";
 
 const RegistrationLiteComponent = ({
    registrationProfile,
@@ -161,10 +159,10 @@ const RegistrationLiteComponent = ({
             return checkRequireExtraQuestionsByAttendee(attendee);
         },
         onPurchaseComplete: (order) => {
-            triggerAnalyticsTrackEvent(PURCHASE_COMPLETE, { order });
             // check if it"s necessary to update profile
             setUserOrder(order).then(()=> checkOrderData(order));
         },
+        trackEvent: triggerTagManagerTrackEvent,
         inPersonDisclaimer: inPersonDisclaimer,
         handleCompanyError: () => handleCompanyError,
         allowsNativeAuth: allowsNativeAuth,

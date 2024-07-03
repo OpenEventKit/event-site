@@ -17,16 +17,15 @@ import {
   SUMMIT_ID,
   SUPABASE_URL,
   SUPABASE_KEY,
-} from "../utils/envVariables";
-import { PHASES } from "../utils/phasesUtils";
+} from "@utils/envVariables";
+import { PHASES } from "@utils/phasesUtils";
 
 import "attendee-to-attendee-widget/dist/index.css";
 
 import { SentryFallbackFunction } from "./SentryErrorComponent";
-import {
-  useCustomEvent,
-  INIT_LOGOUT_EVENT
-} from "../utils/customEvents";
+
+import { useEventListener } from "@utils/hooks";
+import { INIT_LOGOUT_EVENT } from "@utils/eventTriggers";
 
 const sbAuthProps = {
   supabaseUrl: getEnvVariable(SUPABASE_URL),
@@ -192,9 +191,9 @@ const AccessTracker = ({ user, isLoggedUser, summitPhase, chatSettings }) => {
   const handleLogout = useCallback(() => {
     if (trackerRef.current)
       trackerRef.current.signOut();
-  },[]);
+  }, []);
 
-  useCustomEvent(INIT_LOGOUT_EVENT, handleLogout);
+  useEventListener(INIT_LOGOUT_EVENT, handleLogout);
 
   useEffect(() => {
     if (!isLoggedUser) {

@@ -1,4 +1,5 @@
-import { useEffect, useCallback } from "react";
+import { useCallback } from "react";
+import useEventListener from "./useEventListener";
 
 const useResize = (callback, options = { passive: true }) => {
   const handleResize = useCallback(() => {
@@ -7,13 +8,7 @@ const useResize = (callback, options = { passive: true }) => {
     }
   }, [callback]);
 
-  useEffect(() => {
-    handleResize();
-    window.addEventListener("resize", handleResize, options);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [handleResize]);
+  useEventListener("resize", handleResize, options);
 };
 
 export default useResize;
