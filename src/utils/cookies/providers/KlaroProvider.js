@@ -9,7 +9,7 @@ class KlaroProvider extends CookieManagerProvider {
      * @see https://github.com/klaro-org/klaro-js/blob/master/src/lib.js
      **/
     this.api = klaro;
-    this.config = this.formatConfig(services);
+    this.config = this.#formatConfig(services);
     this.consentManager = this.api.getManager(this.config);
   };
 
@@ -20,7 +20,7 @@ class KlaroProvider extends CookieManagerProvider {
   /**
    * @see https://klaro.org/docs/integration/annotated-configuration
    **/
-  formatConfig = (services) => ({
+  #formatConfig = (services) => ({
     acceptAll: true,
     hideLearnMore: true,
     translations: {
@@ -43,13 +43,13 @@ class KlaroProvider extends CookieManagerProvider {
       purposes: service.purposes,
       required: service.required,
       cookies: service.cookies,
-      onAccept: this.handleAccept.bind(this, service),
-      onDecline: this.handleDecline.bind(this, service),
+      onAccept: this.#handleAccept.bind(this, service),
+      onDecline: this.#handleDecline.bind(this, service),
       onInit: service.onInit
     }))
   });
 
-  handleAccept = (service) => {
+  #handleAccept = (service) => {
     if (service.name === "google-tag-manager") {
       const consents = this.getConsents();
       for (let k of Object.keys(consents)) {
@@ -68,7 +68,7 @@ class KlaroProvider extends CookieManagerProvider {
     }
   };
 
-  handleDecline = (service) => {
+  #handleDecline = (service) => {
     const eventName = "klaro-" + service.name + "-declined";
     triggerTagManagerTrackEvent(eventName);
 
