@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Link as GatsbyLink } from "gatsby";
+import Box from "@mui/material/Box";
 // Since DOM elements <a> cannot receive activeClassName
 // and partiallyActive, destructure the prop here and
 // pass it only to GatsbyLink
@@ -37,5 +38,47 @@ const Link = ({ children, to, activeClassName, partiallyActive, ...other }) => {
     </a>
   );
 };
+
+export const AnimatedLink = ({
+  color = "white",
+  hoverColor = "white",
+  children,
+  ...rest
+}) => (
+  <Box
+    component={Link}
+    sx={{
+      position: "relative",
+      color: color,
+      "&:hover, &:focus": {
+        color: hoverColor,
+        textDecoration: "none",
+        "&::before": {
+          backgroundColor: hoverColor,
+          transform: "scaleX(1)",
+          transformOrigin: "left center"
+        }
+      },
+      "&::before": {
+        content: "\"\"",
+        position: "absolute",
+        left: 0,
+        bottom: {
+          xs: -0.5,
+          md: -2
+        },
+        height: "0.5px",
+        width: "100%",
+        backgroundColor: color,
+        transform: "scaleX(0)",
+        transformOrigin: "right center",
+        transition: "transform .45s cubic-bezier(0.86, 0, 0.07, 1)"
+      }
+    }}
+    {...rest}
+  >
+    {children}
+  </Box>
+);
 
 export default Link;
