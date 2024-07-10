@@ -53,7 +53,7 @@ const manifestPlugin = faviconAsset ? [
 
 const googleTagManagerPlugin = process.env.GATSBY_GOOGLE_TAGMANAGER_ID ? [
   {
-    resolve: "gatsby-plugin-google-tagmanager",
+    resolve: require.resolve("./plugins/gatsby-plugin-google-tagmanager"),
     options: {
       id: process.env.GATSBY_GOOGLE_TAGMANAGER_ID,
       includeInDevelopment: true,
