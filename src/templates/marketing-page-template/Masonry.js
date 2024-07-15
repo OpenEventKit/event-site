@@ -32,11 +32,11 @@ export default React.forwardRef(({ data }, ref) => (
           if (item.images[0].link) {
             return (
               <Link key={index} to={item.images[0].link}>
-                <GatsbyImage image={image} alt={alt} />
+                <GatsbyImage image={image} alt={alt} className={styles.masonryImage} />
               </Link>
             );
           } else {
-            return <GatsbyImage key={index} image={image} alt={alt} />;
+            return <GatsbyImage key={index} image={image} alt={alt} className={styles.masonryImage} />;
           };
         } else if (item.images && item.images.length > 1) {
           return (
@@ -51,11 +51,11 @@ export default React.forwardRef(({ data }, ref) => (
                 if (image.link) {
                   return (
                     <Link key={indexSlide} to={image.link}>
-                      <GatsbyImage image={img} alt={alt} />
+                      <GatsbyImage image={img} alt={alt} className={styles.masonryImage} />
                     </Link>
                   );
                 } else {
-                  return <GatsbyImage key={indexSlide} image={img} alt={alt} />;
+                  return <GatsbyImage key={indexSlide} image={img} alt={alt} className={styles.masonryImage} />;
                 };
               })}
             </Slider>
