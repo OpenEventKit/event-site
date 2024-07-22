@@ -10,7 +10,8 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import SvgIcon from "@mui/material/SvgIcon";
 import Avatar from "@mui/material/Avatar";
-import Link, { AnimatedLink } from "../Link";
+import Link from "../Link";
+import AnimatedLink from "../AnimatedLink";
 import ProfilePopupComponent from "@openeventkit/event-site/src/components/ProfilePopupComponent";
 import LogoutButton from "../LogoutButton";
 
