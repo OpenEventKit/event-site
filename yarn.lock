@@ -13465,6 +13465,11 @@ js-cookie@^2.2.1:
   resolved "https://registry.yarnpkg.com/js-cookie/-/js-cookie-2.2.1.tgz#69e106dc5d5806894562902aa5baec3744e9b2b8"
   integrity sha512-HvdH2LzI/EAZcUwA8+0nKNtWHqS+ZmijLA30RwZA0bo7ToCckjK5MkGhjED9KoRcXO6BaGI3I9UIzSA1FKFPOQ==
 
+js-cookie@^3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/js-cookie/-/js-cookie-3.0.5.tgz#0b7e2fd0c01552c58ba86e0841f94dc2557dcdbc"
+  integrity sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw==
+
 js-sha256@^0.9.0:
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/js-sha256/-/js-sha256-0.9.0.tgz#0b89ac166583e91ef9123644bd3c5334ce9d0966"
@@ -16278,10 +16283,10 @@ open@^8.4.0:
     is-docker "^2.1.1"
     is-wsl "^2.2.0"
 
-openstack-uicore-foundation@4.1.76:
-  version "4.1.76"
-  resolved "https://registry.yarnpkg.com/openstack-uicore-foundation/-/openstack-uicore-foundation-4.1.76.tgz#64e7ee6eb5b8d3d8dd1d704cdf53609e24567cb1"
-  integrity sha512-zjaLOw1pIDje/iFBeV+rlMgWP14lb+k5L0F1z90yuTT9DUaLcEcFLWKN6Zt8XAC3oYUpwh26HA+fCyWEqhpTjQ==
+openstack-uicore-foundation@4.1.86:
+  version "4.1.85"
+  resolved "https://registry.yarnpkg.com/openstack-uicore-foundation/-/openstack-uicore-foundation-4.1.85.tgz#d08d5f205f134c9f109cb9cf0aca1c2d187a4005"
+  integrity sha512-apDcp5FuKr9fxoVYfjnc2bYZs6d3W2p1LreHdILEnH8i7OGZKelpV9wLd2K0neiJH/kTfHDtuADKVYIdWIBscQ==
 
 opentracing@^0.14.7:
   version "0.14.7"
