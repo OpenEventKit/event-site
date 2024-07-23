@@ -49,6 +49,7 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
     const [showPicture, setShowPicture] = useState(false);
     const [showBio, setShowBio] = useState(false);
     const [showSocialMedia, setShowSocialMedia] = useState(false);
+    const [showTelephone, setShowTelephone] = useState(false);
     const [bio, setBio] = useState('');
     const [statementOfInterest, setStatementOfInterest] = useState('');
 
@@ -94,6 +95,7 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
             setShowPicture(user.idpProfile.public_profile_show_photo);
             setShowBio(user.idpProfile.public_profile_show_bio);
             setShowSocialMedia(user.idpProfile.public_profile_show_social_media_info);
+            setShowTelephone(user.idpProfile.public_profile_show_telephone_number);
             setBio(user.idpProfile.bio || '');
             setStatementOfInterest(user.idpProfile.statement_of_interest || '');
             setAddress({
@@ -148,6 +150,7 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                     public_profile_show_photo: showPicture,
                     public_profile_show_bio: showBio,
                     public_profile_show_social_media_info: showSocialMedia,
+                    public_profile_show_telephone_number: showTelephone,
                     bio: bio,
                     statement_of_interest: statementOfInterest,
                     address1: address.street,
@@ -216,6 +219,7 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                 setShowPicture(user.idpProfile.public_profile_show_photo);
                 setShowBio(user.idpProfile.public_profile_show_bio);
                 setShowSocialMedia(user.idpProfile.public_profile_show_social_media_info);
+                setShowTelephone(user.idpProfile.public_profile_show_telephone_number);
                 break;
             case 'bio':
                 setBio(user.idpProfile.bio || '');
@@ -445,6 +449,11 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                                     <label className={styles.checkbox}>
                                         <input type="checkbox" checked={showEmail} onChange={e => setShowEmail(e.target.checked)} />
                                         Show email on public profile
+                                    </label>
+                                    <br />
+                                    <label className={styles.checkbox}>
+                                        <input type="checkbox" checked={showTelephone} onChange={e => setShowTelephone(e.target.checked)} />
+                                        Show telephone number on public profile                                        
                                     </label>
                                     <br />
                                     <label className={styles.checkbox}>
