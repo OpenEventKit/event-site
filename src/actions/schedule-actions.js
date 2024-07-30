@@ -97,7 +97,7 @@ export const updateFiltersFromHash =
     Object.keys(filters).forEach((key) => {
       newFilters[key] = { ...filters[key] }; // copy label and rest of props
 
-      if (key === "title") {
+      if (key === "title" || key === "abstract") {
         newFilters[key].values = normalizedFilters[key]
           ? decodeURIComponent(normalizedFilters[key])
           : "";
