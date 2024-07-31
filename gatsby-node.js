@@ -2,7 +2,9 @@ const axios = require("axios");
 const path = require("path");
 const fs = require("fs");
 const webpack = require("webpack");
-const { createFilePath } = require("gatsby-source-filesystem");
+const {
+  createFilePath
+} = require("gatsby-source-filesystem");
 const SentryWebpackPlugin = require("@sentry/webpack-plugin");
 const { ClientCredentials } = require("simple-oauth2");
 
@@ -14,6 +16,7 @@ const {
   REQUIRED_DIR_PATHS,
   DEFAULT_COLORS_FILE_PATH,
   COLORS_FILE_PATH,
+  COLORS_SCSS_FILE_PATH,
   SITE_SETTINGS_FILE_PATH,
   SUMMIT_FILE_PATH,
   EVENTS_FILE_PATH,
@@ -22,11 +25,17 @@ const {
   SPEAKERS_IDX_FILE_PATH,
   VOTEABLE_PRESENTATIONS_FILE_PATH,
   MARKETING_SETTINGS_FILE_PATH,
-  MAINTENANCE_FILE_PATH,
+  MAINTENANCE_PATH_NAME,
+  CONTENT_PAGES_PATH_NAME,
   SPONSORS_FILE_PATH,
   FONTS_SCSS_FILE_PATH
 } = require("./src/utils/filePath");
-const { generateFontFile } = require("./src/utils/cssUtils");
+
+const {
+  generateAndWriteScssFile,
+  generateFontScssFile,
+  generateColorsScssFile
+} = require("./src/utils/scssUtils");
 
 const fileBuildTimes = [];
 
@@ -87,7 +96,8 @@ const SSR_getEvents = async (baseUrl, summitId, accessToken) => {
     access_token: accessToken,
     per_page: 50,
     page: 1,
-    expand: "slides, links, videos, media_uploads, type, track, track.subtracks, track.allowed_access_levels, location, location.venue, location.floor, speakers, moderator, sponsors, current_attendance, groups, rsvp_template, tags",
+    expand: "slides,links,videos,media_uploads,type,track,track.subtracks,track.allowed_access_levels,location,location.venue,location.floor,speakers,moderator,sponsors,current_attendance,groups,rsvp_template,tags",
+    relations: "speakers.badge_features,speakers.affiliations,speakers.languages,speakers.other_presentation_links,speakers.areas_of_expertise,speakers.travel_preferences,speakers.organizational_roles,speakers.all_presentations,speakers.all_moderated_presentations",
   }
 
   return await axios.get(endpoint, { params }).then(async ({data}) => {
@@ -155,6 +165,7 @@ const SSR_getSpeakers = async (baseUrl, summitId, accessToken, filter = null) =>
     access_token: accessToken,
     per_page: 30,
     page: 1,
+    relations: 'badge_features,affiliations,languages,other_presentation_links,areas_of_expertise,travel_preferences,organizational_roles,all_presentations,all_moderated_presentations',
   };
 
   const endpoint = `${baseUrl}/api/v1/summits/${summitId}/speakers/on-schedule`;
@@ -180,7 +191,7 @@ const SSR_getSpeakers = async (baseUrl, summitId, accessToken, filter = null) =>
 const SSR_getSummit = async (baseUrl, summitId) => {
 
   const params = {
-    expand: "event_types,tracks, tracks.subtracks,track_groups,presentation_levels,locations.rooms,locations.floors,order_extra_questions.values,schedule_settings,schedule_settings.filters,schedule_settings.pre_filters",
+    expand: "event_types,tracks,tracks.subtracks,track_groups,presentation_levels,locations.rooms,locations.floors,order_extra_questions.values,schedule_settings,schedule_settings.filters,schedule_settings.pre_filters",
     t: Date.now()
   };
 
@@ -201,7 +212,7 @@ const SSR_getVoteablePresentations = async (baseUrl, summitId, accessToken) => {
     per_page: 50,
     page: 1,
     filter: "published==1",
-    expand: "slides, links, videos, media_uploads, type, track, track.allowed_access_levels, location, location.venue, location.floor, speakers, moderator, sponsors, current_attendance, groups, rsvp_template, tags",
+    expand: "slides,links,videos,media_uploads,type,track,track.allowed_access_levels,location,location.venue,location.floor,speakers,moderator,sponsors,current_attendance,groups,rsvp_template,tags",
   };
 
   return await axios.get(endpoint,
@@ -223,8 +234,8 @@ exports.onPreBootstrap = async () => {
   const summitId = process.env.GATSBY_SUMMIT_ID;
   const summitApiBaseUrl = process.env.GATSBY_SUMMIT_API_BASE_URL;
   let   marketingSettings = await SSR_getMarketingSettings(process.env.GATSBY_MARKETING_API_BASE_URL, summitId);
-  const colorSettings = fs.existsSync(COLORS_FILE_PATH) ? JSON.parse(fs.readFileSync(COLORS_FILE_PATH)) : require(`./${DEFAULT_COLORS_FILE_PATH}`);
-  const globalSettings = fs.existsSync(SITE_SETTINGS_FILE_PATH) ? JSON.parse(fs.readFileSync(SITE_SETTINGS_FILE_PATH)) : {};
+  const siteSettings = fs.existsSync(SITE_SETTINGS_FILE_PATH) ? JSON.parse(fs.readFileSync(SITE_SETTINGS_FILE_PATH)) : {};
+  const colors = fs.existsSync(COLORS_FILE_PATH) ? JSON.parse(fs.readFileSync(COLORS_FILE_PATH)) : require(`./${DEFAULT_COLORS_FILE_PATH}`);
 
   const config = {
     client: {
@@ -242,12 +253,12 @@ exports.onPreBootstrap = async () => {
 
   const accessToken = await getAccessToken(config, process.env.GATSBY_BUILD_SCOPES).then(({ token }) => token.access_token);
 
-  const FileType = 'FILE';
+  const FileType = "FILE";
   // extract colors from marketing settings
-  marketingSettings = marketingSettings.map( entry => {
-    if (entry.key.startsWith("color_")) colorSettings[entry.key] = entry.value;
-    if(entry.type === FileType) return {...entry, value: entry.file};
-    return {...entry};
+  marketingSettings = marketingSettings.map(entry => {
+    if (entry.key.startsWith("color_")) colors[entry.key] = entry.value;
+    if (entry.type === FileType) return { ...entry, value: entry.file };
+    return { ...entry };
   });
 
   // create required directories
@@ -258,7 +269,17 @@ exports.onPreBootstrap = async () => {
   });
 
   fs.writeFileSync(MARKETING_SETTINGS_FILE_PATH, JSON.stringify(marketingSettings), "utf8");
-  fs.writeFileSync(COLORS_FILE_PATH, JSON.stringify(colorSettings), "utf8");
+
+  // write colors json used to set runtime colors in gatsby-browser
+  fs.writeFileSync(COLORS_FILE_PATH, JSON.stringify(colors), "utf8");
+
+  // generate and write colors SCSS file used by built styles 
+  generateAndWriteScssFile(generateColorsScssFile, colors, COLORS_SCSS_FILE_PATH);
+
+  if (siteSettings.siteFont) {    
+    // generate and write font SCSS file used by built styles 
+    generateAndWriteScssFile(generateFontScssFile, siteSettings.siteFont, FONTS_SCSS_FILE_PATH);
+  }
 
   // summit
   const summit = await SSR_getSummit(summitApiBaseUrl, summitId);
@@ -286,7 +307,6 @@ exports.onPreBootstrap = async () => {
     "build_time": Date.now()
   });
   fs.writeFileSync(EVENTS_IDX_FILE_PATH, JSON.stringify(allEventsIDX), "utf8");
-
 
   // Show Speakers
   const allSpeakers = await SSR_getSpeakers(summitApiBaseUrl, summitId, accessToken);
@@ -326,31 +346,58 @@ exports.onPreBootstrap = async () => {
   fs.writeFileSync(VOTEABLE_PRESENTATIONS_FILE_PATH, JSON.stringify(allVoteablePresentations), "utf8");
 
   // setting build times
-  globalSettings.staticJsonFilesBuildTime = fileBuildTimes;
-  globalSettings.lastBuild = Date.now();
+  siteSettings.staticJsonFilesBuildTime = fileBuildTimes;
+  siteSettings.lastBuild = Date.now();
 
-  fs.writeFileSync(SITE_SETTINGS_FILE_PATH, JSON.stringify(globalSettings), "utf8");
-
-  // Read fonts from site settings
-  const siteFonts = globalSettings.siteFont;
-
-  if(siteFonts && Object.keys(siteFonts).length > 0) {
-    // Generate the SCSS file
-    const scssFontsFile = generateFontFile(siteFonts);
-    if (scssFontsFile) {
-      const standalone = __dirname === path.resolve();
-      let fontFilePath = FONTS_SCSS_FILE_PATH;
-      if (!standalone) {
-        fontFilePath = `${__dirname}/${fontFilePath}`;
-      }
-      fs.writeFileSync(fontFilePath, scssFontsFile);
-      console.log(`CUSTOM FONT FILE ${fontFilePath} generated.`);
-    }
-  }
+  fs.writeFileSync(SITE_SETTINGS_FILE_PATH, JSON.stringify(siteSettings), "utf8");
 };
 
-exports.createSchemaCustomization = ({ actions }) => {
-  const { createTypes } = actions;
+exports.createSchemaCustomization = async ({ actions, reporter, getNodeAndSavePathDependency }) => {
+  const { createFieldExtension, createTypes } = actions;
+  createFieldExtension({
+    name: "resolveImages",
+    extend: () => ({
+      async resolve(source, args, context, info) {
+        const content = source[info.fieldName];
+        const imageRegex = /!\[([^\]]*)\]\(([^)]+)\)/g;
+        let match;
+        let transformedContent = content;
+        while ((match = imageRegex.exec(content)) !== null) {
+          const [, alt, url] = match;
+          if (url.startsWith("http://") || url.startsWith("https://")) {
+            continue;
+          }
+          const node = await context.nodeModel.findOne({
+            type: "File",
+            query: { filter: { base: { eq: url } } }
+          });
+          if (!node) {
+            reporter.warn(`File node not found for ${url}`);
+            continue;
+          }
+          const absolutePath = path.resolve(node.dir, url);
+          if (!fs.existsSync(absolutePath)) {
+            reporter.warn(`File not found at path ${absolutePath}`);
+            continue;
+          }
+          const details = getNodeAndSavePathDependency(node.id, context.path);
+          const fileName = `${node.internal.contentDigest}/${details.base}`;
+          const publicStaticDir = path.join(process.cwd(), "public", "static");
+          const publicPath = path.join(publicStaticDir, fileName);
+          if (!fs.existsSync(publicPath)) {
+            try {
+              await fs.copy(details.absolutePath, publicPath, { dereference: true });
+            } catch (err) {
+              reporter.panic(`Error copying file from ${details.absolutePath} to ${publicPath}: ${err.message}`);
+              continue;
+            }
+          }
+          transformedContent = transformedContent.replace(url, `/static/${fileName}`);
+        }
+        return transformedContent;
+      }
+    })
+  });
   // TODO: improve typeDefs to allow theme override
   const typeDefs = require("./src/cms/config/collections/typeDefs");
   createTypes(typeDefs);
@@ -358,91 +405,99 @@ exports.createSchemaCustomization = ({ actions }) => {
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
   const { createNodeField } = actions;
-  if (node.internal.type === "MarkdownRemark") {
+  if (node.internal.type === "Mdx") {
     const value = createFilePath({ node, getNode });
     createNodeField({
       name: "slug",
       node,
-      value,
+      value
     })
   }
 };
 
-exports.createPages = ({ actions, graphql }) => {
+exports.createPages = async ({ actions, graphql }) => {
   const { createPage, createRedirect } = actions;
 
-  const maintenanceMode = fs.existsSync(MAINTENANCE_FILE_PATH) ?
-    JSON.parse(fs.readFileSync(MAINTENANCE_FILE_PATH)) : { enabled: false };
+  const siteSettings = fs.existsSync(SITE_SETTINGS_FILE_PATH) ? JSON.parse(fs.readFileSync(SITE_SETTINGS_FILE_PATH)) : {};
+  const maintenanceMode = siteSettings.maintenanceMode ?? { enabled: false };
+  const maintenancePath = `/${MAINTENANCE_PATH_NAME}/`;
 
-  // create a catch all redirect
   if (maintenanceMode.enabled) {
+    // create a catch all redirect
     createRedirect({
       fromPath: "/*",
-      toPath: "/maintenance/"
+      toPath: maintenancePath,
+      isPermanent: false,
+      statusCode: 302
+    });
+    // end execution, dont create any page from md/mdx
+    return;
+  } else {
+    createRedirect({
+      fromPath: maintenancePath,
+      toPath: "/",
+      isPermanent: false,
+      statusCode: 302
     });
   }
 
-  return graphql(`
+  const result = await graphql(`
     {
-      allMarkdownRemark(limit: 1000) {
-        edges {
-          node {
-            id
-            fields {
-              slug
-            }
-            frontmatter {
-              templateKey
-            }
+      allMdx {
+        nodes {
+          id
+          fields {
+            slug
+          }
+          frontmatter {
+            templateKey
+          }
+          internal {
+            contentFilePath
           }
         }
       }
     }
-  `).then((result) => {
-    const {
-      errors,
-      data: {
-        allMarkdownRemark: {
-          edges
-        }
-      }
-    } = result;
+  `);
 
-    if (errors) {
-      errors.forEach((e) => console.error(e.toString()));
-      return Promise.reject(errors);
-    }
+  if (result.errors) {
+    result.errors.forEach((e) => console.error(e.toString()));
+    return Promise.reject(result.errors);
+  }
 
-    edges.forEach((edge) => {
-      const { id, fields, frontmatter: { templateKey } } = edge.node;
+  const nodes = result.data.allMdx.nodes;
 
-      var slug = fields.slug;
-      if (slug.match(/content-pages/)) {
-        slug = slug.replace("/content-pages/", "/");
-      }
-
-      const page = {
-        path: slug,
-        component: require.resolve(
-          `./src/templates/${String(templateKey)}.js`
-        ),
-        context: {
-          id,
-        },
-      };
-
-      // dont create pages if maintenance mode enabled
-      // gatsby disregards redirect if pages created for path
-      if (maintenanceMode.enabled && !page.path.match(/maintenance/)) return;
-
-      createPage(page);
-    });
+  nodes.forEach((node) => {
+    const { id, fields: { slug }, frontmatter: { templateKey }, internal: { contentFilePath } } = node;
+    const template = require.resolve(`./src/templates/${String(templateKey)}`);
+    // remove content pages namespace from path
+    const path = slug.replace(`${CONTENT_PAGES_PATH_NAME}`, "/");
+    const page = {
+      path: path,
+      component: `${template}?__contentFilePath=${contentFilePath}`,
+      context: { id }
+    };
+    createPage(page);
   });
+};
+
+exports.onCreatePage = async ({ page, actions }) => {
+  const { deletePage } = actions;
+
+  const siteSettings = fs.existsSync(SITE_SETTINGS_FILE_PATH) ? JSON.parse(fs.readFileSync(SITE_SETTINGS_FILE_PATH)) : {};
+  const maintenanceMode = siteSettings.maintenanceMode ?? { enabled: false };
+  const maintenancePath = `/${MAINTENANCE_PATH_NAME}/`;
+
+  const shouldDeletePage = (maintenanceMode.enabled && page.path !== maintenancePath) ||
+                           (!maintenanceMode.enabled && page.path === maintenancePath);
+
+  if (shouldDeletePage) {
+    deletePage(page);
+  }
 };
 
 exports.onCreateWebpackConfig = ({
   actions,
-  plugins,
   loaders,
   getConfig
 }) => {
@@ -480,35 +535,32 @@ exports.onCreateWebpackConfig = ({
        * @see https://viglucci.io/how-to-polyfill-buffer-with-webpack-5
        */
       fallback: {
+        fs: false,
+        assert: require.resolve("assert"),
+        buffer: require.resolve("buffer/"),
         path: require.resolve("path-browserify"),
         stream: require.resolve("stream-browserify"),
-        buffer: require.resolve("buffer/")
+        "object.assign/polyfill": require.resolve("object.assign/polyfill")
       },
       // allows content and data imports to correctly resolve when theming
-      modules: [path.resolve("src")]
+      modules: [
+        path.resolve("src")
+      ]
     },
     // devtool: "source-map",
     plugins: [
-      plugins.define({
-        "global.GENTLY": false,
-        "global.BLOB": false
-      }),
       new webpack.ProvidePlugin({
-        Buffer: ["buffer", "Buffer"],
-      }),
-      // ignore unused jsdom dependency
-      new webpack.IgnorePlugin({
-        resourceRegExp: /canvas/,
-        contextRegExp: /jsdom$/
+        process: "process",
+        Buffer: ["buffer", "Buffer"]
       }),
       // upload source maps only if we have an sentry auth token and we are at production
-      ...("GATSBY_SENTRY_AUTH_TOKEN" in process.env && process.env.NODE_ENV === "production") ?[
-          new SentryWebpackPlugin({
-        org: process.env.GATSBY_SENTRY_ORG,
-        project: process.env.GATSBY_SENTRY_PROJECT,
-        ignore: ["app-*", "polyfill-*", "framework-*", "webpack-runtime-*", "~partytown"],
-        // Specify the directory containing build artifacts
-        include: [
+      ...("GATSBY_SENTRY_AUTH_TOKEN" in process.env && process.env.NODE_ENV === "production") ? [
+        new SentryWebpackPlugin({
+          org: process.env.GATSBY_SENTRY_ORG,
+          project: process.env.GATSBY_SENTRY_PROJECT,
+          ignore: ["app-*", "polyfill-*", "framework-*", "webpack-runtime-*", "~partytown"],
+          // Specify the directory containing build artifacts
+          include: [
             {
               paths: ["src","public",".cache"],
               urlPrefix: "~/",
@@ -548,14 +600,15 @@ exports.onCreateWebpackConfig = ({
             {
               paths: ["node_modules/speakers-widget/dist"],
               urlPrefix: "~/node_modules/speakers-widget/dist",
-            },
-        ],
-        // Auth tokens can be obtained from https://sentry.io/settings/account/api/auth-tokens/
-        // and needs the `project:releases` and `org:read` scopes
-        authToken: process.env.GATSBY_SENTRY_AUTH_TOKEN,
-        // Optionally uncomment the line below to override automatic release name detection
-        release: process.env.GATSBY_SENTRY_RELEASE,
-      })]:[],
+            }
+          ],
+          // Auth tokens can be obtained from https://sentry.io/settings/account/api/auth-tokens/
+          // and needs the `project:releases` and `org:read` scopes
+          authToken: process.env.GATSBY_SENTRY_AUTH_TOKEN,
+          // Optionally uncomment the line below to override automatic release name detection
+          release: process.env.GATSBY_SENTRY_RELEASE,
+        })
+      ] : []
     ]
   });
 };

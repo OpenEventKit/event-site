@@ -1,13 +1,11 @@
-
-.left-column {
+.mainColumn {
 }
-.right-column {
-  .image-slider {
-    height: auto;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain;
-    min-height: 100%;
-    overflow: hidden;
+
+.masonry {
+  .grid {
+    display: flex;
+  }
+  .slide {
+    margin-bottom: -5px;
   }
 }

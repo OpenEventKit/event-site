@@ -161,7 +161,7 @@ const DisqusComponent = class extends React.Component {
     };
 
     const { title, style, className, page, skipTo } = this.props;
-    const sectionClass = className ? className : style ? '' : page === 'marketing-site' ? 'disqus-container-marketing' : 'disqus-container';
+    const sectionClass = className ? className : style || page === 'marketing-site' ? '' : 'disqus-container';
 
     return (
       <section aria-labelledby={title ? 'disqus-title' : ''} className={sectionClass} style={style}>

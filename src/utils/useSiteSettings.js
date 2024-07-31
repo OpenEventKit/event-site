@@ -10,11 +10,7 @@ const siteSettingsQuery = graphql`
         title,
         description,
         image {
-          childImageSharp {
-            gatsbyImageData (
-              quality: 100
-            )
-          }
+          publicURL
         }
       }
       widgets {
@@ -28,6 +24,15 @@ const siteSettingsQuery = graphql`
           allowClick
         }
       }
+      idpLogo {
+        idpLogoDark {
+          publicURL
+        }
+        idpLogoLight {
+          publicURL
+        }
+        idpLogoAlt
+      }
       identityProviderButtons {
         buttonColor
         buttonBorderColor
@@ -37,6 +42,10 @@ const siteSettingsQuery = graphql`
           publicURL
         }
         providerLogoSize
+      }
+      maintenanceMode {
+        title
+        subtitle
       }
     }
   }

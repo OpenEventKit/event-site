@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import CMS from "netlify-cms-app";
 import PropTypes from "prop-types";
 import ImmutablePropTypes from "react-immutable-proptypes";
 import { List } from "immutable";
+import CMS from "decap-cms-app";
 
 const StringControl = CMS.getWidget("string").control;
 const SelectControl = CMS.getWidget("select").control;

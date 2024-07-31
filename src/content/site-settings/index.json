@@ -1,4 +1,7 @@
 {
+  "favicon": {
+    "asset": "icon.png"
+  },
   "widgets": {
     "chat": {
       "enabled": true,
@@ -9,9 +12,6 @@
     "schedule": {
       "allowClick": true
     }
-  },
-  "favicon": {
-    "asset": "icon.png"
   },
   "identityProviderButtons": [
     {
@@ -41,5 +41,10 @@
       "providerLogo": "logo_facebook.svg",
       "providerLogoSize": 20
     }
-  ]
+  ],
+  "maintenanceMode": {
+    "enabled": false,
+    "title": "Site under maintenance",
+    "subtitle": "Please reload page shortly"
+  }
 }

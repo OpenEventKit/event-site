@@ -58,11 +58,6 @@ const marketingPage = {
           name: "date",
           required: false
         }),
-        booleanField({
-          label: "Date Layout",
-          name: "dateLayout",
-          required: false
-        }),
         stringField({
           label: "Time",
           name: "time",
@@ -131,8 +126,8 @@ const marketingPage = {
       name: "widgets",
       fields: [
         objectField({
-          label: "Text",
-          name: "text",
+          label: "Content",
+          name: "content",
           fields: [
             booleanField({
               label: "Display",
@@ -140,10 +135,10 @@ const marketingPage = {
               required: false
             }),
             markdownField({
-              label: "Content",
-              name: "content",
+              label: "Body",
+              name: "body",
               buttons: markdownFieldButtons,
-              editor_components: []
+              editor_components: ["image"]
             })
           ]
         }),

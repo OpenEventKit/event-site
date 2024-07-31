@@ -12,7 +12,6 @@ export const marketingPageQuery = graphql`
       hero {
         title
         subTitle
-        dateLayout
         date
         time
         background {
@@ -55,8 +54,12 @@ export const marketingPageQuery = graphql`
         text
       }
       widgets {
-        text {
-          content
+        content {
+          display
+          body
+        }
+        schedule {
+          title
           display
         }
         disqus {
@@ -78,10 +81,6 @@ export const marketingPageQuery = graphql`
             }
             alt
           }
-        }
-        schedule {
-          title
-          display
         }
       }
       masonry {

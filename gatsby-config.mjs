@@ -1,12 +1,23 @@
-const path = require("path");
+import path, { dirname } from "path";
+import dotenv from "dotenv";
+import { createRequire } from "module";
+import { fileURLToPath } from "url";
+import webpack from "webpack";
+import remarkGfm from "remark-gfm";
+import rehypeMdxImportMedia from "rehype-mdx-import-media";
 
-require("dotenv").config({
+const require = createRequire(import.meta.url);
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+dotenv.config({
   path: `.env.${process.env.NODE_ENV}`
 });
 
 const {
   STATIC_CONTENT_DIR_PATH,
+  PAGES_DIR_PATH,
   CONTENT_PAGES_DIR_PATH,
+  CONTENT_PAGES_PATH_NAME,
   SITE_SETTINGS_FILE_PATH,
   SITE_SETTINGS_DIR_PATH,
   MARKETING_SETTINGS_FILE_PATH
@@ -15,26 +26,40 @@ const {
 let siteSettings = require(`./${SITE_SETTINGS_FILE_PATH}`);
 try {
   siteSettings = require(path.resolve(SITE_SETTINGS_FILE_PATH));
-}
-catch (e) {
+} catch (e) {
   console.log("Falling back to default site settings.")
 }
 
-const title = siteSettings?.siteMetadata?.title || process.env.GATSBY_METADATA_TITLE || "Event Site";
-const description = siteSettings?.siteMetadata?.description || process.env.GATSBY_METADATA_DESCRIPTION || "Event Site";
+const packageJson = require(path.resolve(__dirname, "package.json"));
+
+const title = siteSettings?.siteMetadata?.title || process.env.GATSBY_METADATA_TITLE;
+const description = siteSettings?.siteMetadata?.description || process.env.GATSBY_METADATA_DESCRIPTION;
 const faviconAsset = siteSettings?.favicon?.asset;
 
 const manifestPlugin = faviconAsset ? [
   {
     resolve: "gatsby-plugin-manifest",
     options: {
-      name: title,
-      short_name: title,
-      description: description,
+      name: title ?? packageJson.description,
+      short_name: title ?? packageJson.description,
       start_url: "/",
       display: "minimal-ui",
       icon: path.join(SITE_SETTINGS_DIR_PATH, faviconAsset),
-      include_favicon: true
+      include_favicon: true,
+      ...description && { description }
+    }
+  }
+] : [];
+
+const googleTagManagerPlugin = process.env.GATSBY_GOOGLE_TAGMANAGER_ID ? [
+  {
+    resolve: require.resolve("./plugins/gatsby-plugin-google-tagmanager"),
+    options: {
+      id: process.env.GATSBY_GOOGLE_TAGMANAGER_ID,
+      includeInDevelopment: true,
+      // defer script tags loading to after consent is given
+      // managed by Klaro cookie manager
+      deferLoading: true
     }
   }
 ] : [];
@@ -107,28 +132,45 @@ const plugins = [
       name: "marketingSettings"
     }
   },
+  {
+    resolve: "gatsby-plugin-page-creator",
+    options: {
+      path: path.resolve(PAGES_DIR_PATH),
+      ignore: [`**/${CONTENT_PAGES_PATH_NAME}/**`],
+    }
+  },
   "gatsby-plugin-image",
   "gatsby-plugin-sharp",
   "gatsby-transformer-sharp",
   "gatsby-transformer-json",
   {
-    resolve: "gatsby-transformer-remark",
+    resolve: "gatsby-plugin-mdx",
     options: {
-      plugins: [
+      extensions: [".mdx", ".md"],
+      gatsbyRemarkPlugins: [
         {
           resolve: "gatsby-remark-images",
           options: {
-            // It"s important to specify the maxWidth (in pixels) of
+            // It's important to specify the maxWidth (in pixels) of
             // the content container as this plugin uses this as the
             // base for generating different widths of each image.
             maxWidth: 2048
           }
         }
-      ]
+      ],
+      mdxOptions: {
+        remarkPlugins: [
+          // Add GitHub Flavored Markdown (GFM) support
+          remarkGfm
+        ],
+        rehypePlugins: [
+          rehypeMdxImportMedia 
+        ]
+      }
     }
   },
   {
-    resolve: "gatsby-plugin-netlify-cms",
+    resolve: "gatsby-plugin-decap-cms",
     options: {
       modulePath: `${__dirname}/src/cms/cms.js`,
       manualInit: true,
@@ -160,30 +202,39 @@ const plugins = [
           jsRule
         ];
          /**
-         * Fixes Module not found: Error: Can"t resolve "path" bug.
-         * Webpack 5 doesn"t include browser polyfills for node APIs by default anymore,
-         * so we need to provide them ourselves.
-         * @see https://github.com/postcss/postcss/issues/1509#issuecomment-772097567
-         * @see https://github.com/gatsbyjs/gatsby/issues/31475
-         * @see https://github.com/gatsbyjs/gatsby/issues/31179#issuecomment-844588682
+         * Webpack removed automatic polyfills for these node APIs in v5,
+         * so we need to patch them in the browser.
+         * @see https://www.gatsbyjs.com/docs/reference/release-notes/migrating-from-v2-to-v3/#webpack-5-node-configuration-changed-nodefs-nodepath-
+         * @see https://viglucci.io/how-to-polyfill-buffer-with-webpack-5
          */
         config.resolve = {
           ...config.resolve,
           fallback: {
             ...config.resolve.fallback,
-            path: require.resolve("path-browserify")
+            fs: false,
+            assert: require.resolve("assert"),
+            buffer: require.resolve("buffer/"),
+            path: require.resolve("path-browserify"),
+            "object.assign/polyfill": require.resolve("object.assign/polyfill")
           }
         };
+        config.plugins = [
+          ...config.plugins,
+          new webpack.ProvidePlugin({
+            process: "process",
+            Buffer: ["buffer", "Buffer"]
+          })
+        ];
       }
     }
   },
+  ...googleTagManagerPlugin,
   "gatsby-plugin-netlify", // make sure to keep it last in the array
 ];
 
-module.exports = {
-  siteMetadata: {
-    title,
-    description
-  },
-  plugins
+const siteMetadata = {
+  title,
+  description
 };
+
+export { siteMetadata, plugins };

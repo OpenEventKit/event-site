@@ -22,6 +22,24 @@ import Link from "../../components/Link";
 import { titleFromPathname } from "../../utils/urlFormating";
 import {graphql} from "gatsby";
 
+const mySchedulePage = ({ location, summitPhase,isLoggedUser, user, allowClick, title, key }) => {
+  return  <SchedulePage
+    path="/my-schedule"
+    location={location}
+    summitPhase={summitPhase}
+    isLoggedIn={isLoggedUser}
+    user={user}
+    scheduleProps={{
+      title: title,
+      showSync: true,
+      showShare: false,             
+      subtitle: <Link to={"/a/schedule"}>Show Schedule</Link>
+    }}
+    schedKey={key}
+    allowClick={allowClick}
+  />;
+}
+
 export const appQuery = graphql`
   query {
     invitationsRejectPageJson {
@@ -33,10 +51,19 @@ export const appQuery = graphql`
       alreadyAcceptedInvitationError
       alreadyRejectedInvitationError
     }
+    mySchedulePageJson {
+      title
+      key
+      needsTicketAuthz
+    }
   }
 `;
 
+
 const App = ({ isLoggedUser, user, summitPhase, allowClick = true, data }) => {
+
+  const { mySchedulePageJson } = data;
+
   return (
     <Location>
       {({ location }) => (
@@ -55,25 +82,12 @@ const App = ({ isLoggedUser, user, summitPhase, allowClick = true, data }) => {
             <MyTicketsPage path="/my-tickets" isLoggedIn={isLoggedUser} user={user} location={location} />
             <FullProfilePage path="/profile" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location} />
             <ExtraQuestionsPage path="/extra-questions" isLoggedIn={isLoggedUser} user={user} location={location} />
+            { !mySchedulePageJson.needsTicketAuthz && mySchedulePage({location, summitPhase,isLoggedUser, user, allowClick, title:mySchedulePageJson.title, key: mySchedulePageJson.key }) }
             <WithAuthzRoute path="/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location}>
                 <PostersPage path="/posters" trackGroupId={0} location={location} />
                 <PostersPage path="/posters/:trackGroupId" location={location} />
                 <PosterDetailPage path="/poster/:presentationId/" isLoggedIn={isLoggedUser} user={user} location={location} />
-                <SchedulePage
-                  path="/my-schedule"
-                  location={location}
-                  summitPhase={summitPhase}
-                  isLoggedIn={isLoggedUser}
-                  user={user}
-                  scheduleProps={{
-                    title: "My Schedule",
-                    showSync: true,
-                    showShare: false,
-                    subtitle: <Link to={"/a/schedule"}>Show Schedule</Link>
-                  }}
-                  schedKey="my-schedule-main"
-                  allowClick={allowClick}
-                />
+                { mySchedulePageJson.needsTicketAuthz && mySchedulePage({location, summitPhase,isLoggedUser, user, allowClick, title: mySchedulePageJson.title, key: mySchedulePageJson.key }) }
                 <ShowOpenRoute path="/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location}>
                   <WithBadgeRoute path="/event/:eventId" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location}>
                     <EventPage path="/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location} />

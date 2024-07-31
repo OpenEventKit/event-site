@@ -1,4 +1,5 @@
 import * as React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "./Link";
 
 import footerContent from "content/footer/index.json";
@@ -22,7 +23,7 @@ const FooterMarketing = () => (
       {footerContent.social.networks.map((net, index) => (
         net.display &&
         <Link href={net.link} className={styles.link} key={index}>
-          <i className={`fa icon is-large ${net.icon}`} />
+          <FontAwesomeIcon icon={`fa-brands ${net.icon}`} size="lg" />
         </Link>
       ))}
     </div>

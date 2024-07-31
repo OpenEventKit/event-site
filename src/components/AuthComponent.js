@@ -1,25 +1,27 @@
-import React, { useEffect, useState, useMemo } from "react"
-import { navigate } from "gatsby"
+import React, { useEffect, useState, useMemo } from "react";
+import PropTypes from "prop-types";
+import { navigate } from "gatsby";
 import { connect } from "react-redux";
-import URI from "urijs"
-// these two libraries are client-side only
-import LoginComponent from 'summit-registration-lite/dist/components/login';
-import PasswordlessLoginComponent from 'summit-registration-lite/dist/components/login-passwordless';
+import URI from "urijs";
+
 import FragmentParser from "openstack-uicore-foundation/lib/utils/fragment-parser";
-import { doLogin, passwordlessStart } from 'openstack-uicore-foundation/lib/security/methods'
+import { doLogin, passwordlessStart } from "openstack-uicore-foundation/lib/security/methods";
 import { setPasswordlessLogin, setUserOrder, checkOrderData } from "../actions/user-actions";
 import { getThirdPartyProviders } from "../actions/base-actions";
-import { validateIdentityProviderButtons } from "../utils/loginUtils";
-import 'summit-registration-lite/dist/index.css';
-import styles from '../styles/login-button.module.scss'
-import PropTypes from 'prop-types'
+
+// these two libraries are client-side only
+import LoginComponent from "summit-registration-lite/dist/components/login";
+import PasswordlessLoginComponent from "summit-registration-lite/dist/components/login-passwordless";
+import "summit-registration-lite/dist/index.css";
+import IconButton from "./IconButton";
 import Link from "./Link";
 
-import { PHASES } from "@utils/phasesUtils";
-import { getDefaultLocation } from "@utils/loginUtils";
-import { userHasAccessLevel, VirtualAccessLevel } from "../utils/authorizedGroups";
-
+import { getDefaultLocation, validateIdentityProviderButtons } from "@utils/loginUtils";
+import { userHasAccessLevel, VirtualAccessLevel } from "@utils/authorizedGroups";
 import useSiteSettings from "@utils/useSiteSettings";
+import { PHASES } from "@utils/phasesUtils";
+
+import styles from "../styles/auth-component.module.scss";
 
 const AuthComponent = ({
     getThirdPartyProviders,
@@ -143,7 +145,7 @@ const AuthComponent = ({
         allowsOtpAuth: allowsOtpAuth,
         initialEmailValue: initialEmailValue,
         title: 'Sign in using the email associated with your account:',
-        summitData: summit
+        summitData: summit,
     };
 
     const passwordlessLoginProps = {
@@ -158,28 +160,34 @@ const AuthComponent = ({
         codeError: otpError,
         goToLogin: () => setOtpLogin(false),
         getLoginCode: (email) => sendCode(email),
+        idpLogoLight: siteSettings?.idpLogo?.idpLogoLight?.publicURL,
+        idpLogoDark: siteSettings?.idpLogo?.idpLogoDark?.publicURL,
+        idpLogoAlt: siteSettings?.idpLogo?.idpLogoAlt
     }
 
     const { loginButton } = marketingPageSettings.hero.buttons;
 
     const defaultLoginButton = () => (
-        <button className={`${styles.button} button is-large`} onClick={handleOpenPopup}>
-            <i className={`fa fa-2x fa-edit icon is-large`} />
-            <b>{loginButton.text}</b>
-        </button>
+        <IconButton
+            iconClass="fa fa-2x fa-edit"
+            buttonText={loginButton.text}
+            onClick={handleOpenPopup}
+        />
     );
 
     const defaultEnterButton = () => (
-        <Link className={styles.link} to={defaultPath}>
-            <button className={`${styles.button} button is-large`}>
-                <i className={`fa fa-2x fa-sign-in icon is-large`} />
-                <b>Enter</b>
-            </button>
+        <Link
+            to={defaultPath}
+        >
+            <IconButton
+                iconClass="fa fa-2x fa-sign-in"
+                buttonText="Enter"
+            />
         </Link>
     );
 
     return (
-        <div style={style} className={styles.loginButtonWrapper}>
+        <div style={style} className={styles.authComponent}>
             {!isLoggedUser ?
                 renderLoginButton ? renderLoginButton(handleOpenPopup) : defaultLoginButton()
                 :

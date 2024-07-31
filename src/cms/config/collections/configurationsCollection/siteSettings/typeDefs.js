@@ -21,6 +21,11 @@ module.exports = `
     schedule: Schedule
     chat: Chat
   }
+  type IdpLogo {
+    idpLogoDark: File @fileByRelativePath
+    idpLogoLight: File @fileByRelativePath
+    idpLogoAlt: String
+  }
   type IdentityProviderButton {
     buttonColor: String
     buttonBorderColor: String
@@ -29,10 +34,17 @@ module.exports = `
     providerLogo: File @fileByRelativePath
     providerLogoSize: Float
   }
+  type MaintenanceMode {
+    enabled: Boolean
+    title: String
+    subtitle: String
+  }
   type SiteSettingsJson implements Node {
     siteMetadata: SiteMetadata
     favicon: Favicon
     widgets: Widgets
+    idpLogo: IdpLogo
     identityProviderButtons: [IdentityProviderButton]
+    maintenanceMode: MaintenanceMode
   }
 `;

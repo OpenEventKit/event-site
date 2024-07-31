@@ -6,6 +6,7 @@ import marketingPage from "./marketingPage";
 import lobbyPage from "./lobbyPage";
 import expoHallPage from "./expoHallPage";
 import invitationsRejectPage from "./invitationsRejectPage";
+import mySchedulePage from "./mySchedulePage";
 
 const defaultPagesCollection = {
   ...collectionDefaults({
@@ -16,7 +17,8 @@ const defaultPagesCollection = {
     marketingPage,
     lobbyPage,
     expoHallPage,
-    invitationsRejectPage
+    invitationsRejectPage,
+    mySchedulePage
   ]
 };
 
