@@ -50,7 +50,7 @@
     "final-form": "4.20.7",
     "font-awesome": "^4.7.0",
     "formik": "^2.2.9",
-    "full-schedule-widget": "3.0.7",
+    "full-schedule-widget": "3.0.9",
     "gatsby": "^5.13.5",
     "gatsby-alias-imports": "^1.0.6",
     "gatsby-plugin-decap-cms": "^4.0.4",
