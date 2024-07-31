@@ -10295,10 +10295,10 @@ fsevents@~2.3.2:
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.2.tgz#8a526f78b8fdf4623b709e0b975c52c24c02fd1a"
   integrity sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==
 
-full-schedule-widget@3.0.5:
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/full-schedule-widget/-/full-schedule-widget-3.0.5.tgz#8592e6e13a99e567910755e423e0c923a9f6eec9"
-  integrity sha512-9pb5s+Ik5zcRQMetBmHrofvbCklS60v/gbpwQZoDs105ZRk6XPpRApJAASvMTgvc2FhmjJTIKA4teSKcDnDyCQ==
+full-schedule-widget@3.0.6:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/full-schedule-widget/-/full-schedule-widget-3.0.6.tgz#c542934ea0ba49ba755a9c7408822d9443a865d2"
+  integrity sha512-hLgpdd+xrSY6dpn1qlie2winfnyQ+2UD6+10Qly4/4sMGy1TgccUTLAMR5HQXPmB2ckdavcWNbl55TaqdePA1g==
   dependencies:
     "@mui/base" "5.0.0-alpha.127"
     "@react-pdf/renderer" "^3.1.11"

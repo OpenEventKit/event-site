@@ -32,6 +32,7 @@ const mySchedulePage = ({ location, summitPhase,isLoggedUser, user, allowClick, 
     scheduleProps={{
       title: title,
       showSync: true,
+      showShare: false,             
       subtitle: <Link to={"/a/schedule"}>Show Schedule</Link>
     }}
     schedKey={key}
@@ -86,7 +87,7 @@ const App = ({ isLoggedUser, user, summitPhase, allowClick = true, data }) => {
                 <PostersPage path="/posters" trackGroupId={0} location={location} />
                 <PostersPage path="/posters/:trackGroupId" location={location} />
                 <PosterDetailPage path="/poster/:presentationId/" isLoggedIn={isLoggedUser} user={user} location={location} />
-              { mySchedulePageJson.needsTicketAuthz && mySchedulePage({location, summitPhase,isLoggedUser, user, allowClick, title: mySchedulePageJson.title, key: mySchedulePageJson.key }) }
+                { mySchedulePageJson.needsTicketAuthz && mySchedulePage({location, summitPhase,isLoggedUser, user, allowClick, title: mySchedulePageJson.title, key: mySchedulePageJson.key }) }
                 <ShowOpenRoute path="/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location}>
                   <WithBadgeRoute path="/event/:eventId" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location}>
                     <EventPage path="/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location} />
