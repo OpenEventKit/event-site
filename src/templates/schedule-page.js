@@ -19,7 +19,7 @@ const SchedulePage = ({ summit, scheduleState, summitPhase, isLoggedUser, locati
 
   const [showFilters, setShowfilters] = useState(false);
   const filtersWrapperRef = useRef(null);
-  const { key, events, allEvents, filters, view, timezone, colorSource } = scheduleState || {};
+  const { key, events, allEvents, filters, view, timezone, timeFormat, colorSource } = scheduleState || {};
 
   useEffect(() => {
     if (scheduleState && !!events?.length) {
@@ -71,6 +71,7 @@ const SchedulePage = ({ summit, scheduleState, summitPhase, isLoggedUser, locati
     filters,
     view,
     timezone,
+    timeFormat,
     colorSource,
     schedKey,
     modalSyncText: `Use the link below to add your saved sessions (found in My Schedule) to your personal 
