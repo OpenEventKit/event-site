@@ -237,7 +237,10 @@ const AccessTracker = ({ user, isLoggedUser, summitPhase, chatSettings }) => {
     wechat_user,
     public_profile_show_fullname,
     public_profile_show_email,
-    public_profile_allow_chat_with_me
+    public_profile_allow_chat_with_me,
+    public_profile_show_photo,
+    public_profile_show_social_media_info,
+    public_profile_show_bio
   } = user.idpProfile;
 
   const widgetProps = {
@@ -260,8 +263,12 @@ const AccessTracker = ({ user, isLoggedUser, summitPhase, chatSettings }) => {
           .flatMap((st) => st.badge.features)
           .filter((v, i, a) => a.map((item) => item.id).indexOf(v.id) === i),
       bio: bio,
-      showEmail: public_profile_show_email,
-      allowChatWithMe: public_profile_allow_chat_with_me ?? true
+      showEmail: public_profile_show_email === true,
+      allowChatWithMe: public_profile_allow_chat_with_me === true,
+      showFullName: public_profile_show_fullname === true,
+      showProfilePic: public_profile_show_photo === true,
+      showSocialInfo: public_profile_show_social_media_info === true,
+      showBio: public_profile_show_bio === true
     },
     summitId: parseInt(getEnvVariable(SUMMIT_ID)),
     ...sbAuthProps,
