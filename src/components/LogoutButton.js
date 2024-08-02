@@ -1,6 +1,8 @@
 import React from "react";
 import { navigate } from "gatsby";
 import { triggerLogoutEvent } from "@utils/eventTriggers";
+import IconButton from "@mui/material/IconButton";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 export default class
   LogoutButton extends React.Component {
@@ -15,15 +17,29 @@ export default class
   }
 
   render() {
-    let { isLoggedUser, styles } = this.props;
+    let { isLoggedUser, styles, ...rest } = this.props;
 
     if (isLoggedUser) {
       return (
-        <div className={styles.buttons}>
-          <button className={`link ${styles.userIcon}`} title="Logout" onClick={() => this.onClickLogout()}>
-            <i className="fa fa-sign-out icon is-medium" style={{ fontSize: "1.5rem" }} />
-          </button>
-        </div>
+        <IconButton
+          aria-label="logout"
+          onClick={this.onClickLogout}
+          styles={styles}
+          {...rest}
+        >
+          <LogoutIcon 
+            sx={{
+              color: "white",
+              fontSize: {
+                xs: 18,
+                lg: 19
+              },
+              padding: {
+                xs: 0
+              }
+            }}
+          />
+        </IconButton>
       );
     } else {
       return null;
