@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { connect } from "react-redux";
 import {compose} from "redux";
+import { useLocation } from '@reach/router';
 import HeroComponent from "../components/HeroComponent";
 import {clearFilters, callAction, updateFilter, updateFiltersFromHash} from "../actions/schedule-actions";
 import { reloadScheduleData } from '../actions/base-actions';
@@ -12,13 +13,14 @@ const componentWrapper = (WrappedComponent) => ({schedules, ...props}) => {
   const { updateFiltersFromHash, reloadScheduleData, schedKey, summit, staticJsonFilesBuildTime } = props;
   const scheduleState = schedules?.find( s => s.key === schedKey);
   const { key, filters, view } = scheduleState || {};
+  const location = useLocation();
 
   useEffect(() => {
     if (schedules.length > 0) {
       updateFiltersFromHash(schedKey, filters, view);
       setLoaded(true);
     }
-  }, [key]);
+  }, [key, location.hash]);
 
   if (!loaded)
     return <HeroComponent title="Loading schedule data" />;
