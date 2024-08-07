@@ -6,6 +6,7 @@ import KlaroProvider from "./src/utils/cookies/providers/KlaroProvider";
 import cookieServices from "./src/utils/cookies/services";
 import TagManager from "./src/utils/tag-manager/TagManager";
 import GoogleTagManagerProvider from "./src/utils/tag-manager/providers/GoogleTagManagerProvider";
+import { getEnvVariable, GOOGLE_TAGMANAGER_ID } from "@utils/envVariables";
 import smoothscroll from "smoothscroll-polyfill";
 import "what-input";
 
@@ -25,17 +26,19 @@ export const onClientEntry = () => {
   // smooth scroll polyfill needed for Safari
   smoothscroll.polyfill();
 
-  // Initialize TagManager and add GoogleTagManagerProvider
-  const tagManager = new TagManager();
-  const googleTagManagerProvider = new GoogleTagManagerProvider();
-  tagManager.addProvider(googleTagManagerProvider);
+  // show cookie consent only if google tag manager was deferred loaded
+  // see gatsby-google-tag-manager-plugin in gatsby-config
+  if (getEnvVariable(GOOGLE_TAGMANAGER_ID)) {
+    const tagManager = new TagManager();
+    const googleTagManagerProvider = new GoogleTagManagerProvider();
+    tagManager.addProvider(googleTagManagerProvider);
 
-  // Initialize Cookie Manager with Klaro provider
-  const klaroProvider = new KlaroProvider();
-  const cookieManager = new CookieManager(klaroProvider, cookieServices);
-  cookieManager.show();
+    const klaroProvider = new KlaroProvider();
+    const cookieManager = new CookieManager(klaroProvider, cookieServices);
+    cookieManager.show();
+  }
 
-  // Apply colors
+  // apply colors
   Object.entries(colors).forEach(([key, value]) => {
     document.documentElement.style.setProperty(`--${key}`, value);
     document.documentElement.style.setProperty(`--${key}50`, `${value}50`);
