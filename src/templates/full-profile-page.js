@@ -16,6 +16,7 @@ import withOrchestra from "../utils/widgetOrchestra";
 import LiteScheduleComponent from '../components/LiteScheduleComponent'
 import ProfilePopupComponent from '../components/ProfilePopupComponent'
 import ChangePasswordComponent from '../components/ChangePasswordComponent';
+import AccessTracker from "../components/AttendeeToAttendeeWidgetComponent";
 
 import { updateProfilePicture, updateProfile, getIDPProfile, updatePassword } from '../actions/user-actions'
 
@@ -643,6 +644,7 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                     closePopup={() => handleTogglePopup(!showProfile)}
                 />
             }
+            <AccessTracker/>
         </React.Fragment>
     )
 };
