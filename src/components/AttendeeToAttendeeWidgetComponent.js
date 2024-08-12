@@ -284,6 +284,7 @@ const AccessTracker = ({ user, isLoggedUser, summitPhase, chatSettings }) => {
       showBio: public_profile_show_bio === true
     },
     summitId: parseInt(getEnvVariable(SUMMIT_ID)),
+    keepAliveEnabled: true,
     ...sbAuthProps
   };
 

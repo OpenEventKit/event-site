@@ -5883,15 +5883,14 @@ atob@^2.1.2:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
-attendee-to-attendee-widget@3.1.1-beta.24:
-  version "3.1.1-beta.24"
-  resolved "https://registry.yarnpkg.com/attendee-to-attendee-widget/-/attendee-to-attendee-widget-3.1.1-beta.24.tgz#271dc10e77bc1a6fd6959d89ba04e6a5b810bc6a"
-  integrity sha512-wJLUja9vpk66sqxlxLrGlW5mIr3IyqYAfppks2vV2ztx0aLIMbq9X2G3CU3Q7UTC2wOm7PNIUb+VXal1YlzMlQ==
+attendee-to-attendee-widget@3.1.1-beta.28:
+  version "3.1.1-beta.28"
+  resolved "https://registry.yarnpkg.com/attendee-to-attendee-widget/-/attendee-to-attendee-widget-3.1.1-beta.28.tgz#6e32ade18ead161100c86cfdfc1f4734aec565e9"
+  integrity sha512-OYgdPS8cygfAs8MnAe21IadBxaNbO4rVbT6dJIR1qz6r2hzg+PuXsW024lVWD7D2CKcP+rH67j5wIBeD1d2wsA==
   dependencies:
     "@supabase/supabase-js" "2.45.1"
     formik "^2.2.6"
     lodash.debounce "^4.0.8"
-    luxon "^1.26.0"
     react-device-detect "^2.0.1"
     react-error-boundary "^3.1.3"
     react-infinite-scroll-component "^6.0.0"
@@ -14092,11 +14091,6 @@ lru-queue@^0.1.0:
   integrity sha512-BpdYkt9EvGl8OfWHDQPISVpcl5xZthb+XPsbELj5AQXxIC8IriDZIQYjBJPEm5rS420sjZ0TLEzRcq5KdBhYrQ==
   dependencies:
     es5-ext "~0.10.2"
-
-luxon@^1.26.0:
-  version "1.28.0"
-  resolved "https://registry.yarnpkg.com/luxon/-/luxon-1.28.0.tgz#e7f96daad3938c06a62de0fb027115d251251fbf"
-  integrity sha512-TfTiyvZhwBYM/7QdAVDh+7dBTBA29v4ik0Ce9zda3Mnf8on1S5KJI8P2jKFZ8+5C0jhmr0KwJEO/Wdpm0VeWJQ==
 
 lz-string@^1.4.4:
   version "1.4.4"
