@@ -32,8 +32,11 @@ class KlaroProvider extends CookieManagerProvider {
         },
         consentNotice: {
           description:
-            "Hi! Could we please enable cookies for anonymous {purposes} to improve your user experience?"
+            "Hi! We use cookies to give you the best online experience and analyze our website's performance by collecting anonymous user data, but only if you accept.",
+          learnMore: "Customize"
         },
+        decline: "No thanks",
+        ok: "Sure"
       }
     },
     services: services.map(service => ({
