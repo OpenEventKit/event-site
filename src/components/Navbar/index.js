@@ -29,6 +29,8 @@ const Navbar = ({
     userProfile ? userHasAccessLevel(userProfile.summit_tickets, VIRTUAL_ACCESS_LEVEL) : false
   , [userProfile]);
 
+  const hasSummitHallCheckedIn = userProfile ? userHasCheckedInBadge(userProfile.summit_tickets) : false;
+
   const defaultPath = getDefaultLocation(eventRedirect, hasVirtualBadge);
 
   const meetsUserRequirement = (userRequirement) => {
@@ -84,7 +86,9 @@ const Navbar = ({
         (item.pageRestriction.includes(PAGE_RESTRICTIONS.marketing) && isMarketingPage(currentPath)) ||
         (item.pageRestriction.includes(PAGE_RESTRICTIONS.lobby) && isLobbyPage(currentPath)) ||
         (item.pageRestriction.includes(PAGE_RESTRICTIONS.show) && isShowPage(currentPath)) ||
-        (item.pageRestriction.includes(PAGE_RESTRICTIONS.customPage) && isCustomPage(currentPath));
+        (item.pageRestriction.includes(PAGE_RESTRICTIONS.badge) && hasSummitHallCheckedIn) ||
+        (item.pageRestriction.includes(PAGE_RESTRICTIONS.customPage) && isCustomPage(currentPath))
+    ;
 
     return item.display &&
            meetsUserRequirement(item.userRequirement) &&

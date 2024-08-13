@@ -53,3 +53,7 @@ export const filterEventsByAccessLevels = (originalEvents , user) => {
         return isAuthorizedBadge(ev, summitTickets);
     });
 }
+
+export const userHasCheckedInBadge = (summitTickets) => {
+    return summitTickets.some(t => t.owner.summit_hall_checked_in === true);
+}
