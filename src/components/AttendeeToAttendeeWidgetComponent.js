@@ -198,6 +198,20 @@ const mapState = ({ settingState }) => ({
 export const AttendeesWidget = connect(mapState)(AttendeesWidgetComponent);
 
 const AccessTracker = ({ user, isLoggedUser, summitPhase, chatSettings }) => {
+  const chatProps = {
+    streamApiKey: getEnvVariable(STREAM_IO_API_KEY),
+    apiBaseUrl: getEnvVariable(IDP_BASE_URL),
+    chatApiBaseUrl: getEnvVariable(CHAT_API_BASE_URL),
+    onAuthError: (err, res) => console.log(err),
+    openDir: "left",
+    activity: null,
+    getAccessToken: async () => {
+      const accessToken = await getAccessToken();
+      //console.log("AttendeesList->getAccessToken", accessToken);
+      return accessToken;
+    },
+  };
+  
   const trackerRef = useRef();
 
   const handleLogout = useCallback(() => {
@@ -285,6 +299,7 @@ const AccessTracker = ({ user, isLoggedUser, summitPhase, chatSettings }) => {
     },
     summitId: parseInt(getEnvVariable(SUMMIT_ID)),
     keepAliveEnabled: true,
+    ...chatProps,
     ...sbAuthProps
   };
 
