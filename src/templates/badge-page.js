@@ -6,69 +6,63 @@ import Dropdown from 'openstack-uicore-foundation/lib/components/inputs/dropdown
 import QRCode from "react-qr-code";
 
 import Layout from '../components/Layout'
-import withOrchestra from "../utils/widgetOrchestra";
 import { userHasCheckedInBadge } from '../utils/authorizedGroups';
 
 export const BadgePageTemplate = ({ user }) => {
 
     const hasBadgeChecked = userHasCheckedInBadge(user.summit_tickets);
 
-    const [currentBadge, setCurrentBadge] = useState(null);
-    const [userBadges, setUserBadges] = useState([]);
+    const [currentTicket, setCurrentTicket] = useState(null);
+    const [userTickets, setUserTickets] = useState([]);
     const [badgesDDL, setBadgeDDL] = useState([]);
 
     useEffect(() => {
-        setUserBadges(user.summit_tickets || []);
+        setUserTickets(user.summit_tickets || []);
         const formattedTickets = user?.summit_tickets.map(e => ({ label: e.number, value: e.id }));
         setBadgeDDL(formattedTickets || []);
     }, []);
 
     useEffect(() => {
-        const firstTicket = userBadges.find(e => e.qr_code);
-        setCurrentBadge(firstTicket);
-    }, [userBadges]);
+        const firstTicket = userTickets.find(e => e.qr_code);
+        setCurrentTicket(firstTicket);
+    }, [userTickets]);
 
-    const handleBadgeChange = (ev) => {
+    const handleTicketChange = (ev) => {
         const { target: { value } } = ev;
-        const newBadge = user.summit_tickets.find(e => e.id === value);
-        setCurrentBadge(newBadge);
+        const newTicket = user.summit_tickets.find(e => e.id === value);
+        setCurrentTicket(newTicket);
     }
 
     return (
         <div className="px-6 py-6 mb-6">
-            {hasBadgeChecked &&
-                <>
-                    <h2>Badge QR</h2>
-                    <div className="columns mt-5">
-                        <div className={"column is-half"}>
-                            <Dropdown
-                                id="user_badges"
-                                placeholder="User Badges"
-                                value={currentBadge?.id}
-                                onChange={handleBadgeChange}
-                                options={badgesDDL}
-                            />
-                        </div>
-                    </div>
-                    <div className="columns mt-3">
-                        <div className={"column is-half-desktop is-full-mobile"}>
-                            {currentBadge &&
-                                <QRCode
-                                    size={256}
-                                    style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-                                    value={currentBadge.qr_code}
-                                    viewBox={`0 0 256 256`}
-                                />
-                            }
-                        </div>
-                    </div>
-                </>
-            }
+
+            <h2>Badge QR</h2>
+            <div className="columns mt-5">
+                <div className={"column is-half"}>
+                    <Dropdown
+                        id="user_tickets"
+                        placeholder="User Tickets"
+                        value={currentTicket?.id}
+                        onChange={handleTicketChange}
+                        options={badgesDDL}
+                    />
+                </div>
+            </div>
+            <div className="columns mt-3">
+                <div className={"column is-half-desktop is-full-mobile"}>
+                    {currentTicket && currentTicket.badge.qr_code &&
+                        <QRCode
+                            size={256}
+                            style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                            value={currentTicket.badge.qr_code}
+                            viewBox={`0 0 256 256`}
+                        />
+                    }
+                </div>
+            </div>
         </div>
     )
 };
-
-const OrchestedTemplate = withOrchestra(BadgePageTemplate);
 
 const BadgePage = (
     {
@@ -78,7 +72,7 @@ const BadgePage = (
 ) => {
     return (
         <Layout location={location}>
-            <OrchestedTemplate
+            <BadgePageTemplate
                 user={user} />
         </Layout>
     )

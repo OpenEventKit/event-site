@@ -58,13 +58,18 @@ export const appQuery = graphql`
       key
       needsTicketAuthz
     }
+    badgeQrPageJson {
+      enabled
+    }
   }
 `;
 
 
 const App = ({ isLoggedUser, user, summitPhase, allowClick = true, data }) => {
 
-  const { mySchedulePageJson } = data;
+  const { mySchedulePageJson, badgeQrPageJson } = data;
+
+  console.log("CHECK!", badgeQrPageJson);
 
   return (
     <Location>
@@ -90,9 +95,11 @@ const App = ({ isLoggedUser, user, summitPhase, allowClick = true, data }) => {
                 <PostersPage path="/posters/:trackGroupId" location={location} />
                 <PosterDetailPage path="/poster/:presentationId/" isLoggedIn={isLoggedUser} user={user} location={location} />
                 { mySchedulePageJson.needsTicketAuthz && mySchedulePage({location, summitPhase,isLoggedUser, user, allowClick, title: mySchedulePageJson.title, key: mySchedulePageJson.key }) }
-                <WithCheckedBadgeRoute path="/" isLoggedIn={isLoggedUser} user={user} location={location}>
-                  <BadgePage path="/badge" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location} />
-                </WithCheckedBadgeRoute>
+                {badgeQrPageJson.enabled &&
+                  <WithCheckedBadgeRoute path="/" isLoggedIn={isLoggedUser} user={user} location={location}>
+                    <BadgePage path="/badge" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location} />
+                  </WithCheckedBadgeRoute>
+                }
                 <ShowOpenRoute path="/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location}>
                   <WithBadgeRoute path="/event/:eventId" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location}>
                     <EventPage path="/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location} />
