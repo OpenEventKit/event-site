@@ -166,12 +166,12 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
                 <div className="column is-three-fifths is-offset-one-fifth px-6-desktop py-6-desktop mb-6">
                     <h2>Attendee Information</h2>
                     <div className="columns is-multiline pt-4 pb-5">
-                        <div className={`column is-full-mobile is-half ${styles.extraQuestion}`}>
+                        <div className={`column is-full is-size-3 is-size-4-widescreen is-half-widescreen ${styles.extraQuestion}`}>
                             <label htmlFor={TicketKeys.firstName}>First Name</label>
                             <Input
                                 id={TicketKeys.firstName}
                                 name={TicketKeys.firstName}
-                                className="form-control"
+                                className="form-control is-size-3 is-size-4-widescreen"
                                 type="text"
                                 placeholder={'Your First Name'}
                                 value={formik.values[TicketKeys.firstName]}
@@ -183,12 +183,12 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
                             <p className={styles.errorLabel}>{t("ticket_popup.edit_required")}</p>
                             }
                         </div>
-                        <div className={`column is-full-mobile is-half ${styles.extraQuestion}`}>
+                        <div className={`column is-full is-size-3 is-size-4-widescreen is-half-widescreen ${styles.extraQuestion}`}>
                             <label htmlFor={TicketKeys.lastName}>Last Name</label>
                             <Input
                                 id={TicketKeys.lastName}
                                 name={TicketKeys.lastName}
-                                className="form-control"
+                                className="form-control is-size-3 is-size-4-widescreen"
                                 type="text"
                                 placeholder={'Your Last Name'}
                                 value={formik.values[TicketKeys.lastName]}
@@ -200,18 +200,18 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
                             <p className={styles.errorLabel}>{t("ticket_popup.edit_required")}</p>
                             }
                         </div>
-                        <div className={`column is-full-mobile is-half ${styles.extraQuestion}`}>
+                        <div className={`column is-full is-size-3 is-size-4-widescreen is-half-widescreen ${styles.extraQuestion}`}>
                             <label htmlFor={TicketKeys.email}>Email</label>
                             <Input
                                 id={TicketKeys.email}
                                 name={TicketKeys.email}
-                                className="form-control"
+                                className="form-control is-size-3 is-size-4-widescreen"
                                 type="text"
                                 value={initialValues[TicketKeys.email]}
                                 disabled={true}
                             />
                         </div>
-                        <div className={`column is-full-mobile is-half ${styles.extraQuestion}`}>
+                        <div className={`column is-full is-size-3 is-size-4-widescreen is-half-widescreen ${styles.extraQuestion}`}>
                             <label htmlFor={TicketKeys.company}>Company</label>
                             <RegistrationCompanyInput
                                 id={TicketKeys.company}
@@ -239,9 +239,9 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
                             onAnswerChanges={onExtraQuestionsAnswersSet}
                             ref={formRef}
                             allowExtraQuestionsEdit={summit.allow_update_attendee_extra_questions}
-                            questionContainerClassName={`columns is-multiline ${styles.extraQuestion} pt-3`}
-                            questionLabelContainerClassName={'column is-full pb-0'}
-                            questionControlContainerClassName={`column is-full pt-0`}
+                            questionContainerClassName={`columns is-multiline ${styles.extraQuestion} pt-3 is-size-3 is-size-4-widescreen`}
+                            questionLabelContainerClassName={'column is-full pb-0 is-size-3 is-size-4-widescreen'}
+                            questionControlContainerClassName={`column is-full pt-0 is-size-3 is-size-4-widescreen`}
                             shouldScroll2FirstError={true}
                             onError={handleExtraQuestionError}
                         />
