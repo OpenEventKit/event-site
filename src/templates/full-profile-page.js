@@ -467,7 +467,7 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                                     <br />
                                     <label className={styles.checkbox}>
                                         <input type="checkbox" checked={allowChatWithMe} onChange={e => setAllowChatWithMe(e.target.checked)} />
-                                        Allow people to chat with me?
+                                        Allow people to chat with me
                                     </label>
                                 </div>
                                 <div className={`column is-half`}>
