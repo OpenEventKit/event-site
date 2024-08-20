@@ -38,6 +38,7 @@ export const GET_TICKETS_BY_ORDER = 'GET_TICKETS_BY_ORDER';
 export const GET_TICKETS_BY_ORDER_ERROR = 'GET_TICKETS_BY_ORDER_ERROR';
 export const GET_ORDER_TICKET_DETAILS = 'GET_ORDER_TICKET_DETAILS';
 export const GET_TICKET_DETAILS = 'GET_TICKET_DETAILS';
+export const DELEGATE_TICKET = 'DELEGATE_TICKET';
 
 export const TICKET_ATTENDEE_KEYS = {
     email: 'attendee_email',
@@ -528,6 +529,45 @@ export const refundTicket = ({ ticket, order }) => async (dispatch, getState, { 
         throw (e);
     });
 };
+
+export const delegateTicket = ({ ticket }) => async (dispatch, getState, { getAccessToken, apiBaseUrl, loginUrl }) => {
+    const accessToken = await getAccessToken().catch(_ => history.replace(loginUrl));
+
+    if (!accessToken) return;
+
+    dispatch(startLoading());
+
+    const {
+        orderState: { current_page: orderPage },
+        ticketState: { current_page: ticketPage },
+        summitState: { summit: { id : summitId} }
+    } = getState();
+
+    const orderId = ticket.order ? ticket.order.id : ticket.order_id;
+
+    const params = {
+        access_token: accessToken
+    };
+
+    return putRequest(
+        null,
+        createAction(DELEGATE_TICKET),
+        `${apiBaseUrl}/v1/summits/${summitId}/orders/${orderId}/tickets/${ticket.id}/attendee/delegate`,
+        {},
+        authErrorHandler    
+    )(params)(dispatch).then(() => {
+        dispatch(stopLoading());
+
+        if (ticket.order_id) {
+            dispatch(getUserOrders({ page: orderPage }));
+        } else {
+            dispatch(getUserTickets({ page: ticketPage }));
+        }
+    }).catch(e => {
+        dispatch(stopLoading());
+        throw (e);
+    });
+}
 
 const normalizeTicket = (entity) => {
     const normalizedEntity = {...entity};

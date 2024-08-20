@@ -506,4 +506,14 @@ div.event-feedback-container {
   }
 }
 
+.button-text {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-weight: bold;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 @import "~openstack-uicore-foundation/lib/css/components/extra-questions.css";

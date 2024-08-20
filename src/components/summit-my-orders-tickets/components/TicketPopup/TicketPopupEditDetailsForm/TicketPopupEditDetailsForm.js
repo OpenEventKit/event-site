@@ -12,15 +12,18 @@ import { getMainOrderExtraQuestions } from '../../../store/actions/summit-action
 import {
     editOwnedTicket,
     removeAttendee,
+    delegateTicket,
     TICKET_ATTENDEE_KEYS as TicketKeys
 } from '../../../store/actions/ticket-actions';
 import { useTicketDetails } from '../../../util';
+import useMarketingSettings, { MARKETING_SETTINGS_KEYS }  from "@utils/useMarketingSettings";
 import { ConfirmPopup, CONFIRM_POPUP_CASE } from '../../ConfirmPopup/ConfirmPopup';
 
 import { DefaultScrollBehaviour as ScrollBehaviour } from '@utils/scroll';
 
 import './ticket-popup-edit-details-form.scss';
 import { useTicketAssignedContext } from '../../../context/TicketAssignedContext';
+import { DelegatePopup } from '../../DelegatePopup/DelegatePopup';
 
 const noop = () => {};
 
@@ -41,6 +44,8 @@ export const TicketPopupEditDetailsForm = ({
     const [triedSubmitting, setTriedSubmitting] = useState(false);
     const [showSaveMessage, setShowSaveMessage] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
+    const [showDelegate, setShowDelegate] = useState(false);
+    const [isDelegating, setIsDelegating] = useState(false);
     const [showUnassignMessage, setShowUnassignMessage] = useState(false);
     const {
         isReassignable,
@@ -90,6 +95,11 @@ export const TicketPopupEditDetailsForm = ({
     const hasExtraQuestions = extraQuestions.length > 0;
     const isUserTicketOwner = order.owner_id === userProfile.id;
 
+    const { getSettingByKey } = useMarketingSettings();
+
+    const showCompanyInputDefaultOptions = !!Number(getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteShowCompanyInputDefaultOptions));
+    const showCompanyInput = !!Number(getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteShowCompanyInput));
+
     useEffect(() => {
         const attendeeId = ticket?.owner?.id;
         dispatch(getMainOrderExtraQuestions({ summit, attendeeId }));
@@ -115,14 +125,28 @@ export const TicketPopupEditDetailsForm = ({
             data: values,
         };
 
-        dispatch(editOwnedTicket(params))
-            .then(() => toggleSaveMessage())
-            .catch((error) => console.error(error))
-            .then(() => {
-                // Note: Need to do this to persist the extra question values
-                formikHelpers.resetForm({ values });
-                formikHelpers.setSubmitting(false);
-            });
+        console.log("CHECK here...", values, formikHelpers);
+
+        if(isDelegating) {
+            dispatch(delegateTicket(params))
+                .then(() => toggleSaveMessage())
+                .catch((error) => console.error(error))
+                .then(() => {
+                    formikHelpers.resetForm({ values });
+                    formikHelpers.setSubmitting(false);
+                    setIsDelegating(false);
+                });
+        } else {
+            dispatch(editOwnedTicket(params))
+                .then(() => toggleSaveMessage())
+                .catch((error) => console.error(error))
+                .then(() => {
+                    // Note: Need to do this to persist the extra question values
+                    formikHelpers.resetForm({ values });
+                    formikHelpers.setSubmitting(false);
+                });
+        }
+
     };
 
     const handleConfirmAccept = async () => {
@@ -135,6 +159,23 @@ export const TicketPopupEditDetailsForm = ({
 
     const handleConfirmReject = () => {
         setShowConfirm(false);
+    };
+
+    const handleDelegateAccept = () => {
+        setShowDelegate(false);
+        setIsDelegating(true);        
+        formik.resetForm({
+            values: {
+              ...formik.values,
+              [TicketKeys.firstName]: "",
+              [TicketKeys.lastName]: "",
+              [TicketKeys.extraQuestions]: []
+            }
+          });
+    };
+
+    const handleDelegateReject = () => {
+        setShowDelegate(false);
     };
 
     const handleSubmit = (values, formikHelpers) => updateTicket(values, formikHelpers);
@@ -250,7 +291,7 @@ export const TicketPopupEditDetailsForm = ({
                         name={TicketKeys.email}
                         className="form-control"
                         value={initialValues[TicketKeys.email]}
-                        disabled={true}
+                        disabled={true || isDelegating}
                     />
                     {isUserTicketOwner && isReassignable &&
                     <div className="mt-1">
@@ -277,8 +318,8 @@ export const TicketPopupEditDetailsForm = ({
                         placeholder={t("ticket_popup.edit_first_name_placeholder")}
                         value={formik.values[TicketKeys.firstName]}
                         onBlur={formik.handleBlur}
-                        onChange={!!initialValues[TicketKeys.firstName] ? noop : formik.handleChange}
-                        disabled={!!initialValues[TicketKeys.firstName]}
+                        onChange={!!initialValues[TicketKeys.firstName] && !isDelegating ? noop : formik.handleChange}
+                        disabled={!!initialValues[TicketKeys.firstName] && !isDelegating}
                     />
                     {(formik.touched[TicketKeys.firstName] || triedSubmitting) && formik.errors[TicketKeys.firstName] &&
                     <p className="error-label">{t("ticket_popup.edit_required")}</p>
@@ -297,8 +338,8 @@ export const TicketPopupEditDetailsForm = ({
                         placeholder={t("ticket_popup.edit_last_name_placeholder")}
                         value={formik.values[TicketKeys.lastName]}
                         onBlur={formik.handleBlur}
-                        onChange={!!initialValues[TicketKeys.lastName] ? noop : formik.handleChange}
-                        disabled={!!initialValues[TicketKeys.lastName]}
+                        onChange={!!initialValues[TicketKeys.lastName] && !isDelegating ? noop : formik.handleChange}
+                        disabled={!!initialValues[TicketKeys.lastName] && !isDelegating}
                     />
                     {(formik.touched[TicketKeys.lastName] || triedSubmitting) && formik.errors[TicketKeys.lastName] &&
                     <p className="error-label">{t("ticket_popup.edit_required")}</p>
@@ -306,30 +347,38 @@ export const TicketPopupEditDetailsForm = ({
                 </div>
 
                 <div className="attendee-info column is-full">
-                    <label htmlFor={TicketKeys.company}>
-                        {t("ticket_popup.edit_company")}
-                        {!initialValues[TicketKeys.company].name && <b> *</b>}
-                    </label>
-                    <RegistrationCompanyInput
-                        id={TicketKeys.company}
-                        name={TicketKeys.company}
-                        summitId={summit.id}
-                        placeholder={t("ticket_popup.edit_company_placeholder")}
-                        value={formik.values[TicketKeys.company]}
-                        onBlur={formik.handleBlur}
-                        onChange={!!initialValues[TicketKeys.company].name ? noop : formik.handleChange}
-                        disabled={!!initialValues[TicketKeys.company].name}
-                        menuPortalTarget={document.body}
-                        menuPosition="fixed"
-                        styles={{
-                            menuPortal: (base) => ({ ...base, zIndex: 9999 }),                            
-                        }}
-                        tabSelectsValue={false}
-                    />
-                    {(formik.touched[TicketKeys.company] || triedSubmitting) && formik.errors[TicketKeys.company] &&
-                    <p className="error-label">{t("ticket_popup.edit_required")}</p>
-                    }
+                    <button className="button-text" type='button' onClick={() => setShowDelegate(true)}>Delegate</button>
                 </div>
+                {showCompanyInput &&
+                    <div className="attendee-info column is-full">
+                        <label htmlFor={TicketKeys.company}>
+                            {t("ticket_popup.edit_company")}
+                            {!initialValues[TicketKeys.company].name && <b> *</b>}
+                        </label>
+                        <RegistrationCompanyInput
+                            id={TicketKeys.company}
+                            name={TicketKeys.company}
+                            summitId={summit.id}
+                            placeholder={t("ticket_popup.edit_company_placeholder")}
+                            value={formik.values[TicketKeys.company]}
+                            onBlur={formik.handleBlur}
+                            onChange={!!initialValues[TicketKeys.company].name ? noop : formik.handleChange}
+                            disabled={!!initialValues[TicketKeys.company].name}
+                            defaultOptions={showCompanyInputDefaultOptions}
+                            openMenuOnFocus={showCompanyInputDefaultOptions}
+                            openMenuOnClick={showCompanyInputDefaultOptions}
+                            menuPortalTarget={document.body}
+                            menuPosition="fixed"
+                            styles={{
+                                menuPortal: (base) => ({ ...base, zIndex: 9999 }),                            
+                            }}
+                            tabSelectsValue={false}
+                        />
+                        {(formik.touched[TicketKeys.company] || triedSubmitting) && formik.errors[TicketKeys.company] &&
+                        <p className="error-label">{t("ticket_popup.edit_required")}</p>
+                        }
+                    </div>
+                }
 
                 {(initialValues[TicketKeys.firstName] || initialValues[TicketKeys.lastName] || initialValues[TicketKeys.company].name) &&
                 <div className="column is-full pb-5">
@@ -341,11 +390,13 @@ export const TicketPopupEditDetailsForm = ({
                 <div className="column is-full pt-5">
                     <h4 className="pb-2">{t("ticket_popup.edit_preferences")}</h4>
                     <ExtraQuestionsForm
+                        // This key is added to trigger a new render when the extra questions are resetted on delegation
+                        key={formik.values[TicketKeys.extraQuestions].length}
                         ref={formRef}
                         extraQuestions={extraQuestions}
                         userAnswers={formik.values[TicketKeys.extraQuestions]}
                         onAnswerChanges={onExtraQuestionsAnswersSet}
-                        allowExtraQuestionsEdit={canEditTicketData}
+                        allowExtraQuestionsEdit={canEditTicketData || isDelegating}
                         questionContainerClassName={`columns is-multiline extra-question pt-3`}
                         questionLabelContainerClassName={'column is-full pb-0'}
                         questionControlContainerClassName={`column is-full pt-0`}
@@ -402,6 +453,11 @@ export const TicketPopupEditDetailsForm = ({
                 popupCase={CONFIRM_POPUP_CASE.UNASSIGN_TICKET}
                 onAccept={handleConfirmAccept}
                 onReject={handleConfirmReject}
+            />
+            <DelegatePopup
+                isOpen={showDelegate}                
+                onAccept={handleDelegateAccept}
+                onReject={handleDelegateReject}
             />
         </div>
     );
