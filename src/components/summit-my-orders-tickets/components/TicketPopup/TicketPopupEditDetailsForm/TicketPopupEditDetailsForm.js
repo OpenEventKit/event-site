@@ -54,7 +54,7 @@ export const TicketPopupEditDetailsForm = ({
         isUnassigned
     } = useTicketDetails({ ticket, summit });
 
-    const displayDelegate = (ticket.ticket_type.allows_to_delegate || ticket.promo_code.allows_to_delegate) && !isUnassigned && !ticket.owner?.manager_id;
+    const displayDelegate = (ticket.ticket_type.allows_to_delegate || ticket.promo_code?.allows_to_delegate) && !isUnassigned && !ticket.owner?.manager_id;
 
     const { onTicketAssignChange } = useTicketAssignedContext();
 
