@@ -35,7 +35,7 @@ export const OrderListItem = ({ order, className, changeTicketsPage }) => {
                             <OrderSummary type="mobile" order={order} summit={summit} tickets={tickets}/>
 
                             {summit.ticket_types.map((ticketType, index) => {
-                                const orderTickets = tickets.filter(t => t.ticket_type_id == ticketType.id);
+                                const orderTickets = tickets.filter(t => t.ticket_type.id == ticketType.id);
 
                                 if (orderTickets.length < 1) return null;
 

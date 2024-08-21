@@ -19,7 +19,7 @@ export const useTicketDetails = ({ ticket, summit }) => {
 
     const status = getTicketStatusData(ticket, isPast);
     const role = getTicketRole(ticket);
-    const type = summit.ticket_types.find(type => type.id == ticket.ticket_type_id);
+    const type = summit.ticket_types.find(type => type.id == ticket.ticket_type.id);
 
     const isActive = ticket.is_active && status.type !== STATUS_CANCELLED;
     const isUnassigned = status.type === STATUS_UNASSIGNED;

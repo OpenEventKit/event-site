@@ -50,8 +50,11 @@ export const TicketPopupEditDetailsForm = ({
     const {
         isReassignable,
         formattedReassignDate,
-        daysUntilReassignDeadline
+        daysUntilReassignDeadline,
+        isUnassigned
     } = useTicketDetails({ ticket, summit });
+
+    const displayDelegate = (ticket.ticket_type.allows_to_delegate || ticket.promo_code.allows_to_delegate) && !isUnassigned && !ticket.owner?.manager_id;
 
     const { onTicketAssignChange } = useTicketAssignedContext();
 
@@ -124,8 +127,6 @@ export const TicketPopupEditDetailsForm = ({
             context,
             data: values,
         };
-
-        console.log("CHECK here...", values, formikHelpers);
 
         if(isDelegating) {
             dispatch(delegateTicket(params))
@@ -346,9 +347,12 @@ export const TicketPopupEditDetailsForm = ({
                     }
                 </div>
 
-                <div className="attendee-info column is-full">
-                    <button className="button-text" type='button' onClick={() => setShowDelegate(true)}>Delegate</button>
-                </div>
+                {displayDelegate && 
+                    <div className="attendee-info column is-full">
+                        <button className="button-text" type='button' onClick={() => setShowDelegate(true)}>Delegate</button>
+                    </div>
+                }
+
                 {showCompanyInput &&
                     <div className="attendee-info column is-full">
                         <label htmlFor={TicketKeys.company}>
