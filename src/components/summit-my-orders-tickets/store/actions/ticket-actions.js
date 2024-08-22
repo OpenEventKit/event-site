@@ -91,9 +91,9 @@ export const getUserTickets = ({ page = 1, perPage = 5 }) => async (dispatch, ge
 
     const params = {
         access_token: accessToken,
-        expand: 'order, owner',
+        expand: 'order,owner,promocode,ticket_type',
         order: '-id',
-        fields: 'order.id,order.owner_first_name,order.owner_last_name,order.owner_email,owner.first_name,owner.last_name,owner.status,promocode,ticket_type',
+        fields: 'order.id,order.owner_first_name,order.owner_last_name,order.owner_email,owner.first_name,owner.last_name,owner.status',
         'filter[]': [`status==Paid`, `order_owner_id<>${userProfile.id}`],
         relations: 'none',
         page: page,

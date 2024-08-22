@@ -51,10 +51,9 @@ export const TicketPopupEditDetailsForm = ({
         isReassignable,
         formattedReassignDate,
         daysUntilReassignDeadline,
-        isUnassigned
-    } = useTicketDetails({ ticket, summit });
-
-    const displayDelegate = (ticket.ticket_type.allows_to_delegate || ticket.promo_code?.allows_to_delegate) && !isUnassigned && !ticket.owner?.manager_id;
+        isUnassigned,
+        allowsDelegate
+    } = useTicketDetails({ ticket, summit });    
 
     const { onTicketAssignChange } = useTicketAssignedContext();
 
@@ -347,7 +346,7 @@ export const TicketPopupEditDetailsForm = ({
                     }
                 </div>
 
-                {displayDelegate && 
+                {allowsDelegate && 
                     <div className="attendee-info column is-full">
                         <button className="button-text" type='button' onClick={() => setShowDelegate(true)}>Delegate</button>
                     </div>

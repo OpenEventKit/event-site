@@ -25,6 +25,8 @@ export const useTicketDetails = ({ ticket, summit }) => {
     const isUnassigned = status.type === STATUS_UNASSIGNED;
     const isRefundable = ticket.final_amount > 0 && ticket.final_amount > ticket.refunded_amount;
 
+    const allowsDelegate = (ticket.ticket_type.allows_to_delegate || ticket.promo_code?.allows_to_delegate) && !isUnassigned && !ticket.owner?.manager_id;
+
     const togglePopup = () => setShowPopup(!showPopup);
 
     const handleClick = () => {
@@ -45,6 +47,7 @@ export const useTicketDetails = ({ ticket, summit }) => {
         isUnassigned,
         isReassignable,
         isRefundable,
+        allowsDelegate,
         formattedDate,
         formattedReassignDate,
         daysUntilReassignDeadline,
