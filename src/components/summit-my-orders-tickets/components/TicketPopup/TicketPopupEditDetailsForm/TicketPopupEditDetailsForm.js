@@ -169,6 +169,7 @@ export const TicketPopupEditDetailsForm = ({
               ...formik.values,
               [TicketKeys.firstName]: "",
               [TicketKeys.lastName]: "",
+              [TicketKeys.disclaimerAccepted]: false,
               [TicketKeys.extraQuestions]: []
             }
           });
