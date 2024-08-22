@@ -538,6 +538,7 @@ export const delegateTicket = ({
         attendee_first_name,
         attendee_last_name,
         attendee_company,
+        disclaimer_accepted,
         extra_questions,
     }
 }) => async (dispatch, getState, { getAccessToken, apiBaseUrl, loginUrl }) => {
@@ -564,6 +565,7 @@ export const delegateTicket = ({
         attendee_first_name,
         attendee_last_name,
         attendee_company,
+        disclaimer_accepted,
         extra_questions
     });
 
