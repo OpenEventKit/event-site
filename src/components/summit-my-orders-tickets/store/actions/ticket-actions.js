@@ -149,15 +149,15 @@ export const getTicketById = ({order, ticket}) => async (dispatch, getState, { g
 };
 
 export const getTicketsByOrder = ({ orderId, page = 1, perPage = 5 }) => async (dispatch, getState, { getAccessToken, apiBaseUrl, loginUrl }) => {
-    
+
     dispatch(startLoading());
-    
+
     const accessToken = await getAccessToken().catch(_ => history.replace(loginUrl));
 
     if (!accessToken) return;
 
     const params = {
-        access_token: accessToken,        
+        access_token: accessToken,
         expand: 'refund_requests,owner,owner.extra_questions,badge,badge.features,promocode,ticket_type',
         order: '+id',
         page: page,
@@ -167,7 +167,7 @@ export const getTicketsByOrder = ({ orderId, page = 1, perPage = 5 }) => async (
     return getRequest(
         null,
         createAction(GET_TICKETS_BY_ORDER),
-        `${apiBaseUrl}/api/v1/summits/all/orders/${orderId}/tickets`,        
+        `${apiBaseUrl}/api/v1/summits/all/orders/${orderId}/tickets`,
         authErrorHandler
     )(params)(dispatch).then(() => {
         dispatch(stopLoading());
@@ -325,7 +325,7 @@ export const editOwnedTicket = ({
         if (context === 'ticket-list') {
             dispatch(getUserTickets({ page: ticketPage }));
         } else {
-            dispatch(getUserOrders({ page: orderPage })).then(() => 
+            dispatch(getUserOrders({ page: orderPage })).then(() =>
                 dispatch(getTicketsByOrder({ orderId: ticket.order_id, page: orderTicketsCurrentPage }))
             );
         }
@@ -552,9 +552,9 @@ export const delegateTicket = ({ ticket }) => async (dispatch, getState, { getAc
     return putRequest(
         null,
         createAction(DELEGATE_TICKET),
-        `${apiBaseUrl}/v1/summits/${summitId}/orders/${orderId}/tickets/${ticket.id}/attendee/delegate`,
+        `${apiBaseUrl}/api/v1/summits/${summitId}/orders/${orderId}/tickets/${ticket.id}/delegate`,
         {},
-        authErrorHandler    
+        authErrorHandler
     )(params)(dispatch).then(() => {
         dispatch(stopLoading());
 
