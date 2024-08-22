@@ -530,7 +530,17 @@ export const refundTicket = ({ ticket, order }) => async (dispatch, getState, { 
     });
 };
 
-export const delegateTicket = ({ ticket }) => async (dispatch, getState, { getAccessToken, apiBaseUrl, loginUrl }) => {
+export const delegateTicket = ({
+    ticket,
+    context,
+    data: {
+        attendee_email,
+        attendee_first_name,
+        attendee_last_name,
+        attendee_company,
+        extra_questions,
+    }
+}) => async (dispatch, getState, { getAccessToken, apiBaseUrl, loginUrl }) => {
     const accessToken = await getAccessToken().catch(_ => history.replace(loginUrl));
 
     if (!accessToken) return;
@@ -539,8 +549,8 @@ export const delegateTicket = ({ ticket }) => async (dispatch, getState, { getAc
 
     const {
         orderState: { current_page: orderPage },
-        ticketState: { current_page: ticketPage },
-        summitState: { summit: { id : summitId} }
+        ticketState: { current_page: ticketPage, orderTickets: { current_page : orderTicketsCurrentPage }},
+        summitState: { summit: { id : summitId } }
     } = getState();
 
     const orderId = ticket.order ? ticket.order.id : ticket.order_id;
@@ -549,19 +559,29 @@ export const delegateTicket = ({ ticket }) => async (dispatch, getState, { getAc
         access_token: accessToken
     };
 
+    const normalizedEntity = normalizeTicket({
+        attendee_email,
+        attendee_first_name,
+        attendee_last_name,
+        attendee_company,
+        extra_questions
+    });
+
     return putRequest(
         null,
         createAction(DELEGATE_TICKET),
-        `${apiBaseUrl}/api/v1/summits/${summitId}/orders/${orderId}/tickets/${ticket.id}/delegate`,
-        {},
-        authErrorHandler
+        `${apiBaseUrl}/api/v1/summits/${summitId}/orders/${orderId}/tickets/${ticket.id}/delegate`,        
+        normalizedEntity,
+        authErrorHandler    
     )(params)(dispatch).then(() => {
         dispatch(stopLoading());
-
-        if (ticket.order_id) {
-            dispatch(getUserOrders({ page: orderPage }));
-        } else {
+        // Note: refresh the list view after updating the ticket.
+        if (context === 'ticket-list') {
             dispatch(getUserTickets({ page: ticketPage }));
+        } else {
+            dispatch(getUserOrders({ page: orderPage })).then(() => 
+                dispatch(getTicketsByOrder({ orderId: ticket.order_id, page: orderTicketsCurrentPage }))
+            );
         }
     }).catch(e => {
         dispatch(stopLoading());
