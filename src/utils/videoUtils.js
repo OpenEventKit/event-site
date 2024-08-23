@@ -32,9 +32,14 @@ export const isSynchWordsVideo = (url) => {
     return url.match(IS_SYNC_WORDS_VIDEO_REGEX);
 }
 
+/**
+ * @param src
+ * @returns {string|null}
+ */
 export const getSynchWordsVideoFrameDdFromSrc = (src) => {
     const m = [...src.matchAll(IS_SYNC_WORDS_VIDEO_REGEX)];
     if(!m?.length) return null;
-    if(!m?.length < 2) return null;
-    return `${m[0]}-live-${m[1]}`;
+    const parts = m[0];
+    if(parts.length < 3) return null;
+    return `${parts[1]}-live-${parts[2]}`;
 }
