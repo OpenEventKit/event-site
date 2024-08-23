@@ -91,9 +91,9 @@ export const getUserTickets = ({ page = 1, perPage = 5 }) => async (dispatch, ge
 
     const params = {
         access_token: accessToken,
-        expand: 'order,owner,promocode,ticket_type',
+        expand: 'order,owner,owner.manager,promo_code,ticket_type',
         order: '-id',
-        fields: 'order.id,order.owner_first_name,order.owner_last_name,order.owner_email,owner.first_name,owner.last_name,owner.status',
+        fields: 'order.id,order.owner_first_name,order.owner_last_name,order.owner_email,owner.first_name,owner.last_name,owner.email,owner.company,owner.status,owner.manager.id',
         'filter[]': [`status==Paid`, `order_owner_id<>${userProfile.id}`],
         relations: 'none',
         page: page,
@@ -131,7 +131,7 @@ export const getTicketById = ({order, ticket}) => async (dispatch, getState, { g
 
     const params = {
         access_token: accessToken,
-        expand: `${fromOrderList ? 'order' : ''},owner,owner.extra_questions,badge,badge.features,refund_requests,promocode,ticket_type`,
+        expand: `${fromOrderList ? 'order' : ''},owner,owner.extra_questions,badge,badge.features,refund_requests,promo_code,ticket_type`,
         fields: 'order.id, order.owner_first_name, order.owner_last_name, order.owner_email'
     };
 
@@ -158,7 +158,7 @@ export const getTicketsByOrder = ({ orderId, page = 1, perPage = 5 }) => async (
 
     const params = {
         access_token: accessToken,
-        expand: 'refund_requests,owner,owner.extra_questions,badge,badge.features,promocode,ticket_type',
+        expand: 'refund_requests,owner,owner.extra_questions,badge,badge.features,promo_code,ticket_type',
         order: '+id',
         page: page,
         per_page: perPage

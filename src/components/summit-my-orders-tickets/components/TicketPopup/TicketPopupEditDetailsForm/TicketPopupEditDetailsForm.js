@@ -292,7 +292,7 @@ export const TicketPopupEditDetailsForm = ({
                         name={TicketKeys.email}
                         className="form-control"
                         value={initialValues[TicketKeys.email]}
-                        disabled={true || isDelegating}
+                        disabled={true}
                     />
                     {isUserTicketOwner && isReassignable &&
                     <div className="mt-1">
@@ -439,7 +439,7 @@ export const TicketPopupEditDetailsForm = ({
                 }
             </div>
 
-            {canSubmitChanges() &&
+            {(canSubmitChanges() || isDelegating) &&
             <div className="ticket-popup-footer">
                 <button
                     type="button"
