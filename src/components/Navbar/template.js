@@ -1,108 +1,88 @@
 import React, { useState } from "react";
-
 import Link from "../Link";
-import ProfilePopupComponent from "../ProfilePopupComponent";
 import LogoutButton from "../LogoutButton";
 
 import styles from "../../styles/navbar.module.scss";
 
 const NavbarTemplate = ({
-  data,
+  items,
+  logo,
   summit,
   isLoggedUser,
-  idpLoading,
   idpProfile,
-  updateProfile,
-  updateProfilePicture,
-  defaultPath,
-  logo
+  onLogoClick,
+  onProfileIconClick
 }) => {
   const [active, setActive] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
 
-  const toggleHamburger = () => {
-    // toggle the active boolean in the state
-    setActive(!active);
-  };
-
-  const handleTogglePopup = () => {
-    if (showProfile) {
-      document.body.classList.remove("is-clipped");
-    } else {
-      document.body.classList.add("is-clipped");
-    }
-    setShowProfile(!showProfile);
-  };
+  const toggleHamburger = () => setActive(!active);
 
   const navBarActiveClass = active ? styles.isActive : "";
 
+  const renderLogo = () => {
+    if (!logo && !summit?.name) return null;
+
+    const logoContent = logo ? <img src={logo} alt={summit?.name || "Logo"} /> : <h4>{summit.name}</h4>;
+
+    return onLogoClick ? (
+      <button className={`link ${styles.navbarItem}`} onClick={onLogoClick}>
+        {logoContent}
+      </button>
+    ) : (
+      <div className={styles.navbarItem}>{logoContent}</div>
+    );
+  };
+
+  const renderProfileIcon = () => {
+    if (!isLoggedUser || !idpProfile?.picture) return null;
+
+    const profilePic = (
+      <img alt={idpProfile?.name} className={styles.profilePic} src={idpProfile.picture} />
+    );
+
+    return onProfileIconClick ? (
+      <div className={styles.navbarItem}>
+        <button className="link" onClick={onProfileIconClick}>
+          {profilePic}
+        </button>
+      </div>
+    ) : (
+      <div className={styles.navbarItem}>{profilePic}</div>
+    );
+  };
+
   return (
-    <React.Fragment>
-      <nav
-        className={`${styles.navbar}`}
-        role="navigation"
-        aria-label="main navigation"
-      >
-        <div className={styles.navbarBrand}>
-          <Link
-            to={isLoggedUser ? defaultPath : "/"}
-            className={styles.navbarItem}
-          >
-            {logo && <img src={logo} alt={summit.name} />}
-          </Link>
-
-          <button
-            className={`link ${styles.navbarBurger} ${styles.burger} ${navBarActiveClass}`}
-            aria-label="menu"
-            aria-expanded="false"
-            data-target="navbar"
-            onClick={() => toggleHamburger()}
-          >
-            <span aria-hidden="true" />
-            <span aria-hidden="true" />
-            <span aria-hidden="true" />
-          </button>
-        </div>
-
-        <div
-          id="navbar"
-          className={`${styles.navbarMenu} ${navBarActiveClass}`}
+    <nav className={styles.navbar} role="navigation" aria-label="main navigation">
+      <div className={styles.navbarBrand}>
+        {renderLogo()}
+        <button
+          className={`link ${styles.navbarBurger} ${styles.burger} ${navBarActiveClass}`}
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navbar"
+          onClick={toggleHamburger}
         >
-          <div className={styles.navbarStart} />
-          <div className={styles.navbarEnd}>
-            {data.map((item, index) => (
-              <div className={styles.navbarItem} key={index}>
-                <Link to={item.link} className={styles.link}>
-                  <span>{item.title}</span>
-                </Link>
-              </div>
-            ))}
-            {isLoggedUser && (
-              <div className={styles.navbarItem}>
-                <button className="link" onClick={() => handleTogglePopup()}>
-                  <img
-                    alt="profile pic"
-                    className={styles.profilePic}
-                    src={idpProfile?.picture}
-                  />
-                </button>
-                {showProfile && (
-                  <ProfilePopupComponent
-                    userProfile={idpProfile}
-                    showProfile={showProfile}
-                    idpLoading={idpLoading}
-                    changePicture={updateProfilePicture}
-                    changeProfile={updateProfile}
-                    closePopup={() => handleTogglePopup()}
-                  />
-                )}
-              </div>
-            )}
-            <LogoutButton styles={styles} isLoggedUser={isLoggedUser} />
-          </div>
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
+        </button>
+      </div>
+
+      <div id="navbar" className={`${styles.navbarMenu} ${navBarActiveClass}`}>
+        <div className={styles.navbarStart} />
+        <div className={styles.navbarEnd}>
+          {items?.map((item, index) => (
+            <div className={styles.navbarItem} key={index}>
+              <Link to={item.link} className={styles.link}>
+                <span>{item.title}</span>
+              </Link>
+            </div>
+          ))}
+          {renderProfileIcon()}
+          <LogoutButton styles={styles} isLoggedUser={isLoggedUser} />
         </div>
-      </nav>
-    </React.Fragment>
+      </div>
+    </nav>
   );
 };
 

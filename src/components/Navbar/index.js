@@ -1,12 +1,8 @@
 import * as React from "react";
 import { useMemo } from "react";
 import { connect } from "react-redux";
+import { navigate } from "gatsby";
 import NavbarTemplate from "./template";
-
-import {
-  updateProfile,
-  updateProfilePicture
-} from "../../actions/user-actions";
 
 import { userHasAccessLevel, VirtualAccessLevel } from "@utils/authorizedGroups";
 import { getDefaultLocation } from "@utils/loginUtils";
@@ -21,11 +17,8 @@ const Navbar = ({
   summitPhase,
   summit,
   isLoggedUser,
-  idpLoading,
   idpProfile,
   userProfile,
-  updateProfile,
-  updateProfilePicture,
   eventRedirect
 }) => {
 
@@ -105,20 +98,21 @@ const Navbar = ({
            passPageRestriction;
   };
 
+  const handleLogoClick = () => navigate(isLoggedUser ? defaultPath : "/");
+
+  const handleProfileIconClick = () => navigate("/a/profile");
+
   return (
     <NavbarTemplate
-      data={navbarContent.items.filter(showItem)}
+      items={navbarContent.items.filter(showItem)}
       summit={summit}
-      isLoggedUser={isLoggedUser}
-      idpLoading={idpLoading}
-      idpProfile={idpProfile}
-      hasVirtualBadge={hasVirtualBadge}
-      updateProfile={updateProfile}
-      updateProfilePicture={updateProfilePicture}
-      defaultPath={defaultPath}
       logo={summit?.logo}
+      onLogoClick={handleLogoClick}
+      isLoggedUser={isLoggedUser}
+      idpProfile={idpProfile}
+      onProfileIconClick={handleProfileIconClick}
     />
-  )
+  );
 };
 
 
@@ -129,17 +123,13 @@ const mapStateToProps = ({
   loggedUserState,
   userState
 }) => ({
-  summitPhase: clockState.summit_phase,
   summit: summitState.summit,
+  summitPhase: clockState.summit_phase,
   isLoggedUser: loggedUserState.isLoggedUser,
   idpProfile: userState.idpProfile,
-  idpLoading: userState.loadingIDP,
   userProfile: userState.userProfile,
   // TODO: move to site settings i/o marketing page settings
   eventRedirect: settingState.marketingPageSettings.eventRedirect
 });
 
-export default connect(mapStateToProps, {
-  updateProfile,
-  updateProfilePicture
-})(Navbar);
+export default connect(mapStateToProps, {})(Navbar);
