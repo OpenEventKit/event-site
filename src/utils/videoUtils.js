@@ -1,4 +1,5 @@
 const IS_MUX_VIDEO_REGEX = /https:\/\/stream.mux.com\/(.*).m3u8/;
+const IS_SYNC_WORDS_VIDEO_REGEX = /https:\/\/player.syncwords.com\/iframe\/live\/(.*)\/(.*)/g;
 
 export const getMUXPlaybackId = (url) => {
     if(!url) return null;
@@ -24,4 +25,16 @@ export const isYouTubeVideo = (url) => {
 export const isMuxVideo = (url) => {
     if(!url) return false;
     return url.match(IS_MUX_VIDEO_REGEX)
+}
+
+export const isSynchWordsVideo = (url) => {
+    if(!url) return false;
+    return url.match(IS_SYNC_WORDS_VIDEO_REGEX);
+}
+
+export const getSynchWordsVideoFrameDdFromSrc = (src) => {
+    const m = [...src.matchAll(IS_SYNC_WORDS_VIDEO_REGEX)];
+    if(!m?.length) return null;
+    if(!m?.length < 2) return null;
+    return `${m[0]}-live-${m[1]}`;
 }
