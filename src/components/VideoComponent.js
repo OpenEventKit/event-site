@@ -4,7 +4,8 @@ import VideoJSPlayer from './VideoJSPlayer';
 import VimeoPlayer from "./VimeoPlayer";
 import VideoMUXPlayer from './VideoMUXPlayer';
 import styles from '../styles/video.module.scss';
-import { isMuxVideo, isVimeoVideo, isYouTubeVideo } from '../utils/videoUtils';
+import { isMuxVideo, isVimeoVideo, isYouTubeVideo, isSynchWordsVideo } from '../utils/videoUtils';
+import SynchWordsPlayer from "./SyncWordsPlayer";
 
 /**
  * @param url
@@ -48,6 +49,14 @@ const VideoComponent = ({ url, title, namespace, isLive, firstHalf, autoPlay, st
                 />
             );
         };
+        // synch words player
+        if(isSynchWordsVideo(url)){
+            return (<SynchWordsPlayer
+              video={url}
+              autoplay={autoPlay}
+              className={styles.synchWordsPlayer}
+            />);
+        }
 
         const defaultVideoJsOptions = isYouTubeVideo(url) ? {
             techOrder: ["youtube"],
@@ -99,7 +108,7 @@ VideoComponent.propTypes = {
     isLive: PropTypes.bool,
     firstHalf: PropTypes.bool,
     autoPlay: PropTypes.bool,
-    start: PropTypes.number,    
+    start: PropTypes.number,
     tokens: PropTypes.object,
     onError: PropTypes.func,
 };
@@ -108,7 +117,7 @@ VideoComponent.defaultProps = {
     title: '',
     namespace: '',
     firstHalf: true,
-    autoPlay: false,    
+    autoPlay: false,
     tokens: null,
 };
 
