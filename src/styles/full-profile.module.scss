@@ -113,6 +113,9 @@
                 margin: -3px 8px 0px;
                 vertical-align: middle;
             }
+            &:hover {
+                color: var(--color_text_dark);
+            }
         }
 
         .buttons {
