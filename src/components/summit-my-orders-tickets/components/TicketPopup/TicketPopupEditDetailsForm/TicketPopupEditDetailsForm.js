@@ -251,7 +251,7 @@ export const TicketPopupEditDetailsForm = ({
     const canSubmitChanges = () => {
         const qs = new QuestionsSet(extraQuestions, initialValues[TicketKeys.extraQuestions]);
         const unansweredExtraQuestions = !qs.completed();
-        return canEditTicketData || isReassignable || unansweredExtraQuestions;
+        return canEditTicketData || isReassignable || unansweredExtraQuestions || isDelegating;
     }
 
     return (
@@ -439,7 +439,7 @@ export const TicketPopupEditDetailsForm = ({
                 }
             </div>
 
-            {(canSubmitChanges() || isDelegating) &&
+            {canSubmitChanges() &&
             <div className="ticket-popup-footer">
                 <button
                     type="button"
