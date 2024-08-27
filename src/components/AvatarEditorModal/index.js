@@ -142,6 +142,7 @@ const AvatarEditorModal = ({
             onPositionChange={handlePositionChange}
             scale={scale}
             rotate={rotate}
+            crossOrigin={"anonymous"}
           />
           <IconButton
             onClick={() => fileInputRef.current.click()}
