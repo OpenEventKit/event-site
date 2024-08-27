@@ -16,7 +16,7 @@ const NoTalkComponent = ({ event, currentEventPhase, summit }) => {
           class_name !== 'Presentation' ?
             'Next session will start soon...'
             :
-              currentEventPhase === PHASES.AFTER && !event.streaming_url ?
+              (currentEventPhase === PHASES.AFTER || currentEventPhase === PHASES.DURING) && !event.streaming_url ?
               'Session is over. Recording will be available soon.'
               :
                  currentEventPhase < PHASES.DURING || !event.streaming_url ?
