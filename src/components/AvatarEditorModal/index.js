@@ -187,7 +187,7 @@ const AvatarEditorModal = ({
             </Typography>
             <CustomSlider
               value={scale}
-              min={1}
+              min={0}
               max={2}
               step={0.01}
               onChange={handleScale}
