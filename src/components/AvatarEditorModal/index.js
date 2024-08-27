@@ -9,6 +9,7 @@ import {
   RotateLeft as RotateLeftIcon,
   RotateRight as RotateRightIcon,
 } from "@mui/icons-material";
+import { create_UUID } from "@utils/uuidGenerator";
 
 const CustomSlider = styled(Slider)(({ theme }) => ({
   color: "var(--color-primary)"
@@ -64,7 +65,7 @@ const AvatarEditorModal = ({
       fetch(canvas)
         .then((res) => res.blob())
         .then((blob) => {
-          const file = new File([blob], "profile-pic.png", { type: blob.type });
+          const file = new File([blob], `${create_UUID()}.png`, { type: blob.type });
           changePicture(file);
         });
     }
