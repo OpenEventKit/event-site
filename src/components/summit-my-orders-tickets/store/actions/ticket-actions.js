@@ -303,8 +303,9 @@ export const editOwnedTicket = ({
         authErrorHandler
     )(params)(dispatch).then(async () => {
         // email should match ( only update my profile is ticket belongs to me!)
+        // and if the ticket doesn't have a manager
         // Check if there's changes in the ticket data to update the profile
-        if (userProfile.email == attendee_email && (
+        if (userProfile.email == attendee_email && !ticket.owner?.manager?.id && !ticket.owner?.manager_id && (
             attendee_company.name !== company ||
             attendee_first_name !== userProfile.first_name ||
             attendee_last_name !== userProfile.last_name)) {
@@ -315,7 +316,6 @@ export const editOwnedTicket = ({
                 company: attendee_company.name
             };
             dispatch(updateProfile(newProfile));
-
         }
 
         // Note: make sure we re-fetch the user profile for the parent app.
