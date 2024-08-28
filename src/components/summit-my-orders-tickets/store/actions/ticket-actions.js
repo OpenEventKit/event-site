@@ -301,11 +301,12 @@ export const editOwnedTicket = ({
         `${apiBaseUrl}/api/v1/summits/all/orders/all/tickets/${ticket.id}`,
         normalizedEntity,
         authErrorHandler
-    )(params)(dispatch).then(async () => {
+    )(params)(dispatch).then(async () => {        
+        const hasManager = ticket.owner?.manager?.id || ticket.owner?.manager_id;
         // email should match ( only update my profile is ticket belongs to me!)
         // and if the ticket doesn't have a manager
         // Check if there's changes in the ticket data to update the profile
-        if (userProfile.email == attendee_email && !ticket.owner?.manager?.id && !ticket.owner?.manager_id && (
+        if (userProfile.email == attendee_email && !hasManager && (
             attendee_company.name !== company ||
             attendee_first_name !== userProfile.first_name ||
             attendee_last_name !== userProfile.last_name)) {
