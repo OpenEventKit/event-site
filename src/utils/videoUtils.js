@@ -1,5 +1,5 @@
 const IS_MUX_VIDEO_REGEX = /https:\/\/stream.mux.com\/(.*).m3u8/;
-const IS_SYNC_WORDS_VIDEO_REGEX = /https:\/\/player.syncwords.com\/iframe\/live\/(.*)\/(.*)/g;
+const IS_SYNC_WORDS_VIDEO_REGEX = /https:\/\/iframe\.dacast\.com\/live\/(.*)\/(.*)/g;
 
 export const getMUXPlaybackId = (url) => {
     if(!url) return null;
