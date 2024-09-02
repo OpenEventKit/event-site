@@ -1,7 +1,7 @@
 {
   "name": "@openeventkit/event-site",
   "description": "Event Site",
-  "version": "2.0.125-beta.4",
+  "version": "2.0.125-beta.5",
   "author": "Tipit LLC",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
@@ -9,10 +9,7 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@mdx-js/react": "^3.0.1",
     "@mdx-js/runtime": "^1.6.22",
-    "@mui/base": "^5.0.0-beta.32",
-    "@mui/icons-material": "^5.15.5",
-    "@mui/material": "^5.15.5",
-    "@mui/system": "^5.15.5",
+    "@mui/base": "^5.0.0-beta.40",
     "@mux/mux-player-react": "^1.14.1",
     "@ncwidgets/file-relation": "^0.8.0",
     "@ncwidgets/id": "^0.8.1",
@@ -158,6 +155,7 @@
     "start": "npm run develop",
     "build": "NODE_ENV=production NODE_OPTIONS=--max-old-space-size=10240 cross-env node --trace-warnings node_modules/.bin/gatsby build --log-pages",
     "develop": "NODE_OPTIONS=--max-old-space-size=8192 npm run gatsby-clean && node --trace-warnings node_modules/.bin/gatsby develop --S -H 0.0.0.0",
+    "serve": "gatsby serve",
     "format": "prettier --trailing-comma es5 --no-semi --single-quote --write \"{gatsby-*.js,src/**/*.js}\"",
     "test": "jest",
     "update-libs": "yarn upgrade live-event-widget openstack-uicore-foundation schedule-lite simple-chat-widget speakers-widget attendee-to-attendee-widget"
