@@ -14,7 +14,7 @@ import Layout from '../components/Layout'
 import withOrchestra from "../utils/widgetOrchestra";
 
 import LiteScheduleComponent from '../components/LiteScheduleComponent'
-import ProfilePopupComponent from '../components/ProfilePopupComponent'
+import AvatarEditorModal from '../components/AvatarEditorModal'
 import ChangePasswordComponent from '../components/ChangePasswordComponent';
 import AccessTracker from "../components/AttendeeToAttendeeWidgetComponent";
 
@@ -642,15 +642,13 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                 </div>
             </div>
             {showProfile &&
-                <ProfilePopupComponent
-                    userProfile={user.idpProfile}
-                    showProfile={showProfile}
-                    idpLoading={user.loadingIDP}
-                    fromFullProfile={true}
-                    changePicture={(pic) => handlePictureUpdate(pic)}
-                    changeProfile={(profile) => handleProfileUpdate(profile)}
-                    closePopup={() => handleTogglePopup(!showProfile)}
-                />
+            <AvatarEditorModal
+              userProfile={user.idpProfile}
+              open={showProfile}
+              idpLoading={user.loadingIDP}
+              changePicture={handlePictureUpdate}
+              handleClose={() => handleTogglePopup(false)}
+            />
             }
             <AccessTracker />
         </React.Fragment>
