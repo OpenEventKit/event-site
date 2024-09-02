@@ -1,7 +1,7 @@
 {
   "name": "@openeventkit/event-site",
   "description": "Event Site",
-  "version": "2.0.125-beta.3",
+  "version": "2.0.125-beta.4",
   "author": "Tipit LLC",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
@@ -9,10 +9,10 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@mdx-js/react": "^3.0.1",
     "@mdx-js/runtime": "^1.6.22",
-    "@mui/base": "^5.0.0-beta.40",
-    "@mui/icons-material": "^5.16.7",
-    "@mui/material": "^5.16.7",
-    "@mui/system": "^5.16.7",
+    "@mui/base": "^5.0.0-beta.32",
+    "@mui/icons-material": "^5.15.5",
+    "@mui/material": "^5.15.5",
+    "@mui/system": "^5.15.5",
     "@mux/mux-player-react": "^1.14.1",
     "@ncwidgets/file-relation": "^0.8.0",
     "@ncwidgets/id": "^0.8.1",
