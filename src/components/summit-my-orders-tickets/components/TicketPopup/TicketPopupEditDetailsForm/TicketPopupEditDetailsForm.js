@@ -57,6 +57,11 @@ export const TicketPopupEditDetailsForm = ({
 
     const { onTicketAssignChange } = useTicketAssignedContext();
 
+    const { getSettingByKey } = useMarketingSettings();
+
+    const showCompanyInputDefaultOptions = !!Number(getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteShowCompanyInputDefaultOptions));
+    const showCompanyInput = !!Number(getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteShowCompanyInput));
+
     const initialValues = useMemo(() => {
         const {
             email,
@@ -85,7 +90,7 @@ export const TicketPopupEditDetailsForm = ({
     const validationSchema = useMemo(() => Yup.object().shape({
         [TicketKeys.firstName]: Yup.string().required(),
         [TicketKeys.lastName]: Yup.string().required(),
-        [TicketKeys.company]: Yup.object().shape({
+        [TicketKeys.company]: showCompanyInput && Yup.object().shape({
             id: Yup.number().nullable(),
             name: Yup.string().required(),
         }),
@@ -96,11 +101,6 @@ export const TicketPopupEditDetailsForm = ({
 
     const hasExtraQuestions = extraQuestions.length > 0;
     const isUserTicketOwner = order.owner_id === userProfile.id;
-
-    const { getSettingByKey } = useMarketingSettings();
-
-    const showCompanyInputDefaultOptions = !!Number(getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteShowCompanyInputDefaultOptions));
-    const showCompanyInput = !!Number(getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteShowCompanyInput));
 
     useEffect(() => {
         const attendeeId = ticket?.owner?.id;
