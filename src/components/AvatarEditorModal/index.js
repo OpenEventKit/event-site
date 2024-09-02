@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import AvatarEditor from "react-avatar-editor";
+import { AjaxLoader } from "openstack-uicore-foundation/lib/components";
 import { Box, Typography, Slider, Modal } from "@mui/material";
 import { Button, IconButton } from "../ui";
 import { styled } from "@mui/system";
@@ -24,7 +25,8 @@ const AvatarEditorModal = ({
   const editorRef = useRef(null);
   const fileInputRef = useRef(null);
 
-  const [image, setImage] = useState(userProfile.picture || null);
+  const [image, setImage] = useState(null);
+  const [loadingPicture, setLoadingPicture] = useState(false);
   const [position, setPosition] = useState({ x: 0.5, y: 0.5 });
   const [scale, setScale] = useState(1);
   const [rotate, setRotate] = useState(0);
@@ -33,6 +35,34 @@ const AvatarEditorModal = ({
   useEffect(() => {
     setImage(userProfile.picture);
   }, [userProfile.picture]);
+
+  useEffect(() => {
+    getUserProfilePic(userProfile.picture);
+  }, [])
+
+  const getUserProfilePic = async (imageUrl) => {
+    try {
+      setLoadingPicture(true);
+      const response = await fetch(imageUrl, {
+        method: 'GET',
+        mode: 'cors'
+      });
+
+      if (!response.ok) {
+        setLoadingPicture(false);
+        throw new Error(`Failed to fetch image: ${response.statusText}`);        
+      }
+
+      const blob = await response.blob();
+      const imageObjectURL = URL.createObjectURL(blob);      
+
+      setImage(imageObjectURL);
+      setLoadingPicture(false);
+
+    } catch (error) {
+      console.error("Error fetching image:", error);
+    }
+  }
 
   const handleNewImage = (e) => {
     setImage(e.target.files[0]);
@@ -131,6 +161,7 @@ const AvatarEditorModal = ({
             position: "relative"
           }}
         >
+          <AjaxLoader relative={true} color={'#ffffff'} show={loadingPicture} size={120} />
           <AvatarEditor
             ref={editorRef}
             image={image}
