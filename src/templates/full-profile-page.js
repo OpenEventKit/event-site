@@ -497,7 +497,7 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                             </div>
                         </div>
                         <div className={styles.formContainer}>
-                            <span className={styles.header}>Bio</span>
+                            <div className={styles.header}>Bio</div>
                             <div className={styles.form}>
                                 <div className={`columns is-mobile ${styles.inputRow}`}>
                                     <div className={`column is-full ${styles.inputField}`}>
