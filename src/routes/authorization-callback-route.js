@@ -11,19 +11,20 @@
  * limitations under the License.
  **/
 
-import React from 'react'
-import URI from "urijs"
-import { navigate } from "gatsby"
+import React from "react";
+import URI from "urijs";
+import { navigate } from "gatsby";
 import { Redirect } from "@gatsbyjs/reach-router";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 import AbstractAuthorizationCallbackRoute from "openstack-uicore-foundation/lib/security/abstract-auth-callback-route";
-import { getUserProfile, addToSchedule, removeFromSchedule } from '../actions/user-actions'
+import { getUserProfile, addToSchedule, removeFromSchedule } from "../actions/user-actions";
 import HeroComponent from "../components/HeroComponent";
-import { getEnvVariable, IDP_BASE_URL, OAUTH2_CLIENT_ID } from '../utils/envVariables'
-import { getPendingAction } from '../utils/schedule';
+import { getEnvVariable, IDP_BASE_URL, OAUTH2_CLIENT_ID } from "@utils/envVariables";
+import { getPendingAction } from "@utils/schedule";
 
-import '../styles/bulma.scss';
-import {userHasAccessLevel, VirtualAccessLevel} from "../utils/authorizedGroups";
+import { userHasAccessLevel, VIRTUAL_ACCESS_LEVEL } from "@utils/authorizedGroups";
+
+import "../styles/bulma.scss";
 
 class AuthorizationCallbackRoute extends AbstractAuthorizationCallbackRoute {
 
@@ -36,16 +37,16 @@ class AuthorizationCallbackRoute extends AbstractAuthorizationCallbackRoute {
             const pendingAction = getPendingAction();
             if (pendingAction) {
                 const { action, event } = pendingAction;
-                action === 'ADD_EVENT' ? this.props.addToSchedule(event) : this.props.removeFromSchedule(event);
+                action === "ADD_EVENT" ? this.props.addToSchedule(event) : this.props.removeFromSchedule(event);
             }
             backUrl = URI.decode(backUrl);
             // fallback
-            if(!backUrl || backUrl == '')
-                backUrl = '/';
+            if(!backUrl || backUrl == "")
+                backUrl = "/";
             let { userProfile } = this.props;
             // if redirect to lobby first time if we have virtual access
-            if(backUrl == '/' && userProfile && userHasAccessLevel(userProfile.summit_tickets, VirtualAccessLevel)){
-                backUrl = '/a/';
+            if(backUrl == "/" && userProfile && userHasAccessLevel(userProfile.summit_tickets, VIRTUAL_ACCESS_LEVEL)){
+                backUrl = "/a/";
             }
             navigate(backUrl);
         });
@@ -54,9 +55,9 @@ class AuthorizationCallbackRoute extends AbstractAuthorizationCallbackRoute {
     _redirect2Error(error) {
         console.log(`AuthorizationCallbackRoute error ${error}`);
         if (
-            error.includes('access_denied') ||
-            error.includes('consent_required')
-        ) return <Redirect to={'/'} noThrow />;
+            error.includes("access_denied") ||
+            error.includes("consent_required")
+        ) return <Redirect to={"/"} noThrow />;
         return <Redirect to={`/error?error=${error}`} noThrow/>;
     }
 
@@ -87,4 +88,4 @@ export default connect(mapStateToProps, {
     getUserProfile,
     addToSchedule,
     removeFromSchedule,
-})(AuthorizationCallbackRoute)
+})(AuthorizationCallbackRoute);

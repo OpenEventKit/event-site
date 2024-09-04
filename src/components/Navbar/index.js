@@ -4,11 +4,11 @@ import { connect } from "react-redux";
 import { navigate } from "gatsby";
 import NavbarTemplate from "./template";
 
-import { userHasAccessLevel, VirtualAccessLevel } from "@utils/authorizedGroups";
+import { userHasAccessLevel, VIRTUAL_ACCESS_LEVEL } from "@utils/authorizedGroups";
 import { getDefaultLocation } from "@utils/loginUtils";
 
 import { PHASES } from "@utils/phasesUtils";
-import { PAGE_RESTRICTIONS } from "../../cms/config/collections/configurationsCollection/navbar";
+import { USER_REQUIREMENTS, PAGE_RESTRICTIONS } from "@utils/pageAccessConstants";
 
 import navbarContent from "content/navbar/index.json";
 
@@ -17,6 +17,8 @@ const Navbar = ({
   summitPhase,
   summit,
   isLoggedUser,
+  isAuthorized,
+  hasTicket,
   idpProfile,
   userProfile,
   eventRedirect
@@ -24,10 +26,23 @@ const Navbar = ({
 
   // we store this calculation to use it later
   const hasVirtualBadge = useMemo(() =>
-    userProfile ? userHasAccessLevel(userProfile.summit_tickets, VirtualAccessLevel) : false
+    userProfile ? userHasAccessLevel(userProfile.summit_tickets, VIRTUAL_ACCESS_LEVEL) : false
   , [userProfile]);
 
   const defaultPath = getDefaultLocation(eventRedirect, hasVirtualBadge);
+
+  const meetsUserRequirement = (userRequirement) => {
+    switch (userRequirement) {
+      case USER_REQUIREMENTS.none:
+        return true;
+      case USER_REQUIREMENTS.loggedIn:
+        return isLoggedUser || isAuthorized;
+      case USER_REQUIREMENTS.hasTicket:
+        return hasTicket || isAuthorized;
+      default:
+        return false;
+    }
+  };
 
   const isCustomPage = (path) => {
     return !isMarketingPage(path) &&
@@ -35,53 +50,33 @@ const Navbar = ({
            !isProfilePage(path) &&
            !isMySchedulePage(path) &&
            !isExtraQuestionsPage(path);
-  }
+  };
 
-  const isMySchedulePage = (path) => {
-    return path.startsWith("/a/my-schedule");
-  }
+  const isMySchedulePage = (path) => path.startsWith("/a/my-schedule");
 
-  const isProfilePage = (path) => {
-    return path.startsWith("/a/profile");
-  }
+  const isProfilePage = (path) => path.startsWith("/a/profile");
 
-  const isExtraQuestionsPage = (path) => {
-    return path.startsWith("/a/extra-questions");
-  }
+  const isExtraQuestionsPage = (path) => path.startsWith("/a/extra-questions");
 
-  const isMarketingPage = (path) => {
-      return path === '/';
-  }
+  const isMarketingPage = (path) => path === "/";
 
-  const isLobbyPage = (path) => {
-    return path === '/a' || path === '/a/';
-  }
+  const isLobbyPage = (path) => path === "/a" || path === "/a/";
 
-  const isActivityPage = (path) => {
-    return path.startsWith("/a/event");
-  }
+  const isActivityPage = (path) => path.startsWith("/a/event");
 
-  const isSponsorPage = (path) => {
-    return path.startsWith("/a/sponsor");
-  }
+  const isSponsorPage = (path) => path.startsWith("/a/sponsor");
 
-  const isSchedulePage = (path) => {
-    return path.startsWith("/a/schedule");
-  }
+  const isSchedulePage = (path) => path.startsWith("/a/schedule");
 
-  const isShowPage = (path) => {
-    return isLobbyPage(path) || // lobby
-        isActivityPage(path) || // activity
-        isSponsorPage(path) || // expo hall or sponsor page
-        isSchedulePage(path);// schedule
-  }
+  const isShowPage = (path) => isLobbyPage(path) || isActivityPage(path) || isSponsorPage(path) || isSchedulePage(path);
 
   // we assume that all pages under /a/* requires auth except /a/schedule
-  // item.requiresAuth allows to mark specific pages that are not under /a/* pattern.
+  // item.userRequirement allows to mark specific pages that are not under /a/* pattern.
   const showItem = (item) => {
     // check if we have location defined, if so use the path name , else if window is defined use the window.location
     // as a fallback
-    const currentPath = location ? location.pathname: (typeof window !== "undefined" ? window.location.pathname: "");
+    const currentPath = location ? location.pathname : (typeof window !== "undefined" ? window.location.pathname : "");
+
     const passPageRestriction = !item.pageRestriction ||
         item.link === currentPath || // if we are on the same page then show it
         item.pageRestriction.includes(PAGE_RESTRICTIONS.any) ||
@@ -89,11 +84,10 @@ const Navbar = ({
         (item.pageRestriction.includes(PAGE_RESTRICTIONS.marketing) && isMarketingPage(currentPath)) ||
         (item.pageRestriction.includes(PAGE_RESTRICTIONS.lobby) && isLobbyPage(currentPath)) ||
         (item.pageRestriction.includes(PAGE_RESTRICTIONS.show) && isShowPage(currentPath)) ||
-        (item.pageRestriction.includes(PAGE_RESTRICTIONS.customPage) && isCustomPage(currentPath))
-    ;
+        (item.pageRestriction.includes(PAGE_RESTRICTIONS.customPage) && isCustomPage(currentPath));
 
     return item.display &&
-           (!item.requiresAuth || isLoggedUser) &&
+           meetsUserRequirement(item.userRequirement) &&
            (!item.showOnlyAtShowTime || summitPhase >= PHASES.DURING) &&
            passPageRestriction;
   };
@@ -115,7 +109,6 @@ const Navbar = ({
   );
 };
 
-
 const mapStateToProps = ({
   clockState,
   settingState,
@@ -126,6 +119,8 @@ const mapStateToProps = ({
   summit: summitState.summit,
   summitPhase: clockState.summit_phase,
   isLoggedUser: loggedUserState.isLoggedUser,
+  isAuthorized: userState.isAuthorized,
+  hasTicket: userState.hasTicket,
   idpProfile: userState.idpProfile,
   userProfile: userState.userProfile,
   // TODO: move to site settings i/o marketing page settings

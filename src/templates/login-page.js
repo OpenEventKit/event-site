@@ -1,19 +1,19 @@
-import React, {useMemo} from 'react'
-import { connect } from 'react-redux'
-import { navigate } from "gatsby"
+import React, {useMemo} from "react";
+import { connect } from "react-redux";
+import { navigate } from "gatsby";
 
-import Layout from '../components/Layout'
-import AuthComponent from '../components/AuthComponent'
+import Layout from "../components/Layout";
+import AuthComponent from "../components/AuthComponent";
 
-import { getDefaultLocation } from '../utils/loginUtils'
-import {userHasAccessLevel, VirtualAccessLevel} from "../utils/authorizedGroups";
+import { getDefaultLocation } from "@utils/loginUtils";
+import {userHasAccessLevel, VIRTUAL_ACCESS_LEVEL} from "@utils/authorizedGroups";
 
 
 export const LoginPageTemplate = ({ loggedUserState, eventRedirect, location, userProfile }) => {
 
   // we store this calculation to use it later
   const hasVirtualBadge = useMemo(() =>
-          userProfile ? userHasAccessLevel(userProfile.summit_tickets, VirtualAccessLevel) : false,
+          userProfile ? userHasAccessLevel(userProfile.summit_tickets, VIRTUAL_ACCESS_LEVEL) : false,
       [userProfile]);
 
   if (loggedUserState.isLoggedUser) {
