@@ -21,6 +21,8 @@ import {
   IDP_BASE_URL
 } from "@utils/envVariables";
 
+import { mapObjectToSelectOptions } from "../../../utils";
+
 const FONT_FORMATS = {
   truetype: "ttf",
   opentype: "otf",
@@ -28,9 +30,6 @@ const FONT_FORMATS = {
   woff2: "woff2",
   eot: "eot"
 };
-
-const getFontFormatOptions = () =>
-  Object.entries(FONT_FORMATS).map(([key, value]) => selectOption({ label: value, value: value }));
 
 const siteSettings = {
   label: "Site Settings",
@@ -151,7 +150,7 @@ const siteSettings = {
               name: "fontFormat",
               multiple: false,
               required: false,
-              options: getFontFormatOptions()
+              options: mapObjectToSelectOptions(FONT_FORMATS)
             })
           ],
         }),
@@ -170,7 +169,7 @@ const siteSettings = {
               name: "fontFormat",
               multiple: false,
               required: false,
-              options: getFontFormatOptions()
+              options: mapObjectToSelectOptions(FONT_FORMATS)
             })
           ]
         })

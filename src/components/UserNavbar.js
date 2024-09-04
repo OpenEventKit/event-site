@@ -1,15 +1,16 @@
-import React from 'react'
-import { Link } from 'gatsby'
-import { connect } from 'react-redux'
+import React from "react";
+import { Link } from "gatsby";
+import { connect } from "react-redux";
 
-import styles from '../styles/navbar.module.scss';
-import LogoutButton from './LogoutButton';
-import ProfilePopupComponent from './ProfilePopupComponent';
+import LogoutButton from "./LogoutButton";
+import ProfilePopupComponent from "./ProfilePopupComponent";
 
-import { updateProfilePicture, updateProfile } from '../actions/user-actions'
+import { updateProfilePicture, updateProfile } from "../actions/user-actions"
 
-import { getDefaultLocation } from '../utils/loginUtils';
-import {userHasAccessLevel, VirtualAccessLevel} from "../utils/authorizedGroups";
+import { getDefaultLocation } from ".@utils/loginUtils";
+import { userHasAccessLevel, VIRTUAL_ACCESS_LEVEL } from "../utils/authorizedGroups";
+
+import styles from "../styles/navbar.module.scss";
 
 const UserNavbar = class extends React.Component {
 
@@ -18,7 +19,7 @@ const UserNavbar = class extends React.Component {
     this.state = {
       active: false,
       showProfile: false,
-      navBarActiveClass: '',
+      navBarActiveClass: "",
     }
   }
 
@@ -32,9 +33,9 @@ const UserNavbar = class extends React.Component {
 
   handleTogglePopup = (profile) => {
     if (profile) {
-      document.body.classList.add('is-clipped');
+      document.body.classList.add("is-clipped");
     } else {
-      document.body.classList.remove('is-clipped');
+      document.body.classList.remove("is-clipped");
     }
     this.setState({showProfile: profile})
   }
@@ -53,7 +54,7 @@ const UserNavbar = class extends React.Component {
             navBarActiveClass: `${styles.isActive}`,
           })
           : this.setState({
-            navBarActiveClass: '',
+            navBarActiveClass: "",
           })
       }
     )
@@ -66,7 +67,7 @@ const UserNavbar = class extends React.Component {
 
     // we store this calculation to use it later
     const hasVirtualBadge =
-        userProfile ? userHasAccessLevel(userProfile.summit_tickets, VirtualAccessLevel) : false;
+        userProfile ? userHasAccessLevel(userProfile.summit_tickets, VIRTUAL_ACCESS_LEVEL) : false;
 
     let defaultPath = getDefaultLocation(eventRedirect, hasVirtualBadge);
 
@@ -143,4 +144,4 @@ const mapStateToProps = ({ settingState, userState }) => ({
   userProfile: userState.userProfile
 });
 
-export default connect(mapStateToProps, { updateProfilePicture, updateProfile })(UserNavbar)
+export default connect(mapStateToProps, { updateProfilePicture, updateProfile })(UserNavbar);
