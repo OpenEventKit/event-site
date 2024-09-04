@@ -1,15 +1,15 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
+import React from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
 import URI from "urijs";
-import { handleResetReducers } from '../actions/event-actions'
-import { doLogin } from 'openstack-uicore-foundation/lib/security/methods'
+import { handleResetReducers } from "../actions/event-actions";
+import { doLogin } from "openstack-uicore-foundation/lib/security/methods";
 
-import { getDefaultLocation } from '../utils/loginUtils';
+import { getDefaultLocation } from "@utils/loginUtils";
 
-import HeroComponent from '../components/HeroComponent'
-import { userHasAccessLevel, VirtualAccessLevel } from "../utils/authorizedGroups";
+import HeroComponent from "../components/HeroComponent";
+import { userHasAccessLevel, VIRTUAL_ACCESS_LEVEL } from "../utils/authorizedGroups";
 
 export const TokenExpirePageTemplate = class extends React.Component {
 
@@ -22,10 +22,10 @@ export const TokenExpirePageTemplate = class extends React.Component {
 
       // we store this calculation to use it later
       const hasVirtualBadge =
-              userProfile ? userHasAccessLevel(userProfile.summit_tickets, VirtualAccessLevel) : false;
+              userProfile ? userHasAccessLevel(userProfile.summit_tickets, VIRTUAL_ACCESS_LEVEL) : false;
 
       let defaultPath = getDefaultLocation(eventRedirect, hasVirtualBadge);
-      let previousLocation = location.state?.backUrl && location.state.backUrl !== '/auth/expired' ? location.state.backUrl : defaultPath;
+      let previousLocation = location.state?.backUrl && location.state.backUrl !== "/auth/expired" ? location.state.backUrl : defaultPath;
       let backUrl = URI.encode(previousLocation);
 
       setTimeout(() => {

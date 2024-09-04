@@ -1,6 +1,4 @@
-import {
-  collectionDefaults
-} from "../../patterns";
+import { collectionDefaults } from "../../patterns";
 
 import {
   hiddenField,
@@ -10,18 +8,10 @@ import {
   markdownField
 } from "../../fields";
 
-import {
-  CONTENT_PAGES_DIR_PATH
-} from "@utils/filePath";
+import { CONTENT_PAGES_DIR_PATH } from "@utils/filePath";
+import { USER_REQUIREMENTS } from "@utils/pageAccessConstants";
 
-const USER_REQUIREMENTS = {
-  none: "NONE",
-  loggedIn: "LOGGED_IN",
-  hasTicket: "HAS_TICKET"
-};
-
-const getUserRequirementsOptions = () =>
-  Object.entries(USER_REQUIREMENTS).map(([key, value]) => selectOption({ label: value, value: value }));
+import { mapObjectToSelectOptions } from "../../utils";
 
 const contentPagesCollection = {
   ...collectionDefaults({
@@ -49,17 +39,13 @@ const contentPagesCollection = {
       name: "userRequirement",
       multiple: false,
       default: USER_REQUIREMENTS.none,
-      options: getUserRequirementsOptions()
+      options: mapObjectToSelectOptions(USER_REQUIREMENTS)
     }),
     markdownField({
       label: "Body",
       name: "body"
     })
   ]
-};
-
-export {
-  USER_REQUIREMENTS
 };
 
 export default contentPagesCollection;

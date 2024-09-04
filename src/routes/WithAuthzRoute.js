@@ -1,10 +1,10 @@
-import React, {useEffect, useState, useMemo} from "react";
-import {connect} from "react-redux";
-import {navigate} from "gatsby";
+import React, { useEffect, useState, useMemo } from "react";
+import { connect } from "react-redux";
+import { navigate } from "gatsby";
 import { pick } from "@gatsbyjs/reach-router";
 import { getUserProfile, requireExtraQuestions } from "../actions/user-actions";
 import HeroComponent from "../components/HeroComponent";
-import { userHasAccessLevel, VirtualAccessLevel } from "../utils/authorizedGroups";
+import { userHasAccessLevel, VIRTUAL_ACCESS_LEVEL } from "@utils/authorizedGroups";
 
 const pathsRequiringVirtualBadge = [
     { path: "/a/" },
@@ -12,7 +12,7 @@ const pathsRequiringVirtualBadge = [
     { path: "/a/posters" },
     { path: "/a/sponsors" },
     { path: "/a/posters/:trackGroupId" },
-    { path: "/a/poster/:presentationId/" },
+    { path: "/a/poster/:presentationId/" }
 ];
 
 /**
@@ -44,7 +44,7 @@ const WithAuthzRoute = ({
 
     // we store this calculation to use it later
     const hasVirtualBadge = useMemo(() =>
-        userProfile ? userHasAccessLevel(userProfile.summit_tickets, VirtualAccessLevel) : false,
+        userProfile ? userHasAccessLevel(userProfile.summit_tickets, VIRTUAL_ACCESS_LEVEL) : false,
         [userProfile.summit_tickets]);
 
     const userIsReady = () => {
@@ -98,7 +98,7 @@ const WithAuthzRoute = ({
     return children;
 };
 
-const mapStateToProps = ({userState}) => ({
+const mapStateToProps = ({ userState }) => ({
     userProfile: userState.userProfile,
     isAuthorized: userState.isAuthorized,
     hasTicket: userState.hasTicket,
