@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { navigate } from "gatsby";
 import NavbarTemplate from "./template";
 
-import { userHasAccessLevel, VIRTUAL_ACCESS_LEVEL } from "@utils/authorizedGroups";
+import { userHasAccessLevel, VIRTUAL_ACCESS_LEVEL, userHasCheckedInBadge } from "@utils/authorizedGroups";
 import { getDefaultLocation } from "@utils/loginUtils";
 
 import { PHASES } from "@utils/phasesUtils";
