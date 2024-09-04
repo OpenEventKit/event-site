@@ -24,7 +24,7 @@ import "summit-registration-lite/dist/index.css";
 import useSiteSettings from "@utils/useSiteSettings";
 import useMarketingSettings, { MARKETING_SETTINGS_KEYS }  from "@utils/useMarketingSettings";
 import { getEnvVariable, SUMMIT_API_BASE_URL, OAUTH2_CLIENT_ID, REGISTRATION_BASE_URL, SUPPORT_EMAIL } from "@utils/envVariables";
-import { userHasAccessLevel, VirtualAccessLevel } from "@utils/authorizedGroups";
+import { userHasAccessLevel, VIRTUAL_ACCESS_LEVEL } from "@utils/authorizedGroups";
 import { validateIdentityProviderButtons } from "@utils/loginUtils";
 import { triggerTagManagerTrackEvent } from "@utils/eventTriggers";
 
@@ -136,7 +136,7 @@ const RegistrationLiteComponent = ({
         loading: loadingProfile || loadingIDP,
         // only show info if its not a recent purchase
         ticketOwned: userProfile?.summit_tickets?.length > 0,
-        hasVirtualAccessLevel: userHasAccessLevel(userProfile?.summit_tickets, VirtualAccessLevel),
+        hasVIRTUAL_ACCESS_LEVEL: userHasAccessLevel(userProfile?.summit_tickets, VIRTUAL_ACCESS_LEVEL),
         ownedTickets: attendee?.ticket_types || [],
         authUser: (provider) => onClickLogin(provider),
         getPasswordlessCode: getPasswordlessCode,
