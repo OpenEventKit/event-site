@@ -12,14 +12,14 @@ import { userHasCheckedInBadge } from "../utils/authorizedGroups";
  * @returns {JSX.Element|null|*}
  * @constructor
  */
-const WithCheckedBadge = ({
+const withAttendeeCheckedIn = ({
    children,
    isLoggedIn,
    location,
    userProfile
 }) => {
 
-    const hasCheckedInBadge = userHasCheckedInBadge(userProfile.summit_tickets);
+    const isAttendeeCheckedIn = userHasCheckedInBadge(userProfile.summit_tickets);
 
     if (!isLoggedIn) {
         navigate("/", {state: {backUrl: `${location.pathname}`,},});
@@ -27,7 +27,7 @@ const WithCheckedBadge = ({
     }        
 
     // has no checked badge -> redirect
-    if (!hasCheckedInBadge) {
+    if (!isAttendeeCheckedIn) {
         navigate("/", {state: {backUrl: `${location.pathname}`,},});
     }
 
@@ -38,4 +38,4 @@ const mapStateToProps = ({userState}) => ({
     userProfile: userState.userProfile
 });
 
-export default connect(mapStateToProps, {})(WithCheckedBadge);
+export default connect(mapStateToProps, {})(withAttendeeCheckedIn);

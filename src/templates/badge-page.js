@@ -17,7 +17,9 @@ export const BadgePageTemplate = ({ user }) => {
     const [badgesDDL, setBadgeDDL] = useState([]);
 
     useEffect(() => {
-        setUserTickets(user.summit_tickets || []);
+        // filter tickets with a badge that has access level IN_PERSON
+        const inPersonTickets = user.userProfile.summit_tickets.filter(t => t.badge?.type?.access_levels.some((al) => al.name.includes("IN_PERSON")));
+        setUserTickets(inPersonTickets);
         const formattedTickets = user?.summit_tickets.map(e => ({ label: e.number, value: e.id }));
         setBadgeDDL(formattedTickets || []);
     }, []);

@@ -22,7 +22,7 @@ import Seo from "../../components/Seo";
 import Link from "../../components/Link";
 import { titleFromPathname } from "../../utils/urlFormating";
 import {graphql} from "gatsby";
-import WithCheckedBadgeRoute from "../../routes/WithCheckedBadgeRoute";
+import WithAttendeeCheckedInRoute from "../../routes/WithAttendeeCheckedInRoute";
 
 const mySchedulePage = ({ location, summitPhase,isLoggedUser, user, allowClick, title, key }) => {
   return  <SchedulePage
@@ -96,9 +96,9 @@ const App = ({ isLoggedUser, user, summitPhase, allowClick = true, data }) => {
                 <PosterDetailPage path="/poster/:presentationId/" isLoggedIn={isLoggedUser} user={user} location={location} />
                 { mySchedulePageJson.needsTicketAuthz && mySchedulePage({location, summitPhase,isLoggedUser, user, allowClick, title: mySchedulePageJson.title, key: mySchedulePageJson.key }) }
                 {badgeQrPageJson.enabled &&
-                  <WithCheckedBadgeRoute path="/" isLoggedIn={isLoggedUser} user={user} location={location}>
+                  <WithAttendeeCheckedInRoute path="/" isLoggedIn={isLoggedUser} user={user} location={location}>
                     <BadgePage path="/badge" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location} />
-                  </WithCheckedBadgeRoute>
+                  </WithAttendeeCheckedInRoute>
                 }
                 <ShowOpenRoute path="/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location}>
                   <WithBadgeRoute path="/event/:eventId" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location}>
