@@ -4,7 +4,7 @@
       "title": "Lobby",
       "link": "/a/",
       "display": true,
-      "requiresAuth": true,
+      "userRequirement": "LOGGED_IN",
       "pageRestriction": [
         "ANY"
       ]
@@ -13,7 +13,7 @@
       "title": "My Tickets",
       "link": "/a/my-tickets",
       "display": true,
-      "requiresAuth": true,
+      "userRequirement": "LOGGED_IN",
       "pageRestriction": [
         "ANY"
       ]
@@ -22,7 +22,7 @@
       "title": "Schedule",
       "link": "/a/schedule",
       "display": true,
-      "requiresAuth": false,
+      "userRequirement": "NONE",
       "pageRestriction": [
         "ANY"
       ]
@@ -31,13 +31,13 @@
       "title": "My Schedule",
       "link": "/a/my-schedule",
       "display": true,
-      "requiresAuth": false
+      "userRequirement": "NONE"
     },
     {
       "title": "My Profile",
       "link": "/a/profile",
       "display": true,
-      "requiresAuth": true,
+      "userRequirement": "LOGGED_IN",
       "pageRestriction": [
         "ANY"
       ]
