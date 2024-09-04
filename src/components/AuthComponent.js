@@ -17,7 +17,7 @@ import IconButton from "./IconButton";
 import Link from "./Link";
 
 import { getDefaultLocation, validateIdentityProviderButtons } from "@utils/loginUtils";
-import { userHasAccessLevel, VirtualAccessLevel } from "@utils/authorizedGroups";
+import { userHasAccessLevel, VIRTUAL_ACCESS_LEVEL } from "@utils/authorizedGroups";
 import useSiteSettings from "@utils/useSiteSettings";
 import { PHASES } from "@utils/phasesUtils";
 
@@ -49,7 +49,7 @@ const AuthComponent = ({
     const [otpError, setOtpError] = useState(false);
 
     const hasVirtualBadge = useMemo(() =>
-        userProfile ? userHasAccessLevel(userProfile.summit_tickets, VirtualAccessLevel) : false
+        userProfile ? userHasAccessLevel(userProfile.summit_tickets, VIRTUAL_ACCESS_LEVEL) : false
         , [userProfile]);
     const defaultPath = getDefaultLocation(eventRedirect, hasVirtualBadge);
 

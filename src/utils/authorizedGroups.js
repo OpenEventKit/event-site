@@ -3,7 +3,7 @@ import {
   AUTHZ_USER_GROUPS,
 } from "./envVariables";
 
-export const VirtualAccessLevel = 'VIRTUAL';
+export const VIRTUAL_ACCESS_LEVEL = "VIRTUAL";
 
 export const isAuthorizedUser = (groups) => {
   let authorizedGroups = getEnvVariable(AUTHZ_USER_GROUPS);
