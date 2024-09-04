@@ -4,8 +4,9 @@ module.exports = `
     title: String
     link: String
     display: Boolean
-    requiresAuth: Boolean
+    userRequirement: String
     pageRestriction: [String]
+    showOnlyAtShowTime: Boolean
   }
 
   type NavbarJson implements Node {

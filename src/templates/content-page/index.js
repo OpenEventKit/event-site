@@ -7,9 +7,9 @@ import { MDXProvider } from "@mdx-js/react";
 import ContentPageTemplate from "./template";
 import Layout from "../../components/Layout";
 import Seo from "../../components/Seo";
-import { titleFromPathname } from "../../utils/urlFormating";
+import { titleFromPathname } from "@utils/urlFormating";
 
-import { USER_REQUIREMENTS } from "../../cms/config/collections/contentPagesCollection";
+import { USER_REQUIREMENTS } from "@utils/pageAccessConstants";
 
 const ContentPage = ({
   data,
