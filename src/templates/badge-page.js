@@ -18,9 +18,9 @@ export const BadgePageTemplate = ({ user }) => {
 
     useEffect(() => {
         // filter tickets with a badge that has access level IN_PERSON
-        const inPersonTickets = user.userProfile.summit_tickets.filter(t => t.badge?.type?.access_levels.some((al) => al.name.includes("IN_PERSON")));
+        const inPersonTickets = user?.summit_tickets.filter(t => t.badge?.type?.access_levels.some((al) => al.name.includes("IN_PERSON")));        
         setUserTickets(inPersonTickets);
-        const formattedTickets = user?.summit_tickets.map(e => ({ label: e.number, value: e.id }));
+        const formattedTickets = inPersonTickets.map(e => ({ label: e.number, value: e.id }));
         setBadgeDDL(formattedTickets || []);
     }, []);
 
@@ -40,19 +40,38 @@ export const BadgePageTemplate = ({ user }) => {
 
             <h2>Badge QR</h2>
             <div className="columns mt-5">
-                <div className={"column is-half"}>
+                <div className={"column is-half-desktop is-full-mobile "}>
                     <Dropdown
                         id="user_tickets"
                         placeholder="User Tickets"
                         value={currentTicket?.id}
                         onChange={handleTicketChange}
                         options={badgesDDL}
+                        styles={{
+                            container: (base) => ({
+                                ...base,
+                                width: "100%",                                
+                            }),
+                            control: (base) => ({
+                                ...base,
+                                width: "100%",                                
+                            }),
+                            option: (base) => ({
+                                ...base,
+                                width: 'max-content',
+                                minWidth: '100%'
+                            }),
+                            menu: (base) => ({
+                                ...base,
+                                maxWidth: "100%",                                
+                            }),
+                        }}
                     />
                 </div>
             </div>
             <div className="columns mt-3">
                 <div className={"column is-half-desktop is-full-mobile"}>
-                    {currentTicket && currentTicket.badge.qr_code &&
+                    {currentTicket &&
                         <QRCode
                             size={256}
                             style={{ height: "auto", maxWidth: "100%", width: "100%" }}
