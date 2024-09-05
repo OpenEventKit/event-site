@@ -14,8 +14,9 @@ import Layout from '../components/Layout'
 import withOrchestra from "../utils/widgetOrchestra";
 
 import LiteScheduleComponent from '../components/LiteScheduleComponent'
-import ProfilePopupComponent from '../components/ProfilePopupComponent'
+import AvatarEditorModal from '../components/AvatarEditorModal'
 import ChangePasswordComponent from '../components/ChangePasswordComponent';
+import AccessTracker from "../components/AttendeeToAttendeeWidgetComponent";
 
 import { updateProfilePicture, updateProfile, getIDPProfile, updatePassword } from '../actions/user-actions'
 
@@ -46,6 +47,10 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
     const [showFullName, setShowFullName] = useState(false);
     const [allowChatWithMe, setAllowChatWithMe] = useState(false)
     const [showEmail, setShowEmail] = useState(false);
+    const [showPicture, setShowPicture] = useState(false);
+    const [showBio, setShowBio] = useState(false);
+    const [showSocialMedia, setShowSocialMedia] = useState(false);
+    const [showTelephone, setShowTelephone] = useState(false);
     const [bio, setBio] = useState('');
     const [statementOfInterest, setStatementOfInterest] = useState('');
 
@@ -88,6 +93,10 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
             setShowFullName(user.idpProfile.public_profile_show_fullname);
             setAllowChatWithMe(user.idpProfile.public_profile_allow_chat_with_me);
             setShowEmail(user.idpProfile.public_profile_show_email);
+            setShowPicture(user.idpProfile.public_profile_show_photo);
+            setShowBio(user.idpProfile.public_profile_show_bio);
+            setShowSocialMedia(user.idpProfile.public_profile_show_social_media_info);
+            setShowTelephone(user.idpProfile.public_profile_show_telephone_number);
             setBio(user.idpProfile.bio || '');
             setStatementOfInterest(user.idpProfile.statement_of_interest || '');
             setAddress({
@@ -139,6 +148,10 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                     public_profile_show_fullname: showFullName,
                     public_profile_allow_chat_with_me: allowChatWithMe,
                     public_profile_show_email: showEmail,
+                    public_profile_show_photo: showPicture,
+                    public_profile_show_bio: showBio,
+                    public_profile_show_social_media_info: showSocialMedia,
+                    public_profile_show_telephone_number: showTelephone,
                     bio: bio,
                     statement_of_interest: statementOfInterest,
                     address1: address.street,
@@ -204,6 +217,10 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                 setShowFullName(user.idpProfile.public_profile_show_fullname);
                 setAllowChatWithMe(user.idpProfile.public_profile_allow_chat_with_me);
                 setShowEmail(user.idpProfile.public_profile_show_email);
+                setShowPicture(user.idpProfile.public_profile_show_photo);
+                setShowBio(user.idpProfile.public_profile_show_bio);
+                setShowSocialMedia(user.idpProfile.public_profile_show_social_media_info);
+                setShowTelephone(user.idpProfile.public_profile_show_telephone_number);
                 break;
             case 'bio':
                 setBio(user.idpProfile.bio || '');
@@ -423,20 +440,53 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                                     </div>
                                 </div>
                             </div>
-                            <label className={styles.checkbox}>
-                                <input type="checkbox" checked={showFullName} onChange={e => setShowFullName(e.target.checked)} />
-                                Show full name on public profile
-                            </label>
-                            <br />
-                            <label className={styles.checkbox}>
-                                <input type="checkbox" checked={showEmail} onChange={e => setShowEmail(e.target.checked)} />
-                                Show email on public profile
-                            </label>
-                            <br />
-                            <label className={styles.checkbox}>
-                                <input type="checkbox" checked={allowChatWithMe} onChange={e => setAllowChatWithMe(e.target.checked)} />
-                                Allow people to chat with me?
-                            </label>
+                            <div className={`columns is-mobile`}>
+                                <div className={`column is-full`}>
+                                    <span>
+                                        By electing to show your information you are indicating that other attendees at the 
+                                        event(s) you are registered for will be able to see this information.
+                                    </span>
+                                </div>
+                            </div>
+                            <div className={`columns is-mobile`}>
+                                <div className={`column is-half`}>
+                                    <label className={styles.checkbox}>
+                                        <input type="checkbox" checked={showFullName} onChange={e => setShowFullName(e.target.checked)} />
+                                        Show full name (first name is always shown)
+                                    </label>
+                                    <br />
+                                    <label className={styles.checkbox}>
+                                        <input type="checkbox" checked={showEmail} onChange={e => setShowEmail(e.target.checked)} />
+                                        Show email
+                                    </label>
+                                    <br />
+                                    <label className={styles.checkbox}>
+                                        <input type="checkbox" checked={showTelephone} onChange={e => setShowTelephone(e.target.checked)} />
+                                        Show telephone number
+                                    </label>
+                                    <br />
+                                    <label className={styles.checkbox}>
+                                        <input type="checkbox" checked={allowChatWithMe} onChange={e => setAllowChatWithMe(e.target.checked)} />
+                                        Allow people to chat with me
+                                    </label>
+                                </div>
+                                <div className={`column is-half`}>
+                                    <label className={styles.checkbox}>
+                                        <input type="checkbox" checked={showPicture} onChange={e => setShowPicture(e.target.checked)} />
+                                        Show picture
+                                    </label>
+                                    <br />
+                                    <label className={styles.checkbox}>
+                                        <input type="checkbox" checked={showBio} onChange={e => setShowBio(e.target.checked)} />
+                                        Show bio
+                                    </label>
+                                    <br />
+                                    <label className={styles.checkbox}>
+                                        <input type="checkbox" checked={showSocialMedia} onChange={e => setShowSocialMedia(e.target.checked)} />
+                                        Show social media info
+                                    </label>
+                                </div>
+                            </div>
                             <div className={`columns is-mobile ${styles.buttons}`}>
                                 <div className={`column is-half`}>
                                     <button className={`button is-large ${styles.profileButton}`} onClick={() => discardChanges('profile')}>Discard</button>
@@ -447,7 +497,7 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                             </div>
                         </div>
                         <div className={styles.formContainer}>
-                            <span className={styles.header}>Bio</span>
+                            <div className={styles.header}>Bio</div>
                             <div className={styles.form}>
                                 <div className={`columns is-mobile ${styles.inputRow}`}>
                                     <div className={`column is-full ${styles.inputField}`}>
@@ -592,16 +642,15 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                 </div>
             </div>
             {showProfile &&
-                <ProfilePopupComponent
-                    userProfile={user.idpProfile}
-                    showProfile={showProfile}
-                    idpLoading={user.loadingIDP}
-                    fromFullProfile={true}
-                    changePicture={(pic) => handlePictureUpdate(pic)}
-                    changeProfile={(profile) => handleProfileUpdate(profile)}
-                    closePopup={() => handleTogglePopup(!showProfile)}
-                />
+            <AvatarEditorModal
+              userProfile={user.idpProfile}
+              open={showProfile}
+              idpLoading={user.loadingIDP}
+              changePicture={handlePictureUpdate}
+              handleClose={() => handleTogglePopup(false)}
+            />
             }
+            <AccessTracker />
         </React.Fragment>
     )
 };

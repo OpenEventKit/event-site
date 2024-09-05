@@ -59,7 +59,13 @@ const AttendeesWidgetComponent = ({ user, event, chatSettings }) => {
     linked_in_profile,
     twitter_name,
     wechat_user,
-    public_profile_show_fullname } = idpProfile || {};
+    public_profile_show_fullname,
+    public_profile_show_email,
+    public_profile_allow_chat_with_me,
+    public_profile_show_photo,
+    public_profile_show_social_media_info,
+    public_profile_show_bio
+  } = idpProfile || {};
 
   useEffect(() => {
     if (!user || !userProfile || !idpProfile) return;
@@ -127,6 +133,12 @@ const AttendeesWidgetComponent = ({ user, event, chatSettings }) => {
           .flatMap((st) => st.badge.features)
           .filter((v, i, a) => a.map((item) => item.id).indexOf(v.id) === i),
       bio: bio,
+      showEmail: public_profile_show_email === true,
+      allowChatWithMe: public_profile_allow_chat_with_me === true,
+      showFullName: public_profile_show_fullname === true,
+      showProfilePic: public_profile_show_photo === true,
+      showSocialInfo: public_profile_show_social_media_info === true,
+      showBio: public_profile_show_bio === true,
       hasPermission: (permission) => {
         const isAdmin =  groups &&
             groups.map((g) => g.slug).filter((g) => adminGroups.includes(g))
@@ -186,6 +198,20 @@ const mapState = ({ settingState }) => ({
 export const AttendeesWidget = connect(mapState)(AttendeesWidgetComponent);
 
 const AccessTracker = ({ user, isLoggedUser, summitPhase, chatSettings }) => {
+  const chatProps = {
+    streamApiKey: getEnvVariable(STREAM_IO_API_KEY),
+    apiBaseUrl: getEnvVariable(IDP_BASE_URL),
+    chatApiBaseUrl: getEnvVariable(CHAT_API_BASE_URL),
+    onAuthError: (err, res) => console.log(err),
+    openDir: "left",
+    activity: null,
+    getAccessToken: async () => {
+      const accessToken = await getAccessToken();
+      //console.log("AttendeesList->getAccessToken", accessToken);
+      return accessToken;
+    },
+  };
+  
   const trackerRef = useRef();
 
   const handleLogout = useCallback(() => {
@@ -237,11 +263,15 @@ const AccessTracker = ({ user, isLoggedUser, summitPhase, chatSettings }) => {
     wechat_user,
     public_profile_show_fullname,
     public_profile_show_email,
-    public_profile_allow_chat_with_me
+    public_profile_allow_chat_with_me,
+    public_profile_show_photo,
+    public_profile_show_social_media_info,
+    public_profile_show_bio
   } = user.idpProfile;
 
   const widgetProps = {
     user: {
+      id: sub,
       idpUserId: sub,
       fullName: public_profile_show_fullname ? `${given_name} ${family_name}` : `${given_name}`,
       email: email,
@@ -260,11 +290,17 @@ const AccessTracker = ({ user, isLoggedUser, summitPhase, chatSettings }) => {
           .flatMap((st) => st.badge.features)
           .filter((v, i, a) => a.map((item) => item.id).indexOf(v.id) === i),
       bio: bio,
-      showEmail: public_profile_show_email,
-      allowChatWithMe: public_profile_allow_chat_with_me ?? true
+      showEmail: public_profile_show_email === true,
+      allowChatWithMe: public_profile_allow_chat_with_me === true,
+      showFullName: public_profile_show_fullname === true,
+      showProfilePic: public_profile_show_photo === true,
+      showSocialInfo: public_profile_show_social_media_info === true,
+      showBio: public_profile_show_bio === true
     },
     summitId: parseInt(getEnvVariable(SUMMIT_ID)),
-    ...sbAuthProps,
+    keepAliveEnabled: true,
+    ...chatProps,
+    ...sbAuthProps
   };
 
   if (!chatSettings.enabled) return null;

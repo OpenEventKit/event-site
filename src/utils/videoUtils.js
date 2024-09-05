@@ -1,4 +1,5 @@
 const IS_MUX_VIDEO_REGEX = /https:\/\/stream.mux.com\/(.*).m3u8/;
+const IS_SYNC_WORDS_VIDEO_REGEX = /https:\/\/iframe\.dacast\.com\/live\/(.*)\/(.*)/g;
 
 export const getMUXPlaybackId = (url) => {
     if(!url) return null;
@@ -24,4 +25,21 @@ export const isYouTubeVideo = (url) => {
 export const isMuxVideo = (url) => {
     if(!url) return false;
     return url.match(IS_MUX_VIDEO_REGEX)
+}
+
+export const isSynchWordsVideo = (url) => {
+    if(!url) return false;
+    return url.match(IS_SYNC_WORDS_VIDEO_REGEX);
+}
+
+/**
+ * @param src
+ * @returns {string|null}
+ */
+export const getSynchWordsVideoFrameDdFromSrc = (src) => {
+    const m = [...src.matchAll(IS_SYNC_WORDS_VIDEO_REGEX)];
+    if(!m?.length) return null;
+    const parts = m[0];
+    if(parts.length < 3) return null;
+    return `${parts[1]}-live-${parts[2]}`;
 }

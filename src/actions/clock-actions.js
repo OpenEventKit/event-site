@@ -1,24 +1,25 @@
-import { createAction } from 'openstack-uicore-foundation/lib/utils/actions';
+import { createAction } from "openstack-uicore-foundation/lib/utils/actions";
+import { PHASES, getSummitPhase, getEventPhase } from "@utils/phasesUtils";
+import { updateVotingPeriodsPhase } from "../actions/presentation-actions";
+import { sanitizeHash } from "../actions/security-actions";
 
-import { PHASES, getSummitPhase, getEventPhase } from '../utils/phasesUtils';
-
-import { updateVotingPeriodsPhase } from '../actions/presentation-actions';
-
-export const SUMMIT_PHASE_AFTER = 'SUMMIT_PHASE_AFTER';
-export const SUMMIT_PHASE_DURING = 'SUMMIT_PHASE_DURING';
-export const SUMMIT_PHASE_BEFORE = 'SUMMIT_PHASE_BEFORE';
-export const EVENT_PHASE_BEFORE = 'EVENT_PHASE_BEFORE';
-export const EVENT_PHASE_DURING = 'EVENT_PHASE_DURING';
-export const EVENT_PHASE_AFTER = 'EVENT_PHASE_AFTER';
-export const EVENT_PHASE_ADD = 'EVENT_PHASE_ADD';
-export const UPDATE_CLOCK = 'UPDATE_CLOCK';
+export const SUMMIT_PHASE_AFTER = "SUMMIT_PHASE_AFTER";
+export const SUMMIT_PHASE_DURING = "SUMMIT_PHASE_DURING";
+export const SUMMIT_PHASE_BEFORE = "SUMMIT_PHASE_BEFORE";
+export const EVENT_PHASE_BEFORE = "EVENT_PHASE_BEFORE";
+export const EVENT_PHASE_DURING = "EVENT_PHASE_DURING";
+export const EVENT_PHASE_AFTER = "EVENT_PHASE_AFTER";
+export const EVENT_PHASE_ADD = "EVENT_PHASE_ADD";
+export const UPDATE_CLOCK = "UPDATE_CLOCK";
 
 export const updateClock = (timestamp) => (dispatch) => {
-
   dispatch(createAction(UPDATE_CLOCK)({ timestamp }));
+
   dispatch(updateSummitPhase());
   dispatch(updateEventsPhase());
   dispatch(updateVotingPeriodsPhase());
+
+  dispatch(sanitizeHash());
 };
 
 export const updateSummitPhase = () => (dispatch, getState) => {
@@ -89,5 +90,5 @@ export const updateEventsPhase = () => (dispatch, getState) => {
           break;
       }
     }
-  })
+  });
 };

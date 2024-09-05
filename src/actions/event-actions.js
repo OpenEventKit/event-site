@@ -29,23 +29,14 @@ export const setEventLastUpdate = (lastUpdate) => (dispatch) => {
 
 /**
  * @param eventId
- * @param checkLocal
  * @returns {(function(*, *): Promise<*>)|*}
  */
 export const getEventById = (
     eventId
-) => async (dispatch, getState) => {
+) => async (dispatch) => {
 
     dispatch(startLoading());
-    // if we have it on the reducer , provide that first
-    let {allSchedulesState: {allEvents}} = getState();
-    const event = allEvents.find(ev => ev.id === parseInt(eventId));
 
-    if (event) {
-        dispatch(createAction(GET_EVENT_DATA)({event}));
-    }
-
-    // then refresh from api
     let accessToken;
     try {
         accessToken = await getAccessToken();

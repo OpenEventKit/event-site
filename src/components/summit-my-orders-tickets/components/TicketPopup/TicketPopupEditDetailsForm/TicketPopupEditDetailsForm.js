@@ -319,6 +319,11 @@ export const TicketPopupEditDetailsForm = ({
                         onBlur={formik.handleBlur}
                         onChange={!!initialValues[TicketKeys.company].name ? noop : formik.handleChange}
                         disabled={!!initialValues[TicketKeys.company].name}
+                        menuPortalTarget={document.body}
+                        menuPosition="fixed"
+                        styles={{
+                            menuPortal: (base) => ({ ...base, zIndex: 9999 }),                            
+                        }}
                         tabSelectsValue={false}
                     />
                     {(formik.touched[TicketKeys.company] || triedSubmitting) && formik.errors[TicketKeys.company] &&
