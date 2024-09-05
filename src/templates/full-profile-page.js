@@ -14,7 +14,7 @@ import Layout from '../components/Layout'
 import withOrchestra from "../utils/widgetOrchestra";
 
 import LiteScheduleComponent from '../components/LiteScheduleComponent'
-import ProfilePopupComponent from '../components/ProfilePopupComponent'
+import AvatarEditorModal from '../components/AvatarEditorModal'
 import ChangePasswordComponent from '../components/ChangePasswordComponent';
 import AccessTracker from "../components/AttendeeToAttendeeWidgetComponent";
 
@@ -441,41 +441,49 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                                 </div>
                             </div>
                             <div className={`columns is-mobile`}>
+                                <div className={`column is-full`}>
+                                    <span>
+                                        By electing to show your information you are indicating that other attendees at the 
+                                        event(s) you are registered for will be able to see this information.
+                                    </span>
+                                </div>
+                            </div>
+                            <div className={`columns is-mobile`}>
                                 <div className={`column is-half`}>
                                     <label className={styles.checkbox}>
                                         <input type="checkbox" checked={showFullName} onChange={e => setShowFullName(e.target.checked)} />
-                                        Show full name on public profile
+                                        Show full name (first name is always shown)
                                     </label>
                                     <br />
                                     <label className={styles.checkbox}>
                                         <input type="checkbox" checked={showEmail} onChange={e => setShowEmail(e.target.checked)} />
-                                        Show email on public profile
+                                        Show email
                                     </label>
                                     <br />
                                     <label className={styles.checkbox}>
                                         <input type="checkbox" checked={showTelephone} onChange={e => setShowTelephone(e.target.checked)} />
-                                        Show telephone number on public profile                                        
+                                        Show telephone number
                                     </label>
                                     <br />
                                     <label className={styles.checkbox}>
                                         <input type="checkbox" checked={allowChatWithMe} onChange={e => setAllowChatWithMe(e.target.checked)} />
-                                        Allow people to chat with me?
+                                        Allow people to chat with me
                                     </label>
                                 </div>
                                 <div className={`column is-half`}>
                                     <label className={styles.checkbox}>
                                         <input type="checkbox" checked={showPicture} onChange={e => setShowPicture(e.target.checked)} />
-                                        Show picture on public profile
+                                        Show picture
                                     </label>
                                     <br />
                                     <label className={styles.checkbox}>
                                         <input type="checkbox" checked={showBio} onChange={e => setShowBio(e.target.checked)} />
-                                        Show bio on public profile
+                                        Show bio
                                     </label>
                                     <br />
                                     <label className={styles.checkbox}>
                                         <input type="checkbox" checked={showSocialMedia} onChange={e => setShowSocialMedia(e.target.checked)} />
-                                        Show social media info on public profile
+                                        Show social media info
                                     </label>
                                 </div>
                             </div>
@@ -489,7 +497,7 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                             </div>
                         </div>
                         <div className={styles.formContainer}>
-                            <span className={styles.header}>Bio</span>
+                            <div className={styles.header}>Bio</div>
                             <div className={styles.form}>
                                 <div className={`columns is-mobile ${styles.inputRow}`}>
                                     <div className={`column is-full ${styles.inputField}`}>
@@ -634,17 +642,15 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                 </div>
             </div>
             {showProfile &&
-                <ProfilePopupComponent
-                    userProfile={user.idpProfile}
-                    showProfile={showProfile}
-                    idpLoading={user.loadingIDP}
-                    fromFullProfile={true}
-                    changePicture={(pic) => handlePictureUpdate(pic)}
-                    changeProfile={(profile) => handleProfileUpdate(profile)}
-                    closePopup={() => handleTogglePopup(!showProfile)}
-                />
+            <AvatarEditorModal
+              userProfile={user.idpProfile}
+              open={showProfile}
+              idpLoading={user.loadingIDP}
+              changePicture={handlePictureUpdate}
+              handleClose={() => handleTogglePopup(false)}
+            />
             }
-            <AccessTracker/>
+            <AccessTracker />
         </React.Fragment>
     )
 };
