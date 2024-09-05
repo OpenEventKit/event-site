@@ -15,12 +15,14 @@ import ShowOpenRoute from "../../routes/ShowOpenRoute";
 import WithBadgeRoute from "../../routes/WithBadgeRoute";
 import PosterDetailPage from "../../templates/poster-detail-page";
 import MyTicketsPage from "../../templates/my-tickets-page";
+import BadgePage from "../../templates/badge-page";
 import withRealTimeUpdates from "../../utils/real_time_updates/withRealTimeUpdates";
 import withFeedsWorker from "../../utils/withFeedsWorker";
 import Seo from "../../components/Seo";
 import Link from "../../components/Link";
 import { titleFromPathname } from "../../utils/urlFormating";
 import {graphql} from "gatsby";
+import WithAttendeeCheckedInRoute from "../../routes/WithAttendeeCheckedInRoute";
 
 const mySchedulePage = ({ location, summitPhase,isLoggedUser, user, allowClick, title, key }) => {
   return  <SchedulePage
@@ -56,13 +58,18 @@ export const appQuery = graphql`
       key
       needsTicketAuthz
     }
+    badgeQrPageJson {
+      enabled
+    }
   }
 `;
 
 
 const App = ({ isLoggedUser, user, summitPhase, allowClick = true, data }) => {
 
-  const { mySchedulePageJson } = data;
+  const { mySchedulePageJson, badgeQrPageJson } = data;
+
+  console.log("CHECK!", badgeQrPageJson);
 
   return (
     <Location>
@@ -88,13 +95,18 @@ const App = ({ isLoggedUser, user, summitPhase, allowClick = true, data }) => {
                 <PostersPage path="/posters/:trackGroupId" location={location} />
                 <PosterDetailPage path="/poster/:presentationId/" isLoggedIn={isLoggedUser} user={user} location={location} />
                 { mySchedulePageJson.needsTicketAuthz && mySchedulePage({location, summitPhase,isLoggedUser, user, allowClick, title: mySchedulePageJson.title, key: mySchedulePageJson.key }) }
+                {badgeQrPageJson.enabled &&
+                  <WithAttendeeCheckedInRoute path="/" isLoggedIn={isLoggedUser} user={user} location={location}>
+                    <BadgePage path="/badge" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location} />
+                  </WithAttendeeCheckedInRoute>
+                }
                 <ShowOpenRoute path="/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location}>
                   <WithBadgeRoute path="/event/:eventId" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location}>
                     <EventPage path="/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location} />
                   </WithBadgeRoute>
                   <SponsorPage path="/sponsor/:sponsorId" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location} />
                   <ExpoHallPage path="/sponsors/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location} />
-                </ShowOpenRoute>
+                </ShowOpenRoute>                
             </WithAuthzRoute>
           </WithAuthRoute>
         </Router>

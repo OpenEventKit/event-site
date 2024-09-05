@@ -10,6 +10,15 @@
       ]
     },
     {
+      "title": "Show Badge QR",
+      "link": "/a/badge",
+      "display": true,
+      "requiresAuth": true,
+      "pageRestriction": [
+        "BADGE"
+      ]
+    },
+    {
       "title": "My Tickets",
       "link": "/a/my-tickets",
       "display": true,

@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { navigate } from "gatsby";
 import NavbarTemplate from "./template";
 
-import { userHasAccessLevel, VIRTUAL_ACCESS_LEVEL } from "@utils/authorizedGroups";
+import { userHasAccessLevel, VIRTUAL_ACCESS_LEVEL, userHasCheckedInBadge } from "@utils/authorizedGroups";
 import { getDefaultLocation } from "@utils/loginUtils";
 
 import { PHASES } from "@utils/phasesUtils";
@@ -28,6 +28,8 @@ const Navbar = ({
   const hasVirtualBadge = useMemo(() =>
     userProfile ? userHasAccessLevel(userProfile.summit_tickets, VIRTUAL_ACCESS_LEVEL) : false
   , [userProfile]);
+
+  const hasSummitHallCheckedIn = userProfile ? userHasCheckedInBadge(userProfile.summit_tickets) : false;
 
   const defaultPath = getDefaultLocation(eventRedirect, hasVirtualBadge);
 
@@ -84,7 +86,9 @@ const Navbar = ({
         (item.pageRestriction.includes(PAGE_RESTRICTIONS.marketing) && isMarketingPage(currentPath)) ||
         (item.pageRestriction.includes(PAGE_RESTRICTIONS.lobby) && isLobbyPage(currentPath)) ||
         (item.pageRestriction.includes(PAGE_RESTRICTIONS.show) && isShowPage(currentPath)) ||
-        (item.pageRestriction.includes(PAGE_RESTRICTIONS.customPage) && isCustomPage(currentPath));
+        (item.pageRestriction.includes(PAGE_RESTRICTIONS.badge) && hasSummitHallCheckedIn) ||
+        (item.pageRestriction.includes(PAGE_RESTRICTIONS.customPage) && isCustomPage(currentPath))
+    ;
 
     return item.display &&
            meetsUserRequirement(item.userRequirement) &&

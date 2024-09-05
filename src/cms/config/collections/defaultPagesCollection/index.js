@@ -7,6 +7,7 @@ import lobbyPage from "./lobbyPage";
 import expoHallPage from "./expoHallPage";
 import invitationsRejectPage from "./invitationsRejectPage";
 import mySchedulePage from "./mySchedulePage";
+import badgeQrPage from "./badgeQrPage";
 
 const defaultPagesCollection = {
   ...collectionDefaults({
@@ -18,7 +19,8 @@ const defaultPagesCollection = {
     lobbyPage,
     expoHallPage,
     invitationsRejectPage,
-    mySchedulePage
+    mySchedulePage,
+    badgeQrPage
   ]
 };
 
