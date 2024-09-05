@@ -10,6 +10,7 @@ const PAGE_RESTRICTIONS = {
   marketing: "MARKETING",
   lobby: "LOBBY",
   show: "SHOW",
+  badge: "BADGE",
   customPage: "CUSTOM_PAGE"
 };
 
