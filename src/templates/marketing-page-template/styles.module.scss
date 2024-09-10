@@ -8,4 +8,8 @@
   .slider {
     margin-bottom: -5px;
   }
+  .masonryImage { // hack for white border/lines between masonry images
+    width: 101%;
+    margin: -1px;
+  }
 }
