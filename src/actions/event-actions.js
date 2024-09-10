@@ -43,6 +43,8 @@ export const getEventById = (
     if (event) {
         dispatch(stopLoading());
         dispatch(createAction(GET_EVENT_DATA)({event}));
+        const res = { response: event, err: null };
+        return Promise.resolve(res);
     }
     // then refresh from api
 
