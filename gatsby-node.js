@@ -92,12 +92,16 @@ const SSR_getEvents = async (baseUrl, summitId, accessToken) => {
 
   const endpoint = `${baseUrl}/api/v1/summits/${summitId}/events/published`;
 
+  const speakers_fields = ['id', 'first_name', 'last_name', 'title', 'bio','member_id','pic', 'big_pic', 'company'];
+  const current_attendance_fields = ['member_first_name', 'member_last_name', 'member_pic'];
+
   const params = {
     access_token: accessToken,
     per_page: 50,
     page: 1,
-    expand: "slides,links,videos,media_uploads,type,track,track.subtracks,track.allowed_access_levels,location,location.venue,location.floor,speakers,moderator,sponsors,current_attendance,groups,rsvp_template,tags",
-    relations: "speakers.badge_features,speakers.affiliations,speakers.languages,speakers.other_presentation_links,speakers.areas_of_expertise,speakers.travel_preferences,speakers.organizational_roles,speakers.all_presentations,speakers.all_moderated_presentations",
+    expand: 'slides,links,videos,media_uploads,type,track,track.subtracks,track.allowed_access_levels,location,location.venue,location.floor,speakers,moderator,sponsors,groups,rsvp_template,tags,current_attendance',
+    relations: 'speakers.badge_features,speakers.affiliations,speakers.languages,speakers.other_presentation_links,speakers.areas_of_expertise,speakers.travel_preferences,speakers.organizational_roles,speakers.all_presentations,speakers.all_moderated_presentations',
+    fields: `speakers.${speakers_fields.join(",speakers.")},current_attendance.${current_attendance_fields.join(',current_attendance.')}`,
   }
 
   return await axios.get(endpoint, { params }).then(async ({data}) => {
@@ -161,11 +165,27 @@ const SSR_getSponsorCollections = async (allSponsors, baseUrl, summitId, accessT
 
 const SSR_getSpeakers = async (baseUrl, summitId, accessToken, filter = null) => {
 
+  const speakers_relations = [
+    'badge_features',
+    'affiliations',
+    'languages',
+    'other_presentation_links',
+    'areas_of_expertise',
+    'travel_preferences',
+    'organizational_roles',
+    'all_presentations',
+    'all_moderated_presentations',
+  ];
+
+  const speakers_fields =
+    ['id', 'first_name', 'last_name', 'title', 'bio','member_id','pic', 'big_pic', 'company'];
+
   const params = {
     access_token: accessToken,
     per_page: 30,
     page: 1,
-    relations: 'badge_features,affiliations,languages,other_presentation_links,areas_of_expertise,travel_preferences,organizational_roles,all_presentations,all_moderated_presentations',
+    relations: speakers_relations.join(','),
+    fields: speakers_fields.join(',')
   };
 
   const endpoint = `${baseUrl}/api/v1/summits/${summitId}/speakers/on-schedule`;
@@ -273,11 +293,11 @@ exports.onPreBootstrap = async () => {
   // write colors json used to set runtime colors in gatsby-browser
   fs.writeFileSync(COLORS_FILE_PATH, JSON.stringify(colors), "utf8");
 
-  // generate and write colors SCSS file used by built styles 
+  // generate and write colors SCSS file used by built styles
   generateAndWriteScssFile(generateColorsScssFile, colors, COLORS_SCSS_FILE_PATH);
 
-  if (siteSettings.siteFont) {    
-    // generate and write font SCSS file used by built styles 
+  if (siteSettings.siteFont) {
+    // generate and write font SCSS file used by built styles
     generateAndWriteScssFile(generateFontScssFile, siteSettings.siteFont, FONTS_SCSS_FILE_PATH);
   }
 

@@ -6,6 +6,7 @@ import URI from "urijs";
  * @param accessToken
  * @returns {Promise<Response>}
  */
+
 export const fetchEventById = async (summitId, eventId, accessToken = null) => {
 
     let apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/public/v1/summits/${summitId}/events/${eventId}/published`);
@@ -14,10 +15,13 @@ export const fetchEventById = async (summitId, eventId, accessToken = null) => {
         apiUrl.addQuery('access_token', accessToken);
     }
 
+    const speakers_fields = ['id', 'first_name', 'last_name', 'title', 'bio','member_id','pic', 'big_pic', 'company'];
+    const current_attendance_fields = ['member_first_name', 'member_last_name', 'member_pic'];
+
     apiUrl.addQuery('expand', 'slides, links, videos, media_uploads, type, track, track.allowed_access_levels, location, location.venue, location.floor, speakers, moderator, sponsors, current_attendance, groups, rsvp_template, tags');
     apiUrl.addQuery('evict_cache', 1);
     apiUrl.addQuery('relations', "speakers.badge_features,speakers.affiliations,speakers.languages,speakers.other_presentation_links,speakers.areas_of_expertise,speakers.travel_preferences,speakers.organizational_roles,speakers.all_presentations,speakers.all_moderated_presentations");
-
+    apiUrl.addQuery('fields', `speakers.${speakers_fields.join(",speakers.")},current_attendance.${current_attendance_fields.join(',current_attendance.')}`);
     return fetch(apiUrl.toString(), {
         method: 'GET'
     }).then(async (response) => {
@@ -52,7 +56,6 @@ export const fetchEventTypeById = async (summitId, eventTypeId, accessToken = nu
         return null;
     });
 }
-
 
 /**
  *
@@ -101,8 +104,24 @@ export const fetchSpeakerById = async(summitId, speakerId, accessToken = null) =
         apiUrl.addQuery('access_token', accessToken);
     }
 
-    apiUrl.addQuery('relations', 'badge_features,affiliations,languages,other_presentation_links,areas_of_expertise,travel_preferences,organizational_roles,all_presentations,all_moderated_presentations');
+    const speakers_relations = [
+        'badge_features',
+        'affiliations',
+        'languages',
+        'other_presentation_links',
+        'areas_of_expertise',
+        'travel_preferences',
+        'organizational_roles',
+        'all_presentations',
+        'all_moderated_presentations',
+    ];
+
+    const speakers_fields =
+      ['id', 'first_name', 'last_name', 'title', 'bio','member_id','pic', 'big_pic', 'company'];
+
     apiUrl.addQuery('evict_cache', 1);
+    apiUrl.addQuery('relations', speakers_relations.join(','));
+    apiUrl.addQuery('fields', speakers_fields.join(','));
 
     return fetch(apiUrl.toString(), {
         method: 'GET'
