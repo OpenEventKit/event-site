@@ -650,7 +650,7 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
               handleClose={() => handleTogglePopup(false)}
             />
             }
-            <AccessTracker />
+            <AccessTracker updateChatProfileEnabled={true} />
         </React.Fragment>
     )
 };

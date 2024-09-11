@@ -197,7 +197,7 @@ const mapState = ({ settingState }) => ({
 
 export const AttendeesWidget = connect(mapState)(AttendeesWidgetComponent);
 
-const AccessTracker = ({ user, isLoggedUser, summitPhase, chatSettings }) => {
+const AccessTracker = ({ user, isLoggedUser, summitPhase, chatSettings, updateChatProfileEnabled=false }) => {
   const chatProps = {
     streamApiKey: getEnvVariable(STREAM_IO_API_KEY),
     apiBaseUrl: getEnvVariable(IDP_BASE_URL),
@@ -299,6 +299,7 @@ const AccessTracker = ({ user, isLoggedUser, summitPhase, chatSettings }) => {
     },
     summitId: parseInt(getEnvVariable(SUMMIT_ID)),
     keepAliveEnabled: true,
+    updateChatProfileEnabled: updateChatProfileEnabled,
     ...chatProps,
     ...sbAuthProps
   };
