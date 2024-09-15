@@ -112,3 +112,34 @@ export const getEventStreamingInfoById = (
         return (e);
     });
 };
+
+/**
+ * Fetch overflow event by stream key
+ * @param {string} overflowStreamKey
+ * @returns {(function(*): Promise<*>)|*}
+ */
+export const getOverflowEventByKey = (
+    overflowStreamKey
+) => async (dispatch) => {
+    dispatch(startLoading());
+    
+    let params = {
+        k: overflowStreamKey
+    };
+    
+    return getRequest(
+        null,
+        createAction(GET_EVENT_DATA),
+        `${window.SUMMIT_API_BASE_URL}/api/v1/public/summits/${window.SUMMIT_ID}/events/all/published/overflow`,
+        customErrorHandler
+    )(params)(dispatch).then((payload) => {
+        dispatch(stopLoading());
+        return payload.response;
+    }).catch(e => {
+        dispatch(stopLoading());
+        dispatch(createAction(GET_EVENT_DATA_ERROR)(e));
+        console.error("ERROR: ", e);
+        return (e);
+    });
+};
+
