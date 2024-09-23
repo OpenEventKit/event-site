@@ -5,10 +5,16 @@
 
 @import 'colors.scss';
 
+.modal {
+  z-index: 100000;
+  background-color: rgba(0,0,0,0.8);
+}
+
 .modal-card {
   background-color: var(--color_background_light);
   color: var(--color_text_dark);
   margin: 0 5rem 0 auto;
+  border: 1px solid var(--color_input_border_color_dark);
 
   .modal-card-head {
     padding: 10px 20px;

@@ -38,6 +38,7 @@ export const GET_TICKETS_BY_ORDER = 'GET_TICKETS_BY_ORDER';
 export const GET_TICKETS_BY_ORDER_ERROR = 'GET_TICKETS_BY_ORDER_ERROR';
 export const GET_ORDER_TICKET_DETAILS = 'GET_ORDER_TICKET_DETAILS';
 export const GET_TICKET_DETAILS = 'GET_TICKET_DETAILS';
+export const DELEGATE_TICKET = 'DELEGATE_TICKET';
 
 export const TICKET_ATTENDEE_KEYS = {
     email: 'attendee_email',
@@ -90,9 +91,9 @@ export const getUserTickets = ({ page = 1, perPage = 5 }) => async (dispatch, ge
 
     const params = {
         access_token: accessToken,
-        expand: 'order, owner',
+        expand: 'order,owner,owner.manager,promo_code,ticket_type',
         order: '-id',
-        fields: 'order.id,order.owner_first_name,order.owner_last_name,order.owner_email,owner.first_name,owner.last_name,owner.status',
+        fields: 'order.id,order.owner_first_name,order.owner_last_name,order.owner_email,owner.first_name,owner.last_name,owner.email,owner.company,owner.status,owner.manager.id',
         'filter[]': [`status==Paid`, `order_owner_id<>${userProfile.id}`],
         relations: 'none',
         page: page,
@@ -130,7 +131,7 @@ export const getTicketById = ({order, ticket}) => async (dispatch, getState, { g
 
     const params = {
         access_token: accessToken,
-        expand: `${fromOrderList ? 'order' : ''}, owner, owner.extra_questions, badge, badge.features, refund_requests`,
+        expand: `${fromOrderList ? 'order' : ''},owner,owner.extra_questions,badge,badge.features,refund_requests,promo_code,ticket_type`,
         fields: 'order.id, order.owner_first_name, order.owner_last_name, order.owner_email'
     };
 
@@ -148,16 +149,16 @@ export const getTicketById = ({order, ticket}) => async (dispatch, getState, { g
 };
 
 export const getTicketsByOrder = ({ orderId, page = 1, perPage = 5 }) => async (dispatch, getState, { getAccessToken, apiBaseUrl, loginUrl }) => {
-    
+
     dispatch(startLoading());
-    
+
     const accessToken = await getAccessToken().catch(_ => history.replace(loginUrl));
 
     if (!accessToken) return;
 
     const params = {
-        access_token: accessToken,        
-        expand: 'refund_requests, owner, owner.extra_questions, badge, badge.features',
+        access_token: accessToken,
+        expand: 'refund_requests,owner,owner.extra_questions,badge,badge.features,promo_code,ticket_type',
         order: '+id',
         page: page,
         per_page: perPage
@@ -166,7 +167,7 @@ export const getTicketsByOrder = ({ orderId, page = 1, perPage = 5 }) => async (
     return getRequest(
         null,
         createAction(GET_TICKETS_BY_ORDER),
-        `${apiBaseUrl}/api/v1/summits/all/orders/${orderId}/tickets`,        
+        `${apiBaseUrl}/api/v1/summits/all/orders/${orderId}/tickets`,
         authErrorHandler
     )(params)(dispatch).then(() => {
         dispatch(stopLoading());
@@ -300,10 +301,12 @@ export const editOwnedTicket = ({
         `${apiBaseUrl}/api/v1/summits/all/orders/all/tickets/${ticket.id}`,
         normalizedEntity,
         authErrorHandler
-    )(params)(dispatch).then(async () => {
+    )(params)(dispatch).then(async () => {        
+        const hasManager = ticket.owner?.manager?.id || ticket.owner?.manager_id;
         // email should match ( only update my profile is ticket belongs to me!)
+        // and if the ticket doesn't have a manager
         // Check if there's changes in the ticket data to update the profile
-        if (userProfile.email == attendee_email && (
+        if (userProfile.email == attendee_email && !hasManager && (
             attendee_company.name !== company ||
             attendee_first_name !== userProfile.first_name ||
             attendee_last_name !== userProfile.last_name)) {
@@ -314,7 +317,6 @@ export const editOwnedTicket = ({
                 company: attendee_company.name
             };
             dispatch(updateProfile(newProfile));
-
         }
 
         // Note: make sure we re-fetch the user profile for the parent app.
@@ -324,7 +326,7 @@ export const editOwnedTicket = ({
         if (context === 'ticket-list') {
             dispatch(getUserTickets({ page: ticketPage }));
         } else {
-            dispatch(getUserOrders({ page: orderPage })).then(() => 
+            dispatch(getUserOrders({ page: orderPage })).then(() =>
                 dispatch(getTicketsByOrder({ orderId: ticket.order_id, page: orderTicketsCurrentPage }))
             );
         }
@@ -528,6 +530,67 @@ export const refundTicket = ({ ticket, order }) => async (dispatch, getState, { 
         throw (e);
     });
 };
+
+export const delegateTicket = ({
+    ticket,
+    context,
+    data: {
+        attendee_email,
+        attendee_first_name,
+        attendee_last_name,
+        attendee_company,
+        disclaimer_accepted,
+        extra_questions,
+    }
+}) => async (dispatch, getState, { getAccessToken, apiBaseUrl, loginUrl }) => {
+    const accessToken = await getAccessToken().catch(_ => history.replace(loginUrl));
+
+    if (!accessToken) return;
+
+    dispatch(startLoading());
+
+    const {
+        orderState: { current_page: orderPage },
+        ticketState: { current_page: ticketPage, orderTickets: { current_page : orderTicketsCurrentPage }},
+        summitState: { summit: { id : summitId } }
+    } = getState();
+
+    const orderId = ticket.order ? ticket.order.id : ticket.order_id;
+
+    const params = {
+        access_token: accessToken
+    };
+
+    const normalizedEntity = normalizeTicket({
+        attendee_email,
+        attendee_first_name,
+        attendee_last_name,
+        attendee_company,
+        disclaimer_accepted,
+        extra_questions
+    });
+
+    return putRequest(
+        null,
+        createAction(DELEGATE_TICKET),
+        `${apiBaseUrl}/api/v1/summits/${summitId}/orders/${orderId}/tickets/${ticket.id}/delegate`,        
+        normalizedEntity,
+        authErrorHandler    
+    )(params)(dispatch).then(() => {
+        dispatch(stopLoading());
+        // Note: refresh the list view after updating the ticket.
+        if (context === 'ticket-list') {
+            dispatch(getUserTickets({ page: ticketPage }));
+        } else {
+            dispatch(getUserOrders({ page: orderPage })).then(() => 
+                dispatch(getTicketsByOrder({ orderId: ticket.order_id, page: orderTicketsCurrentPage }))
+            );
+        }
+    }).catch(e => {
+        dispatch(stopLoading());
+        throw (e);
+    });
+}
 
 const normalizeTicket = (entity) => {
     const normalizedEntity = {...entity};

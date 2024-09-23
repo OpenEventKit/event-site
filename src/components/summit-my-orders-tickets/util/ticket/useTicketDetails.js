@@ -19,11 +19,13 @@ export const useTicketDetails = ({ ticket, summit }) => {
 
     const status = getTicketStatusData(ticket, isPast);
     const role = getTicketRole(ticket);
-    const type = summit.ticket_types.find(type => type.id == ticket.ticket_type_id);
+    const type = summit.ticket_types.find(type => type.id == ticket.ticket_type.id);
 
     const isActive = ticket.is_active && status.type !== STATUS_CANCELLED;
     const isUnassigned = status.type === STATUS_UNASSIGNED;
     const isRefundable = ticket.final_amount > 0 && ticket.final_amount > ticket.refunded_amount;
+
+    const allowsDelegate = (ticket.ticket_type.allows_to_delegate || ticket.promo_code?.allows_to_delegate) && !isUnassigned && !ticket.owner?.manager?.id && !ticket.owner?.manager_id;
 
     const togglePopup = () => setShowPopup(!showPopup);
 
@@ -45,6 +47,7 @@ export const useTicketDetails = ({ ticket, summit }) => {
         isUnassigned,
         isReassignable,
         isRefundable,
+        allowsDelegate,
         formattedDate,
         formattedReassignDate,
         daysUntilReassignDeadline,
