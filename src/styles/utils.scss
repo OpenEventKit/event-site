@@ -1,0 +1,34 @@
+// Helper function to convert HEX to RGB
+@function hex-to-rgb($hex) {
+    $r: red($hex);
+    $g: green($hex);
+    $b: blue($hex);
+    @return ($r, $g, $b);
+}
+
+// calculate luminance val
+@function luminance-value($color) { 
+    $normalized: $color / 255; 
+    @if $normalized <= 0.03928 {  
+      @return $normalized / 12.92; 
+    } @else { 
+      @return pow(($normalized + 0.055) / 1.055, 2.4);  
+    }
+}
+
+// Helper function to calculate luminance
+@function luminance($r, $g, $b) {  
+    $lum: luminance-value($r) * 0.2126 + luminance-value($g) * 0.7152 + luminance-value($b) * 0.0722;
+    @return $lum; 
+}
+
+// Mixin to get contrasting text color
+@mixin get-contrasting-text-color($bg-color, $light-color, $dark-color) {
+    $rgb: hex-to-rgb($bg-color);  
+    $r: nth($rgb, 1);  
+    $g: nth($rgb, 2); 
+    $b: nth($rgb, 3);    
+    $lum: luminance($r, $g, $b);
+    $contrast-color: if($lum > 0.179, $dark-color, $light-color);
+    color: $contrast-color;
+}

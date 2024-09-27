@@ -1,4 +1,6 @@
 @import "../../styles/variables";
+@import "../../../../styles/utils.scss";
+@import "../../../../styles/colors.scss";
 
 .ticket-popup {
   z-index: 1000;
@@ -110,7 +112,7 @@
   }
 
   .ticket-popup-title {
-    color: $color-primary-contrast;
+    @include get-contrasting-text-color($color-primary, $color-text-light, $color-text-dark);
     white-space: normal;
     overflow: hidden;
 

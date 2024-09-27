@@ -30,7 +30,11 @@
     "@vimeo/player": "^2.16.3",
     "ably": "^1.2.34",
     "assert": "^2.1.0",
+<<<<<<< HEAD
+    "attendee-to-attendee-widget": "3.1.1-beta.29",
+=======
     "attendee-to-attendee-widget": "3.1.1-beta.34",
+>>>>>>> 78e77932ec454702bb017a6984777b0606729704
     "autoprefixer": "10.4.14",
     "awesome-bootstrap-checkbox": "^1.0.1",
     "axios": "^0.19.2",
