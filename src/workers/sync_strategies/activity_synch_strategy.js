@@ -1,5 +1,5 @@
 import AbstractSynchStrategy from "./abstract_synch_strategy";
-import {fetchEventById} from "../../actions/fetch-entities-actions";
+import {fetchEventById, fetchStreamingInfoByEventId} from "../../actions/fetch-entities-actions";
 import {insertSorted, intCheck} from "../../utils/arrayUtils";
 import {
     BUCKET_EVENTS_DATA_KEY,
@@ -19,7 +19,12 @@ class ActivitySynchStrategy extends AbstractSynchStrategy{
 
         const {entity_operator, entity_id} = payload;
 
-        const entity = await fetchEventById(this.summit.id, entity_id, this.accessToken);
+        let entity = await fetchEventById(this.summit.id, entity_id, this.accessToken);
+        if(this.accessToken) {
+            const streaming_info = await fetchStreamingInfoByEventId(this.summit.id, entity_id, this.accessToken);
+            if(streaming_info) entity = {...entity, ...streaming_info};
+        }
+
         let eventsData = [...this.allEvents];
 
         if (entity_operator === 'UPDATE') {

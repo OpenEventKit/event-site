@@ -94,14 +94,41 @@ const SSR_getEvents = async (baseUrl, summitId, accessToken) => {
 
   const speakers_fields = ['id', 'first_name', 'last_name', 'title', 'bio','member_id','pic', 'big_pic', 'company'];
   const current_attendance_fields = ['member_first_name', 'member_last_name', 'member_pic'];
-
+  const first_level_fields = [
+    "id",
+    "created",
+    "last_edited",
+    "title",
+    "description",
+    "social_description",
+    "start_date",
+    "end_date",
+    "location_id",
+    "class_name",
+    "allow_feedback",
+    "avg_feedback_rate",
+    "published_date",
+    "head_count",
+    "attendance_count",
+    "current_attendance_count",
+    "image",
+    "level" ,
+    "show_sponsors",
+    "duration",
+    "moderator_speaker_id",
+    "problem_addressed",
+    "attendees_expected_learnt",
+    "to_record",
+    "attending_media",
+  ];
+  const fields =  `${first_level_fields.join(",")},speakers.${speakers_fields.join(",speakers.")},current_attendance.${current_attendance_fields.join(',current_attendance.')}`;
   const params = {
     access_token: accessToken,
     per_page: 50,
     page: 1,
     expand: 'slides,links,videos,media_uploads,type,track,track.subtracks,track.allowed_access_levels,location,location.venue,location.floor,speakers,moderator,sponsors,groups,rsvp_template,tags,current_attendance',
     relations: 'speakers.badge_features,speakers.affiliations,speakers.languages,speakers.other_presentation_links,speakers.areas_of_expertise,speakers.travel_preferences,speakers.organizational_roles,speakers.all_presentations,speakers.all_moderated_presentations',
-    fields: `speakers.${speakers_fields.join(",speakers.")},current_attendance.${current_attendance_fields.join(',current_attendance.')}`,
+    fields: fields,
   }
 
   return await axios.get(endpoint, { params }).then(async ({data}) => {

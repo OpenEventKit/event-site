@@ -19,7 +19,7 @@ import AccessTracker, {AttendeesWidget} from "../components/AttendeeToAttendeeWi
 import AttendanceTrackerComponent from "../components/AttendanceTrackerComponent";
 import EventFeedbackComponent from "../components/EventFeedbackComponent"
 import {PHASES} from "../utils/phasesUtils";
-import { getEventById, getEventTokensById } from "../actions/event-actions";
+import { getEventById, getEventStreamingInfoById } from "../actions/event-actions";
 import URI from "urijs";
 import useMarketingSettings, { MARKETING_SETTINGS_KEYS } from "@utils/useMarketingSettings";
 import { checkMuxTokens, isMuxVideo } from "../utils/videoUtils";
@@ -61,30 +61,20 @@ export const EventPageTemplate = class extends React.Component {
     const {eventId: prevEventId} = prevProps;
     // event id could come as param at uri
     if (parseInt(eventId) !== parseInt(prevEventId) || parseInt(event?.id) !== parseInt(eventId)) {
-      this.props.getEventById(eventId).then((res) => {
-        const { response }  = res;
-        if(response && response?.stream_is_secure && isMuxVideo(response?.streaming_url)) // todo check
-          this.props.getEventTokensById(eventId)
-      });
+      this.props.getEventById(eventId).then(() => this.props.getEventStreamingInfoById(eventId));
     }
   }
 
   componentDidMount() {
     const {eventId, event } = this.props;
     if (parseInt(event?.id) !== parseInt(eventId)) {
-      this.props.getEventById(eventId).then((res) => {
-        const { response }  = res;
-        if(response && response?.stream_is_secure && isMuxVideo(response?.streaming_url))
-          this.props.getEventTokensById(eventId)
-      });
+      this.props.getEventById(eventId).then(() => this.props.getEventStreamingInfoById(eventId));
     }
   }
 
   onError(err){
-    const { event, getEventTokensById } = this.props;
-    if(event?.stream_is_secure && isMuxVideo(event?.streaming_url) ){
-      getEventTokensById(event.id)
-    }
+    const { event, getEventStreamingInfoById } = this.props;
+    getEventStreamingInfoById(event.id)
   }
 
   render() {
@@ -232,7 +222,7 @@ const EventPage = ({
    eventsPhases,
    nowUtc,
    getEventById,
-   getEventTokensById,
+   getEventStreamingInfoById,
    lastUpdate,
    lastDataSync
 }) => {
@@ -260,7 +250,7 @@ const EventPage = ({
         nowUtc={nowUtc}
         location={location}
         getEventById={getEventById}
-        getEventTokensById={getEventTokensById}
+        getEventStreamingInfoById={getEventStreamingInfoById}
         lastUpdate={lastUpdate}
         activityCtaText={activityCtaText}
         lastDataSync={lastDataSync}
@@ -278,7 +268,7 @@ EventPage.propTypes = {
   user: PropTypes.object,
   eventsPhases: PropTypes.array,
   getEventById: PropTypes.func,
-  getEventTokensById: PropTypes.func,
+  getEventStreamingInfoById: PropTypes.func,
 };
 
 EventPageTemplate.propTypes = {
@@ -290,7 +280,7 @@ EventPageTemplate.propTypes = {
   user: PropTypes.object,
   eventsPhases: PropTypes.array,
   getEventById: PropTypes.func,
-  getEventTokensById: PropTypes.func,
+  getEventStreamingInfoById: PropTypes.func,
   activityCtaText: PropTypes.string,
 };
 
@@ -314,5 +304,5 @@ const mapStateToProps = ({
 
 export default connect(mapStateToProps, {
   getEventById,
-  getEventTokensById,
+  getEventStreamingInfoById,
 })(EventPage);

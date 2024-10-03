@@ -1,6 +1,6 @@
 import { START_LOADING, STOP_LOADING } from "openstack-uicore-foundation/lib/utils/actions";
 import { LOGOUT_USER } from "openstack-uicore-foundation/lib/security/actions";
-import {GET_EVENT_DATA, GET_EVENT_DATA_ERROR, RELOAD_EVENT_STATE, SET_EVENT_LAST_UPDATE, GET_EVENT_TOKENS} from "../actions/event-actions-definitions";
+import {GET_EVENT_DATA, GET_EVENT_DATA_ERROR, RELOAD_EVENT_STATE, SET_EVENT_LAST_UPDATE, GET_EVENT_STREAMING_INFO} from "../actions/event-actions-definitions";
 import {RESET_STATE} from "../actions/base-actions-definitions";
 
 const DEFAULT_STATE = {
@@ -37,11 +37,13 @@ const eventReducer = (state = DEFAULT_STATE, action) => {
     }
     // reload event state
     case RELOAD_EVENT_STATE:{
-      return {...state, loading:false, event: payload};
+      const { tokens: newTokens, ...rest } = payload;
+      const formerTokens = state.tokens;
+      return {...state, loading:false, event: {...rest}, tokens: newTokens || formerTokens};
     }
-    case GET_EVENT_TOKENS:{
-      const { tokens } = payload.response
-      return {...state, tokens: tokens};
+    case GET_EVENT_STREAMING_INFO:{
+      const { tokens, ...rest } = payload.response
+      return {...state, tokens: tokens, event: { ...state.event, ...rest}};
     }
     default:
       return state;

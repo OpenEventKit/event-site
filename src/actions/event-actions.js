@@ -15,7 +15,7 @@ import {LOGOUT_USER} from "openstack-uicore-foundation/lib/security/actions";
 import {
     GET_EVENT_DATA,
     GET_EVENT_DATA_ERROR,
-    GET_EVENT_TOKENS,
+    GET_EVENT_STREAMING_INFO,
     SET_EVENT_LAST_UPDATE,
 } from './event-actions-definitions';
 
@@ -86,7 +86,7 @@ export const getEventById = (
  * @param checkLocal
  * @returns {(function(*, *): Promise<*>)|*}
  */
-export const getEventTokensById = (
+export const getEventStreamingInfoById = (
     eventId
 ) => async (dispatch) => {
 
@@ -104,8 +104,8 @@ export const getEventTokensById = (
 
     return getRequest(
         null,
-        createAction(GET_EVENT_TOKENS),
-        `${window.SUMMIT_API_BASE_URL}/api/v1/summits/${window.SUMMIT_ID}/events/${eventId}/published/tokens`,
+        createAction(GET_EVENT_STREAMING_INFO),
+        `${window.SUMMIT_API_BASE_URL}/api/v1/summits/${window.SUMMIT_ID}/events/${eventId}/published/streaming-info`,
         customErrorHandler,
         {},
         true)
