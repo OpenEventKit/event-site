@@ -61,30 +61,20 @@ export const EventPageTemplate = class extends React.Component {
     const {eventId: prevEventId} = prevProps;
     // event id could come as param at uri
     if (parseInt(eventId) !== parseInt(prevEventId) || parseInt(event?.id) !== parseInt(eventId)) {
-      this.props.getEventById(eventId).then((res) => {
-        const { response }  = res;
-        if(response && response?.stream_is_secure && isMuxVideo(response?.streaming_url)) // todo check
-          this.props.getEventStreamingInfoById(eventId)
-      });
+      this.props.getEventById(eventId).then(() => this.props.getEventStreamingInfoById(eventId));
     }
   }
 
   componentDidMount() {
     const {eventId, event } = this.props;
     if (parseInt(event?.id) !== parseInt(eventId)) {
-      this.props.getEventById(eventId).then((res) => {
-        const { response }  = res;
-        if(response && response?.stream_is_secure && isMuxVideo(response?.streaming_url))
-          this.props.getEventStreamingInfoById(eventId)
-      });
+      this.props.getEventById(eventId).then(() => this.props.getEventStreamingInfoById(eventId));
     }
   }
 
   onError(err){
     const { event, getEventStreamingInfoById } = this.props;
-    if(event?.stream_is_secure && isMuxVideo(event?.streaming_url) ){
-      getEventStreamingInfoById(event.id)
-    }
+    getEventStreamingInfoById(event.id)
   }
 
   render() {
