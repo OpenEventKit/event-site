@@ -24,14 +24,12 @@ const WithBadgeRoute = ({ children, location, eventId, event, loading, userProfi
   useEffect(() => {
     if (event === null || parseInt(eventId) !== parseInt(event.id)) {
       getEventById(eventId).then((res) => {
-        const { response, err }  = res;
+        const { err }  = res;
         // check error
         if(err && err?.status === 404){
            navigate('/a/schedule');
-        }
-        if(response && response?.stream_is_secure && isMuxVideo(response?.streaming_url)){
-          getEventStreamingInfoById(eventId)
-        }
+        }        
+        getEventStreamingInfoById(eventId)
       }).catch(err => {
         console.log(err);
       });
