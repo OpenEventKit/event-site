@@ -27,7 +27,7 @@ const FullSchedule = ({
   ...rest
 }) => {
   const { getSettingByKey } = useMarketingSettings();
-  const defaultImage = getSettingByKey(MARKETING_SETTINGS_KEYS.schedultDefaultImage);
+  const defaultImage = getSettingByKey(MARKETING_SETTINGS_KEYS.scheduleDefaultImage);
   const summitLogoPrint = getSettingByKey(MARKETING_SETTINGS_KEYS.fullScheduleSummitLogoPrint);
   const componentProps = {
     title: "Schedule",

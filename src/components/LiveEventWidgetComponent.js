@@ -5,7 +5,7 @@ import {connect} from "react-redux";
 // these two libraries are client-side only
 import LiveEventWidget from 'live-event-widget/dist/index.js';
 import 'live-event-widget/dist/index.css';
-// awesome-bootstrap-checkbox css dependency 
+// awesome-bootstrap-checkbox css dependency
 // https://cdnjs.cloudflare.com/ajax/libs/awesome-bootstrap-checkbox/1.0.2/awesome-bootstrap-checkbox.min.css
 // injected through HeadComponents
 
@@ -20,9 +20,8 @@ const LiveEventWidgetComponent = ({
   ...rest
 }) => {
   const { getSettingByKey } = useMarketingSettings();
-  const defaultImage = getSettingByKey(MARKETING_SETTINGS_KEYS.schedultDefaultImage);
+  const defaultImage = getSettingByKey(MARKETING_SETTINGS_KEYS.scheduleDefaultImage);
   const scheduleState = schedules?.find( s => s.key === 'schedule-main');
-
   const widgetProps = {
     title: "",
     defaultImage: defaultImage,

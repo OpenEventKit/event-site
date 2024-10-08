@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 // these two libraries are client-side only
 import UpcomingEvents from "upcoming-events-widget/dist";
 import "upcoming-events-widget/dist/index.css";
-// awesome-bootstrap-checkbox css dependency 
+// awesome-bootstrap-checkbox css dependency
 // https://cdnjs.cloudflare.com/ajax/libs/awesome-bootstrap-checkbox/1.0.2/awesome-bootstrap-checkbox.min.css
 // injected through HeadComponents
 
@@ -27,7 +27,7 @@ const UpcomingEventsComponent = ({
 }) => {
   const wrapperClass = page === "marketing-site" ? "schedule-container-marketing" : "schedule-container";
   const { getSettingByKey } = useMarketingSettings();
-  const defaultImage = getSettingByKey(MARKETING_SETTINGS_KEYS.schedultDefaultImage);
+  const defaultImage = getSettingByKey(MARKETING_SETTINGS_KEYS.scheduleDefaultImage);
   const scheduleState = schedules?.find( s => s.key === 'schedule-main');
 
   const componentProps = {
