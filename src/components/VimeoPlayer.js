@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Player from '@vimeo/player';
+import * as Sentry from "@sentry/react";
 import eventNames from './VimeoPlayerEventNames';
 import Swal from 'sweetalert2';
 
@@ -387,6 +388,7 @@ VimeoPlayer.defaultProps = {
     onError: (error) => {
         Swal.fire('Error', 'This video stream will begin momentarily. Please standby.', "warning");
         console.log(error);
+        Sentry.captureException(error)
     }
 };
 
