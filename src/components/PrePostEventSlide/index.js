@@ -17,7 +17,7 @@ const containerStyles = {
 const titleStyle = {
   color: "var(--color_text_light)",
   fontFamily: "var(--font_family)",
-  fontSize: "40px",
+  fontSize: "42px",
   fontWeight: 600,
   lineHeight: 1.125
 };
@@ -25,7 +25,7 @@ const titleStyle = {
 const subtitleStyle = {
   color: "var(--color_text_light)",
   fontFamily: "var(--font_family)",
-  fontSize: "42px",
+  fontSize: "36px",
   fontWeight: 400,
   lineHeight: 1.25
 };
