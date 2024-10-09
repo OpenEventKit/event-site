@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import { PHASES } from "../utils/phasesUtils";
 import { requireExtraQuestions, doVirtualCheckIn } from "../actions/user-actions";
-import HeroComponent from "../components/HeroComponent";
+import Interstitial from "../components/Interstitial";
 import  FragmentParser from "openstack-uicore-foundation/lib/utils/fragment-parser";
 import moment from "moment-timezone";
 
@@ -37,7 +37,7 @@ const ShowOpenRoute = ({
       if(attendee)
         doVirtualCheckIn(attendee);
     }
-  },[summitPhase, hasTicket, userProfile, doVirtualCheckIn]);
+  }, [summitPhase, hasTicket, userProfile, doVirtualCheckIn]);
 
   const userCanByPassAuthz = () => {
     return isAuthorized;
@@ -61,14 +61,14 @@ const ShowOpenRoute = ({
 
   // if summit didnt started yet ...
   if (!shouldBypassCheck && !userCanByPassAuthz() && summitPhase === PHASES.BEFORE) {
-    return <HeroComponent title="You are now logged in. Additional event info is now available on the website." redirectTo="/" />;
+    return <Interstitial title="You are now logged in. Additional event info is now available on the website." navigateTo="/" />;
   }
 
   if (requireExtraQuestions()) {
     return (
-      <HeroComponent
+      <Interstitial
         title="You need to complete some extra questions before entering the event"
-        redirectTo="/a/extra-questions"
+        navigateTo="/a/extra-questions"
       />
     );
   }

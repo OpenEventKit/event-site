@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import { connect } from "react-redux";
-import {compose} from "redux";
+import { compose } from "redux";
 import { useLocation } from '@reach/router';
-import HeroComponent from "../components/HeroComponent";
-import {clearFilters, callAction, updateFilter, updateFiltersFromHash} from "../actions/schedule-actions";
+import Interstitial from "../components/Interstitial";
+import { clearFilters, callAction, updateFilter, updateFiltersFromHash } from "../actions/schedule-actions";
 import { reloadScheduleData } from '../actions/base-actions';
 
 // This HOC makes sure the schedules array in allSchedulesState is populated before render.
@@ -23,7 +23,7 @@ const componentWrapper = (WrappedComponent) => ({schedules, ...props}) => {
   }, [key, location.hash]);
 
   if (!loaded)
-    return <HeroComponent title="Loading schedule data" />;
+    return <Interstitial title="Loading schedule data" />;
 
   return <WrappedComponent {...props} scheduleState={scheduleState} />;
 };

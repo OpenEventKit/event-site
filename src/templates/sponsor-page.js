@@ -12,7 +12,7 @@ import AdvertiseSponsorsComponent from '../components/AdvertiseSponsorsComponent
 import DocumentsComponent from '../components/DocumentsComponent'
 import DisqusComponent from '../components/DisqusComponent'
 import SponsorBanner from '../components/SponsorBanner'
-import HeroComponent from '../components/HeroComponent'
+import Interstitial from '../components/Interstitial'
 import Link from '../components/Link'
 import Layout from '../components/Layout'
 import { scanBadge } from '../actions/user-actions'
@@ -59,7 +59,7 @@ const SponsorPageTemplate = ({ sponsorId, sponsors, scanBadge, eventId, lastData
   };
 
   if (notFound) {
-    return <HeroComponent title="Sponsor not found" redirectTo="/a/sponsors" />
+    return <Interstitial title="Sponsor not found" navigateTo="/a/sponsors" ontained />
   }
 
   const {
@@ -70,7 +70,7 @@ const SponsorPageTemplate = ({ sponsorId, sponsors, scanBadge, eventId, lastData
   } = sponsorship || {};
 
   if (sponsorLoading) {
-    return <HeroComponent title="Loading..." />
+    return <Interstitial title="Loading..." contained />
   }
 
   return (

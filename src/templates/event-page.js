@@ -1,6 +1,6 @@
 import * as React from "react";
 import PropTypes from "prop-types";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import { isEqual } from "lodash";
 import Layout from "../components/Layout";
 import DisqusComponent from "../components/DisqusComponent";
@@ -11,14 +11,14 @@ import TalkComponent from "../components/TalkComponent";
 import DocumentsComponent from "../components/DocumentsComponent";
 import VideoBanner from "../components/VideoBanner";
 import SponsorComponent from "../components/SponsorComponent";
-import NoTalkComponent from "../components/NoTalkComponent";
-import HeroComponent from "../components/HeroComponent";
+import PrePostEventSlide from "../components/PrePostEventSlide";
+import Interstitial from "../components/Interstitial";
 import UpcomingEventsComponent from "../components/UpcomingEventsComponent";
 import Link from "../components/Link";
 import AccessTracker, {AttendeesWidget} from "../components/AttendeeToAttendeeWidgetComponent"
 import AttendanceTrackerComponent from "../components/AttendanceTrackerComponent";
 import EventFeedbackComponent from "../components/EventFeedbackComponent"
-import {PHASES} from "../utils/phasesUtils";
+import { PHASES } from "../utils/phasesUtils";
 import { getEventById, getEventStreamingInfoById } from "../actions/event-actions";
 import URI from "urijs";
 import useMarketingSettings, { MARKETING_SETTINGS_KEYS } from "@utils/useMarketingSettings";
@@ -41,7 +41,7 @@ export const EventPageTemplate = class extends React.Component {
     if (!isEqual(event, nextProps.event)) return true;
     if (!isEqual(eventTokens, nextProps.eventTokens)) return true;
     // a synch did happened!
-    if(lastDataSync !== nextProps.lastDataSync) return true;
+    if (lastDataSync !== nextProps.lastDataSync) return true;
     // compare current event phase with next one
     const currentPhase = eventsPhases.find((e) => parseInt(e.id) === parseInt(eventId))?.phase;
     const nextCurrentPhase = nextProps.eventsPhases.find(
@@ -92,15 +92,15 @@ export const EventPageTemplate = class extends React.Component {
 
     // if event is loading or we are still calculating the current phase ...
     if (loading || currentPhase === undefined || currentPhase === null) {
-      return <HeroComponent title="Loading event"/>;
+      return <Interstitial title="Loading event" contained />;
     }
 
     if (!event) {
-      return <HeroComponent title="Event not found" redirectTo="/a/schedule"/>;
+      return <Interstitial title="Event not found" navigateTo="/a/schedule" contained />;
     }
 
-    if(isMuxVideo(event?.streaming_url) && event?.stream_is_secure && ! checkMuxTokens(eventTokens)){
-      return <HeroComponent title="Loading secure event"/>;
+    if (isMuxVideo(event?.streaming_url) && event?.stream_is_secure && !checkMuxTokens(eventTokens)) {
+      return <Interstitial title="Loading secure event" contained />;
     }
 
     return (
@@ -109,25 +109,25 @@ export const EventPageTemplate = class extends React.Component {
           <div className="columns is-gapless">
             {this.canRenderVideo(currentPhase) ? (
               <div className="column is-three-quarters px-0 py-0">
-                    <VideoComponent
-                        url={event.streaming_url}
-                        tokens={eventTokens}
-                        isLive={event.streaming_type === "LIVE"}
-                        title={event.title}
-                        namespace={summit.name}
-                        firstHalf={firstHalf}
-                        autoPlay={autoPlay}
-                        start={startTime}
-                        onError={this.onError}
-                    />
+                <VideoComponent
+                  url={event.streaming_url}
+                  tokens={eventTokens}
+                  isLive={event.streaming_type === "LIVE"}
+                  title={event.title}
+                  namespace={summit.name}
+                  firstHalf={firstHalf}
+                  autoPlay={autoPlay}
+                  start={startTime}
+                  onError={this.onError}
+                />
                 {event.meeting_url && <VideoBanner event={event} ctaText={activityCtaText} />}
               </div>
             ) : (
               <div className="column is-three-quarters px-0 py-0 is-full-mobile">
-                <NoTalkComponent
-                  currentEventPhase={currentPhase}
-                  event={event}
+                <PrePostEventSlide
                   summit={summit}
+                  event={event}
+                  eventPhase={currentPhase}
                 />
               </div>
             )}
@@ -151,9 +151,8 @@ export const EventPageTemplate = class extends React.Component {
             <div className="column is-three-quarters is-full-mobile">
               <div className="px-5 py-5">
                 <TalkComponent
-                  currentEventPhase={currentPhase}
-                  event={event}
                   summit={summit}
+                  event={event}
                 />
               </div>
               { event.allow_feedback &&

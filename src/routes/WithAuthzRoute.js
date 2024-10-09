@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { navigate } from "gatsby";
 import { pick } from "@gatsbyjs/reach-router";
 import { getUserProfile, requireExtraQuestions } from "../actions/user-actions";
-import HeroComponent from "../components/HeroComponent";
+import Interstitial from "../components/Interstitial";
 import { userHasAccessLevel, VIRTUAL_ACCESS_LEVEL } from "@utils/authorizedGroups";
 
 const pathsRequiringVirtualBadge = [
@@ -79,20 +79,20 @@ const WithAuthzRoute = ({
     }, [fetchedUserProfile, isLoggedIn, hasTicket, isAuthorized, userProfile, getUserProfile, userIsAuthz]);
 
     if (!isLoggedIn) {
-        navigate("/", {state: {backUrl: `${location.pathname}`,},});
+        navigate("/", { state: { backUrl: `${location.pathname}` } });
         return null;
     }
 
     // we are checking credentials if userProfile is being loading yet or
     // if we are re-fetching the user profile to check new data ( user currently is not a authz
     if (!userIsReady() || checkingCredentials()) {
-        return <HeroComponent title="Checking credentials..."/>;
+        return <Interstitial title="Checking credentials..."/>;
     }
 
     // has no ticket -> redirect
     if (!userIsAuthz) {
-        const options = { state: { error: !hasTicket ? 'no-ticket' : 'no-virtual-access' } };
-        return <HeroComponent title="Checking credentials..." redirectTo="/authz/ticket" options={options}/>;
+        const options = { state: { error: !hasTicket ? "no-ticket" : "no-virtual-access" } };
+        return <Interstitial title="Checking credentials..." navigateTo="/authz/ticket" navigateOptions={options} />;
     }
 
     return children;
