@@ -1,14 +1,12 @@
 import React from "react";
-import HeroComponent from "../components/HeroComponent";
+import Interstitial from "../components/Interstitial";
 import useSiteSettings from "@utils/useSiteSettings";
-
-import "../styles/bulma.scss";
 
 const MaintenancePage = () => {
   const { maintenanceMode: { title, subtitle } } = useSiteSettings();
 
   return (
-    <HeroComponent
+    <Interstitial
       title={title}
       subtitle={subtitle}
     />

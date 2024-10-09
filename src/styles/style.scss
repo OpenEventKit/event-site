@@ -120,10 +120,6 @@ footer {
   padding-top: 12px;
 }
 
-#content-wrapper {
-  min-height: 95vh;
-}
-
 div.login-form {
   display: block;
   background-color: #f5f5f5;
@@ -204,26 +200,12 @@ h2 {
 .talk {
   color: var(--color_text_dark);
 
-  &__break {
-    background-color: var(--color_secondary);
-    width: 100%;
-    aspect-ratio: auto 16 / 9;
-
-    h1,
-    h2 {
-      color: var(--color_text_light);
-      font-size: 42px;
-    }
-  }
-
   h1 {
     font-size: 40px;
-    color: var(--color_text_dark);
   }
 
   &__date {
     font-weight: bold;
-    color: var(--color_text_dark);
   }
 
   &__speaker, &__moderator {

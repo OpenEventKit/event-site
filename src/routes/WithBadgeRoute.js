@@ -1,8 +1,8 @@
 import React, {useEffect} from "react";
 import { connect } from "react-redux";
 import { isAuthorizedBadge } from "../utils/authorizedGroups";
-import HeroComponent from "../components/HeroComponent";
-import {getEventById, getEventStreamingInfoById} from "../actions/event-actions";
+import Interstitial from "../components/Interstitial";
+import { getEventById, getEventStreamingInfoById } from "../actions/event-actions";
 import { isMuxVideo } from "../utils/videoUtils";
 import {navigate} from "gatsby";
 
@@ -26,7 +26,7 @@ const WithBadgeRoute = ({ children, location, eventId, event, loading, userProfi
       getEventById(eventId).then((res) => {
         const { err }  = res;
         // check error
-        if(err && err?.status === 404){
+        if (err && err?.status === 404){
            navigate('/a/schedule');
         }        
         getEventStreamingInfoById(eventId)
@@ -37,11 +37,11 @@ const WithBadgeRoute = ({ children, location, eventId, event, loading, userProfi
   }, [eventId, getEventById, event, getEventStreamingInfoById]);
 
   if (loading || needsToLoadEvent) {
-    return <HeroComponent title="Loading event" />;
+    return <Interstitial title="Loading event" />;
   }
 
   if (!userIsAuthz || !hasBadgeForEvent) {
-    return <HeroComponent title={getTitle()} redirectTo={location.state?.previousUrl || "/"}/>;
+    return <Interstitial title={getTitle()} navigateTo={location.state?.previousUrl || "/"} />;
   }
 
   return children;

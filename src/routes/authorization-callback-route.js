@@ -18,7 +18,7 @@ import { Redirect } from "@gatsbyjs/reach-router";
 import { connect } from "react-redux";
 import AbstractAuthorizationCallbackRoute from "openstack-uicore-foundation/lib/security/abstract-auth-callback-route";
 import { getUserProfile, addToSchedule, removeFromSchedule } from "../actions/user-actions";
-import HeroComponent from "../components/HeroComponent";
+import Interstitial from "../components/Interstitial";
 import { getEnvVariable, IDP_BASE_URL, OAUTH2_CLIENT_ID } from "@utils/envVariables";
 import { getPendingAction } from "@utils/schedule";
 
@@ -58,7 +58,7 @@ class AuthorizationCallbackRoute extends AbstractAuthorizationCallbackRoute {
             error.includes("access_denied") ||
             error.includes("consent_required")
         ) return <Redirect to={"/"} noThrow />;
-        return <Redirect to={`/error?error=${error}`} noThrow/>;
+        return <Redirect to={`/error?error=${error}`} noThrow />;
     }
 
     render() {
@@ -75,13 +75,13 @@ class AuthorizationCallbackRoute extends AbstractAuthorizationCallbackRoute {
         if (!id_token_is_valid) {
             return this._redirect2Error("token_validation_error");
         }
-        return <HeroComponent title="Checking credentials..."/>;
+        return <Interstitial title="Checking credentials..." />;
     }
 }
 
 
 const mapStateToProps = ({ userState }) => ({
-    userProfile: userState.userProfile,
+    userProfile: userState.userProfile
 });
 
 export default connect(mapStateToProps, {

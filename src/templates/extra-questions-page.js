@@ -17,9 +17,10 @@ import ExtraQuestionsForm from 'openstack-uicore-foundation/lib/components/extra
 
 import { DefaultScrollBehaviour as ScrollBehaviour } from '@utils/scroll';
 
-import styles from '../styles/extra-questions.module.scss';
 import { getAttendeeData } from '../actions/extra-questions-actions';
-import HeroComponent from "../components/HeroComponent";
+import Interstitial from "../components/Interstitial";
+
+import styles from '../styles/extra-questions.module.scss';
 
 const noOpFn = () => {};
 
@@ -146,7 +147,7 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
     };
 
     if ((!ticket && !attendeeId) || (attendeeId && someoneElseLoaded === false)) {
-        return <HeroComponent title={"Sorry. You don't have a ticket for this event."} redirectTo={"/"} />;
+        return <Interstitial title={"Sorry. You don't have a ticket for this event."} navigateTo={"/"} contained />;
     }
 
     const getAttendeeFullname = (attendee) => {

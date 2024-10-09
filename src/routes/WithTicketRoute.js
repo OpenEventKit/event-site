@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import HeroComponent from "../components/HeroComponent";
+import Interstitial from "../components/Interstitial";
 
 const WithTicketRoute = ({ children, location, userProfile, hasTicket, isAuthorized }) => {
   const userIsAuthz = hasTicket || isAuthorized;
@@ -13,7 +13,7 @@ const WithTicketRoute = ({ children, location, userProfile, hasTicket, isAuthori
   };
 
   if (!userIsAuthz || !userProfile) {
-    return <HeroComponent title={getTitle()} redirectTo={location.state?.previousUrl || "/"} />;
+    return <Interstitial title={getTitle()} navigateTo={location.state?.previousUrl || "/"} />;
   }
 
   return children;
@@ -22,7 +22,7 @@ const WithTicketRoute = ({ children, location, userProfile, hasTicket, isAuthori
 const mapStateToProps = ({ userState }) => ({
   userProfile: userState.userProfile,
   hasTicket: userState.hasTicket,
-  isAuthorized: userState.isAuthorized,
+  isAuthorized: userState.isAuthorized
 });
 
 export default connect(mapStateToProps)(WithTicketRoute);

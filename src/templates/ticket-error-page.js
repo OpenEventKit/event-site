@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Redirect } from "@gatsbyjs/reach-router";
 import { getEnvVariable, REGISTRATION_BASE_URL } from "../utils/envVariables";
-import HeroComponent from "../components/HeroComponent";
+import Interstitial from "../components/Interstitial";
 import { navigate } from "gatsby";
 
 export const TicketErrorPageTemplate = class extends React.Component {
@@ -94,7 +94,7 @@ export const TicketErrorPageTemplate = class extends React.Component {
         if (error) {
             this.redirect();
             return (
-                <HeroComponent
+                <Interstitial
                     title={this.getErrorMessage()}
                     subtitle={this.getRedirectMessage()}
                 />
@@ -117,11 +117,11 @@ const TicketErrorPage = ({ location, summit }) => (
 );
 
 TicketErrorPage.propTypes = {
-    location: PropTypes.object,
+    location: PropTypes.object
 };
 
 const mapStateToProps = ({ summitState }) => ({
-    summit: summitState.summit,
+    summit: summitState.summit
 });
 
 export default connect(mapStateToProps, null)(TicketErrorPage);

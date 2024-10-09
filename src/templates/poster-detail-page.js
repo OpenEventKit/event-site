@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { navigate } from 'gatsby';
 
 import Layout from "../components/Layout";
-import HeroComponent from '../components/HeroComponent';
+import Interstitial from '../components/Interstitial';
 import DisqusComponent from '../components/DisqusComponent';
 import VideoComponent from '../components/VideoComponent';
 import PosterButton from '../components/PosterButton';
@@ -140,12 +140,12 @@ export const PosterDetailPage = ({
 
   const { getSettingByKey } = useMarketingSettings();
 
-  if (loading) return <HeroComponent title="Loading poster" />;
+  if (loading) return <Interstitial title="Loading poster" contained />;
 
-  if (!poster) return <HeroComponent title="Poster not found" />;
+  if (!poster) return <Interstitial title="Poster not found" contained />;
 
   if (!posterViewable) {
-    return <HeroComponent title={"Sorry. You need a special badge to view this poster."} redirectTo={location.state?.previousUrl || '/a/'} />;
+    return <Interstitial title={"Sorry. You need a special badge to view this poster."} navigateTo={location.state?.previousUrl || "/a/"} contained />;
   }
 
   const mediaUpload = poster.media_uploads?.find((e) => e?.media_upload_type?.name === 'Poster');
