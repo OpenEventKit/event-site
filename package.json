@@ -78,7 +78,7 @@
     "jsdom": "^24.1.0",
     "klaro": "^0.7.21",
     "lite-schedule-widget": "3.0.3",
-    "live-event-widget": "4.0.2",
+    "live-event-widget": "4.0.3",
     "lodash": "^4.17.19",
     "lz-string": "^1.4.4",
     "markdown-it": "^12.0.0",
