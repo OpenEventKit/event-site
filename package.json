@@ -133,7 +133,7 @@
     "summit-registration-lite": "5.0.39",
     "superagent": "8.0.9",
     "sweetalert2": "^9.17.0",
-    "upcoming-events-widget": "3.0.5",
+    "upcoming-events-widget": "3.0.6",
     "urijs": "^1.19.2",
     "use-fit-text": "^2.4.0",
     "uuid": "^7.0.0",
@@ -144,7 +144,8 @@
     "web-vitals": "^1.1.2",
     "what-input": "^5.2.10",
     "xmlhttprequest": "^1.8.0",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "react-textfit": "^1.1.1"
   },
   "keywords": [
     "Open Event Kit"

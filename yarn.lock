@@ -18235,6 +18235,14 @@ react-textarea-autosize@^8.0.0, react-textarea-autosize@^8.2.0, react-textarea-a
     use-composed-ref "^1.3.0"
     use-latest "^1.2.1"
 
+react-textfit@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-textfit/-/react-textfit-1.1.1.tgz#cce3d974c69b8b4222cfae78200abc366f74d050"
+  integrity sha512-UDSQRo5yBEGueLTE5SgNV9fSmr5CWJkE0E0R0YbcbCO69iuJGfcT6wspKhX2sIwdsDyT9qXOwMC80cnRolir7Q==
+  dependencies:
+    process "^0.11.10"
+    prop-types "^15.7.2"
+
 react-toastify@^9.1.1:
   version "9.1.3"
   resolved "https://registry.yarnpkg.com/react-toastify/-/react-toastify-9.1.3.tgz#1e798d260d606f50e0fab5ee31daaae1d628c5ff"
@@ -21745,12 +21753,13 @@ unpipe@1.0.0, unpipe@~1.0.0:
   resolved "https://registry.yarnpkg.com/unpipe/-/unpipe-1.0.0.tgz#b2bf4ee8514aae6165b4817829d21b2ef49904ec"
   integrity sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==
 
-upcoming-events-widget@3.0.5:
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/upcoming-events-widget/-/upcoming-events-widget-3.0.5.tgz#807cff26fbe92f049c3b7d45fe344414e659683f"
-  integrity sha512-KPBe0nlIiMQ3YqcNQss11BYZMhJY/tPwhV8XrFOhkgM/DxbAWai+wjFs2qu4QuDDtLBTanuZMLaPcrsj+efn7g==
+upcoming-events-widget@3.0.6:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/upcoming-events-widget/-/upcoming-events-widget-3.0.6.tgz#06a1aa34b57264d7f58d1e390dab41475d1c6a96"
+  integrity sha512-z2uEOjfInO0qVAHTXH2XMNQ5UqE7wPSc8wrnZBN022S4rcJk3eQT0QSURS98B1v/2jiYKCGqVLnwXRUJUKiJ0w==
   dependencies:
     pure-react-carousel "^1.30.1"
+    react-textfit "^1.1.1"
 
 update-browserslist-db@^1.0.10, update-browserslist-db@^1.0.9:
   version "1.0.10"
