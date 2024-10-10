@@ -181,7 +181,21 @@ export const fetchSpeakerById = async(summitId, speakerId, accessToken = null) =
 export const fetchSummitById =  async(summitId, accessToken = null) => {
     let apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/public/v1/summits/${summitId}`);
 
-    apiUrl.addQuery('expand', 'event_types,tracks,track_groups,presentation_levels,locations.rooms,locations.floors,order_extra_questions.values,schedule_settings,schedule_settings.filters,schedule_settings.pre_filters');
+    const expand = [
+        'event_types',
+        'tracks',
+        'tracks.subtracks',
+        'track_groups',
+        'presentation_levels',
+        'locations.rooms',
+        'locations.floors',
+        'order_extra_questions.values',
+        'schedule_settings',
+        'schedule_settings.filters',
+        'schedule_settings.pre_filters',
+    ]
+
+    apiUrl.addQuery('expand', expand.join(','));
 
     return fetch(apiUrl.toString(), {
         method: 'GET'
