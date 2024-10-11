@@ -13840,12 +13840,11 @@ lite-schedule-widget@3.0.3:
     pure-react-carousel "^1.27.4"
     use-fit-text "^2.4.0"
 
-live-event-widget@4.0.3:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/live-event-widget/-/live-event-widget-4.0.3.tgz#4b220b57aedace5a44102b3dcea21e952406a2c0"
-  integrity sha512-giG8RJl22PhChhPVFE9ZNvANyvisYuhP8MjHj/Pyb3hoGqXJjbQj8UU8EXhOYG8fmbGrVj3MBmeS/hquLLc1sQ==
+live-event-widget@4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/live-event-widget/-/live-event-widget-4.0.4.tgz#cb7b74dc48a8eca790f4a18dd52d5316ecd34c45"
+  integrity sha512-XU+Zps+6kjV1AWNzwW8UtBCsd22bdAwjd3/9uwYMtNhESeebpAI+H1nee3Cx+h5AQHN15ifcM0WCjFD2d/hzXQ==
   dependencies:
-    react-textfit "^1.1.1"
     svg-url-loader "^7.1.1"
 
 lmdb@2.5.2:
@@ -18235,14 +18234,6 @@ react-textarea-autosize@^8.0.0, react-textarea-autosize@^8.2.0, react-textarea-a
     "@babel/runtime" "^7.10.2"
     use-composed-ref "^1.3.0"
     use-latest "^1.2.1"
-
-react-textfit@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/react-textfit/-/react-textfit-1.1.1.tgz#cce3d974c69b8b4222cfae78200abc366f74d050"
-  integrity sha512-UDSQRo5yBEGueLTE5SgNV9fSmr5CWJkE0E0R0YbcbCO69iuJGfcT6wspKhX2sIwdsDyT9qXOwMC80cnRolir7Q==
-  dependencies:
-    process "^0.11.10"
-    prop-types "^15.7.2"
 
 react-toastify@^9.1.1:
   version "9.1.3"
