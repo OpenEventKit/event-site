@@ -5,7 +5,7 @@ import URI from "urijs"
 import { doLogin } from "openstack-uicore-foundation/lib/security/methods";
 import { handleResetReducers } from "../actions/event-actions";
 import Interstitial from "../components/Interstitial";
-import { userHasAccessLevel, VIRTUAL_ACCESS_LEVEL } from "@uutils/authorizedGroups";
+import { userHasAccessLevel, VIRTUAL_ACCESS_LEVEL } from "@utils/authorizedGroups";
 import { getDefaultLocation } from "@utils/loginUtils";
 
 export const TokenExpirePageTemplate = class extends React.Component {
