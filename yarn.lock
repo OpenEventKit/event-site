@@ -21754,13 +21754,12 @@ unpipe@1.0.0, unpipe@~1.0.0:
   resolved "https://registry.yarnpkg.com/unpipe/-/unpipe-1.0.0.tgz#b2bf4ee8514aae6165b4817829d21b2ef49904ec"
   integrity sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==
 
-upcoming-events-widget@3.0.6:
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/upcoming-events-widget/-/upcoming-events-widget-3.0.6.tgz#06a1aa34b57264d7f58d1e390dab41475d1c6a96"
-  integrity sha512-z2uEOjfInO0qVAHTXH2XMNQ5UqE7wPSc8wrnZBN022S4rcJk3eQT0QSURS98B1v/2jiYKCGqVLnwXRUJUKiJ0w==
+upcoming-events-widget@3.0.7:
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/upcoming-events-widget/-/upcoming-events-widget-3.0.7.tgz#673052e66e72014d16a9cfc3dbc78f9c0f2aae11"
+  integrity sha512-ZAl8rnjZRFmqTanygeuMjXZIeJ1TE/wG/Dz/Q5S3C1sG+q6Px6ViJl6zhisTQDNU5AUidrW3SE6PfYAJYXfb+Q==
   dependencies:
     pure-react-carousel "^1.30.1"
-    react-textfit "^1.1.1"
 
 update-browserslist-db@^1.0.10, update-browserslist-db@^1.0.9:
   version "1.0.10"
