@@ -1,15 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-
-import URI from "urijs";
-import { handleResetReducers } from "../actions/event-actions";
+import URI from "urijs"
 import { doLogin } from "openstack-uicore-foundation/lib/security/methods";
-
+import { handleResetReducers } from "../actions/event-actions";
+import Interstitial from "../components/Interstitial";
+import { userHasAccessLevel, VIRTUAL_ACCESS_LEVEL } from "@uutils/authorizedGroups";
 import { getDefaultLocation } from "@utils/loginUtils";
-
-import HeroComponent from "../components/HeroComponent";
-import { userHasAccessLevel, VIRTUAL_ACCESS_LEVEL } from "../utils/authorizedGroups";
 
 export const TokenExpirePageTemplate = class extends React.Component {
 
@@ -37,9 +34,7 @@ export const TokenExpirePageTemplate = class extends React.Component {
 
   render() {
     return (
-      <HeroComponent
-        title="Checking credentials..."
-      />
+      <Interstitial title="Checking credentials..." />
     )
   }
 }
@@ -47,7 +42,7 @@ export const TokenExpirePageTemplate = class extends React.Component {
 TokenExpirePageTemplate.propTypes = {
   loggedUser: PropTypes.object,
   location: PropTypes.object,
-  handleResetReducers: PropTypes.func,
+  handleResetReducers: PropTypes.func
 }
 
 const TokenExpirePage = ({ loggedUser, location, handleResetReducers, userProfile, eventRedirect }) => {
@@ -67,14 +62,14 @@ const TokenExpirePage = ({ loggedUser, location, handleResetReducers, userProfil
 TokenExpirePage.propTypes = {
   loggedUser: PropTypes.object,
   location: PropTypes.object,
-  handleResetReducers: PropTypes.func,
+  handleResetReducers: PropTypes.func
 }
 
 const mapStateToProps = ({ loggedUserState, settingState, userState  }) => ({
   loggedUser: loggedUserState,
   // TODO: move to site settings i/o marketing page settings
   eventRedirect: settingState.marketingPageSettings.eventRedirect,
-  userProfile: userState.userProfile,
+  userProfile: userState.userProfile
 })
 
 export default connect(mapStateToProps, { handleResetReducers })(TokenExpirePage);
