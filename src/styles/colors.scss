@@ -1,4 +1,4 @@
-$color_accent: #00A2FF;
+$color_accent: #00B189;
 $color_alerts: #ff0000;
 $color_background_light: #ffffff;
 $color_background_dark: #000000;
@@ -19,16 +19,16 @@ $color_input_text_color_light: #363636;
 $color_input_text_color_dark: #ffffff;
 $color_input_text_color_disabled_light: #ffffff;
 $color_input_text_color_disabled_dark: #ffffff;
-$color_primary: #000000;
+$color_primary: #8DC63F;
 $color_primary_contrast: #FFFFFF;
-$color_secondary: #00A2FF;
-$color_secondary_contrast: #181818;
+$color_secondary: #5e5f62;
+$color_secondary_contrast: #005870;
 $color_text_light: #ffffff;
 $color_text_med: #828282;
-$color_text_dark: #000000;
+$color_text_dark: #5e5f62;
 $color_text_input_hints_light: #7b7b7b;
 $color_text_input_hints_dark: #7b7b7b;
-$color_text_input_hints: #131313;
+$color_text_input_hints: #c4c4c4;
 
 :root {
   --color_primary: #{$color_primary};

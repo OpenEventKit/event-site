@@ -13,6 +13,7 @@ import {
 import URI from "urijs";
 
 import { customErrorHandler } from '../utils/customErrorHandler';
+import {getAccessTokenSafely} from "../utils/loginUtils";
 
 export const GET_EXTRA_QUESTIONS = 'GET_EXTRA_QUESTIONS';
 
@@ -20,13 +21,11 @@ export const getExtraQuestions = (attendeeId = null) => async (dispatch, getStat
 
     dispatch(startLoading());
 
-    let accessToken;
-    try {
-        accessToken = await getAccessToken();
-    } catch (e) {
-        console.log('getAccessToken error: ', e);
-        return Promise.reject(e);
-    }
+    const accessToken = await getAccessTokenSafely()
+      .catch(() => {
+          dispatch(stopLoading());
+          return Promise.reject();
+      });
 
     let apiUrl = URI(`${window.API_BASE_URL}/api/v1/summits/${window.SUMMIT_ID}/attendees/${attendeeId ? attendeeId : 'me'}/allowed-extra-questions`);
     apiUrl.addQuery('expand', '*sub_question_rules,*sub_question,*values')

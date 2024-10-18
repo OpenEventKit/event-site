@@ -1,7 +1,9 @@
+import { initLogOut, getAccessToken } from 'openstack-uicore-foundation/lib/security/methods'
 import {
   getEnvVariable,
   AUTHORIZED_DEFAULT_PATH
 } from "./envVariables";
+import {Exception} from "sass";
 
 export const getDefaultLocation = (
   eventRedirect,
@@ -52,4 +54,14 @@ export const validateIdentityProviderButtons = (
     );
 
   return filteredButtons;
+};
+
+export const getAccessTokenSafely = async () => {
+  try {
+    return await getAccessToken();
+  } catch (e) {
+    console.log("getAccessToken error: ", e);
+    initLogOut();
+    return Promise.reject();
+  }
 };

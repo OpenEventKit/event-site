@@ -26,6 +26,7 @@ import { SentryFallbackFunction } from "./SentryErrorComponent";
 
 import { useEventListener } from "@utils/hooks";
 import { INIT_LOGOUT_EVENT } from "@utils/eventTriggers";
+import {getAccessTokenSafely} from "../utils/loginUtils";
 
 const sbAuthProps = {
   supabaseUrl: getEnvVariable(SUPABASE_URL),
@@ -97,7 +98,7 @@ const AttendeesWidgetComponent = ({ user, event, chatSettings }) => {
     openDir: "left",
     activity: null,
     getAccessToken: async () => {
-      const accessToken = await getAccessToken();
+      const accessToken = await getAccessTokenSafely();
       //console.log("AttendeesList->getAccessToken", accessToken);
       return accessToken;
     },
@@ -206,7 +207,7 @@ const AccessTracker = ({ user, isLoggedUser, summitPhase, chatSettings, updateCh
     openDir: "left",
     activity: null,
     getAccessToken: async () => {
-      const accessToken = await getAccessToken();
+      const accessToken = await getAccessTokenSafely();
       //console.log("AttendeesList->getAccessToken", accessToken);
       return accessToken;
     },

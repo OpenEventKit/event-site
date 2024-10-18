@@ -11,19 +11,18 @@ import {
 } from 'openstack-uicore-foundation/lib/utils/actions';
 
 import { customErrorHandler } from '../utils/customErrorHandler';
+import {getAccessTokenSafely} from "../utils/loginUtils";
 
 export const GET_ATTENDEE_DATA = 'GET_ATTENDEE_DATA';
 export const REQUEST_ATTENDEE_DATA = 'REQUEST_ATTENDEE_DATA';
 
 export const getAttendeeData = (attendeeId) => async (dispatch, getState) => {
 
-    let accessToken;
-    try {
-      accessToken = await getAccessToken();
-    } catch (e) {
-      console.log('getAccessToken error: ', e);
+  const accessToken = await getAccessTokenSafely()
+    .catch(() => {
+      dispatch(stopLoading());
       return Promise.reject();
-    }
+    });
   
     let params = {
       access_token: accessToken,
