@@ -9,6 +9,8 @@ import {
   stopLoading,
 } from 'openstack-uicore-foundation/lib/utils/actions';
 
+import {putOnLocalStorage, getFromLocalStorage} from 'openstack-uicore-foundation/lib/utils/methods';
+
 import {
   getAccessToken,
   clearAccessToken,
@@ -55,11 +57,15 @@ export const REQUEST_INVITATION = 'REQUEST_INVITATION';
 export const RECEIVE_INVITATION = 'RECEIVE_INVITATION';
 export const REJECT_INVITATION = 'REJECT_INVITATION';
 
-// shortName is the unique identifier assigned to a Disqus site.
-export const getDisqusSSO = (shortName, refresh = false) => async (dispatch, getState) => {
-  const { userState: { disqusSSO } } = getState();
+const DISQUS_SSO_EXPIRATION = "DISQUS_SSO_EXPIRATION";
 
-  if (disqusSSO && !refresh) return;
+// shortName is the unique identifier assigned to a Disqus site.
+export const getDisqusSSO = (shortName) => async (dispatch, getState) => {
+  const { userState: { disqusSSO } } = getState();
+  const almostTwoHours = 1000 * 60 * 60 * 1.9;
+  const disqusSsoExpiration = parseInt(getFromLocalStorage(DISQUS_SSO_EXPIRATION)) || 0;
+
+  if (disqusSSO && disqusSsoExpiration > Date.now()) return;
 
   let accessToken;
   try {
@@ -74,7 +80,11 @@ export const getDisqusSSO = (shortName, refresh = false) => async (dispatch, get
     createAction(GET_DISQUS_SSO),
     `${window.IDP_BASE_URL}/api/v1/sso/disqus/${shortName}/profile?access_token=${accessToken}`,
     customErrorHandler
-  )({})(dispatch).catch(e => {
+  )({})(dispatch)
+    .then(() => {
+      putOnLocalStorage(DISQUS_SSO_EXPIRATION, Date.now() + almostTwoHours)
+    })
+    .catch(e => {
     console.log('ERROR: ', e);
     clearAccessToken();
 

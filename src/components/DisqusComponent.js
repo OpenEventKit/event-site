@@ -13,27 +13,34 @@ const DisqusComponent = ({summit, sponsor, event, disqusSSO, hideMobile, title, 
   const almostTwoHours = 1000 * 60 * 60 * 1.9;
 
   useEffect(() => {
-    let refreshSSOInterval = null;
-
-    // disqus SSO
-    if (shortname) {
-      props.getDisqusSSO(shortname).catch((e) => console.log(e));
-
-      // refresh disqus SSO before expiration 2hrs
-      refreshSSOInterval = setInterval(() => {
-          props.getDisqusSSO(shortname, true).catch((e) => console.log(e));
-      }, almostTwoHours);
-    }
-
     // Resize Handler
     window.addEventListener('resize', onResize);
     setIsMobile(window.innerWidth <= 768);
 
     return () => {
       window.removeEventListener('resize', onResize);
-      if (refreshSSOInterval) clearInterval(refreshSSOInterval);
     }
   }, []);
+
+  // check Disqus SSO on every render
+  useEffect(() => {
+    let disqusSsoInterval = null;
+
+    if (shortname) {
+      props.getDisqusSSO(shortname).catch((e) => console.log(e));
+
+      // Edge case: if component has not rendered for more than 2hrs, we need to force a SSO token refresh.
+      disqusSsoInterval = setInterval(() => {
+        props.getDisqusSSO(shortname).catch((e) => console.log(e));
+      }, almostTwoHours);
+    }
+
+    return () => {
+      if (disqusSsoInterval) {
+        clearInterval(disqusSsoInterval);
+      }
+    }
+  });
 
   const onResize = () => {
     setIsMobile(window.innerWidth <= 768);
@@ -113,8 +120,6 @@ const DisqusComponent = ({summit, sponsor, event, disqusSSO, hideMobile, title, 
   if (!disqusSSO || (hideMobile !== null && hideMobile === isMobile)) {
     return null;
   }
-
-  console.log('DISQUSSSSS', disqusSSO);
 
   if (!remoteAuthS3 || !apiKey || !shortname) {
     let error = 'Disqus misconfiguration: ';
