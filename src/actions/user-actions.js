@@ -56,10 +56,10 @@ export const RECEIVE_INVITATION = 'RECEIVE_INVITATION';
 export const REJECT_INVITATION = 'REJECT_INVITATION';
 
 // shortName is the unique identifier assigned to a Disqus site.
-export const getDisqusSSO = (shortName) => async (dispatch, getState) => {
+export const getDisqusSSO = (shortName, refresh = false) => async (dispatch, getState) => {
   const { userState: { disqusSSO } } = getState();
 
-  if (disqusSSO !== null) return;
+  if (disqusSSO && !refresh) return;
 
   let accessToken;
   try {
