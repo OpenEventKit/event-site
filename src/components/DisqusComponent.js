@@ -27,11 +27,11 @@ const DisqusComponent = ({summit, sponsor, event, disqusSSO, hideMobile, title, 
     let disqusSsoInterval = null;
 
     if (shortname) {
-      props.getDisqusSSO(shortname).catch((e) => console.log(e));
+      props.getDisqusSSO(shortname);
 
       // Edge case: if component has not rendered for more than 2hrs, we need to force a SSO token refresh.
       disqusSsoInterval = setInterval(() => {
-        props.getDisqusSSO(shortname).catch((e) => console.log(e));
+        props.getDisqusSSO(shortname);
       }, almostTwoHours);
     }
 
