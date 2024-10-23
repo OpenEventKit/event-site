@@ -9,6 +9,8 @@ import {
   stopLoading,
 } from 'openstack-uicore-foundation/lib/utils/actions';
 
+import {putOnLocalStorage, getFromLocalStorage} from 'openstack-uicore-foundation/lib/utils/methods';
+
 import {
   getAccessToken,
   clearAccessToken,
@@ -23,6 +25,7 @@ import { navigate } from 'gatsby';
 import { customErrorHandler, customBadgeHandler, voidErrorHandler } from '../utils/customErrorHandler';
 import { getEnvVariable, SUMMIT_API_BASE_URL, SUMMIT_ID } from "../utils/envVariables";
 import expiredToken from "../utils/expiredToken";
+import * as Sentry from "@sentry/react";
 
 export const GET_DISQUS_SSO = 'GET_DISQUS_SSO';
 export const GET_USER_PROFILE = 'GET_USER_PROFILE';
@@ -55,11 +58,15 @@ export const REQUEST_INVITATION = 'REQUEST_INVITATION';
 export const RECEIVE_INVITATION = 'RECEIVE_INVITATION';
 export const REJECT_INVITATION = 'REJECT_INVITATION';
 
+const DISQUS_SSO_EXPIRATION = "DISQUS_SSO_EXPIRATION";
+
 // shortName is the unique identifier assigned to a Disqus site.
 export const getDisqusSSO = (shortName) => async (dispatch, getState) => {
   const { userState: { disqusSSO } } = getState();
+  const almostTwoHours = 1000 * 60 * 60 * 1.9;
+  const disqusSsoExpiration = parseInt(getFromLocalStorage(DISQUS_SSO_EXPIRATION)) || 0;
 
-  if (disqusSSO !== null) return;
+  if (disqusSSO && disqusSsoExpiration > Date.now()) return;
 
   let accessToken;
   try {
@@ -74,11 +81,16 @@ export const getDisqusSSO = (shortName) => async (dispatch, getState) => {
     createAction(GET_DISQUS_SSO),
     `${window.IDP_BASE_URL}/api/v1/sso/disqus/${shortName}/profile?access_token=${accessToken}`,
     customErrorHandler
-  )({})(dispatch).catch(e => {
-    console.log('ERROR: ', e);
-    clearAccessToken();
+  )({})(dispatch)
+    .then(() => {
+      putOnLocalStorage(DISQUS_SSO_EXPIRATION, Date.now() + almostTwoHours)
+    })
+    .catch(e => {
+      console.log('ERROR: ', e);
+      Sentry.captureException(e)
+      clearAccessToken();
 
-    return Promise.reject(e);
+      return Promise.reject(e);
   });
 }
 
