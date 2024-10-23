@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { connect } from "react-redux";
 import { DiscussionEmbed } from "disqus-react";
 import { withMarketingSettings, MARKETING_SETTINGS_KEYS } from "@utils/useMarketingSettings";
@@ -6,61 +6,53 @@ import { getEnvVariable, DISQUS_SHORTNAME } from "@utils/envVariables";
 import { getDisqusSSO } from "../actions/user-actions";
 import PropTypes from "prop-types";
 
-const DisqusComponent = class extends React.Component {
+const DisqusComponent = ({summit, sponsor, event, disqusSSO, hideMobile, title, style, className, page, skipTo, ...props}) => {
+  const [isMobile, setIsMobile] = useState(false);
+  const shortname = getEnvVariable(DISQUS_SHORTNAME);
+  const { auth: remoteAuthS3, public_key: apiKey } = disqusSSO || {};
+  const almostTwoHours = 1000 * 60 * 60 * 1.9;
 
-  constructor(props) {
-    super(props);
+  useEffect(() => {
+    // Resize Handler
+    window.addEventListener('resize', onResize);
+    setIsMobile(window.innerWidth <= 768);
 
-    this.state = {
-      isMobile: false
-    };
-
-    this.getIdentifier = this.getIdentifier.bind(this);
-    this.getTitle = this.getTitle.bind(this);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.onResize);
-  }
-
-  componentDidMount() {
-    const shortname = getEnvVariable(DISQUS_SHORTNAME);
-    if (shortname)
-      this.props.getDisqusSSO(shortname).catch((e) => console.log(e));
-
-    window.addEventListener('resize', this.onResize);
-    if (window.innerWidth <= 768) {
-      this.setState({ isMobile: true })
-    } else {
-      this.setState({ isMobile: false })
+    return () => {
+      window.removeEventListener('resize', onResize);
     }
-  }
+  }, []);
 
-  onResize = () => {
-    if (window.innerWidth <= 768 && this.state.isMobile === false) {
-      this.setState({ isMobile: true })
+  // check Disqus SSO on every render
+  useEffect(() => {
+    let disqusSsoInterval = null;
+
+    if (shortname) {
+      props.getDisqusSSO(shortname);
+
+      // Edge case: if component has not rendered for more than 2hrs, we need to force a SSO token refresh.
+      disqusSsoInterval = setInterval(() => {
+        props.getDisqusSSO(shortname);
+      }, almostTwoHours);
     }
-    if (window.innerWidth > 768 && this.state.isMobile === true) {
-      this.setState({ isMobile: false })
+
+    return () => {
+      if (disqusSsoInterval) {
+        clearInterval(disqusSsoInterval);
+      }
     }
+  });
+
+  const onResize = () => {
+    setIsMobile(window.innerWidth <= 768);
   };
 
-  getIdentifier() {
-    const {
-      summit,
-      page,
-      sponsor,
-      event,
-      getMarketingSettingByKey
-    } = this.props;
-
-    let threadsBy = getMarketingSettingByKey(MARKETING_SETTINGS_KEYS.disqusThreadsBy) ?? "event";
-
+  const getIdentifier = () => {
+    const threadsBy = props.getMarketingSettingByKey(MARKETING_SETTINGS_KEYS.disqusThreadsBy) ?? "event";
     let identifier = null;
 
     if (event) {
-      let eventExcludes = getMarketingSettingByKey(MARKETING_SETTINGS_KEYS.disqusExcludeEvents) ?? [];
-      let trackExcludes = getMarketingSettingByKey(MARKETING_SETTINGS_KEYS.disqusExcludeTracks) ?? [];
+      const eventExcludes = props.getMarketingSettingByKey(MARKETING_SETTINGS_KEYS.disqusExcludeEvents) ?? [];
+      const trackExcludes = props.getMarketingSettingByKey(MARKETING_SETTINGS_KEYS.disqusExcludeTracks) ?? [];
 
       identifier = eventExcludes.includes(event.id) ? `summit/${summit.id}/event/${event.id}` : null;
 
@@ -95,20 +87,12 @@ const DisqusComponent = class extends React.Component {
     return identifier;
   }
 
-  getTitle() {
-    const {
-      summit,
-      page,
-      sponsor,
-      event,
-      getMarketingSettingByKey
-    } = this.props;
-
+  const getTitle = () => {
     let suffix = '';
-    const threadsBy = getMarketingSettingByKey(MARKETING_SETTINGS_KEYS.disqusThreadsBy) ?? "event";
+    const threadsBy = props.getMarketingSettingByKey(MARKETING_SETTINGS_KEYS.disqusThreadsBy) ?? "event";
 
     if (event) {
-      const trackExcludes = getMarketingSettingByKey(MARKETING_SETTINGS_KEYS.disqusExcludeTracks) ?? [];
+      const trackExcludes = props.getMarketingSettingByKey(MARKETING_SETTINGS_KEYS.disqusExcludeTracks) ?? [];
       if (event.track && event.track.id && (threadsBy === 'track' || trackExcludes.includes(event.track.id))) {
         suffix += ' - ';
         suffix += event.track.name;
@@ -133,49 +117,40 @@ const DisqusComponent = class extends React.Component {
     return `${summit.name}${suffix}`;
   }
 
-  render() {
-    const { isMobile } = this.state || null;
-    const { disqusSSO, hideMobile = null } = this.props;
-
-    if (!disqusSSO || (hideMobile !== null && hideMobile === isMobile)) {
-      return null;
-    }
-
-    const { auth: remoteAuthS3, public_key: apiKey } = disqusSSO;
-    const shortname = getEnvVariable(DISQUS_SHORTNAME);
-
-    if (!remoteAuthS3 || !apiKey || !shortname) {
-      let error = 'Disqus misconfiguration: ';
-      if (!remoteAuthS3) error = ` ${error} ${!remoteAuthS3 ? 'SSO remoteAuthS3 missing' : ''}`;
-      if (!apiKey) error = ` ${error} ${!apiKey ? 'SSO apiKey missing' : ''}`;
-      if (!shortname) error = ` ${error} ${!shortname ? 'DISQUS_SHORTNAME env var missing' : ''}`;
-      return error;
-    }
-
-    const disqusConfig = {
-      url: window.location.href,
-      identifier: this.getIdentifier(),
-      title: this.getTitle(),
-      remoteAuthS3: remoteAuthS3,
-      apiKey: apiKey
-    };
-
-    const { title, style, className, page, skipTo } = this.props;
-    const sectionClass = className ? className : style || page === 'marketing-site' ? '' : 'disqus-container';
-
-    return (
-      <section aria-labelledby={title ? 'disqus-title' : ''} className={sectionClass} style={style}>
-        <div className="disqus-header">
-          {skipTo && <a className="sr-only skip-to-next" href={skipTo}>Skip to next section</a>}
-          {title && <h2 id="disqus-title" className="title">{title}</h2>}
-        </div>
-        <DiscussionEmbed
-          shortname={shortname}
-          config={disqusConfig}
-        />
-      </section>
-    );
+  if (!disqusSSO || (hideMobile !== null && hideMobile === isMobile)) {
+    return null;
   }
+
+  if (!remoteAuthS3 || !apiKey || !shortname) {
+    let error = 'Disqus misconfiguration: ';
+    if (!remoteAuthS3) error = ` ${error} ${!remoteAuthS3 ? 'SSO remoteAuthS3 missing' : ''}`;
+    if (!apiKey) error = ` ${error} ${!apiKey ? 'SSO apiKey missing' : ''}`;
+    if (!shortname) error = ` ${error} ${!shortname ? 'DISQUS_SHORTNAME env var missing' : ''}`;
+    return error;
+  }
+
+  const disqusConfig = {
+    url: window.location.href,
+    identifier: getIdentifier(),
+    title: getTitle(),
+    remoteAuthS3: remoteAuthS3,
+    apiKey: apiKey
+  };
+
+  const sectionClass = className ? className : style || page === 'marketing-site' ? '' : 'disqus-container';
+
+  return (
+    <section aria-labelledby={title ? 'disqus-title' : ''} className={sectionClass} style={style}>
+      <div className="disqus-header">
+        {skipTo && <a className="sr-only skip-to-next" href={skipTo}>Skip to next section</a>}
+        {title && <h2 id="disqus-title" className="title">{title}</h2>}
+      </div>
+      <DiscussionEmbed
+        shortname={shortname}
+        config={disqusConfig}
+      />
+    </section>
+  );
 };
 
 const mapStateToProps = ({ summitState, userState }) => ({
