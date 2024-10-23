@@ -1,9 +1,9 @@
 import { initLogOut, getAccessToken } from 'openstack-uicore-foundation/lib/security/methods'
+import * as Sentry from '@sentry/react'
 import {
   getEnvVariable,
   AUTHORIZED_DEFAULT_PATH
 } from "./envVariables";
-import {Exception} from "sass";
 
 export const getDefaultLocation = (
   eventRedirect,
@@ -61,6 +61,7 @@ export const getAccessTokenSafely = async () => {
     return await getAccessToken();
   } catch (e) {
     console.log("getAccessToken error: ", e);
+    Sentry.captureException(e)
     initLogOut();
     return Promise.reject();
   }
