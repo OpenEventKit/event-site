@@ -34,7 +34,7 @@ const sbAuthProps = {
 
 const adminGroups = ["administrators", "super-admins"];
 
-const AttendeesWidgetComponent = ({ user, event, chatSettings }) => {
+const AttendeesWidgetComponent = ({ user, event, summit, chatSettings }) => {
   const [loading, setLoading] = useState(true);
 
   //Deep linking support
@@ -127,11 +127,14 @@ const AttendeesWidgetComponent = ({ user, event, chatSettings }) => {
         twitterName: twitter_name,
         wechatUser: wechat_user,
       },
-      getBadgeFeatures: () =>
-        summit_tickets
+      getBadgeFeatures: () => {
+        const attendeeBadgeFeatureIds = [...new Set(summit_tickets
           .filter((st) => st.badge)
           .flatMap((st) => st.badge.features)
-          .filter((v, i, a) => a.map((item) => item.id).indexOf(v.id) === i),
+          .map((feature) => feature.id))]
+    
+        return summit.badge_features_types.filter((bft) => attendeeBadgeFeatureIds.includes(bft.id));
+      },
       bio: bio,
       showEmail: public_profile_show_email === true,
       allowChatWithMe: public_profile_allow_chat_with_me === true,
@@ -170,7 +173,7 @@ const AttendeesWidgetComponent = ({ user, event, chatSettings }) => {
         }
       },
     },
-    summitId: parseInt(getEnvVariable(SUMMIT_ID)),
+    summit: summit,
     height: 400,
     defaultScope: chatSettings?.defaultScope || scopes.PAGE,  //Default attendees filter scope (scopes.PAGE | scopes.SHOW)
     ...chatProps,
@@ -313,7 +316,7 @@ const mapStateToProps = ({ loggedUserState, userState, clockState, settingState 
   isLoggedUser: loggedUserState.isLoggedUser,
   user: userState,
   summitPhase: clockState.summit_phase,
-  chatSettings: settingState.widgets.chat,
+  chatSettings: settingState.widgets.chat
 });
 
 export default connect(mapStateToProps)(AccessTracker);

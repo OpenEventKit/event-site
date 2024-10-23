@@ -200,7 +200,7 @@ export const EventPageTemplate = class extends React.Component {
             <div className="column px-0 py-0 is-one-quarter is-full-mobile">
               <DocumentsComponent event={event}/>
               <AccessTracker/>
-              <AttendeesWidget user={user} event={event}/>
+              <AttendeesWidget user={user} event={event} summit={summit}/>
               <AdvertiseComponent section="event" column="right"/>
             </div>
           </div>
