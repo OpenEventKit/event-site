@@ -129,10 +129,13 @@ const AuthComponent = ({
 
     const sendCode = (email) => {
         setUserEmail(email);
-        getPasswordlessCode(email).then(({ response }) => {
+        return getPasswordlessCode(email).then(({ response }) => {
             setOtpLength(response.otp_length);
             setOtpLogin(true);
-        });
+        }).catch((err) => {
+            const errorMessage = err.response?.body?.error || err.message;
+            return Promise.reject(new Error(errorMessage));
+        })
     }
 
     const siteSettings = useSiteSettings();
