@@ -300,7 +300,9 @@ const AccessTracker = ({ user, isLoggedUser, summitPhase, chatSettings, updateCh
       showSocialInfo: public_profile_show_social_media_info === true,
       showBio: public_profile_show_bio === true
     },
-    summitId: parseInt(getEnvVariable(SUMMIT_ID)),
+    summit: {
+      id: parseInt(getEnvVariable(SUMMIT_ID)),
+    },
     keepAliveEnabled: true,
     updateChatProfileEnabled: updateChatProfileEnabled,
     ...chatProps,

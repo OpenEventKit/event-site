@@ -5977,10 +5977,10 @@ atob@^2.1.2:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
-attendee-to-attendee-widget@3.2.1-beta.2:
-  version "3.2.1-beta.2"
-  resolved "https://registry.yarnpkg.com/attendee-to-attendee-widget/-/attendee-to-attendee-widget-3.2.1-beta.2.tgz#a47b5da1aee5d5a77e832d1e94dabf3d9fdb1488"
-  integrity sha512-W9nxn/gJotlukQ9WnS/T8JJXLf6u5wjaUXMoOCURQlavSgL0DL430uxmH5S6udZTnYhAyeE107yT5z1GbpI6PA==
+attendee-to-attendee-widget@3.2.1-beta.6:
+  version "3.2.1-beta.6"
+  resolved "https://registry.yarnpkg.com/attendee-to-attendee-widget/-/attendee-to-attendee-widget-3.2.1-beta.6.tgz#bdab7b45771dec0d7119a00aff55eb27cc36a9b9"
+  integrity sha512-ICvpckynREXQTx7PH2m1lsyJIX7MFjIEPw2qzT864qIQm5C+hEAyBbc62A5PTtsmIz/bPA6tyzERUDTO5kuwfA==
   dependencies:
     "@supabase/supabase-js" "2.45.1"
     formik "^2.2.6"
