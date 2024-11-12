@@ -67,9 +67,7 @@ export const EventPageTemplate = class extends React.Component {
 
   componentDidMount() {
     const {eventId, event } = this.props;
-    if (parseInt(event?.id) !== parseInt(eventId)) {
-      this.props.getEventById(eventId).then(() => this.props.getEventStreamingInfoById(eventId));
-    }
+    this.props.getEventById(eventId).then(() => this.props.getEventStreamingInfoById(eventId));
   }
 
   onError(err){

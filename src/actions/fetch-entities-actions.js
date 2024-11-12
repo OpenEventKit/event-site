@@ -163,7 +163,8 @@ export const fetchSpeakerById = async(summitId, speakerId, accessToken = null) =
     apiUrl.addQuery('fields', speakers_fields.join(','));
 
     return fetch(apiUrl.toString(), {
-        method: 'GET'
+        method: 'GET',
+        cache: "no-store",
     }).then(async (response) => {
         if (response.status === 200) {
             return await response.json();

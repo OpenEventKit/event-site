@@ -239,4 +239,20 @@ export const synchEntityData = (
         dispatch(createAction(RELOAD_EVENT_STATE)(entity));
     }
 
+    // check if it's a presentation to reload event state
+    if (entity && entity_type === 'PresentationSpeaker' && entity_operator === 'UPDATE' && event &&
+      (
+        // current loaded event is a presentation on where speakers is a presenter
+        (entity.all_presentations && entity.all_presentations.find(id => id == event?.id))
+          ||
+        // current loaded event is a presentation on where speakers is a moderator
+        (entity.all_moderated_presentations && entity.all_moderated_presentations.find(id => id == event?.id))
+      )
+    )
+    {
+        const idx = allIDXEvents[event?.id];
+        const updatedEvent = eventsData[idx];
+        dispatch(createAction(RELOAD_EVENT_STATE)(updatedEvent));
+    }
+
 }

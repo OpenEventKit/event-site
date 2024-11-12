@@ -52,12 +52,12 @@ class SpeakerSynchStrategy extends AbstractSynchStrategy{
             }
 
             // check presentations
-            if (entity && entity.hasOwnProperty('presentations')) {
-                for (const publishedEventId of entity.presentations) {
+            if (entity && entity.hasOwnProperty('all_presentations')) {
+                for (const publishedEventId of entity.all_presentations) {
                     const eventIdx = this.allIDXEvents.hasOwnProperty(publishedEventId) ? this.allIDXEvents[publishedEventId] : -1;
                     let formerEntity = eventIdx === -1 ? null : ( (eventsData.length - 1) >= eventIdx ? eventsData[eventIdx] : null);
                     if(formerEntity === null){
-                        console.log(`SpeakerSynchStrategy::process presentations activity ${publishedEventId} not found on data set`);
+                        console.log(`SpeakerSynchStrategy::process all_presentations activity ${publishedEventId} not found on data set`);
                         continue;
                     }
                     if (formerEntity && formerEntity.id !== publishedEventId) continue;
@@ -73,12 +73,12 @@ class SpeakerSynchStrategy extends AbstractSynchStrategy{
             }
 
             // check moderated presentations
-            if(entity && entity.hasOwnProperty('moderated_presentations')){
-                for (const publishedEventId of entity.moderated_presentations) {
+            if(entity && entity.hasOwnProperty('all_moderated_presentations')){
+                for (const publishedEventId of entity.all_moderated_presentations) {
                     const eventIdx = this.allIDXEvents.hasOwnProperty(publishedEventId) ? this.allIDXEvents[publishedEventId] : -1;
                     let formerEntity = eventIdx === -1 ? null : ( (eventsData.length - 1 ) >= eventIdx ? eventsData[eventIdx] : null);
                     if(formerEntity === null) {
-                        console.log(`SpeakerSynchStrategy::process  moderated_presentations activity ${publishedEventId} not found on data set`);
+                        console.log(`SpeakerSynchStrategy::process all_moderated_presentations activity ${publishedEventId} not found on data set`);
                         continue;
                     }
                     if (formerEntity && formerEntity.id !== publishedEventId) continue; // it's not the same
