@@ -98,6 +98,10 @@ button.link {
   justify-content: space-between;
 }
 
+#content-wrapper {
+  flex-grow: 1;
+}
+
 header div.current-user {
   position: absolute;
   top: 30px;
