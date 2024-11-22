@@ -59,7 +59,7 @@ const SponsorPageTemplate = ({ sponsorId, sponsors, scanBadge, eventId, lastData
   };
 
   if (notFound) {
-    return <Interstitial title="Sponsor not found" navigateTo="/a/sponsors" ontained />
+    return <Interstitial title="Sponsor not found" navigateTo="/a/sponsors" contained />
   }
 
   const {
