@@ -240,7 +240,7 @@ export const assignAttendee = ({
         return newTicket;
     }).catch(e => {
         dispatch(stopLoading());
-        return (e);
+        throw e;
     });
 }
 
@@ -412,7 +412,7 @@ export const changeTicketAttendee = ({
     }).catch((e) => {
         console.log('error', e)
         dispatch(stopLoading());
-        return (e);
+        throw e;
     });
 };
 
