@@ -119,6 +119,7 @@ const RegistrationLiteComponent = ({
     const initialOrderComplete1stParagraph = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteInitialOrderComplete1stParagraph);
     const initialOrderComplete2ndParagraph = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteInitialOrderComplete2ndParagraph);
     const initialOrderCompleteButton = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteInitialOrderCompleteButton);
+    const orderCompleteTitle = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteOrderCompleteTitle);
     const orderComplete1stParagraph = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteOrderComplete1stParagraph);
     const orderComplete2ndParagraph = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteOrderComplete2ndParagraph);
     const orderCompleteButton = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteOrderCompleteButton);
@@ -187,6 +188,7 @@ const RegistrationLiteComponent = ({
         initialOrderComplete1stParagraph: initialOrderComplete1stParagraph,
         initialOrderComplete2ndParagraph: initialOrderComplete2ndParagraph,
         initialOrderCompleteButton: initialOrderCompleteButton,
+        orderCompleteTitle: orderCompleteTitle,
         orderComplete1stParagraph: orderComplete1stParagraph,
         orderComplete2ndParagraph: orderComplete2ndParagraph,
         orderCompleteButton: orderCompleteButton,
