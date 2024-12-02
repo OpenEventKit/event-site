@@ -76,6 +76,20 @@ const customFetchErrorHandler = (response) => {
     }
 };
 
+const customWithout412ErrorHandler = (response) => {
+    switch (response.status) {
+        case 403:
+            Swal.fire('ERROR', i18n.t('errors.user_not_authz'), 'warning');
+            break;
+        case 401:
+            Swal.fire('ERROR', i18n.t('errors.session_expired'), 'error');
+            break;
+        case 500:
+            Swal.fire('ERROR', i18n.t('errors.server_error'), 'error');
+    }
+};
+
+
 export const getUserTickets = ({ page = 1, perPage = 5 }) => async (dispatch, getState, { getAccessToken, apiBaseUrl, loginUrl }) => {
     const { userState: { userProfile }, summitState: { summit } } = getState();
 
@@ -229,7 +243,7 @@ export const assignAttendee = ({
         createAction(ASSIGN_TICKET),
         `${apiBaseUrl}/api/v1/summits/all/orders/${orderId}/tickets/${ticket.id}/attendee`,
         normalizedEntity,
-        authErrorHandler
+        customWithout412ErrorHandler
     )(params)(dispatch).then((newTicket) => {
         if (reassignOrderId && context === 'ticket-list') {
             dispatch(getUserTickets({ page: ticketPage }));
@@ -301,7 +315,7 @@ export const editOwnedTicket = ({
         `${apiBaseUrl}/api/v1/summits/all/orders/all/tickets/${ticket.id}`,
         normalizedEntity,
         authErrorHandler
-    )(params)(dispatch).then(async () => {        
+    )(params)(dispatch).then(async () => {
         const hasManager = ticket.owner?.manager?.id || ticket.owner?.manager_id;
         // email should match ( only update my profile is ticket belongs to me!)
         // and if the ticket doesn't have a manager
@@ -392,7 +406,7 @@ export const changeTicketAttendee = ({
         createAction(REMOVE_TICKET_ATTENDEE),
         `${apiBaseUrl}/api/v1/summits/all/orders/${orderId}/tickets/${ticket.id}/attendee`,
         {},
-        authErrorHandler
+        customWithout412ErrorHandler
     )(params)(dispatch).then(() => {
         return dispatch(assignAttendee({
             ticket,
@@ -573,16 +587,16 @@ export const delegateTicket = ({
     return putRequest(
         null,
         createAction(DELEGATE_TICKET),
-        `${apiBaseUrl}/api/v1/summits/${summitId}/orders/${orderId}/tickets/${ticket.id}/delegate`,        
+        `${apiBaseUrl}/api/v1/summits/${summitId}/orders/${orderId}/tickets/${ticket.id}/delegate`,
         normalizedEntity,
-        authErrorHandler    
+        authErrorHandler
     )(params)(dispatch).then(() => {
         dispatch(stopLoading());
         // Note: refresh the list view after updating the ticket.
         if (context === 'ticket-list') {
             dispatch(getUserTickets({ page: ticketPage }));
         } else {
-            dispatch(getUserOrders({ page: orderPage })).then(() => 
+            dispatch(getUserOrders({ page: orderPage })).then(() =>
                 dispatch(getTicketsByOrder({ orderId: ticket.order_id, page: orderTicketsCurrentPage }))
             );
         }
