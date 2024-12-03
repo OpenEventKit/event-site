@@ -28,6 +28,7 @@ import { objectToQueryString } from 'openstack-uicore-foundation/lib/utils/metho
 import { getIdToken } from 'openstack-uicore-foundation/lib/security/methods';
 import { getUserOrders } from "./order-actions";
 import { updateProfile } from './user-actions';
+import { processActionError } from   './../../util/helpers/index';
 
 export const GET_TICKETS = 'GET_TICKETS';
 export const ASSIGN_TICKET = 'ASSIGN_TICKET';
@@ -49,10 +50,10 @@ export const TICKET_ATTENDEE_KEYS = {
     extraQuestions: 'extra_questions'
 }
 
-const customFetchErrorHandler = (response) => {
+const customFetchErrorHandler = (response) => (dispatch) => {
     let code = response.status;
     let msg = response.statusText;
-
+    dispatch(stopLoading());
     switch (code) {
         case 403:
             Swal.fire('ERROR', i18n.t('errors.user_not_authz'), 'warning');
@@ -76,8 +77,11 @@ const customFetchErrorHandler = (response) => {
     }
 };
 
-const customWithout412ErrorHandler = (response) => {
-    switch (response.status) {
+const customWithout412ErrorHandler = (
+  err
+) => (dispatch) => {
+    dispatch(stopLoading());
+    switch (err.status) {
         case 403:
             Swal.fire('ERROR', i18n.t('errors.user_not_authz'), 'warning');
             break;
@@ -86,6 +90,7 @@ const customWithout412ErrorHandler = (response) => {
             break;
         case 500:
             Swal.fire('ERROR', i18n.t('errors.server_error'), 'error');
+            break;
     }
 };
 
@@ -252,9 +257,8 @@ export const assignAttendee = ({
             dispatch(getTicketsByOrder({ orderId, page: orderTicketsCurrentPage }));
         }
         return newTicket;
-    }).catch(e => {
-        dispatch(stopLoading());
-        throw e;
+    }).catch(({err}) => {
+        processActionError(err);
     });
 }
 
@@ -423,10 +427,8 @@ export const changeTicketAttendee = ({
                 reassignOrderId: orderId,
             }
         }));
-    }).catch((e) => {
-        console.log('error', e)
-        dispatch(stopLoading());
-        throw e;
+    }).catch(({err}) => {
+        processActionError(err);
     });
 };
 
