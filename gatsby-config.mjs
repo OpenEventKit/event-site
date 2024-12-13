@@ -164,7 +164,7 @@ const plugins = [
           remarkGfm
         ],
         rehypePlugins: [
-          rehypeMdxImportMedia 
+          rehypeMdxImportMedia
         ]
       }
     }
@@ -228,8 +228,7 @@ const plugins = [
       }
     }
   },
-  ...googleTagManagerPlugin,
-  "gatsby-plugin-netlify", // make sure to keep it last in the array
+  ...googleTagManagerPlugin
 ];
 
 const siteMetadata = {
