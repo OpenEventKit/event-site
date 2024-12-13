@@ -217,6 +217,7 @@ const SSR_getSpeakers = async (baseUrl, summitId, accessToken, filter = null) =>
     access_token: accessToken,
     per_page: 30,
     page: 1,
+    relations: 'none',
     fields: speakers_fields.join(',')
   };
 
