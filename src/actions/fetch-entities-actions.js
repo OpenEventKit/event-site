@@ -184,9 +184,11 @@ export const fetchSummitById =  async(summitId, accessToken = null) => {
 
     const expand = [
         'event_types',
+        'badge_features_types',
         'tracks',
         'tracks.subtracks',
         'track_groups',
+        'locations',
         'presentation_levels',
         'locations',
         'locations.rooms',
