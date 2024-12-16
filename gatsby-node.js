@@ -37,6 +37,8 @@ const {
   generateColorsScssFile
 } = require("./src/utils/scssUtils");
 
+const { FIFTY_PER_PAGE, SPEAKER_MODERATOR_FIELDS } = require("./src/utils/constants");
+
 const fileBuildTimes = [];
 
 const getAccessToken = async (config, scope) => {
@@ -92,7 +94,6 @@ const SSR_getEvents = async (baseUrl, summitId, accessToken) => {
 
   const endpoint = `${baseUrl}/api/v1/summits/${summitId}/events/published`;
 
-  const speakers_fields = ['id', 'first_name', 'last_name', 'title', 'bio','member_id','pic', 'big_pic', 'company', 'featured'];
   const documents_fields = ['display_on_site', 'name', 'order', 'class_name', 'type', 'public_url', 'link']
   const current_attendance_fields = ['member_first_name', 'member_last_name', 'member_pic'];
   const first_level_fields = [
@@ -131,17 +132,18 @@ const SSR_getEvents = async (baseUrl, summitId, accessToken) => {
   ];
   const fields =  `
     ${first_level_fields.join(",")},
-    speakers.${speakers_fields.join(",speakers.")},
+    speakers.${SPEAKER_MODERATOR_FIELDS.join(",speakers.")},
     current_attendance.${current_attendance_fields.join(',current_attendance.')}
-    moderator.${speakers_fields.join(",moderator.")},
+    moderator.${SPEAKER_MODERATOR_FIELDS.join(",moderator.")},
     media_uploads.${documents_fields.join(",media_uploads.")}
     videos.${documents_fields.join(",videos.")}
     slides.${documents_fields.join(",slides.")}
     links.${documents_fields.join(",links.")}
     `;
+  
   const params = {
     access_token: accessToken,
-    per_page: 50,
+    per_page: FIFTY_PER_PAGE,
     page: 1,
     expand: 'slides,links,videos,media_uploads,type,track,location,location.venue,location.floor,speakers,moderator,sponsors,tags,current_attendance',
     relations: 'speakers.badge_features,speakers.all_presentations,speakers.all_moderated_presentations',
@@ -165,7 +167,7 @@ const SSR_getSponsors = async (baseUrl, summitId, accessToken) => {
 
   const params = {
         access_token: accessToken,
-        per_page: 50,
+        per_page: FIFTY_PER_PAGE,
         page: 1,
         filter: "is_published==1",
         expand: 'company,sponsorship,sponsorship.type',
@@ -186,7 +188,7 @@ const SSR_getSponsorCollections = async (allSponsors, baseUrl, summitId, accessT
 
   const params = {
         access_token: accessToken,
-        per_page: 50,
+        per_page: FIFTY_PER_PAGE,
         page: 1,
   }
 
@@ -209,16 +211,12 @@ const SSR_getSponsorCollections = async (allSponsors, baseUrl, summitId, accessT
 
 const SSR_getSpeakers = async (baseUrl, summitId, accessToken, filter = null) => {
 
-
-  const speakers_fields =
-    ['id', 'first_name', 'last_name', 'title', 'bio','member_id','pic', 'big_pic', 'company', 'featured'];
-
   const params = {
     access_token: accessToken,
     per_page: 30,
     page: 1,
     relations: 'none',
-    fields: speakers_fields.join(',')
+    fields: SPEAKER_MODERATOR_FIELDS.join(',')
   };
 
   const endpoint = `${baseUrl}/api/v1/summits/${summitId}/speakers/on-schedule`;
@@ -274,7 +272,7 @@ const SSR_getSummit = async (baseUrl, summitId, accessToken) => {
     "badge_features_types",
     "time_zone"]
 
-  const summit_relations = ["dates_with_events","ticket_types.none","es","tracks.none","track_groups.none","locations","locations.none","payment_profiles","time_zone","none"]
+  const summit_relations = ["dates_with_events","ticket_types.none","tracks.none","track_groups.none","locations","locations.none","payment_profiles","time_zone","none"]
 
   const params = {
     access_token: accessToken,    
@@ -310,7 +308,7 @@ const SSR_getVoteablePresentations = async (baseUrl, summitId, accessToken) => {
 
   const params = {
     access_token: accessToken,
-    per_page: 50,
+    per_page: FIFTY_PER_PAGE,
     page: 1,
     filter: "published==1",
     expand: "slides,links,videos,media_uploads,type,track,track.allowed_access_levels,location,location.venue,location.floor,speakers,moderator,sponsors,current_attendance,groups,rsvp_template,tags",

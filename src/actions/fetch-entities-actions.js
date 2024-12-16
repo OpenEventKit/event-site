@@ -1,4 +1,5 @@
 import URI from "urijs";
+import { SPEAKER_MODERATOR_FIELDS } from "../utils/constants";
 
 /**
  * @param summitId
@@ -9,12 +10,12 @@ import URI from "urijs";
 export const fetchEventById = async (summitId, eventId, accessToken = null) => {
 
     let apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/public/v1/summits/${summitId}/events/${eventId}/published`);
-    if(accessToken){
+    if (accessToken) {
         apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/v1/summits/${summitId}/events/${eventId}/published`);
         apiUrl.addQuery('access_token', accessToken);
     }
 
-    const speakers_fields = ['id', 'first_name', 'last_name', 'title', 'bio','member_id','pic', 'big_pic', 'company'];
+    const speakers_fields = ['id', 'first_name', 'last_name', 'title', 'bio', 'member_id', 'pic', 'big_pic', 'company'];
     const current_attendance_fields = ['member_first_name', 'member_last_name', 'member_pic'];
     const first_level_fields = [
         "id",
@@ -34,7 +35,7 @@ export const fetchEventById = async (summitId, eventId, accessToken = null) => {
         "attendance_count",
         "current_attendance_count",
         "image",
-        "level" ,
+        "level",
         "show_sponsors",
         "duration",
         "moderator_speaker_id",
@@ -84,10 +85,84 @@ export const fetchStreamingInfoByEventId = async (summitId, eventId, accessToken
 export const fetchEventTypeById = async (summitId, eventTypeId, accessToken = null) => {
 
     let apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/public/v1/summits/${summitId}/event-types/${eventTypeId}`);
-    if(accessToken){
+    if (accessToken) {
         apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/v1/summits/${summitId}/event-types/${eventTypeId}`);
         apiUrl.addQuery('access_token', accessToken);
     }
+
+    const documents_fields = ['display_on_site', 'name', 'order', 'class_name', 'type', 'public_url', 'link']
+    const current_attendance_fields = ['member_first_name', 'member_last_name', 'member_pic'];
+    const first_level_fields = [
+        "id",
+        "created",
+        "start_date",
+        "end_date",
+        "title",
+        "abstract",
+        "description",
+        "level",
+        "image",
+        "stream_thumbnail",
+        "type", "type.id", "type.name",
+        "location_id",
+        "class_name",
+        "allow_feedback",
+        "head_count",
+        "attendance_count",
+        "current_attendance_count",
+        "tags", "tags.id", "tags.tag",
+        "location", "location.class_name", "location.name", "location.venue.name", "location.venue.floor",
+        "track", "track.id", "track.name", "track.icon_url", "track.color", "track.text_color",
+        "track_groups", "track_groups.id", "track_groups.name", "track_groups.parent_id", "track_groups.color", "track_groups.order", "track_groups.subtracks",
+        "sponsors", "sponsors.id", "sponsors.name", "sponsors.logo",
+        "to_record",
+        "etherpad_link",
+        "streaming_url",
+        "streaming_type",
+        "meeting_url",
+        "current_attendance",
+        "attendees_expected_learnt",
+        "show_sponsors",
+        "duration",
+        "moderator_speaker_id",
+    ];
+    const fields = `
+    ${first_level_fields.join(",")},
+    speakers.${SPEAKER_MODERATOR_FIELDS.join(",speakers.")},
+    current_attendance.${current_attendance_fields.join(',current_attendance.')}
+    moderator.${SPEAKER_MODERATOR_FIELDS.join(",moderator.")},
+    media_uploads.${documents_fields.join(",media_uploads.")}
+    videos.${documents_fields.join(",videos.")}
+    slides.${documents_fields.join(",slides.")}
+    links.${documents_fields.join(",links.")}
+    `;
+
+    const expand = [
+        'slides',
+        'links',
+        'videos',
+        'media_uploads',
+        'type',
+        'track',
+        'location',
+        'location.venue',
+        'location.floor',
+        'speakers',
+        'moderator',
+        'sponsors',
+        'tags',
+        'current_attendance'
+    ];
+
+    const relations = [
+        'speakers.badge_features',
+        'speakers.all_presentations',
+        'speakers.all_moderated_presentations'
+    ]
+
+    apiUrl.addQuery('fields', fields.join(','));
+    apiUrl.addQuery('expand', expand.join(','));
+    apiUrl.addQuery('relations', relations.join(','));
 
     return fetch(apiUrl.toString(), {
         method: 'GET'
@@ -107,15 +182,15 @@ export const fetchEventTypeById = async (summitId, eventTypeId, accessToken = nu
  * @param accessToken
  * @returns {Promise<Response>}
  */
-export const fetchLocationById = async(summitId, locationId, expand, accessToken = null) => {
+export const fetchLocationById = async (summitId, locationId, expand, accessToken = null) => {
 
     let apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/public/v1/summits/${summitId}/locations/${locationId}`);
-    if(accessToken){
+    if (accessToken) {
         apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/v1/summits/${summitId}/locations/${locationId}`);
         apiUrl.addQuery('access_token', accessToken);
     }
 
-    if(expand)
+    if (expand)
         apiUrl.addQuery('expand', expand);
 
     return fetch(apiUrl.toString(), {
@@ -135,32 +210,17 @@ export const fetchLocationById = async(summitId, locationId, expand, accessToken
  * @param accessToken
  * @returns {Promise<Response>}
  */
-export const fetchSpeakerById = async(summitId, speakerId, accessToken = null) => {
+export const fetchSpeakerById = async (summitId, speakerId, accessToken = null) => {
 
     let apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/public/v1/summits/${summitId}/speakers/${speakerId}`);
 
-    if(accessToken){
+    if (accessToken) {
         apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/v1/summits/${summitId}/speakers/${speakerId}`);
         apiUrl.addQuery('access_token', accessToken);
     }
 
-    const speakers_relations = [
-        'badge_features',
-        'affiliations',
-        'languages',
-        'other_presentation_links',
-        'areas_of_expertise',
-        'travel_preferences',
-        'organizational_roles',
-        'all_presentations',
-        'all_moderated_presentations',
-    ];
+    apiUrl.addQuery('relations', 'none');
 
-    const speakers_fields =
-      ['id', 'first_name', 'last_name', 'title', 'bio','member_id','pic', 'big_pic', 'company'];
-
-    apiUrl.addQuery('relations', speakers_relations.join(','));
-    apiUrl.addQuery('fields', speakers_fields.join(','));
 
     return fetch(apiUrl.toString(), {
         method: 'GET',
@@ -179,14 +239,57 @@ export const fetchSpeakerById = async(summitId, speakerId, accessToken = null) =
  * @param accessToken
  * @returns {Promise<Response>}
  */
-export const fetchSummitById =  async(summitId, accessToken = null) => {
+export const fetchSummitById = async (summitId, accessToken = null) => {
     let apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/public/v1/summits/${summitId}`);
+
+    const fields = [
+        'id',
+        'name',
+        'start_date',
+        'end_date',
+        'time_zone_id',
+        'time_zone_label',
+        'tracks.id', 'tracks.name', 'tracks.code',
+        'track_groups.id', 'track_groups.name', 'track_groups.tracks',
+        'locations.id', 'locations.class_name', 'locations', 'locations.is_main',
+        'secondary_logo',
+        'slug',
+        'payment_profiles',
+        'support_email',
+        'ticket_types.id',
+        'ticket_types.name', 'ticket_types.created', 'ticket_types.cost',
+        'start_showing_venues_date',
+        'dates_with_events',
+        'logo',
+        'registration_allowed_refund_request_till_date',
+        'allow_update_attendee_extra_questions',
+        'is_virtual',
+        'registration_disclaimer_mandatory',
+        'registration_disclaimer_content',
+        'reassign_ticket_till_date',
+        'is_main',
+        'title',
+        'description',
+        'badge_features_types',
+        'time_zone'
+    ];
+
+    const relations = [
+        'dates_with_events',
+        'ticket_types.none',
+        'tracks.none',
+        'track_groups.none',
+        'locations',
+        'locations.none',
+        'payment_profiles',
+        'time_zone',
+        'none'
+    ]
 
     const expand = [
         'event_types',
         'badge_features_types',
         'tracks',
-        'tracks.subtracks',
         'track_groups',
         'locations',
         'presentation_levels',
@@ -226,6 +329,8 @@ export const fetchTrackById = async(summitId, trackId, accessToken = null) => {
     ]
 
     apiUrl.addQuery('expand', expand.join(','));
+    apiUrl.addQuery('relations', relations.join(','));
+    apiUrl.addQuery('fields', fields.join(','));
 
     return fetch(apiUrl.toString(), {
         method: 'GET'
