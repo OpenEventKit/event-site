@@ -243,6 +243,7 @@ const SSR_getSummit = async (baseUrl, summitId) => {
       "tracks.subtracks," +
       "track_groups," +
       "presentation_levels," +
+      "locations," +
       "locations.rooms," +
       "locations.floors," +
       "order_extra_questions.values," +
