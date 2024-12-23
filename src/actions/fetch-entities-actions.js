@@ -188,6 +188,7 @@ export const fetchSummitById =  async(summitId, accessToken = null) => {
         'tracks.subtracks',
         'track_groups',
         'presentation_levels',
+        'locations',
         'locations.rooms',
         'locations.floors',
         'order_extra_questions.values',
