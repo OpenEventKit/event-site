@@ -31,12 +31,16 @@ export default React.forwardRef(({ data }, ref) => (
           const alt = item.images[0].alt ?? "";
           if (item.images[0].link) {
             return (
-              <Link key={index} to={item.images[0].link}>
-                <img src={getSrc(image)} alt={alt} />
+              <Link className={styles.masonryWrapper} key={index} to={item.images[0].link}>
+                <img className={styles.masonryImage} src={getSrc(image)} alt={alt} />
               </Link>
             );
           } else {
-            return <img key={index} src={getSrc(image)} alt={alt} />;
+            return (
+              <div className={styles.masonryWrapper}>
+                <img className={styles.masonryImage} key={index} src={getSrc(image)} alt={alt} />;
+              </div>
+            );
           };
         } else if (item.images && item.images.length > 1) {
           return (
