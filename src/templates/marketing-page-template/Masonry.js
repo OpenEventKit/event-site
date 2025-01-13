@@ -1,5 +1,5 @@
 import * as React from "react";
-import { GatsbyImage, getImage } from "gatsby-plugin-image";
+import { getImage, getSrc } from "gatsby-plugin-image";
 import Masonry from "react-masonry-css";
 import Slider from "react-slick";
 import Link from "../../components/Link";
@@ -32,11 +32,11 @@ export default React.forwardRef(({ data }, ref) => (
           if (item.images[0].link) {
             return (
               <Link key={index} to={item.images[0].link}>
-                <GatsbyImage image={image} alt={alt} />
+                <img src={getSrc(image)} alt={alt} />
               </Link>
             );
           } else {
-            return <GatsbyImage key={index} image={image} alt={alt} />;
+            return <img key={index} src={getSrc(image)} alt={alt} />;
           };
         } else if (item.images && item.images.length > 1) {
           return (
@@ -51,11 +51,11 @@ export default React.forwardRef(({ data }, ref) => (
                 if (image.link) {
                   return (
                     <Link key={indexSlide} to={image.link}>
-                      <GatsbyImage image={img} alt={alt} />
+                      <img src={getSrc(img)} alt={alt} />
                     </Link>
                   );
                 } else {
-                  return <GatsbyImage key={indexSlide} image={img} alt={alt} />;
+                  return <img key={indexSlide} src={getSrc(img)} alt={alt} />;
                 };
               })}
             </Slider>
