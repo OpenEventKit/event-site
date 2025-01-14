@@ -8,4 +8,14 @@
   .slider {
     margin-bottom: -5px;
   }
+
+  .masonryWrapper {
+    display: inline-block;
+    width: 100%;
+    font-size: 0;
+    .masonryImage {
+      width: 100%;
+      object-fit: cover;
+    }
+  }
 }
