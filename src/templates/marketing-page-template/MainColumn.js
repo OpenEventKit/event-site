@@ -56,7 +56,7 @@ const MainColumn = ({ widgets, summitPhase, isLoggedUser, onEventClick, lastData
             <DisqusComponent page="marketing-site" />
           </>
         )}
-        {image?.display && image?.image.src && (
+        {image?.display && image?.image?.src && (
           <>
             <h2><b>{image.title}</b></h2>
             <br/>

@@ -67,9 +67,7 @@ export const EventPageTemplate = class extends React.Component {
 
   componentDidMount() {
     const {eventId, event } = this.props;
-    if (parseInt(event?.id) !== parseInt(eventId)) {
-      this.props.getEventById(eventId).then(() => this.props.getEventStreamingInfoById(eventId));
-    }
+    this.props.getEventById(eventId).then(() => this.props.getEventStreamingInfoById(eventId));
   }
 
   onError(err){
@@ -200,7 +198,7 @@ export const EventPageTemplate = class extends React.Component {
             <div className="column px-0 py-0 is-one-quarter is-full-mobile">
               <DocumentsComponent event={event}/>
               <AccessTracker/>
-              <AttendeesWidget user={user} event={event}/>
+              <AttendeesWidget user={user} event={event} summit={summit}/>
               <AdvertiseComponent section="event" column="right"/>
             </div>
           </div>

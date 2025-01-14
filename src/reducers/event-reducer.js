@@ -1,7 +1,7 @@
 import { START_LOADING, STOP_LOADING } from "openstack-uicore-foundation/lib/utils/actions";
 import { LOGOUT_USER } from "openstack-uicore-foundation/lib/security/actions";
 import {GET_EVENT_DATA, GET_EVENT_DATA_ERROR, RELOAD_EVENT_STATE, SET_EVENT_LAST_UPDATE, GET_EVENT_STREAMING_INFO} from "../actions/event-actions-definitions";
-import {RESET_STATE} from "../actions/base-actions-definitions";
+import {RESET_STATE, SYNC_DATA} from "../actions/base-actions-definitions";
 
 const DEFAULT_STATE = {
   loading: false,
@@ -14,6 +14,7 @@ const eventReducer = (state = DEFAULT_STATE, action) => {
   const { type, payload } = action
 
   switch (type) {
+
     case RESET_STATE:
     case LOGOUT_USER:
     {
@@ -31,6 +32,18 @@ const eventReducer = (state = DEFAULT_STATE, action) => {
       // check if we need to update the current event or do we need to just use the new one
       const updatedEvent = event.id  === state?.event?.id ? {...state, ...event} : event;
       return { ...state, loading: false, event: updatedEvent, tokens: null };
+    }
+    case SYNC_DATA:{
+      // update current event if we have one on data sync
+      const {eventsData, eventsIDXData } = payload;
+      if(state?.event){
+        const idx = eventsIDXData[state?.event?.id] || null;
+        if(idx) {
+          const updatedEvent = eventsData[idx];
+          return {...state, loading: false, event: updatedEvent, tokens: null};
+        }
+      }
+      return state;
     }
     case GET_EVENT_DATA_ERROR: {
       return { ...state, loading: false, event: null, tokens: null }

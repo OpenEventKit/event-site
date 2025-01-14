@@ -244,7 +244,7 @@ export const PosterDetailPage = ({
             {poster.meeting_url && <PosterLiveSession poster={poster} ctaText={activityCtaText} />}
             <DocumentsComponent event={poster} />
             <AccessTracker />
-            <AttendeesWidget user={user} event={poster} />
+            <AttendeesWidget user={user} event={poster} summit={summit} />
             <AdvertiseComponent section="event" column="right" />
           </div>
         </div>

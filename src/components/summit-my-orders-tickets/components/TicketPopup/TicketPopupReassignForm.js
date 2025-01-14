@@ -26,7 +26,9 @@ export const TicketPopupReassignForm = ({ ticket, summit, order }) => {
     const [showConfirm, setShowConfirm] = useState(false);
     const [newAttendeeEmail, setNewAttendeeEmail] = useState('');
     const [showSaveMessage, setShowSaveMessage] = useState(false);
+    const [showErrorMessage, setShowErrorMessage] = useState(false);
     const [message, setMessage] = useState('')
+    const [errorMessage, setErrorMessage] = useState('')
 
     const { onTicketAssignChange } = useTicketAssignedContext();
 
@@ -36,6 +38,11 @@ export const TicketPopupReassignForm = ({ ticket, summit, order }) => {
     const toggleSaveMessage = () => {
         setTimeout(() => setShowSaveMessage(true), 50);
         setTimeout(() => setShowSaveMessage(false), 5000);
+    };
+
+    const toggleErrorMessage = () => {
+        setTimeout(() => setShowErrorMessage(true), 50);
+        setTimeout(() => setShowErrorMessage(false), 5000);
     };
 
     const handleSubmit = (values, formikHelpers) => {
@@ -62,14 +69,17 @@ export const TicketPopupReassignForm = ({ ticket, summit, order }) => {
 
         dispatch(changeTicketAttendee({
             ticket,
-            message,            
+            message,
             order,
             data: { attendee_email: newAttendeeEmail }
         })).then((updatedTicket) => {
             onTicketAssignChange(updatedTicket);
             toggleSaveMessage();
             setMessage('');
-        });
+        }).catch((err) => {
+            setErrorMessage(err);
+            toggleErrorMessage();
+        })
     };
 
     const handleConfirmReject = () => {
@@ -83,12 +93,12 @@ export const TicketPopupReassignForm = ({ ticket, summit, order }) => {
             <form className="ticket-reassign-form" onSubmit={formik.handleSubmit}>
                 <div className="ticket-popup-form-body">
                     {
-                        isTicketPrinted ? 
+                        isTicketPrinted ?
                         <>
                             <p>
                                 {t("ticket_popup.reassign_printed_ticket")}
                             </p>
-                        </> 
+                        </>
                         :
                         <>
                             {showSaveMessage && (
@@ -102,6 +112,19 @@ export const TicketPopupReassignForm = ({ ticket, summit, order }) => {
                                         {t("tickets.reassign_success_message")}
                                     </Alert>
                                 </CSSTransition>
+                            )}
+
+                            {showErrorMessage && (
+                              <CSSTransition
+                                unmountOnExit
+                                in={showErrorMessage}
+                                timeout={2000}
+                                classNames="fade-in-out"
+                              >
+                                  <Alert bsStyle="warning" className="ticket-popup-form-alert text-center">
+                                      {errorMessage}
+                                  </Alert>
+                              </CSSTransition>
                             )}
 
                             {!isUserTicketOwner && (

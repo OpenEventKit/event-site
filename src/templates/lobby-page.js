@@ -121,7 +121,7 @@ export const LobbyPageTemplate = class extends React.Component {
             <div className="column is-one-quarter pb-6">
               <h2><b>My Info</b></h2>
               <AccessTracker/>
-              <AttendeesWidget user={user}/>
+              <AttendeesWidget user={user} summit={summit}/>
               <LiteScheduleComponent
                 id={`lobby_page_lite_schedule_${lastDataSync}`}
                 lastDataSync={lastDataSync}

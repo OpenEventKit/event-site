@@ -17,6 +17,7 @@ export const MARKETING_SETTINGS_KEYS = {
   regLiteInitialOrderComplete1stParagraph: "REG_LITE_INITIAL_ORDER_COMPLETE_STEP_1ST_PARAGRAPH",
   regLiteInitialOrderComplete2ndParagraph: "REG_LITE_INITIAL_ORDER_COMPLETE_STEP_2ND_PARAGRAPH",
   regLiteInitialOrderCompleteButton: "REG_LITE_INITIAL_ORDER_COMPLETE_BTN_LABEL",
+  regLiteOrderCompleteTitle: "REG_LITE_ORDER_COMPLETE_TITLE",
   regLiteOrderComplete1stParagraph: "REG_LITE_ORDER_COMPLETE_STEP_1ST_PARAGRAPH",
   regLiteOrderComplete2ndParagraph: "REG_LITE_ORDER_COMPLETE_STEP_2ND_PARAGRAPH",
   regLiteOrderCompleteButton: "REG_LITE_ORDER_COMPLETE_BTN_LABEL",
