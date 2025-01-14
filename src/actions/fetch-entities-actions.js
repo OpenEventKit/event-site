@@ -195,6 +195,7 @@ export const fetchSummitById =  async(summitId, accessToken = null) => {
         'schedule_settings',
         'schedule_settings.filters',
         'schedule_settings.pre_filters',
+        "ticket_types",
     ]
 
     apiUrl.addQuery('expand', expand.join(','));
