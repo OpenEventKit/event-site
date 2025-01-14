@@ -25,6 +25,7 @@ import { navigate } from 'gatsby';
 import { customErrorHandler, customBadgeHandler, voidErrorHandler } from '../utils/customErrorHandler';
 import { getEnvVariable, SUMMIT_API_BASE_URL, SUMMIT_ID } from "../utils/envVariables";
 import expiredToken from "../utils/expiredToken";
+import {getAccessTokenSafely} from "../utils/loginUtils";
 import * as Sentry from "@sentry/react";
 
 export const GET_DISQUS_SSO = 'GET_DISQUS_SSO';
@@ -68,13 +69,11 @@ export const getDisqusSSO = (shortName) => async (dispatch, getState) => {
 
   if (disqusSSO && disqusSsoExpiration > Date.now()) return;
 
-  let accessToken;
-  try {
-    accessToken = await getAccessToken();
-  } catch (e) {
-    console.log('getAccessToken error: ', e);
-    return Promise.reject(e);
-  }
+  const accessToken = await getAccessTokenSafely()
+    .catch(() => {
+      dispatch(stopLoading());
+      return Promise.reject();
+    });
 
   return getRequest(
     null,
@@ -96,13 +95,11 @@ export const getDisqusSSO = (shortName) => async (dispatch, getState) => {
 
 export const getUserProfile = () => async (dispatch) => {
 
-  let accessToken;
-  try {
-    accessToken = await getAccessToken();
-  } catch (e) {
-    console.log('getAccessToken error: ', e);
-    return Promise.reject();
-  }
+  const accessToken = await getAccessTokenSafely()
+    .catch(() => {
+      dispatch(stopLoading());
+      return Promise.reject();
+    });
 
   let params = {
     access_token: accessToken,
@@ -131,13 +128,11 @@ export const getUserProfile = () => async (dispatch) => {
 
 export const getIDPProfile = () => async (dispatch) => {
 
-  let accessToken;
-  try {
-    accessToken = await getAccessToken();
-  } catch (e) {
-    console.log('getAccessToken error: ', e);
-    return Promise.reject();
-  }
+  const accessToken = await getAccessTokenSafely()
+    .catch(() => {
+      dispatch(stopLoading());
+      return Promise.reject();
+    });
 
   let params = {
     access_token: accessToken,
@@ -182,13 +177,11 @@ export const checkRequireExtraQuestionsByAttendee = (attendee) => (dispatch, get
 
 export const scanBadge = (sponsorId) => async (dispatch) => {
 
-  let accessToken;
-  try {
-    accessToken = await getAccessToken();
-  } catch (e) {
-    console.log('getAccessToken error: ', e);
-    return Promise.reject();
-  }
+  const accessToken = await getAccessTokenSafely()
+    .catch(() => {
+      dispatch(stopLoading());
+      return Promise.reject();
+    });
 
   let params = {
     access_token: accessToken,
@@ -217,13 +210,11 @@ export const scanBadge = (sponsorId) => async (dispatch) => {
 
 export const addToSchedule = (event) => async (dispatch, getState) => {
 
-  let accessToken;
-  try {
-    accessToken = await getAccessToken();
-  } catch (e) {
-    console.log('getAccessToken error: ', e);
-    return Promise.reject();
-  }
+  const accessToken = await getAccessTokenSafely()
+    .catch(() => {
+      dispatch(stopLoading());
+      return Promise.reject();
+    });
 
   const url = `${getEnvVariable(SUMMIT_API_BASE_URL)}/api/v1/summits/${getEnvVariable(SUMMIT_ID)}/members/me/schedule/${event.id}`;
 
@@ -241,13 +232,11 @@ export const addToSchedule = (event) => async (dispatch, getState) => {
 
 export const removeFromSchedule = (event) => async (dispatch, getState) => {
 
-  let accessToken;
-  try {
-    accessToken = await getAccessToken();
-  } catch (e) {
-    console.log('getAccessToken error: ', e);
-    return Promise.reject();
-  }
+  const accessToken = await getAccessTokenSafely()
+    .catch(() => {
+      dispatch(stopLoading());
+      return Promise.reject();
+    });
 
   const url = `${getEnvVariable(SUMMIT_API_BASE_URL)}/api/v1/summits/${getEnvVariable(SUMMIT_ID)}/members/me/schedule/${event.id}`;
 
@@ -265,13 +254,11 @@ export const removeFromSchedule = (event) => async (dispatch, getState) => {
 
 export const castPresentationVote = (presentation) => async (dispatch, getState) => {
 
-  let accessToken;
-  try {
-    accessToken = await getAccessToken();
-  } catch (e) {
-    console.log('getAccessToken error: ', e);
-    return Promise.reject();
-  }
+  const accessToken = await getAccessTokenSafely()
+    .catch(() => {
+      dispatch(stopLoading());
+      return Promise.reject();
+    });
 
   const params = {
     access_token: accessToken,
@@ -319,13 +306,11 @@ export const castPresentationVote = (presentation) => async (dispatch, getState)
 
 export const uncastPresentationVote = (presentation) => async (dispatch, getState) => {
 
-  let accessToken;
-  try {
-    accessToken = await getAccessToken();
-  } catch (e) {
-    console.log('getAccessToken error: ', e);
-    return Promise.reject();
-  }
+  const accessToken = await getAccessTokenSafely()
+    .catch(() => {
+      dispatch(stopLoading());
+      return Promise.reject();
+    });
 
   const params = {
     access_token: accessToken,
@@ -358,13 +343,11 @@ export const uncastPresentationVote = (presentation) => async (dispatch, getStat
 
 export const updateProfilePicture = (pic) => async (dispatch) => {
 
-  let accessToken;
-  try {
-    accessToken = await getAccessToken();
-  } catch (e) {
-    console.log('getAccessToken error: ', e);
-    return Promise.reject();
-  }
+  const accessToken = await getAccessTokenSafely()
+    .catch(() => {
+      dispatch(stopLoading());
+      return Promise.reject();
+    });
 
   let params = {
     access_token: accessToken,
@@ -391,13 +374,11 @@ export const updateProfilePicture = (pic) => async (dispatch) => {
 
 export const updateProfile = (profile) => async (dispatch) => {
 
-  let accessToken;
-  try {
-    accessToken = await getAccessToken();
-  } catch (e) {
-    console.log('getAccessToken error: ', e);
-    return Promise.reject();
-  }
+  const accessToken = await getAccessTokenSafely()
+    .catch(() => {
+      dispatch(stopLoading());
+      return Promise.reject();
+    });
 
   let params = {
     access_token: accessToken,
@@ -423,13 +404,12 @@ export const updateProfile = (profile) => async (dispatch) => {
 
 export const updatePassword = (password) => async (dispatch) => {
 
-  let accessToken;
-  try {
-    accessToken = await getAccessToken();
-  } catch (e) {
-    console.log('getAccessToken error: ', e);
-    return Promise.reject();
-  }
+  const accessToken = await getAccessTokenSafely()
+    .catch(() => {
+      dispatch(stopLoading());
+      return Promise.reject();
+    });
+
   let params = {
     access_token: accessToken,
   };
@@ -467,13 +447,11 @@ export const saveAttendeeQuestions = (values, ticketId = null) => async (dispatc
     normalizedEntity['attendee_company_id'] = values.attendee_company.id;
   }
 
-  let accessToken;
-  try {
-    accessToken = await getAccessToken();
-  } catch (e) {
-    console.log('getAccessToken error: ', e);
-    return Promise.reject();
-  }
+  const accessToken = await getAccessTokenSafely()
+    .catch(() => {
+      dispatch(stopLoading());
+      return Promise.reject();
+    });
 
   let params = {
     access_token: accessToken,
@@ -517,13 +495,11 @@ export const setPasswordlessLogin = (params) => (dispatch, getState) => {
 
 export const getScheduleSyncLink = () => async (dispatch) => {
 
-  let accessToken;
-  try {
-    accessToken = await getAccessToken();
-  } catch (e) {
-    console.log('getAccessToken error: ', e);
-    return Promise.reject();
-  }
+  const accessToken = await getAccessTokenSafely()
+    .catch(() => {
+      dispatch(stopLoading());
+      return Promise.reject();
+    });
 
   let params = {
     access_token: accessToken,
@@ -574,13 +550,11 @@ export const ticketOwnerChange = (ticket) => async (dispatch) => {
  */
 export const doVirtualCheckIn = (attendee) => async (dispatch, getState) => {
 
-  let accessToken;
-  try {
-    accessToken = await getAccessToken();
-  } catch (e) {
-    console.log('getAccessToken error: ', e);
-    return Promise.reject();
-  }
+  const accessToken = await getAccessTokenSafely()
+    .catch(() => {
+      dispatch(stopLoading());
+      return Promise.reject();
+    });
 
   let params = {
     access_token: accessToken,

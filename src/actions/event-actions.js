@@ -4,10 +4,8 @@ import {
     stopLoading,
     startLoading,
 } from 'openstack-uicore-foundation/lib/utils/actions';
-import {
-    getAccessToken,
-    clearAccessToken,
-} from 'openstack-uicore-foundation/lib/security/methods';
+import { clearAccessToken } from 'openstack-uicore-foundation/lib/security/methods';
+import { getAccessTokenSafely } from '../utils/loginUtils';
 
 import { customErrorHandler } from '../utils/customErrorHandler';
 
@@ -48,14 +46,12 @@ export const getEventById = (
     }
     // then refresh from api
 
-    let accessToken;
-    try {
-        accessToken = await getAccessToken();
-    } catch (e) {
-        console.log('getAccessToken error: ', e);
-        dispatch(stopLoading());
-        return Promise.reject();
-    }
+    const accessToken = await getAccessTokenSafely()
+      .catch(() => {
+            dispatch(stopLoading());
+            console.log('REJECTING PROMISE AFTER STOP LOADING')
+            return Promise.reject();
+      });
 
     let params = {
         access_token: accessToken,
@@ -90,13 +86,11 @@ export const getEventStreamingInfoById = (
     eventId
 ) => async (dispatch) => {
 
-    let accessToken;
-    try {
-        accessToken = await getAccessToken();
-    } catch (e) {
-        console.log('getAccessToken error: ', e);
-        return Promise.reject();
-    }
+    const accessToken = await getAccessTokenSafely()
+      .catch(() => {
+          dispatch(stopLoading());
+          return Promise.reject();
+      });
 
     let params = {
         access_token: accessToken

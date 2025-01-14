@@ -18,6 +18,7 @@ import { getVotingPeriodPhase } from '../utils/phasesUtils';
 import { mapVotesPerTrackGroup } from '../utils/voting-utils';
 
 import { getEnvVariable, SUMMIT_API_BASE_URL, SUMMIT_ID } from '../utils/envVariables';
+import {getAccessTokenSafely} from "../utils/loginUtils";
 
 export const SET_INITIAL_DATASET = 'VOTEABLE_PRESENTATIONS_SET_INITIAL_DATASET';
 export const GET_VOTEABLE_PRESENTATIONS = 'GET_VOTEABLE_PRESENTATIONS';
@@ -45,14 +46,11 @@ export const getAllVoteablePresentations = (page = 1, perPage = PresentationsDef
 
   dispatch(startLoading());
 
-  let accessToken;
-  try {
-      accessToken = await getAccessToken();
-  } catch (e) {
-      console.log('getAccessToken error: ', e);
+  const accessToken = await getAccessTokenSafely()
+    .catch(() => {
       dispatch(stopLoading());
-      return Promise.reject();    
-  }
+      return Promise.reject();
+    });
 
   const params = {
     access_token: accessToken,
@@ -85,13 +83,11 @@ export const getAllVoteablePresentations = (page = 1, perPage = PresentationsDef
 
 export const getVoteablePresentations = (page = 1, perPage = PresentationsDefaultPageSize) => async (dispatch, getState) => {
 
-  let accessToken;
-  try {
-      accessToken = await getAccessToken();
-  } catch (e) {
-      console.log('getAccessToken error: ', e);
-      return Promise.reject();    
-  }
+  const accessToken = await getAccessTokenSafely()
+    .catch(() => {
+      dispatch(stopLoading());
+      return Promise.reject();
+    });
 
   const params = {
     access_token: accessToken,
@@ -118,14 +114,11 @@ export const getPresentationById = (presentationId) => async (dispatch) => {
 
   dispatch(startLoading());
 
-  let accessToken;
-  try {
-    accessToken = await getAccessToken();
-  } catch (e) {
-    console.log('getAccessToken error: ', e);
-    dispatch(stopLoading());
-    return Promise.reject(e);
-  }
+  const accessToken = await getAccessTokenSafely()
+    .catch(() => {
+      dispatch(stopLoading());
+      return Promise.reject();
+    });
 
   const params = {
     access_token: accessToken,
@@ -154,14 +147,11 @@ export const getRecommendedPresentations = (trackGroups) => async (dispatch) => 
 
   dispatch(startLoading());
 
-  let accessToken;
-  try {
-    accessToken = await getAccessToken();
-  } catch (e) {
-    console.log('getAccessToken error: ', e);
-    dispatch(stopLoading());
-    return Promise.reject();    
-  }
+  const accessToken = await getAccessTokenSafely()
+    .catch(() => {
+      dispatch(stopLoading());
+      return Promise.reject();
+    });
 
 // order by random
 

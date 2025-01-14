@@ -1,3 +1,5 @@
+import { initLogOut, getAccessToken } from 'openstack-uicore-foundation/lib/security/methods'
+import * as Sentry from '@sentry/react'
 import {
   getEnvVariable,
   AUTHORIZED_DEFAULT_PATH
@@ -52,4 +54,15 @@ export const validateIdentityProviderButtons = (
     );
 
   return filteredButtons;
+};
+
+export const getAccessTokenSafely = async () => {
+  try {
+    return await getAccessToken();
+  } catch (e) {
+    console.log("getAccessToken error: ", e);
+    Sentry.captureException(e)
+    initLogOut();
+    return Promise.reject();
+  }
 };
