@@ -130,6 +130,7 @@ const AuthComponent = ({
 
     const sendCode = (email) => {
         setUserEmail(email);
+        setOtpLifeTime(0);
         return getPasswordlessCode(email).then(({ response }) => {
             setOtpLength(response.otp_length);
             setOtpLifeTime(response.otp_lifetime)
