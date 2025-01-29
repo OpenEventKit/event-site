@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, {useEffect, useRef, useState, useCallback} from "react";
 import * as Sentry from "@sentry/react";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import FragmentParser from "openstack-uicore-foundation/lib/utils/fragment-parser";
-import { getAccessToken } from "openstack-uicore-foundation/lib/security/methods";
+import {getAccessToken} from "openstack-uicore-foundation/lib/security/methods";
 import {
   AttendeeToAttendeeContainer,
   permissions,
@@ -18,14 +18,14 @@ import {
   SUPABASE_URL,
   SUPABASE_KEY,
 } from "@utils/envVariables";
-import { PHASES } from "@utils/phasesUtils";
+import {PHASES} from "@utils/phasesUtils";
 
 import "attendee-to-attendee-widget/dist/index.css";
 
-import { SentryFallbackFunction } from "./SentryErrorComponent";
+import {SentryFallbackFunction} from "./SentryErrorComponent";
 
-import { useEventListener } from "@utils/hooks";
-import { INIT_LOGOUT_EVENT } from "@utils/eventTriggers";
+import {useEventListener} from "@utils/hooks";
+import {INIT_LOGOUT_EVENT} from "@utils/eventTriggers";
 import {getAccessTokenSafely} from "../utils/loginUtils";
 
 const sbAuthProps = {
@@ -33,9 +33,11 @@ const sbAuthProps = {
   supabaseKey: getEnvVariable(SUPABASE_KEY),
 };
 
+const envVarsPresent = getEnvVariable(SUPABASE_URL) && getEnvVariable(SUPABASE_KEY) && getEnvVariable(STREAM_IO_API_KEY) && getEnvVariable(CHAT_API_BASE_URL);
+
 const adminGroups = ["administrators", "super-admins"];
 
-const AttendeesWidgetComponent = ({ user, event, summit, chatSettings }) => {
+const AttendeesWidgetComponent = ({user, event, summit, chatSettings}) => {
   const [loading, setLoading] = useState(true);
 
   //Deep linking support
@@ -44,18 +46,18 @@ const AttendeesWidgetComponent = ({ user, event, summit, chatSettings }) => {
   const sqacRef = useRef();
   const ocrRef = useRef();
 
-  const { userProfile, idpProfile } = user || {};
-  const { summit_tickets } = userProfile || {};
-  const { 
-    email, 
-    groups, 
+  const {userProfile, idpProfile} = user || {};
+  const {summit_tickets} = userProfile || {};
+  const {
+    email,
+    groups,
     bio,
     given_name,
     family_name,
     picture,
     company,
     job_title,
-    sub, 
+    sub,
     github_user,
     linked_in_profile,
     twitter_name,
@@ -69,7 +71,7 @@ const AttendeesWidgetComponent = ({ user, event, summit, chatSettings }) => {
   } = idpProfile || {};
 
   useEffect(() => {
-    if (!user || !userProfile || !idpProfile) return;
+    if (!user || !userProfile || !idpProfile || !envVarsPresent) return;
     const fragmentParser = new FragmentParser();
     const starHelpChatParam = fragmentParser.getParam("starthelpchat");
     const starQAChatParam = fragmentParser.getParam("startqachat");
@@ -88,7 +90,7 @@ const AttendeesWidgetComponent = ({ user, event, summit, chatSettings }) => {
     setLoading(false);
   }, [user, idpProfile, userProfile]);
 
-  if (loading) return <div style={{ margin: "20px auto", position: "relative" }}>Loading...</div>;
+  if (loading) return <div style={{margin: "20px auto", position: "relative"}}>Loading...</div>;
 
   const chatProps = {
     streamApiKey: getEnvVariable(STREAM_IO_API_KEY),
@@ -133,7 +135,7 @@ const AttendeesWidgetComponent = ({ user, event, summit, chatSettings }) => {
           .filter((st) => st.badge)
           .flatMap((st) => st.badge.features)
           .map((feature) => feature.id))]
-    
+
         return summit.badge_features_types.filter((bft) => attendeeBadgeFeatureIds.includes(bft.id));
       },
       bio: bio,
@@ -144,14 +146,14 @@ const AttendeesWidgetComponent = ({ user, event, summit, chatSettings }) => {
       showSocialInfo: public_profile_show_social_media_info === true,
       showBio: public_profile_show_bio === true,
       hasPermission: (permission) => {
-        const isAdmin =  groups &&
-            groups.map((g) => g.slug).filter((g) => adminGroups.includes(g))
-                .length > 0;
+        const isAdmin = groups &&
+          groups.map((g) => g.slug).filter((g) => adminGroups.includes(g))
+            .length > 0;
         switch (permission) {
           case permissions.MANAGE_ROOMS:
             return isAdmin;
           case permissions.CHAT:
-            if(isAdmin) return true;
+            if (isAdmin) return true;
             const accessLevels = summit_tickets
               .flatMap((x) => x.badge?.type.access_levels)
               .filter(
@@ -181,27 +183,27 @@ const AttendeesWidgetComponent = ({ user, event, summit, chatSettings }) => {
     ...sbAuthProps,
   };
 
-  if (!chatSettings?.enabled) return null;
+  if (!chatSettings?.enabled || !envVarsPresent) return null;
 
   return (
-    <div style={{ margin: "20px auto", position: "relative" }}>
-        <Sentry.ErrorBoundary fallback={SentryFallbackFunction({componentName: 'Attendee To Attendee'})}>
-          <AttendeeToAttendeeContainer
-            {...widgetProps}
-            ref={{ sdcRef, shcRef, sqacRef, ocrRef }}
-          />
-        </Sentry.ErrorBoundary>
-      </div>
+    <div style={{margin: "20px auto", position: "relative"}}>
+      <Sentry.ErrorBoundary fallback={SentryFallbackFunction({componentName: 'Attendee To Attendee'})}>
+        <AttendeeToAttendeeContainer
+          {...widgetProps}
+          ref={{sdcRef, shcRef, sqacRef, ocrRef}}
+        />
+      </Sentry.ErrorBoundary>
+    </div>
   );
 };
 
-const mapState = ({ settingState }) => ({
+const mapState = ({settingState}) => ({
   chatSettings: settingState.widgets.chat,
 });
 
 export const AttendeesWidget = connect(mapState)(AttendeesWidgetComponent);
 
-const AccessTracker = ({ user, isLoggedUser, summitPhase, chatSettings, updateChatProfileEnabled=false }) => {
+const AccessTracker = ({user, isLoggedUser, summitPhase, chatSettings, updateChatProfileEnabled = false}) => {
   const chatProps = {
     streamApiKey: getEnvVariable(STREAM_IO_API_KEY),
     apiBaseUrl: getEnvVariable(IDP_BASE_URL),
@@ -215,7 +217,7 @@ const AccessTracker = ({ user, isLoggedUser, summitPhase, chatSettings, updateCh
       return accessToken;
     },
   };
-  
+
   const trackerRef = useRef();
 
   const handleLogout = useCallback(() => {
@@ -228,7 +230,7 @@ const AccessTracker = ({ user, isLoggedUser, summitPhase, chatSettings, updateCh
   useEffect(() => {
     if (!isLoggedUser) {
       if (trackerRef.current)
-          trackerRef.current.signOut();
+        trackerRef.current.signOut();
     }
   }, [isLoggedUser]);
 
@@ -251,7 +253,7 @@ const AccessTracker = ({ user, isLoggedUser, summitPhase, chatSettings, updateCh
     return null;
   }
 
-  const { summit_tickets } = user.userProfile;
+  const {summit_tickets} = user.userProfile;
   const {
     bio,
     given_name,
@@ -310,12 +312,12 @@ const AccessTracker = ({ user, isLoggedUser, summitPhase, chatSettings, updateCh
     ...sbAuthProps
   };
 
-  if (!chatSettings.enabled) return null;
+  if (!chatSettings.enabled || !envVarsPresent) return null;
 
-  return <Tracker {...widgetProps} ref={trackerRef} />;
+  return <Tracker {...widgetProps} ref={trackerRef}/>;
 };
 
-const mapStateToProps = ({ loggedUserState, userState, clockState, settingState }) => ({
+const mapStateToProps = ({loggedUserState, userState, clockState, settingState}) => ({
   isLoggedUser: loggedUserState.isLoggedUser,
   user: userState,
   summitPhase: clockState.summit_phase,
