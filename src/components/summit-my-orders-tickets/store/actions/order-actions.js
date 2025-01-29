@@ -19,7 +19,6 @@ import {
     stopLoading,
     startLoading
 } from 'openstack-uicore-foundation/lib/utils/actions';
-import history from '../history';
 
 export const GET_USER_ORDERS = 'GET_ORDERS';
 export const REFUND_ORDER = 'REFUND_ORDER';
@@ -28,7 +27,11 @@ export const SET_ACTIVE_ORDER_ID = 'SET_ACTIVE_ORDER_ID';
 export const getUserOrders = ({ page = 1, perPage = 5 }) => async (dispatch, getState, { getAccessToken, apiBaseUrl, loginUrl }) => {
     const { summitState: { summit } } = getState();
 
-    const accessToken = await getAccessToken().catch(_ => history.replace(loginUrl));
+    const accessToken = await getAccessToken().catch(() => {
+        dispatch(stopLoading());
+        console.log('REJECTING PROMISE AFTER STOP LOADING')
+        return Promise.reject();
+    });
 
     if (!accessToken) return Promise.reject();
 
@@ -59,9 +62,13 @@ export const getUserOrders = ({ page = 1, perPage = 5 }) => async (dispatch, get
 export const cancelOrder = ({ order }) => async (dispatch, getState, { getAccessToken, apiBaseUrl, loginUrl }) => {
     const { orderState: { current_page } } = getState();
 
-    const accessToken = await getAccessToken().catch(_ => history.replace(loginUrl));
+    const accessToken = await getAccessToken().catch(() => {
+        dispatch(stopLoading());
+        console.log('REJECTING PROMISE AFTER STOP LOADING')
+        return Promise.reject();
+    });
 
-    if (!accessToken) return;
+    if (!accessToken) return Promise.reject();
 
     dispatch(startLoading());
 

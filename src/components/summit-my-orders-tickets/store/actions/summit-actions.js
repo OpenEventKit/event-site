@@ -19,7 +19,6 @@ import {
     startLoading,
     authErrorHandler,
 } from 'openstack-uicore-foundation/lib/utils/actions';
-import history from "../history";
 
 export const SET_SUMMIT = 'SET_SUMMIT';
 export const GET_MAIN_EXTRA_QUESTIONS = 'GET_MAIN_EXTRA_QUESTIONS';
@@ -32,7 +31,11 @@ export const getMainOrderExtraQuestions = ({ summit, attendeeId }) => async (dis
 
     if (!summit || !attendeeId) return Promise.reject();
 
-    const accessToken = await getAccessToken().catch(_ => history.replace(loginUrl));
+    const accessToken = await getAccessToken().catch(() => {
+        dispatch(stopLoading());
+        console.log('REJECTING PROMISE AFTER STOP LOADING')
+        return Promise.reject();
+    });
 
     if (!accessToken) return Promise.reject();
 

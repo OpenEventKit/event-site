@@ -1,9 +1,20 @@
-import { initLogOut, getAccessToken } from 'openstack-uicore-foundation/lib/security/methods'
+import { getAccessToken } from 'openstack-uicore-foundation/lib/security/methods'
 import * as Sentry from '@sentry/react'
 import {
   getEnvVariable,
   AUTHORIZED_DEFAULT_PATH
 } from "./envVariables";
+import { navigate } from "gatsby";
+import { triggerLogoutEvent } from "@utils/eventTriggers";
+
+export const onLogOut = (backUrl = null) => {
+  triggerLogoutEvent();
+  navigate("/auth/logout", {
+    state: {
+      backUrl: backUrl || window.location.pathname
+    }
+  });
+}
 
 export const getDefaultLocation = (
   eventRedirect,
@@ -50,7 +61,7 @@ export const validateIdentityProviderButtons = (
     .filter(button =>
       // default identity provider has no providerParam set
       !button[buttonPropertyMapping.providerParam] ||
-      availableSocialProviders.includes(button[buttonPropertyMapping.providerParam]) 
+      availableSocialProviders.includes(button[buttonPropertyMapping.providerParam])
     );
 
   return filteredButtons;
@@ -60,9 +71,9 @@ export const getAccessTokenSafely = async () => {
   try {
     return await getAccessToken();
   } catch (e) {
-    console.log("getAccessToken error: ", e);
+    console.log("loginUtils::getAccessToken error: ", e);
     Sentry.captureException(e)
-    initLogOut();
+    onLogOut();
     return Promise.reject();
   }
 };
