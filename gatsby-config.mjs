@@ -4,6 +4,7 @@ import { createRequire } from "module";
 import { fileURLToPath } from "url";
 import webpack from "webpack";
 import remarkGfm from "remark-gfm";
+import rehypeExternalLinks from "rehype-external-links";
 import rehypeMdxImportMedia from "rehype-mdx-import-media";
 
 const require = createRequire(import.meta.url);
@@ -154,7 +155,9 @@ const plugins = [
             // It's important to specify the maxWidth (in pixels) of
             // the content container as this plugin uses this as the
             // base for generating different widths of each image.
-            maxWidth: 2048
+            maxWidth: 2048,
+            linkImagesToOriginal: false,
+            wrapperStyle: fluidResult => "margin-left: 0; margin-right: auto;"
           }
         }
       ],
@@ -164,6 +167,7 @@ const plugins = [
           remarkGfm
         ],
         rehypePlugins: [
+          rehypeExternalLinks,
           rehypeMdxImportMedia
         ]
       }
