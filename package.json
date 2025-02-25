@@ -4,6 +4,7 @@
   "version": "2.0.152",
   "author": "Tipit LLC",
   "dependencies": {
+    "@emotion/server": "^11.11.0",
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/free-brands-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
