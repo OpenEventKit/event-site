@@ -5,7 +5,7 @@ import {
     BUCKET_SUMMIT_DATA_KEY,
     saveFile
 } from "../../utils/dataUpdatesUtils";
-
+import moment from "moment-timezone";
 /**
  * ActivityTypeSynchStrategy
  */
@@ -23,14 +23,13 @@ class ActivityTypeSynchStrategy extends AbstractSynchStrategy{
             if (!entity) return Promise.reject('ActivityTypeSynchStrategy::process entity not found.');
 
             // update summit
-            this.summit.event_types = [...this.summit.event_types.filter(et => et.id !== entity_id), entity]
-
+            this.summit.event_types = [...this.summit.event_types.filter(et => et.id !== entity_id),  entity];
+            this.summit.timestamp = moment().unix();
             // update events
             this.allEvents = this.allEvents.map(ev => {
                 if (ev.type.id === entity_id) return ({...ev, type: entity});
                 return ev;
             })
-
 
             // update files on cache
             console.log(`ActivityTypeSynchStrategy::process updating cache files`);
