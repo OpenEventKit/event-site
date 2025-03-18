@@ -211,11 +211,16 @@ const SSR_getSponsorCollections = async (allSponsors, baseUrl, summitId, accessT
 
 const SSR_getSpeakers = async (baseUrl, summitId, accessToken, filter = null) => {
 
+  const speakers_relations = [
+    'all_presentations',
+    'all_moderated_presentations',
+  ];
+
   const params = {
     access_token: accessToken,
     per_page: 30,
     page: 1,
-    relations: 'none',
+    relations: speakers_relations,
     fields: SPEAKER_MODERATOR_FIELDS.join(',')
   };
 
