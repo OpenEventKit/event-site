@@ -253,7 +253,8 @@ const SSR_getSummit = async (baseUrl, summitId, accessToken) => {
     "end_date",
     "time_zone_id",
     "time_zone_label",
-    "tracks.id","tracks.name","tracks.code","tracks.subtracks",
+    "tracks.id","tracks.name","tracks.code","tracks.order","tracks.parent_id","tracks.color",
+    "tracks.subtracks.id","tracks.subtracks.name","tracks.subtracks.code","tracks.subtracks.order","tracks.subtracks.parent_id","tracks.subtracks.color",
     "track_groups.id","track_groups.name","track_groups.tracks",
     "locations.id","locations.class_name","locations","locations.is_main",
     "secondary_logo",
@@ -277,13 +278,14 @@ const SSR_getSummit = async (baseUrl, summitId, accessToken) => {
     "badge_features_types",
     "time_zone"]
 
-  const summit_relations = ["dates_with_events","ticket_types.none","tracks.subtracks","track_groups.none","locations","locations.none","payment_profiles","time_zone","none"]
+  const summit_relations = ["dates_with_events","ticket_types.none","tracks.subtracks.none","track_groups.none","locations","locations.none","payment_profiles","time_zone","none"]
 
   const params = {
     access_token: accessToken,    
     expand: "event_types," +
       "badge_features_types," +
       "tracks," +
+      "tracks.subtracks," +
       "track_groups," +
       "presentation_levels," +
       "locations," +
