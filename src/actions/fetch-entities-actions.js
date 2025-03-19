@@ -331,8 +331,6 @@ export const fetchTrackById = async(summitId, trackId, accessToken = null) => {
     ]
 
     apiUrl.addQuery('expand', expand.join(','));
-    apiUrl.addQuery('relations', relations.join(','));
-    apiUrl.addQuery('fields', fields.join(','));
 
     return fetch(apiUrl.toString(), {
         method: 'GET'
