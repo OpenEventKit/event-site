@@ -40,8 +40,12 @@ export class LogOutCallbackRoute extends React.Component {
             let query = URI.parseQuery(location.search);
             // compare the state and perform the final logout
             if (query.hasOwnProperty("state") && query["state"] === postLogoutState) {
-                this.props.doLogout();
                 let backUrl = getFromLocalStorage('post_logout_redirect_path', true);
+                this.props.doLogout();
+                // clear current state , bc unmounted widgets will not receive the LOG_OUT event
+                if(typeof window !== 'undefined') {
+                    window.localStorage.clear();
+                }
                 navigate(backUrl ? backUrl : '/');
                 return;
             }

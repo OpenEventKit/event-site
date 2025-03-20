@@ -1,12 +1,17 @@
 import React from 'react';
 import * as Sentry from "@sentry/react";
 import { useDispatch, useSelector } from 'react-redux';
-import { getEnvVariable, IDP_BASE_URL, SUMMIT_API_BASE_URL, OAUTH2_CLIENT_ID, SUPPORT_EMAIL } from '../utils/envVariables';
-import { MyOrdersTicketsWidget } from './summit-my-orders-tickets';
-import { getUserProfile, ticketOwnerChange } from '../actions/user-actions';
-
+import { getAccessToken } from 'openstack-uicore-foundation/lib/security/methods';
+import { getEnvVariable, SUMMIT_API_BASE_URL, OAUTH2_CLIENT_ID, SUPPORT_EMAIL } from '../utils/envVariables';
+import { getUserProfile, ticketOwnerChange,updateProfile } from '../actions/user-actions';
+import loadable from "@loadable/component";
+import 'my-orders-tickets-widget/dist/index.css';
+import 'my-orders-tickets-widget/dist/i18n';
 import { SentryFallbackFunction } from "./SentryErrorComponent";
-import {getAccessTokenSafely} from "../utils/loginUtils";
+const MyOrdersMyTicketsWidget = loadable(() => import("my-orders-tickets-widget/dist/index"), {
+    ssr: false,
+    fallback: null,
+});
 
 export const MyOrdersTicketsComponent = () => {
     const dispatch = useDispatch();
@@ -18,19 +23,19 @@ export const MyOrdersTicketsComponent = () => {
     const widgetProps = {
         apiBaseUrl: getEnvVariable(SUMMIT_API_BASE_URL),
         clientId: getEnvVariable(OAUTH2_CLIENT_ID),
-        idpBaseUrl: getEnvVariable(IDP_BASE_URL),
         supportEmail: summit.support_email || getEnvVariable(SUPPORT_EMAIL),
         loginUrl: '/',
-        getAccessToken: getAccessTokenSafely,
+        getAccessToken,
         getUserProfile: async () => await dispatch(getUserProfile()),
+        updateProfile: (profile) =>  dispatch(updateProfile(profile)),
         summit,
         user,
         onTicketAssigned: (ticket) => dispatch(ticketOwnerChange(ticket))
     };
 
     return (
-        <Sentry.ErrorBoundary fallback={SentryFallbackFunction({componentName: 'My Orders & Tickets'})}>
-            <MyOrdersTicketsWidget {...widgetProps} />
-        </Sentry.ErrorBoundary>
+      <Sentry.ErrorBoundary fallback={SentryFallbackFunction({componentName: 'My Orders & Tickets'})}>
+          <MyOrdersMyTicketsWidget {...widgetProps} />
+      </Sentry.ErrorBoundary>
     );
 };

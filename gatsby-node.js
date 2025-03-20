@@ -250,7 +250,8 @@ const SSR_getSummit = async (baseUrl, summitId) => {
       "schedule_settings," +
       "schedule_settings.filters," +
       "schedule_settings.pre_filters,"+
-      "ticket_types",
+      "ticket_types," +
+      "badge_features_types" ,
     t: Date.now()
   };
 
