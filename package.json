@@ -12,8 +12,8 @@
     "@mdx-js/react": "^3.0.1",
     "@mdx-js/runtime": "^1.6.22",
     "@mui/base": "^5.0.0-beta.40",
-    "@mui/icons-material": "^5.15.5",
-    "@mui/material": "^5.15.5",
+    "@mui/icons-material": "^5.15.20",
+    "@mui/material": "^5.15.20",
     "@mux/mux-player-react": "^1.14.1",
     "@ncwidgets/file-relation": "^0.8.0",
     "@ncwidgets/id": "^0.8.1",
@@ -53,7 +53,7 @@
     "event-feedback-widget": "^2.0.1",
     "final-form": "4.20.7",
     "font-awesome": "^4.7.0",
-    "formik": "^2.2.9",
+    "formik": "^2.4.6",
     "full-schedule-widget": "3.0.9",
     "gatsby": "^5.13.5",
     "gatsby-alias-imports": "^1.0.6",
@@ -99,7 +99,7 @@
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.2.0",
     "react-final-form": "6.5.9",
-    "react-i18next": "^11.16.9",
+    "react-i18next": "^14.1.2",
     "react-iframe-comm": "^1.2.2",
     "react-immutable-proptypes": "^2.2.0",
     "react-laag": "^2.0.5",
@@ -135,7 +135,7 @@
     "stream-chat-react": "3.1.7",
     "summit-registration-lite": "5.0.44",
     "superagent": "8.0.9",
-    "sweetalert2": "^9.17.0",
+    "sweetalert2": "^11.11.1",
     "upcoming-events-widget": "3.0.7",
     "urijs": "^1.19.2",
     "use-fit-text": "^2.4.0",
@@ -147,7 +147,8 @@
     "web-vitals": "^1.1.2",
     "what-input": "^5.2.10",
     "xmlhttprequest": "^1.8.0",
-    "yup": "^0.32.11"
+    "yup": "^1.4.0",
+    "js-cookie": "^3.0.5"
   },
   "keywords": [
     "Open Event Kit"
