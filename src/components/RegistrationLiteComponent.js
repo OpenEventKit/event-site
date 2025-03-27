@@ -73,6 +73,11 @@ const RegistrationLiteComponent = ({
     };
 
     const handleOpenPopup = () => {
+        const { registerButton } = marketingPageSettings.hero.buttons;
+        if(registerButton?.externalRegistrationLink){
+            window.location = registerButton.externalRegistrationLink;
+            return;
+        }
         setIsActive(true);
     }
 
