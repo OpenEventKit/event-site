@@ -79,7 +79,12 @@ const marketingPage = {
                   label: "Display",
                   name: "display",
                   required: false
-                })
+                }),
+                stringField({
+                  label: "External Registration Link",
+                  name: "externalRegistrationLink",
+                  required: false
+                }),
               ]
             }),
             objectField({
@@ -116,7 +121,7 @@ const marketingPage = {
           required: false
         }),
         stringField({
-          label: "Text", 
+          label: "Text",
           name: "text"
         })
       ]
@@ -152,7 +157,7 @@ const marketingPage = {
               required: false
             }),
             stringField({
-              label: "Title", 
+              label: "Title",
               name: "title"
             })
           ]
@@ -167,7 +172,7 @@ const marketingPage = {
               required: false
             }),
             stringField({
-              label: "Title", 
+              label: "Title",
               name: "title",
               required: false
             })
@@ -183,7 +188,7 @@ const marketingPage = {
               required: false
             }),
             stringField({
-              label: "Title", 
+              label: "Title",
               name: "title"
             }),
             imageWithAltField()

@@ -6,11 +6,12 @@
     "buttons": {
       "registerButton": {
         "text": "Register Now",
-        "display": true
+        "display": true,
+        "externalRegistrationLink": ""
       },
       "loginButton": {
         "text": "Log In",
-        "display": true
+        "display": false
       }
     },
     "images": []

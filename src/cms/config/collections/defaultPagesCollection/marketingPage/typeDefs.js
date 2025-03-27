@@ -42,13 +42,18 @@ module.exports = `
     display: Boolean
     text: String
   }
-  type MarketingPageHeroButton {
+  type MarketingPageHeroRegistrationButton {
+    text: String
+    display: Boolean
+    externalRegistrationLink: String
+  }
+  type MarketingPageHeroLoginButton {
     text: String
     display: Boolean
   }
   type MarketingPageHeroButtons {
-    loginButton: MarketingPageHeroButton
-    registerButton: MarketingPageHeroButton
+    loginButton: MarketingPageHeroLoginButton
+    registerButton: MarketingPageHeroRegistrationButton
   }
   type MarketingPageHero {
     title: String
