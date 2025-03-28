@@ -181,7 +181,6 @@ export const fetchSpeakerById = async(summitId, speakerId, accessToken = null) =
  */
 export const fetchSummitById =  async(summitId, accessToken = null) => {
     let apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/public/v1/summits/${summitId}`);
-
     const expand = [
         'event_types',
         'tracks',
@@ -196,6 +195,7 @@ export const fetchSummitById =  async(summitId, accessToken = null) => {
         'schedule_settings.filters',
         'schedule_settings.pre_filters',
         "ticket_types",
+        "badge_features_types",
     ]
 
     apiUrl.addQuery('expand', expand.join(','));
