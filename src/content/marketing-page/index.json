@@ -11,13 +11,13 @@
       },
       "loginButton": {
         "text": "Log In",
-        "display": false
+        "display": true
       }
     },
     "images": []
   },
   "countdown": {
-      "display": false
+    "display": false
   },
   "widgets": {
     "schedule": {
