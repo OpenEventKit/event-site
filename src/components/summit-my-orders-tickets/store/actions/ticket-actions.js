@@ -14,7 +14,6 @@
 import i18n from '../../i18n';
 import IdTokenVerifier from 'idtoken-verifier';
 import Swal from 'sweetalert2';
-import history from '../history';
 import {
     authErrorHandler,
     getRequest,
@@ -100,7 +99,11 @@ export const getUserTickets = ({ page = 1, perPage = 5 }) => async (dispatch, ge
 
     if (!summit) return Promise.reject();
 
-    const accessToken = await getAccessToken().catch(_ => history.replace(loginUrl));
+    const accessToken = await getAccessToken().catch(() => {
+        dispatch(stopLoading());
+        console.log('REJECTING PROMISE AFTER STOP LOADING')
+        return Promise.reject();
+    });
 
     if (!accessToken) return Promise.reject();
 
@@ -142,9 +145,13 @@ export const getTicketById = ({order, ticket}) => async (dispatch, getState, { g
 
     if (!summit) return
 
-    const accessToken = await getAccessToken().catch(_ => history.replace(loginUrl));
+    const accessToken = await getAccessToken().catch(() => {
+        dispatch(stopLoading());
+        console.log('REJECTING PROMISE AFTER STOP LOADING')
+        return Promise.reject();
+    });
 
-    if (!accessToken) return;
+    if (!accessToken) return Promise.reject();
 
     dispatch(startLoading());
 
@@ -171,9 +178,13 @@ export const getTicketsByOrder = ({ orderId, page = 1, perPage = 5 }) => async (
 
     dispatch(startLoading());
 
-    const accessToken = await getAccessToken().catch(_ => history.replace(loginUrl));
+    const accessToken = await getAccessToken().catch(() => {
+        dispatch(stopLoading());
+        console.log('REJECTING PROMISE AFTER STOP LOADING')
+        return Promise.reject();
+    });
 
-    if (!accessToken) return;
+    if (!accessToken) return Promise.reject();
 
     const params = {
         access_token: accessToken,
@@ -212,9 +223,13 @@ export const assignAttendee = ({
         reassignOrderId = null
     }
 }) => async (dispatch, getState, { getAccessToken, apiBaseUrl, loginUrl }) => {
-    const accessToken = await getAccessToken().catch(_ => history.replace(loginUrl));
+    const accessToken = await getAccessToken().catch(() => {
+        dispatch(stopLoading());
+        console.log('REJECTING PROMISE AFTER STOP LOADING')
+        return Promise.reject();
+    });
 
-    if (!accessToken) return;
+    if (!accessToken) return Promise.reject();
 
     dispatch(startLoading());
 
@@ -274,9 +289,13 @@ export const editOwnedTicket = ({
         extra_questions,
     }
 }) => async (dispatch, getState, { getAccessToken, getUserProfile, apiBaseUrl, loginUrl }) => {
-    const accessToken = await getAccessToken().catch(_ => history.replace(loginUrl));
+    const accessToken = await getAccessToken().catch(() => {
+        dispatch(stopLoading());
+        console.log('REJECTING PROMISE AFTER STOP LOADING')
+        return Promise.reject();
+    });
 
-    if (!accessToken) return;
+    if (!accessToken) return Promise.reject();
 
     dispatch(startLoading());
 
@@ -357,9 +376,13 @@ export const editOwnedTicket = ({
 };
 
 export const resendNotification = (ticket) => async (dispatch, getState, { getAccessToken, apiBaseUrl, loginUrl }) => {
-    const accessToken = await getAccessToken().catch(_ => history.replace(loginUrl));
+    const accessToken = await getAccessToken().catch(() => {
+        dispatch(stopLoading());
+        console.log('REJECTING PROMISE AFTER STOP LOADING')
+        return Promise.reject();
+    });
 
-    if (!accessToken) return;
+    if (!accessToken) return Promise.reject();
 
     const { message } = ticket;
 
@@ -392,9 +415,13 @@ export const changeTicketAttendee = ({
     context,
     data: { attendee_email }
 }) => async (dispatch, getState, { getAccessToken, apiBaseUrl, loginUrl }) => {
-    const accessToken = await getAccessToken().catch(_ => history.replace(loginUrl));
+    const accessToken = await getAccessToken().catch(() => {
+        dispatch(stopLoading());
+        console.log('REJECTING PROMISE AFTER STOP LOADING')
+        return Promise.reject();
+    });
 
-    if (!accessToken) return;
+    if (!accessToken) return Promise.reject();
 
     dispatch(startLoading());
 
@@ -439,9 +466,13 @@ export const removeAttendee = ({ticket, context}) => async (dispatch, getState, 
         ticketState: { current_page: ticketPage, orderTickets: { current_page : orderTicketsCurrentPage } }
     } = getState();
 
-    const accessToken = await getAccessToken().catch(_ => history.replace(loginUrl));
+    const accessToken = await getAccessToken().catch(() => {
+        dispatch(stopLoading());
+        console.log('REJECTING PROMISE AFTER STOP LOADING')
+        return Promise.reject();
+    });
 
-    if (!accessToken) return;
+    if (!accessToken) return Promise.reject();
 
     dispatch(startLoading());
 
@@ -474,9 +505,13 @@ export const removeAttendee = ({ticket, context}) => async (dispatch, getState, 
 };
 
 export const getTicketPDF = ({ ticket }) => async (dispatch, getState, { getAccessToken, apiBaseUrl, loginUrl }) => {
-    const accessToken = await getAccessToken().catch(_ => history.replace(loginUrl));
+    const accessToken = await getAccessToken().catch(() => {
+        dispatch(stopLoading());
+        console.log('REJECTING PROMISE AFTER STOP LOADING')
+        return Promise.reject();
+    });
 
-    if (!accessToken) return;
+    if (!accessToken) return Promise.reject();
 
     dispatch(startLoading());
 
@@ -510,9 +545,13 @@ export const getTicketPDF = ({ ticket }) => async (dispatch, getState, { getAcce
 };
 
 export const refundTicket = ({ ticket, order }) => async (dispatch, getState, { getAccessToken, apiBaseUrl, loginUrl }) => {
-    const accessToken = await getAccessToken().catch(_ => history.replace(loginUrl));
+    const accessToken = await getAccessToken().catch(() => {
+        dispatch(stopLoading());
+        console.log('REJECTING PROMISE AFTER STOP LOADING')
+        return Promise.reject();
+    });
 
-    if (!accessToken) return;
+    if (!accessToken) return Promise.reject();
 
     dispatch(startLoading());
 
@@ -559,9 +598,13 @@ export const delegateTicket = ({
         extra_questions,
     }
 }) => async (dispatch, getState, { getAccessToken, apiBaseUrl, loginUrl }) => {
-    const accessToken = await getAccessToken().catch(_ => history.replace(loginUrl));
+    const accessToken = await getAccessToken().catch(() => {
+        dispatch(stopLoading());
+        console.log('REJECTING PROMISE AFTER STOP LOADING')
+        return Promise.reject();
+    });
 
-    if (!accessToken) return;
+    if (!accessToken) return Promise.reject();
 
     dispatch(startLoading());
 

@@ -209,3 +209,28 @@ export const fetchSummitById =  async(summitId, accessToken = null) => {
         return null;
     });
 }
+
+/**
+ * @param summitId
+ * @param trackId
+ * @param accessToken
+ * @returns {Promise<* | null>}
+ */
+export const fetchTrackById = async(summitId, trackId, accessToken = null) => {
+    let apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/public/v1/summits/${summitId}/tracks/${trackId}`);
+
+    const expand = [
+        'subtracks',
+    ]
+
+    apiUrl.addQuery('expand', expand.join(','));
+
+    return fetch(apiUrl.toString(), {
+        method: 'GET'
+    }).then(async (response) => {
+        if (response.status === 200) {
+            return await response.json();
+        }
+        return null;
+    });
+}

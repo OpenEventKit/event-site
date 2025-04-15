@@ -22,6 +22,7 @@ import { SentryFallbackFunction } from "./SentryErrorComponent";
 import RegistrationLiteWidget from "summit-registration-lite/dist";
 import "summit-registration-lite/dist/index.css";
 import useSiteSettings from "@utils/useSiteSettings";
+import usePaymentSettings from "@utils/usePaymentSettings";
 import useMarketingSettings, { MARKETING_SETTINGS_KEYS }  from "@utils/useMarketingSettings";
 import { getEnvVariable, SUMMIT_API_BASE_URL, OAUTH2_CLIENT_ID, REGISTRATION_BASE_URL, SUPPORT_EMAIL } from "@utils/envVariables";
 import { userHasAccessLevel, VIRTUAL_ACCESS_LEVEL } from "@utils/authorizedGroups";
@@ -73,6 +74,11 @@ const RegistrationLiteComponent = ({
     };
 
     const handleOpenPopup = () => {
+        const { registerButton } = marketingPageSettings.hero.buttons;
+        if(registerButton?.externalRegistrationLink){
+            window.location = registerButton.externalRegistrationLink;
+            return;
+        }
         setIsActive(true);
     }
 
@@ -126,6 +132,8 @@ const RegistrationLiteComponent = ({
     const noAllowedTicketsMessage = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteNoAllowedTicketsMessage);
 
     const siteSettings = useSiteSettings();
+
+    const paymentSettings = usePaymentSettings();
 
     const widgetProps = {
         apiBaseUrl: getEnvVariable(SUMMIT_API_BASE_URL),
@@ -197,7 +205,8 @@ const RegistrationLiteComponent = ({
         showCompanyInputDefaultOptions: showCompanyInputDefaultOptions,
         idpLogoLight: siteSettings?.idpLogo?.idpLogoLight?.publicURL,
         idpLogoDark: siteSettings?.idpLogo?.idpLogoDark?.publicURL,
-        idpLogoAlt: siteSettings?.idpLogo?.idpLogoAlt
+        idpLogoAlt: siteSettings?.idpLogo?.idpLogoAlt,
+        hidePostalCode: paymentSettings?.hidePostalCode
     };
 
     const { registerButton } = marketingPageSettings.hero.buttons;

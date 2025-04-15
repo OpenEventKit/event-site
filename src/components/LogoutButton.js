@@ -1,17 +1,11 @@
 import React from "react";
-import { navigate } from "gatsby";
-import { triggerLogoutEvent } from "@utils/eventTriggers";
+import {onLogOut} from "../utils/loginUtils";
 
 export default class
   LogoutButton extends React.Component {
 
   onClickLogout() {
-    triggerLogoutEvent();
-    navigate("/auth/logout", {
-      state: {
-        backUrl: window.location.pathname
-      }
-    })
+    onLogOut();
   }
 
   render() {

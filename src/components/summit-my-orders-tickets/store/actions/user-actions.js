@@ -5,7 +5,6 @@ import {
     stopLoading,
     startLoading
 } from 'openstack-uicore-foundation/lib/utils/actions';
-import history from '../history';
 
 export const START_LOADING_IDP_PROFILE = 'START_LOADING_IDP_PROFILE';
 export const STOP_LOADING_IDP_PROFILE = 'STOP_LOADING_IDP_PROFILE';
@@ -15,9 +14,13 @@ export const SET_USER = 'SET_USER';
 export const setUser = (user) => (dispatch) => dispatch(createAction(SET_USER)(user));
 
 export const updateProfile = (profile) => async (dispatch, getState, { getAccessToken, idpBaseUrl, loginUrl }) => {
-    const accessToken = await getAccessToken().catch(_ => history.replace(loginUrl));
+    const accessToken = await getAccessToken().catch(() => {
+        dispatch(stopLoading());
+        console.log('REJECTING PROMISE AFTER STOP LOADING')
+        return Promise.reject();
+    });
 
-    if (!accessToken) return;
+    if (!accessToken) return Promise.reject();
 
     dispatch(startLoading());
 

@@ -11,7 +11,7 @@ const shortcodes = {
   // Example:
   // Grid,
   // SpeakerCard,
-  img: ResponsiveImage
+  ResponsiveImage
 };
 
 export default shortcodes;

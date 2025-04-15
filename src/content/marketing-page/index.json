@@ -6,7 +6,8 @@
     "buttons": {
       "registerButton": {
         "text": "Register Now",
-        "display": true
+        "display": true,
+        "externalRegistrationLink": ""
       },
       "loginButton": {
         "text": "Log In",
@@ -16,7 +17,7 @@
     "images": []
   },
   "countdown": {
-      "display": false
+    "display": false
   },
   "widgets": {
     "schedule": {
