@@ -46,6 +46,7 @@ const AuthComponent = ({
     const [otpLogin, setOtpLogin] = useState(false);
     const [userEmail, setUserEmail] = useState('');
     const [otpLength, setOtpLength] = useState(null);
+    const [otpLifeTime, setOtpLifeTime] = useState(null);
     const [otpError, setOtpError] = useState(false);
 
     const hasVirtualBadge = useMemo(() =>
@@ -129,8 +130,10 @@ const AuthComponent = ({
 
     const sendCode = (email) => {
         setUserEmail(email);
+        setOtpLifeTime(0);
         return getPasswordlessCode(email).then(({ response }) => {
             setOtpLength(response.otp_length);
+            setOtpLifeTime(response.otp_lifetime)
             setOtpLogin(true);
         }).catch((err) => {
             const errorMessage = err.response?.body?.error || err.message;
@@ -154,6 +157,7 @@ const AuthComponent = ({
     const passwordlessLoginProps = {
         email: userEmail,
         codeLength: otpLength,
+        codeLifeTime: otpLifeTime,
         passwordlessLogin: (code) => loginPasswordless(code, userEmail).then(() => {
             // close popup and then navigate bc its its the same origin page
             // it would not reload and closed the popup automatically
