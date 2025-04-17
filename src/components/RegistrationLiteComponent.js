@@ -20,6 +20,7 @@ import iconButtonStyles from "./IconButton/styles.module.scss";
 import { SentryFallbackFunction } from "./SentryErrorComponent";
 // these two libraries are client-side only
 import RegistrationLiteWidget from "summit-registration-lite/dist";
+import {ERROR_TYPE_ERROR, ERROR_TYPE_VALIDATION, ERROR_TYPE_PAYMENT} from "summit-registration-lite/dist/utils/constants";
 import "summit-registration-lite/dist/index.css";
 import useSiteSettings from "@utils/useSiteSettings";
 import usePaymentSettings from "@utils/usePaymentSettings";
@@ -93,6 +94,28 @@ const RegistrationLiteComponent = ({
             window.localStorage.setItem("post_logout_redirect_path", new URI(window.location.href).pathname());
             doLogout();
         });
+    }
+
+    const handleOnError = (e) => {
+        // this is a basic implementation using swal
+        const {type, msg, exception} = e;
+        let icon = 'error';
+        let title = 'ERROR';
+        switch(type){
+            case ERROR_TYPE_ERROR:
+                icon = 'error';
+                title = 'Error';
+                break
+            case ERROR_TYPE_VALIDATION:
+                icon = 'warning';
+                title = 'Warning'
+                break;
+            case ERROR_TYPE_PAYMENT:
+                title = 'Payment Error'
+                icon = 'warning';
+                break;
+        }
+        Swal.fire(title, msg, icon)
     }
 
     const getPasswordlessCode = (email) => {
@@ -176,7 +199,7 @@ const RegistrationLiteComponent = ({
         handleCompanyError: () => handleCompanyError,
         allowsNativeAuth: allowsNativeAuth,
         allowsOtpAuth: allowsOtpAuth,
-        stripeOptions: {
+        providerOptions: {
             fonts: [{ cssSrc: withPrefix("/fonts/fonts.css") }],
             style: { base: { fontFamily: `"Nunito Sans", sans-serif`, fontWeight: 300 } }
         },
@@ -206,7 +229,9 @@ const RegistrationLiteComponent = ({
         idpLogoLight: siteSettings?.idpLogo?.idpLogoLight?.publicURL,
         idpLogoDark: siteSettings?.idpLogo?.idpLogoDark?.publicURL,
         idpLogoAlt: siteSettings?.idpLogo?.idpLogoAlt,
-        hidePostalCode: paymentSettings?.hidePostalCode
+        hidePostalCode: paymentSettings?.hidePostalCode,
+        successfulPaymentReturnUrl: `${window.location.origin}/a/my-tickets/`,
+        onError: handleOnError,
     };
 
     const { registerButton } = marketingPageSettings.hero.buttons;

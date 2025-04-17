@@ -3674,17 +3674,17 @@
     string-width "^4.2.3"
     strip-ansi "^6.0.1"
 
-"@stripe/react-stripe-js@^1.4.1":
-  version "1.16.5"
-  resolved "https://registry.yarnpkg.com/@stripe/react-stripe-js/-/react-stripe-js-1.16.5.tgz#51cf862b50ca91ae6193c77a5bec889e81047f10"
-  integrity sha512-lVPW3IfwdacyS22pP+nBB6/GNFRRhT/4jfgAK6T2guQmtzPwJV1DogiGGaBNhiKtSY18+yS8KlHSu+PvZNclvQ==
+"@stripe/react-stripe-js@^3.6.0":
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/@stripe/react-stripe-js/-/react-stripe-js-3.6.0.tgz#af6b66c006eef97ed885815ae976fb74f0aa1bf4"
+  integrity sha512-zEnaUmTOsu7zhl3RWbZ0l1dRiad+QIbcAYzQfF+yYelURJowhAwesRHKWH+qGAIBEpkO6/VCLFHhVLH9DtPlnw==
   dependencies:
     prop-types "^15.7.2"
 
-"@stripe/stripe-js@^1.15.0":
-  version "1.54.2"
-  resolved "https://registry.yarnpkg.com/@stripe/stripe-js/-/stripe-js-1.54.2.tgz#0665848e22cbda936cfd05256facdfbba121438d"
-  integrity sha512-R1PwtDvUfs99cAjfuQ/WpwJ3c92+DAMy9xGApjqlWQMj0FKQabUAys2swfTRNzuYAYJh7NqK2dzcYVNkKLEKUg==
+"@stripe/stripe-js@^7.0.0":
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/@stripe/stripe-js/-/stripe-js-7.1.0.tgz#a0e7b928a3f46d515e8df7a3a66cf4f923b0a580"
+  integrity sha512-dORq+9fb+STvq9Woi7eupUJV2UcW3tP33yQvREI0NIPDKv6KOCg/tV6h/DH1zQn2clIH/WR7HHBpbNQzWAo+Kg==
 
 "@supabase/auth-js@2.64.4":
   version "2.64.4"
@@ -19205,10 +19205,10 @@ sudo-prompt@^8.2.0:
   resolved "https://registry.yarnpkg.com/sudo-prompt/-/sudo-prompt-8.2.5.tgz#cc5ef3769a134bb94b24a631cc09628d4d53603e"
   integrity sha512-rlBo3HU/1zAJUrkY6jNxDOC9eVYliG6nS4JA8u8KAshITd07tafMc/Br7xQwCSseXwJ2iCcHCE8SNWX3q8Z+kw==
 
-summit-registration-lite@5.0.45-beta.3:
-  version "5.0.45-beta.3"
-  resolved "https://registry.yarnpkg.com/summit-registration-lite/-/summit-registration-lite-5.0.45-beta.3.tgz#42af1b497446f4fca9eba245621000f46afac965"
-  integrity sha512-efbij4FS25tZWRSbLaYLKyPqmfkDkVXI1QKvErvK/CvVe+VifUpwDrq12QUu8lBPvz3GnF1dXnVRUcjjevRTow==
+summit-registration-lite@6.0.0-beta.1:
+  version "6.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/summit-registration-lite/-/summit-registration-lite-6.0.0-beta.1.tgz#a694dc0c223e5614107efc1cc42f9518db6a187c"
+  integrity sha512-IERhJ9FiTCFbvpzXLl9m3nycZW/s05BdqMcrq5GnqGvN9VUPCtco4fKTXZXCSw16AgAKtfSco/S01l/Gm22BQw==
   dependencies:
     "@emotion/react" "^11.11.1"
     "@emotion/styled" "^11.11.0"
@@ -19216,8 +19216,8 @@ summit-registration-lite@5.0.45-beta.3:
     "@mui/material" "^5.14.18"
     "@react-pdf/renderer" "^3.1.12"
     "@sentry/react" "^8.35.0"
-    "@stripe/react-stripe-js" "^1.4.1"
-    "@stripe/stripe-js" "^1.15.0"
+    "@stripe/react-stripe-js" "^3.6.0"
+    "@stripe/stripe-js" "^7.0.0"
     i18n-react "^0.6.4"
     react-helmet "^6.1.0"
     react-hook-form "^7.6.7"
