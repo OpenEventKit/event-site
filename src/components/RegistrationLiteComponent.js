@@ -114,6 +114,10 @@ const RegistrationLiteComponent = ({
                 title = 'Payment Error'
                 icon = 'warning';
                 break;
+            default:
+                icon = 'error';
+                title = 'Error';
+                break;
         }
         Swal.fire(title, msg, icon)
     }
