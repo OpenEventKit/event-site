@@ -1,4 +1,4 @@
 {
   "applePayDomainFile": "/static/.well-known/apple-developer-merchantid-domain-association",
-  "hidePostalCode": true
+  "hidePostalCode": false
 }
