@@ -126,7 +126,10 @@ const DisqusComponent = ({summit, sponsor, event, disqusSSO, hideMobile, title, 
     if (!remoteAuthS3) error = ` ${error} ${!remoteAuthS3 ? 'SSO remoteAuthS3 missing' : ''}`;
     if (!apiKey) error = ` ${error} ${!apiKey ? 'SSO apiKey missing' : ''}`;
     if (!shortname) error = ` ${error} ${!shortname ? 'DISQUS_SHORTNAME env var missing' : ''}`;
-    return error;
+
+    // no error, fail silently
+    console.log(error);
+    return null;
   }
 
   const disqusConfig = {
