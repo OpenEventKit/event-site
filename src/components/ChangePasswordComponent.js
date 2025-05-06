@@ -35,6 +35,7 @@ const ChangePasswordComponent = ({ updatePassword }) => {
           <div className={`columns is-mobile ${styles.passwordFields}`}>
             <div className={`columns column is-full ${styles.inputField}`}>
               <b>Current Password</b>
+              <i className={styles.subLabel}>(leave blank if you don't have one)</i>
               <div>
                 <input
                   className={`column is-11 ${styles.input} ${styles.isLarge}`}
@@ -81,7 +82,7 @@ const ChangePasswordComponent = ({ updatePassword }) => {
           </div>
           <div className={`columns is-mobile ${styles.buttons}`}>
             <div className={`column is-full`}>
-              <button disabled={!currentPassword || !newPassword || !newPasswordConfirm}
+              <button disabled={!newPassword || !newPasswordConfirm}
                 className="button is-large"
                 onClick={() => updatePassword(currentPassword, newPassword, newPasswordConfirm)}
               >
