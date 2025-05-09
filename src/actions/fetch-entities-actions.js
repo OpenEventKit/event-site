@@ -181,7 +181,9 @@ export const fetchSpeakerById = async (summitId, speakerId, accessToken = null) 
  * @returns {Promise<Response>}
  */
 export const fetchSummitById = async (summitId, accessToken = null) => {
-    let apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/public/v1/summits/${summitId}`);
+    let apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/v2/summits/${summitId}`);
+
+    apiUrl.addQuery('access_token', accessToken);
 
     const summit_primary_fields = [
         "id", "name", "start_date", "end_date", "time_zone_id", "time_zone_label"
