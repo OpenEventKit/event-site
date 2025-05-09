@@ -9,6 +9,7 @@ const {
 const SentryWebpackPlugin = require("@sentry/webpack-plugin");
 const { ClientCredentials } = require("simple-oauth2");
 const SummitAPIRequest = require("./src/utils/build-json/SummitAPIRequest");
+const URI = require("urijs")
 
 const myEnv = require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
@@ -238,64 +239,23 @@ const SSR_getSpeakers = async (baseUrl, summitId, accessToken, filter = null) =>
     .catch(e => console.log("ERROR: ", e));
 };
 
-const SSR_getSummit = async (baseUrl, summitId, accessToken) => {
+const SSR_getSummit = async (baseUrl, summitId, accessToken) => {  
 
-  const summit_primary_fields = [
-    "id", "name", "start_date", "end_date", "time_zone_id", "time_zone_label"
-  ];
+  let apiUrl = URI(`${baseUrl}/api/v2/summits/${summitId}`);
+  
+  apiUrl.addQuery('access_token', accessToken);  
 
-  const summit_tracks_fields = [
-    "tracks.id", "tracks.name", "tracks.code", "tracks.order", "tracks.parent_id", "tracks.color",
-    "tracks.subtracks.id", "tracks.subtracks.name", "tracks.subtracks.code", "tracks.subtracks.order",
-    "tracks.subtracks.parent_id", "tracks.subtracks.color"
-  ];
+  apiUrl.addQuery('fields', SummitAPIRequest.getFields());
+  apiUrl.addQuery('expand', SummitAPIRequest.getExpands());  
+  apiUrl.addQuery('relations', SummitAPIRequest.getRelations());
+  
+  apiUrl.addQuery('t', Date.now());
 
-  const summit_ticket_types_fields = [
-    "ticket_types.id", "ticket_types.name", "ticket_types.created", "ticket_types.cost"
-  ];
+  console.log("CHECK!", apiUrl.toString());
 
-  const summit_track_groups_fields = [
-    "track_groups.id", "track_groups.name", "track_groups.tracks", "track_groups.color"
-  ];
-
-  const summit_other_fields = [
-    "secondary_logo", "slug", "payment_profiles", "support_email", "start_showing_venues_date",
-    "dates_with_events", "logo", "registration_allowed_refund_request_till_date", "allow_update_attendee_extra_questions",
-    "is_virtual", "registration_disclaimer_mandatory", "registration_disclaimer_content", "reassign_ticket_till_date",
-    "is_main", "title", "description", "time_zone"
-  ];
-
-  const summit_relations = [
-    "dates_with_events", "ticket_types.none", "tracks.subtracks.none", "track_groups.none", "locations",
-    "locations.none", "payment_profiles", "time_zone", "none"
-  ];
-
-  const summit_expands = [
-    "event_types", "badge_features_types", "tracks", "tracks.subtracks", "track_groups", "presentation_levels",
-    "locations", "locations.rooms", "locations.floors", "order_extra_questions.values", "schedule_settings",
-    "schedule_settings.filters", "schedule_settings.pre_filters", "ticket_types"
-  ];
-
-  const summitAPI = SummitAPIRequest.getInstance();
-
-  summitAPI.addFields(summit_primary_fields);
-  summitAPI.addFields(summit_tracks_fields);
-  summitAPI.addFields(summit_track_groups_fields);
-  summitAPI.addFields(summit_ticket_types_fields);
-  summitAPI.addFields(summit_other_fields);
-
-  summitAPI.addRelations(summit_relations);
-  summitAPI.addExpands(summit_expands);
-
-  const params = {
-    access_token: accessToken,
-    t: Date.now(),
-    ...summitAPI.buildQueryParams(),
-  }
 
   return await axios.get(
-    `${baseUrl}/api/v2/summits/${summitId}`,
-    { params }
+    apiUrl.toString()
   )
     .then(({ data }) => data)
     .catch(e => console.log("ERROR: ", e));
