@@ -251,9 +251,6 @@ const SSR_getSummit = async (baseUrl, summitId, accessToken) => {
   
   apiUrl.addQuery('t', Date.now());
 
-  console.log("CHECK!", apiUrl.toString());
-
-
   return await axios.get(
     apiUrl.toString()
   )
