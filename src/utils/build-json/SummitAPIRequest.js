@@ -63,17 +63,17 @@ class SummitAPIRequest {
         return SummitAPIRequest.instance;
     }
 
-    static getFields = () => {
+    getFields = () => {
         const instance = SummitAPIRequest.getInstance();
         return instance.fields.join(",");
     }
 
-    static getExpands = () => {
+    getExpands = () => {
         const instance = SummitAPIRequest.getInstance();
         return instance.expands.join(",");
     }
 
-    static getRelations = () => {
+    getRelations = () => {
         const instance = SummitAPIRequest.getInstance();
         return instance.relations.join(",");
     }
