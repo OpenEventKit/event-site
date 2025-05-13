@@ -184,12 +184,11 @@ export const fetchSummitById = async (summitId, accessToken = null) => {
     let apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/v2/summits/${summitId}`);
 
     apiUrl.addQuery('access_token', accessToken);
+    apiUrl.addQuery('t', Date.now());
+  
+    const apiUrlWithParams = SummitAPIRequest.build(apiUrl);
 
-    apiUrl.addQuery('fields', SummitAPIRequest.getFields());
-    apiUrl.addQuery('expand', SummitAPIRequest.getExpands());
-    apiUrl.addQuery('relations', SummitAPIRequest.getRelations());
-
-    return fetch(apiUrl.toString(), {
+    return fetch(apiUrlWithParams, {
         method: 'GET'
     }).then(async (response) => {
         if (response.status === 200) {
