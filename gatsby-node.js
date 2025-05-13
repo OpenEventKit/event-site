@@ -239,20 +239,17 @@ const SSR_getSpeakers = async (baseUrl, summitId, accessToken, filter = null) =>
     .catch(e => console.log("ERROR: ", e));
 };
 
-const SSR_getSummit = async (baseUrl, summitId, accessToken) => {  
+const SSR_getSummit = async (baseUrl, summitId, accessToken) => {
 
   let apiUrl = URI(`${baseUrl}/api/v2/summits/${summitId}`);
-  
-  apiUrl.addQuery('access_token', accessToken);  
 
-  apiUrl.addQuery('fields', SummitAPIRequest.getFields());
-  apiUrl.addQuery('expand', SummitAPIRequest.getExpands());  
-  apiUrl.addQuery('relations', SummitAPIRequest.getRelations());
-  
+  apiUrl.addQuery('access_token', accessToken);
   apiUrl.addQuery('t', Date.now());
 
+  const apiUrlWithParams = SummitAPIRequest.build(apiUrl);
+
   return await axios.get(
-    apiUrl.toString()
+    apiUrlWithParams
   )
     .then(({ data }) => data)
     .catch(e => console.log("ERROR: ", e));

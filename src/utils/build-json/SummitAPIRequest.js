@@ -77,6 +77,15 @@ class SummitAPIRequest {
         const instance = SummitAPIRequest.getInstance();
         return instance.relations.join(",");
     }
+
+    static build = (apiUrl) => {
+        const instance = SummitAPIRequest.getInstance();
+        apiUrl.addQuery('fields', instance.getFields());
+        apiUrl.addQuery('expand', instance.getExpands());
+        apiUrl.addQuery('relations', instance.getRelations());
+
+        return apiUrl.toString();
+    }
 }
 
 module.exports = SummitAPIRequest;
