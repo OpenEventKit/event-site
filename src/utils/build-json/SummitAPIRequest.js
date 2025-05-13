@@ -1,4 +1,6 @@
-class SummitAPIRequest {
+const BaseAPIRequest = require("./BaseAPIRequest");
+
+class SummitAPIRequest extends BaseAPIRequest {
     static instance;
 
     constructor() {
@@ -96,14 +98,9 @@ class SummitAPIRequest {
 
     static getInstance() {
         if (!SummitAPIRequest.instance) {
-            SummitAPIRequest.instance = new SummitAPIRequest();
+            new SummitAPIRequest();
         }
         return SummitAPIRequest.instance;
-    }
-
-    getFields = () => {
-        const instance = SummitAPIRequest.getInstance();
-        return instance.fields.join(",");
     }
 
     getExpands = () => {
