@@ -14,6 +14,10 @@ class SummitAPIRequest {
             "is_main", "title", "description", "time_zone"
         ];
 
+        const event_types_fields = [
+            "event_types.id"
+        ];
+
         const tracks_fields = [
             "tracks.id", "tracks.name", "tracks.code", "tracks.order", "tracks.parent_id", "tracks.color",
             "tracks.subtracks.id", "tracks.subtracks.name", "tracks.subtracks.code", "tracks.subtracks.order",
@@ -25,30 +29,32 @@ class SummitAPIRequest {
         ];
 
         const track_groups_fields = [
-            "track_groups.id", "track_groups.name", "track_groups.tracks", "track_groups.color"
+            "track_groups.id", "track_groups.name", "track_groups.color"
         ];
 
-        const other_fields = [
-
+        const location_fields = [
+            "locations.id", "locations.class_name", "locations.is_main", "locations.name", "locations.city",
+            "locations.country", "locations.venue.name"
         ];
 
         const relations = [
-            "dates_with_events", "ticket_types.none", "tracks.subtracks.none", "track_groups.none", "locations",
-            "locations.none", "payment_profiles", "time_zone", "none"
+            "dates_with_events", "ticket_types.none", "tracks.none", "tracks.subtracks.none", "track_groups.none", 
+            "event_types.none", "locations", "locations.none", "payment_profiles", "time_zone", "none"
         ];
 
         const expands = [
             "event_types", "badge_features_types", "tracks", "tracks.subtracks", "track_groups", "presentation_levels",
-            "locations", "locations.rooms", "locations.floors", "order_extra_questions.values", "schedule_settings",
-            "schedule_settings.filters", "schedule_settings.pre_filters", "ticket_types"
+            "locations", "locations.venue", "order_extra_questions.values", "schedule_settings", "schedule_settings.filters",
+            "schedule_settings.pre_filters", "ticket_types"
         ];
 
         this.fields = [
             ...primary_fields,
+            ...event_types_fields,
             ...tracks_fields,
             ...ticket_types_fields,
             ...track_groups_fields,
-            ...other_fields
+            ...location_fields,
         ];
 
         this.expands = [...expands];
