@@ -14,6 +14,7 @@ class SummitAPIRequest {
             "is_main", "title", "description", "time_zone"
         ];
 
+        // TODO: to be reviewed later with data syncs actions to match the needs of the data update
         const event_types_fields = [
             "event_types.id"
         ];
@@ -37,15 +38,45 @@ class SummitAPIRequest {
             "locations.country", "locations.venue.name"
         ];
 
+        const ticket_types_relations = ["ticket_types.none"];
+        const tracks_relations = ["tracks.none", "tracks.subtracks.none"];
+        const track_groups_relations = ["track_groups.none"];
+        const location_relations = ["locations.none"];
+        const event_types_relations = ["event_types.none"];
+
         const relations = [
-            "dates_with_events", "ticket_types.none", "tracks.none", "tracks.subtracks.none", "track_groups.none", 
-            "event_types.none", "locations", "locations.none", "payment_profiles", "time_zone", "none"
+            "dates_with_events",
+            "locations",
+            "payment_profiles",
+            "time_zone",
+            ...ticket_types_relations,
+            ...tracks_relations,
+            ...track_groups_relations,
+            ...location_relations,
+            ...event_types_relations
+        ]
+
+        const schedule_settings_expands = [
+            "schedule_settings.filters",
+            "schedule_settings.pre_filters"
         ];
 
+        const track_expands = ["tracks.subtracks"];
+
+        const locations_expands = ["locations.venue"];
+
         const expands = [
-            "event_types", "badge_features_types", "tracks", "tracks.subtracks", "track_groups", "presentation_levels",
-            "locations", "locations.venue", "order_extra_questions.values", "schedule_settings", "schedule_settings.filters",
-            "schedule_settings.pre_filters", "ticket_types"
+            "event_types",
+            "badge_features_types",
+            "tracks",
+            "track_groups",
+            "presentation_levels",
+            "locations",
+            "schedule_settings",
+            "ticket_types",
+            ...schedule_settings_expands,
+            ...track_expands,
+            ...locations_expands
         ];
 
         this.fields = [
@@ -87,9 +118,9 @@ class SummitAPIRequest {
 
     static build = (apiUrl) => {
         const instance = SummitAPIRequest.getInstance();
-        apiUrl.addQuery('fields', instance.getFields());
-        apiUrl.addQuery('expand', instance.getExpands());
-        apiUrl.addQuery('relations', instance.getRelations());
+        apiUrl.addQuery("fields", instance.getFields());
+        apiUrl.addQuery("expand", instance.getExpands());
+        apiUrl.addQuery("relations", instance.getRelations());
 
         return apiUrl.toString();
     }
