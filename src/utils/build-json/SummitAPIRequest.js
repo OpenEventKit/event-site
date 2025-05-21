@@ -41,7 +41,7 @@ class SummitAPIRequest {
         const ticket_types_relations = ["ticket_types.none"];
         const tracks_relations = ["tracks.none", "tracks.subtracks.none"];
         const track_groups_relations = ["track_groups.none"];
-        const location_relations = ["locations.none"];
+        const location_relations = ["locations.none, locations.venue.none"];
         const event_types_relations = ["event_types.none"];
 
         const relations = [
