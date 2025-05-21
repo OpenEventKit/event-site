@@ -5,9 +5,8 @@ import { CSSTransition } from "react-transition-group";
 import Alert from 'react-bootstrap/lib/Alert';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Input } from 'openstack-uicore-foundation/lib/components'
+import Input from 'openstack-uicore-foundation/lib/components/inputs/text-input'
 import { assignAttendee } from "../../store/actions/ticket-actions";
-import { getSummitFormattedReassignDate } from "../../util";
 import { useTicketAssignedContext } from "../../context/TicketAssignedContext";
 
 const initialValues = {

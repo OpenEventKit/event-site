@@ -12,7 +12,6 @@
  **/
 import React, { useState } from 'react'
 import { useTranslation } from "react-i18next";
-import { Input } from 'openstack-uicore-foundation/lib/components';
 import usePortal from 'react-useportal';
 
 import './delegate-popup.scss';
@@ -37,7 +36,7 @@ export const DelegatePopup = ({ isOpen, onAccept, onReject }) => {
                         <div className="confirm-popup">
                             <h4>Delegate Ticket</h4>
                             <p>Delegation will create a new attendee and require to you to fill the first Name, last Name and to answer the extra questions again</p>
-                            
+
                             <div className="buttons">
                                 <span onClick={handleRejectClick}>{t("confirm_popup.cancel")}</span>
                                 <span onClick={handleAcceptClick}>{t("confirm_popup.accept")}</span>

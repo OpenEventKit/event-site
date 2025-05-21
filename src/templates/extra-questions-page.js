@@ -10,7 +10,9 @@ import { isEmpty } from "lodash";
 import { getExtraQuestions } from '../actions/summit-actions';
 import { saveAttendeeQuestions } from '../actions/user-actions';
 import { TICKET_ATTENDEE_KEYS as TicketKeys } from '../components/summit-my-orders-tickets/store/actions/ticket-actions';
-import { Input, RegistrationCompanyInput, RawHTML } from 'openstack-uicore-foundation/lib/components';
+import Input from 'openstack-uicore-foundation/lib/components/inputs/text-input'
+import RegistrationCompanyInput  from 'openstack-uicore-foundation/lib/components/inputs/registration-company-input';
+import RawHTML from 'openstack-uicore-foundation/lib/components/raw-html';
 import FragmentParser from "openstack-uicore-foundation/lib/utils/fragment-parser";
 import QuestionsSet from 'openstack-uicore-foundation/lib/utils/questions-set';
 import ExtraQuestionsForm from 'openstack-uicore-foundation/lib/components/extra-questions';
@@ -259,12 +261,12 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
                                 onChange={(e) =>
                                     formik.setFieldTouched(TicketKeys.disclaimerAccepted, true) && formik.handleChange(e)
                                 }
-                                checked={formik.values[TicketKeys.disclaimerAccepted]}                                
+                                checked={formik.values[TicketKeys.disclaimerAccepted]}
                             />
                             <label htmlFor={TicketKeys.disclaimerAccepted}>
                                 {summit.registration_disclaimer_mandatory && <b> *</b>}
-                            </label>                            
-                        </div>                        
+                            </label>
+                        </div>
                         <div className="mt-3">
                             <RawHTML>
                                 {summit.registration_disclaimer_content}

@@ -5,7 +5,9 @@ import { CSSTransition } from "react-transition-group";
 import Alert from 'react-bootstrap/lib/Alert';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Input, RegistrationCompanyInput, RawHTML } from 'openstack-uicore-foundation/lib/components';
+import Input from 'openstack-uicore-foundation/lib/components/inputs/text-input'
+import RegistrationCompanyInput from 'openstack-uicore-foundation/lib/components/inputs/registration-company-input';
+import RawHTML from 'openstack-uicore-foundation/lib/components/raw-html';
 import ExtraQuestionsForm from 'openstack-uicore-foundation/lib/components/extra-questions';
 import QuestionsSet from 'openstack-uicore-foundation/lib/utils/questions-set';
 import { getMainOrderExtraQuestions } from '../../../store/actions/summit-actions';

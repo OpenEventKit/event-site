@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { useTranslation } from "react-i18next";
 import classNames from 'classnames';
-import { AjaxLoader } from "openstack-uicore-foundation/lib/components";
+import AjaxLoader from "openstack-uicore-foundation/lib/components/ajaxloader";
 import { getUserOrders } from '../store/actions/order-actions';
 import { getUserTickets } from '../store/actions/ticket-actions';
 import { OrderList } from './OrderList/OrderList';
@@ -62,7 +62,7 @@ export const MyOrdersTickets = ({ className }) => {
             )}
 
             <div className={classNames('my-orders-tickets', className)}>
-                {hasOrders && (                    
+                {hasOrders && (
                     <OrderList />
                 )}
 
