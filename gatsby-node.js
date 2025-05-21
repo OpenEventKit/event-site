@@ -74,21 +74,6 @@ const SSR_GetRemainingPages = async (endpoint, params, lastPage) => {
   return remainingPages.sort((a, b,) => a.current_page - b.current_page).map(p => p.data).flat();
 }
 
-const SSR_GetRemainingPagesWithURI = async (endpoint, lastPage) => {
-  // create an array with remaining pages to perform Promise.All
-  const pages = [];
-  for (let i = 2; i <= lastPage; i++) {
-    pages.push(i);
-  }
-
-  let remainingPages = await Promise.all(pages.map(pageIdx => {
-    const newPageUrl = new URI(endpoint).addQuery('page', pageIdx);
-    return axios.get(newPageUrl.toString()).then(({ data }) => data);
-  }));
-
-  return remainingPages.sort((a, b,) => a.current_page - b.current_page).map(p => p.data).flat();
-}
-
 const SSR_getMarketingSettings = async (baseUrl, summitId) => {
 
   const endpoint = `${baseUrl}/api/public/v1/config-values/all/shows/${summitId}`;
@@ -117,13 +102,15 @@ const SSR_getEvents = async (baseUrl, summitId, accessToken) => {
   apiUrl.addQuery('per_page', FIFTY_PER_PAGE);
   apiUrl.addQuery('page', 1);
 
-  const apiUrlWithParams = EventAPIRequest.build(apiUrl);  
+  const apiUrlWithParams = EventAPIRequest.build(apiUrl);
+
+  const params = EventAPIRequest.getParams(apiUrl);
 
   return await axios.get(apiUrlWithParams).then(async ({ data }) => {
 
     console.log(`SSR_getEvents then data.current_page ${data.current_page} data.last_page ${data.last_page} total ${data.total}`)
 
-    let remainingPages = await SSR_GetRemainingPagesWithURI(apiUrlWithParams, data.last_page);
+    let remainingPages = await SSR_GetRemainingPages(apiUrlWithParams, params, data.last_page);
 
     return [...data.data, ...remainingPages];
 

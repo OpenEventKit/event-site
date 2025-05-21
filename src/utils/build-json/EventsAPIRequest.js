@@ -1,9 +1,14 @@
 const BaseAPIRequest = require("./BaseAPIRequest");
-const { SPEAKER_MODERATOR_FIELDS, CURRENT_ATTENDANCE_FIELDS, DOCUMENTS_FIELDS } = require("./constants");
+
+const SPEAKER_MODERATOR_FIELDS = ['id', 'first_name', 'last_name', 'title', 'bio', 'member_id', 'pic', 'big_pic', 'company', 'featured'];
+const DOCUMENTS_FIELDS = ['display_on_site', 'name', 'order', 'class_name', 'type', 'public_url', 'link'];
+const CURRENT_ATTENDANCE_FIELDS = ['member_first_name', 'member_last_name', 'member_pic'];
 
 class EventAPIRequest extends BaseAPIRequest {
+    static instance;
+
     constructor() {
-        const event_primary_fields = [
+        const primary_fields = [
             "id",
             "created",
             "start_date",
@@ -31,15 +36,15 @@ class EventAPIRequest extends BaseAPIRequest {
             "duration",
         ];
 
-        const events_type_fields = ["type.id", "type.name", "type.allows_publishing_dates", "type.color"];
-        const events_tags_fields = ["tags.id", "tags.tag"];
-        const events_location_fields = ["location.id", "location.class_name", "location.name", "location.venue.name", "location.venue.floor", "location.floor.name"];
-        const events_track_fields = ["track.id", "track.name", "track.icon_url", "track.color", "track.text_color", "track.parent_id"];
-        const events_track_groups_fields = ["track_groups.id", "track_groups.name", "track_groups.parent_id", "track_groups.color", "track_groups.order"];
-        const events_speakers_badge_feature_fields = ["speakers.badge_features.id", "speakers.badge_features.name", "speakers.badge_features.image"];
-        const events_sponsors_fields = ["sponsors.id", "sponsors.name", "sponsors.logo"];
+        const type_fields = ["type.id", "type.name", "type.allows_publishing_dates", "type.color"];
+        const tags_fields = ["tags.id", "tags.tag"];
+        const location_fields = ["location.id", "location.class_name", "location.name", "location.venue.name", "location.venue.floor", "location.floor.name"];
+        const track_fields = ["track.id", "track.name", "track.icon_url", "track.color", "track.text_color", "track.parent_id"];
+        const track_groups_fields = ["track_groups.id", "track_groups.name", "track_groups.parent_id", "track_groups.color", "track_groups.order"];
+        const speakers_badge_feature_fields = ["speakers.badge_features.id", "speakers.badge_features.name", "speakers.badge_features.image"];
+        const sponsors_fields = ["sponsors.id", "sponsors.name", "sponsors.logo"];
 
-        const event_fields_from_constants = `
+        const fields_from_constants = `
             speakers.${SPEAKER_MODERATOR_FIELDS.join(",speakers.")},
             current_attendance.${CURRENT_ATTENDANCE_FIELDS.join(',current_attendance.')},
             moderator.${SPEAKER_MODERATOR_FIELDS.join(",moderator.")},
@@ -49,27 +54,61 @@ class EventAPIRequest extends BaseAPIRequest {
             links.${DOCUMENTS_FIELDS.join(",links.")}
         `;
 
-        const event_relations = ["speakers.badge_features", "speakers.all_presentations", "speakers.all_moderated_presentations", "track.track_groups"];
+        const speakers_relations = ["speakers.badge_features", "speakers.all_presentations", "speakers.all_moderated_presentations"];
 
-        const event_expands = ["slides", "links", "videos", "media_uploads", "type", "track", "location", "location.venue", "location.floor", "speakers", "speakers.badge_features", "moderator", "sponsors", "tags", "track.subtracks", "track.allowed_access_levels", "current_attendance"];
+        const track_relations = ["track.track_groups"];
+
+        const relations = [
+            ...track_relations,
+            ...speakers_relations
+        ];
+
+        const speakers_expand = ["speakers.badge_features"];
+
+        const location_expand = ["location.venue", "location.floor"];
+
+        const track_expand = [
+            "track.subtracks",
+            "track.allowed_access_levels",
+        ]
+
+        const expands = [
+            "slides",
+            "links",
+            "videos",
+            "media_uploads",
+            "type",
+            "track",
+            "location",
+            "speakers",
+            "moderator",
+            "sponsors",
+            "tags",
+            "current_attendance",
+            ...track_expand,
+            ...speakers_expand,
+            ...location_expand
+        ];
 
         super(
             [
-                ...event_primary_fields,
-                ...events_type_fields,
-                ...events_tags_fields,
-                ...events_location_fields,
-                ...events_track_fields,
-                ...events_track_groups_fields,
-                ...events_sponsors_fields,
-                ...event_fields_from_constants.trim().split(","),
-                ...events_speakers_badge_feature_fields
+                ...primary_fields,
+                ...type_fields,
+                ...tags_fields,
+                ...location_fields,
+                ...track_fields,
+                ...track_groups_fields,
+                ...sponsors_fields,
+                ...fields_from_constants.trim().split(","),
+                ...speakers_badge_feature_fields
             ],
-            event_relations,
-            event_expands
+            relations,
+            expands
         );
 
-        EventAPIRequest.instance = this;
+        if (!EventAPIRequest.instance) {
+            EventAPIRequest.instance = this;
+        }
     }
 
     static getInstance() {
@@ -77,7 +116,15 @@ class EventAPIRequest extends BaseAPIRequest {
             new EventAPIRequest();
         }
         return EventAPIRequest.instance;
-    }    
+    }
+
+    static getParams(apiUrl) {
+        const instance = EventAPIRequest.getInstance();
+        apiUrl.addQuery("fields", instance.getFields());
+        apiUrl.addQuery("expand", instance.getExpands());
+        apiUrl.addQuery("relations", instance.getRelations());
+        return apiUrl.query(true);
+    }
 
     static build(apiUrl) {
         const instance = EventAPIRequest.getInstance();

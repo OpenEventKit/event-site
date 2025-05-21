@@ -4,10 +4,6 @@ class SummitAPIRequest extends BaseAPIRequest {
     static instance;
 
     constructor() {
-        if (SummitAPIRequest.instance) {
-            return SummitAPIRequest.instance;
-        }
-
         const primary_fields = [
             "id", "name", "start_date", "end_date", "time_zone_id", "time_zone_label", "secondary_logo", "slug",
             "payment_profiles", "support_email", "start_showing_venues_date", "dates_with_events", "logo",
@@ -56,7 +52,7 @@ class SummitAPIRequest extends BaseAPIRequest {
             ...track_groups_relations,
             ...location_relations,
             ...event_types_relations
-        ]
+        ];
 
         const schedule_settings_expands = [
             "schedule_settings.filters",
@@ -81,19 +77,22 @@ class SummitAPIRequest extends BaseAPIRequest {
             ...locations_expands
         ];
 
-        this.fields = [
-            ...primary_fields,
-            ...event_types_fields,
-            ...tracks_fields,
-            ...ticket_types_fields,
-            ...track_groups_fields,
-            ...location_fields,
-        ];
+        super(
+            [
+                ...primary_fields,
+                ...event_types_fields,
+                ...tracks_fields,
+                ...ticket_types_fields,
+                ...track_groups_fields,
+                ...location_fields,
+            ],
+            relations,
+            expands
+        );
 
-        this.expands = [...expands];
-        this.relations = [...relations];
-
-        SummitAPIRequest.instance = this;
+        if (!SummitAPIRequest.instance) {
+            SummitAPIRequest.instance = this;
+        }
     }
 
     static getInstance() {
@@ -101,16 +100,6 @@ class SummitAPIRequest extends BaseAPIRequest {
             new SummitAPIRequest();
         }
         return SummitAPIRequest.instance;
-    }
-
-    getExpands = () => {
-        const instance = SummitAPIRequest.getInstance();
-        return instance.expands.join(",");
-    }
-
-    getRelations = () => {
-        const instance = SummitAPIRequest.getInstance();
-        return instance.relations.join(",");
     }
 
     static build = (apiUrl) => {
