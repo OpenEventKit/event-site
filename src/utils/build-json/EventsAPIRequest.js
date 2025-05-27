@@ -38,7 +38,7 @@ class EventAPIRequest extends BaseAPIRequest {
 
         const type_fields = ["type.id", "type.name", "type.allows_publishing_dates", "type.color"];
         const tags_fields = ["tags.id", "tags.tag"];
-        const location_fields = ["location.id", "location.class_name", "location.name", "location.venue.name", "location.venue.floor", "location.floor.name"];
+        const location_fields = ["location.id", "location.class_name", "location.name", "location.venue.name", "location.floor.name"];
         const track_fields = ["track.id", "track.name", "track.icon_url", "track.color", "track.text_color", "track.parent_id"];
         const track_groups_fields = ["track_groups.id", "track_groups.name", "track_groups.parent_id", "track_groups.color", "track_groups.order"];
         const speakers_badge_feature_fields = ["speakers.badge_features.id", "speakers.badge_features.name", "speakers.badge_features.image"];
@@ -58,9 +58,13 @@ class EventAPIRequest extends BaseAPIRequest {
 
         const track_relations = ["track.track_groups"];
 
+        const locations_relations = ["location.venue.none,location.floor.none"];
+
         const relations = [
             ...track_relations,
-            ...speakers_relations
+            ...speakers_relations,
+            ...locations_relations,
+            "none"
         ];
 
         const speakers_expand = ["speakers.badge_features"];
