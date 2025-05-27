@@ -44,15 +44,13 @@ class EventAPIRequest extends BaseAPIRequest {
         const speakers_badge_feature_fields = ["speakers.badge_features.id", "speakers.badge_features.name", "speakers.badge_features.image"];
         const sponsors_fields = ["sponsors.id", "sponsors.name", "sponsors.logo"];
 
-        const fields_from_constants = `
-            speakers.${SPEAKER_MODERATOR_FIELDS.join(",speakers.")},
-            current_attendance.${CURRENT_ATTENDANCE_FIELDS.join(',current_attendance.')},
-            moderator.${SPEAKER_MODERATOR_FIELDS.join(",moderator.")},
-            media_uploads.${DOCUMENTS_FIELDS.join(",media_uploads.")},
-            videos.${DOCUMENTS_FIELDS.join(",videos.")},
-            slides.${DOCUMENTS_FIELDS.join(",slides.")},
-            links.${DOCUMENTS_FIELDS.join(",links.")}
-        `;
+        const speakers_fields = SPEAKER_MODERATOR_FIELDS.map((e) => `speakers.${e}`);
+        const moderator_fields = SPEAKER_MODERATOR_FIELDS.map((e) => `moderator.${e}`);
+        const media_upload_fields = DOCUMENTS_FIELDS.map((e) => `media_uploads.${e}`)
+        const slides_fields = DOCUMENTS_FIELDS.map((e) => `slides.${e}`)
+        const links_fields = DOCUMENTS_FIELDS.map((e) => `links.${e}`)
+        const video_fields = DOCUMENTS_FIELDS.map((e) => `videos.${e}`)
+        const current_attendance_fields = CURRENT_ATTENDANCE_FIELDS.map((e) => `current_attendance.${e}`)        
 
         const speakers_relations = ["speakers.badge_features", "speakers.all_presentations", "speakers.all_moderated_presentations"];
 
@@ -103,7 +101,13 @@ class EventAPIRequest extends BaseAPIRequest {
                 ...track_fields,
                 ...track_groups_fields,
                 ...sponsors_fields,
-                ...fields_from_constants.trim().split(","),
+                ...speakers_fields,
+                ...moderator_fields,
+                ...media_upload_fields,
+                ...slides_fields,
+                ...links_fields,
+                ...video_fields,
+                ...current_attendance_fields,
                 ...speakers_badge_feature_fields
             ],
             relations,
