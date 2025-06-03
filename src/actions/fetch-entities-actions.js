@@ -16,39 +16,9 @@ export const fetchEventById = async (summitId, eventId, accessToken = null) => {
         apiUrl.addQuery('access_token', accessToken);
     }
 
-    const speakers_fields = ['id', 'first_name', 'last_name', 'title', 'bio', 'member_id', 'pic', 'big_pic', 'company'];
-    const current_attendance_fields = ['member_first_name', 'member_last_name', 'member_pic'];
-    const first_level_fields = [
-        "id",
-        "created",
-        "last_edited",
-        "title",
-        "description",
-        "social_description",
-        "start_date",
-        "end_date",
-        "location_id",
-        "class_name",
-        "allow_feedback",
-        "avg_feedback_rate",
-        "published_date",
-        "head_count",
-        "attendance_count",
-        "current_attendance_count",
-        "image",
-        "level",
-        "show_sponsors",
-        "duration",
-        "moderator_speaker_id",
-        "problem_addressed",
-        "attendees_expected_learnt",
-        "to_record",
-        "attending_media",
-    ];
-    apiUrl.addQuery('expand', 'slides, links, videos, media_uploads, type, track, track.allowed_access_levels, location, location.venue, location.floor, speakers, moderator, sponsors, current_attendance, groups, rsvp_template, tags');
-    apiUrl.addQuery('relations', "speakers.badge_features,speakers.affiliations,speakers.languages,speakers.other_presentation_links,speakers.areas_of_expertise,speakers.travel_preferences,speakers.organizational_roles,speakers.all_presentations,speakers.all_moderated_presentations");
-    apiUrl.addQuery('fields', `${first_level_fields.join(",")},speakers.${speakers_fields.join(",speakers.")},current_attendance.${current_attendance_fields.join(',current_attendance.')}`);
-    return fetch(apiUrl.toString(), {
+    const apiUrlWithParams = EventAPIRequest.build(apiUrl);
+
+    return fetch(apiUrlWithParams, {
         method: 'GET'
     }).then(async (response) => {
         if (response.status === 200) {

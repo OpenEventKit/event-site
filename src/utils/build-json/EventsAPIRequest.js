@@ -50,19 +50,40 @@ class EventAPIRequest extends BaseAPIRequest {
         const slides_fields = DOCUMENTS_FIELDS.map((e) => `slides.${e}`)
         const links_fields = DOCUMENTS_FIELDS.map((e) => `links.${e}`)
         const video_fields = DOCUMENTS_FIELDS.map((e) => `videos.${e}`)
-        const current_attendance_fields = CURRENT_ATTENDANCE_FIELDS.map((e) => `current_attendance.${e}`)        
+        const current_attendance_fields = CURRENT_ATTENDANCE_FIELDS.map((e) => `current_attendance.${e}`)
+
+        const primary_relations = [
+            "slides",
+            "links",
+            "videos",
+            "media_uploads",
+            "type",
+            "track",
+            "location",
+            "speakers",
+            "moderator",
+            "sponsors",
+            "tags",
+            "current_attendance",
+            "allowed_ticket_types"
+        ];
 
         const speakers_relations = ["speakers.badge_features", "speakers.all_presentations", "speakers.all_moderated_presentations"];
 
         const track_relations = ["track.track_groups"];
 
-        const locations_relations = ["location.venue.none,location.floor.none"];
+        const type_relations = ["type.allowed_ticket_types"];
+
+        const locations_relations = ["location.venue", "location.floor", "location.venue.none", "location.floor.none"];
+
+        // TODO: review relations for "current_attendance"
 
         const relations = [
             ...track_relations,
+            ...type_relations,
             ...speakers_relations,
             ...locations_relations,
-            "none"
+            ...primary_relations,
         ];
 
         const speakers_expand = ["speakers.badge_features"];
