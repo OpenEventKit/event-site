@@ -5,7 +5,7 @@ import { navigate, withPrefix } from "gatsby";
 import { connect } from "react-redux";
 import URI from "urijs";
 import Swal from "sweetalert2";
-
+import {ERROR_TYPE_ERROR, ERROR_TYPE_VALIDATION, ERROR_TYPE_PAYMENT} from "summit-registration-lite/dist/utils/constants";
 import FragmentParser from "openstack-uicore-foundation/lib/utils/fragment-parser";
 import { doLogin, passwordlessStart, getAccessToken } from "openstack-uicore-foundation/lib/security/methods"
 import { doLogout } from "openstack-uicore-foundation/lib/security/actions"
@@ -115,6 +115,9 @@ const RegistrationLiteComponent = ({
         return setPasswordlessLogin(params);
     };
 
+    const handleOnError = (e) => {
+    }
+
     const { getSettingByKey } = useMarketingSettings();
 
     const inPersonDisclaimer = getSettingByKey(MARKETING_SETTINGS_KEYS.registrationInPersonDisclaimer);
@@ -176,7 +179,7 @@ const RegistrationLiteComponent = ({
         handleCompanyError: () => handleCompanyError,
         allowsNativeAuth: allowsNativeAuth,
         allowsOtpAuth: allowsOtpAuth,
-        stripeOptions: {
+        providerOptions: {
             fonts: [{ cssSrc: withPrefix("/fonts/fonts.css") }],
             style: { base: { fontFamily: `"Nunito Sans", sans-serif`, fontWeight: 300 } }
         },
@@ -206,7 +209,9 @@ const RegistrationLiteComponent = ({
         idpLogoLight: siteSettings?.idpLogo?.idpLogoLight?.publicURL,
         idpLogoDark: siteSettings?.idpLogo?.idpLogoDark?.publicURL,
         idpLogoAlt: siteSettings?.idpLogo?.idpLogoAlt,
-        hidePostalCode: paymentSettings?.hidePostalCode
+        hidePostalCode: paymentSettings?.hidePostalCode,
+        successfulPaymentReturnUrl: `${window.location.origin}/a/my-tickets/`,
+        onError: handleOnError,
     };
 
     const { registerButton } = marketingPageSettings.hero.buttons;
