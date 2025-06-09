@@ -116,6 +116,29 @@ const RegistrationLiteComponent = ({
     };
 
     const handleOnError = (e) => {
+        // this is a basic implementation using swal
+        const {type, msg, exception} = e;
+        let icon = 'error';
+        let title = 'ERROR';
+        switch(type){
+            case ERROR_TYPE_ERROR:
+                icon = 'error';
+                title = 'Error';
+                break
+            case ERROR_TYPE_VALIDATION:
+                icon = 'warning';
+                title = 'Warning'
+                break;
+            case ERROR_TYPE_PAYMENT:
+                title = 'Payment Error'
+                icon = 'warning';
+                break;
+            default:
+                icon = 'error';
+                title = 'Error';
+                break;
+        }
+        Swal.fire(title, msg, icon)
     }
 
     const { getSettingByKey } = useMarketingSettings();
