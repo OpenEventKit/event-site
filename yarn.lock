@@ -14781,15 +14781,16 @@ mux.js@6.0.1:
     "@babel/runtime" "^7.11.2"
     global "^4.4.0"
 
-my-orders-tickets-widget@1.0.0-beta.51:
-  version "1.0.0-beta.51"
-  resolved "https://registry.yarnpkg.com/my-orders-tickets-widget/-/my-orders-tickets-widget-1.0.0-beta.51.tgz#ba3e9a1ef09c42663fb61118447f58f14af540e7"
-  integrity sha512-mTgVR9QePlA9zreTR7b/yn2eaYtnxYpn0x18JacZR0Oy6jXhXbsKPzhvb1eEb7wI7cA+0S50Jj0BgPasaacANg==
+my-orders-tickets-widget@1.0.0-beta.52:
+  version "1.0.0-beta.52"
+  resolved "https://registry.yarnpkg.com/my-orders-tickets-widget/-/my-orders-tickets-widget-1.0.0-beta.52.tgz#0f3a9dbf904f7b856e5270dce49e1e2b556336d2"
+  integrity sha512-VocRlbsczon4gAeSr7SNF+eIfB4pQ7aRN33yk2zwFr9bV2TvSusVoVk5eDyXdHxpptZfXYbG1JCzk9V2XU04cg==
   dependencies:
     "@emotion/react" "^11.11.4"
     "@emotion/styled" "^11.11.5"
     "@mui/icons-material" "^5.15.20"
     "@mui/material" "^5.15.20"
+    "@mui/utils" "^5.16.8"
     "@mui/x-date-pickers" "^7.12.0"
     "@reduxjs/toolkit" "^2.2.5"
     "@sentry/react" "^8.37.1"
