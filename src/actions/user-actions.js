@@ -414,7 +414,7 @@ export const updatePassword = (password) => async (dispatch) => {
     access_token: accessToken,
   };
 
-  putRequest(
+  return putRequest(
     createAction(START_LOADING_IDP_PROFILE),
     createAction(UPDATE_PASSWORD),
     `${window.IDP_BASE_URL}/api/v1/users/me`,
