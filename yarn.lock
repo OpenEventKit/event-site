@@ -1257,7 +1257,7 @@
     "@emotion/utils" "0.11.3"
     "@emotion/weak-memoize" "0.2.5"
 
-"@emotion/cache@^11.11.0", "@emotion/cache@^11.13.5", "@emotion/cache@^11.14.0", "@emotion/cache@^11.4.0":
+"@emotion/cache@^11.13.5", "@emotion/cache@^11.14.0", "@emotion/cache@^11.4.0":
   version "11.14.0"
   resolved "https://registry.yarnpkg.com/@emotion/cache/-/cache-11.14.0.tgz#ee44b26986eeb93c8be82bb92f1f7a9b21b2ed76"
   integrity sha512-L/B1lc/TViYk4DcpGxtAVbx0ZyiKM5ktoIyafGkH6zg/tj+mA+NE//aPYKG0k8kCHSHVJrpLpcAlOBEXQ3SavA==
@@ -2382,11 +2382,6 @@
     clsx "^2.1.1"
     prop-types "^15.8.1"
 
-"@mui/core-downloads-tracker@^5.16.11":
-  version "5.16.11"
-  resolved "https://registry.yarnpkg.com/@mui/core-downloads-tracker/-/core-downloads-tracker-5.16.11.tgz#0295ae13eeb449a87939fadf029e3382b0b9a802"
-  integrity sha512-2eVDGg9OvIXNRmfDUQyKYH+jNcjdv1JkCH5F2YDgUye5fMX5nxGiYHAUe1BXaXyDMaLSwXC7LRksEKMiIQsFdw==
-
 "@mui/core-downloads-tracker@^5.17.1":
   version "5.17.1"
   resolved "https://registry.yarnpkg.com/@mui/core-downloads-tracker/-/core-downloads-tracker-5.17.1.tgz#49b88ecb68b800431b5c2f2bfb71372d1f1478fa"
@@ -2406,24 +2401,6 @@
   dependencies:
     "@babel/runtime" "^7.23.9"
 
-"@mui/material@^5.14.18":
-  version "5.16.11"
-  resolved "https://registry.yarnpkg.com/@mui/material/-/material-5.16.11.tgz#e7e6db021f027103e32cadea78d8bde3c13f2be5"
-  integrity sha512-uoc67oecKdnVKaMHBVE433YrMuxQs22xY5nIjRb5sAPB+GaeZQWp8brQ3/adeH6k2IDa8+9i2IVd4fNLuvHSvA==
-  dependencies:
-    "@babel/runtime" "^7.23.9"
-    "@mui/core-downloads-tracker" "^5.16.11"
-    "@mui/system" "^5.16.8"
-    "@mui/types" "^7.2.15"
-    "@mui/utils" "^5.16.8"
-    "@popperjs/core" "^2.11.8"
-    "@types/react-transition-group" "^4.4.10"
-    clsx "^2.1.0"
-    csstype "^3.1.3"
-    prop-types "^15.8.1"
-    react-is "^18.3.1"
-    react-transition-group "^4.4.5"
-
 "@mui/material@^5.15.20":
   version "5.17.1"
   resolved "https://registry.yarnpkg.com/@mui/material/-/material-5.17.1.tgz#596f542a51fc74db75da2df66565b4874ce4049d"
@@ -2442,15 +2419,6 @@
     react-is "^19.0.0"
     react-transition-group "^4.4.5"
 
-"@mui/private-theming@^5.16.8":
-  version "5.16.8"
-  resolved "https://registry.yarnpkg.com/@mui/private-theming/-/private-theming-5.16.8.tgz#7914996caaf6eedc59914aeab83dcd2d4e4da1ec"
-  integrity sha512-3Vl9yFVLU6T3CFtxRMQTcJ60Ijv7wxQi4yjH92+9YXcsqvVspeIYoocqNoIV/1bXGYfyWu5zrCmwQVHaGY7bug==
-  dependencies:
-    "@babel/runtime" "^7.23.9"
-    "@mui/utils" "^5.16.8"
-    prop-types "^15.8.1"
-
 "@mui/private-theming@^5.17.1":
   version "5.17.1"
   resolved "https://registry.yarnpkg.com/@mui/private-theming/-/private-theming-5.17.1.tgz#b4b6fbece27830754ef78186e3f1307dca42f295"
@@ -2467,30 +2435,6 @@
   dependencies:
     "@babel/runtime" "^7.23.9"
     "@emotion/cache" "^11.13.5"
-    csstype "^3.1.3"
-    prop-types "^15.8.1"
-
-"@mui/styled-engine@^5.16.8":
-  version "5.16.8"
-  resolved "https://registry.yarnpkg.com/@mui/styled-engine/-/styled-engine-5.16.8.tgz#b8ca35f93f503a51d0759a05475bfd28e10757ea"
-  integrity sha512-OFdgFf8JczSRs0kvWGdSn0ZeXxWrY0LITDPJ/nAtLEvUUTyrlFaO4il3SECX8ruzvf1VnAxHx4M/4mX9oOn9yA==
-  dependencies:
-    "@babel/runtime" "^7.23.9"
-    "@emotion/cache" "^11.11.0"
-    csstype "^3.1.3"
-    prop-types "^15.8.1"
-
-"@mui/system@^5.16.8":
-  version "5.16.8"
-  resolved "https://registry.yarnpkg.com/@mui/system/-/system-5.16.8.tgz#e5010d76cd2fdcc403ad3f98abfba99d330055ad"
-  integrity sha512-L32TaFDFpGIi1g6ysRtmhc9zDgrlxDXu3NlrGE8gAsQw/ziHrPdr0PNr20O0POUshA1q14W4dNZ/z0Nx2F9lhA==
-  dependencies:
-    "@babel/runtime" "^7.23.9"
-    "@mui/private-theming" "^5.16.8"
-    "@mui/styled-engine" "^5.16.8"
-    "@mui/types" "^7.2.15"
-    "@mui/utils" "^5.16.8"
-    clsx "^2.1.0"
     csstype "^3.1.3"
     prop-types "^15.8.1"
 
@@ -15250,10 +15194,10 @@ open@^8.4.0:
     is-docker "^2.1.1"
     is-wsl "^2.2.0"
 
-openstack-uicore-foundation@4.2.8:
-  version "4.2.8"
-  resolved "https://registry.yarnpkg.com/openstack-uicore-foundation/-/openstack-uicore-foundation-4.2.8.tgz#0ad8d89141cfbbc87fc57a3ab436f2a2beb21dd7"
-  integrity sha512-YTPlnWYkGUPyWunFyqLbkrMP6OaxMf0Fl9sQMTM4uNKOnIyB0y4LzeO6VXM0gO9whBcvRcG6kbsfOJsC8eEFtA==
+openstack-uicore-foundation@4.2.11:
+  version "4.2.11"
+  resolved "https://registry.yarnpkg.com/openstack-uicore-foundation/-/openstack-uicore-foundation-4.2.11.tgz#de4c3a1879a0b379dfe066bfb47da6d276ed6ab1"
+  integrity sha512-qjTitwqJDowO+QfbVRbmJhyXqpYWvuRBtXzezMtzaXOI2AosobWH7kmhvjqoeVpHUD4+0xDOnH2pMn/amcnMXg==
 
 opentracing@^0.14.7:
   version "0.14.7"
@@ -19471,15 +19415,16 @@ sudo-prompt@^8.2.0:
   resolved "https://registry.yarnpkg.com/sudo-prompt/-/sudo-prompt-8.2.5.tgz#cc5ef3769a134bb94b24a631cc09628d4d53603e"
   integrity sha512-rlBo3HU/1zAJUrkY6jNxDOC9eVYliG6nS4JA8u8KAshITd07tafMc/Br7xQwCSseXwJ2iCcHCE8SNWX3q8Z+kw==
 
-summit-registration-lite@6.0.2:
-  version "6.0.2"
-  resolved "https://registry.yarnpkg.com/summit-registration-lite/-/summit-registration-lite-6.0.2.tgz#bf182d0ef107354ed34a4d1a7490567e5d41875e"
-  integrity sha512-PFH4guOeRIFOBepMGOpLKSTxFXVMbBYKFxB2LyFThazGLEa03sHzp6BdwTA1jaA4eW4V9bMkbgvQzJwUmgGMuQ==
+summit-registration-lite@6.0.3-beta.3:
+  version "6.0.3-beta.3"
+  resolved "https://registry.yarnpkg.com/summit-registration-lite/-/summit-registration-lite-6.0.3-beta.3.tgz#207f99ab7dc25e6b2b5dde6888315d006b458076"
+  integrity sha512-EYKuTW5YTL+02P3dWab5auuTJvYjKQdK2LVuG2LCgXwvStbWy0i4XApQYxfEaLdu5BXVGx1O2qTfHywW/c6Otg==
   dependencies:
-    "@emotion/react" "^11.11.1"
-    "@emotion/styled" "^11.11.0"
+    "@emotion/react" "^11.11.4"
+    "@emotion/styled" "^11.11.5"
     "@mui/icons-material" "^5.14.18"
-    "@mui/material" "^5.14.18"
+    "@mui/material" "^5.15.20"
+    "@mui/utils" "^5.16.8"
     "@react-pdf/renderer" "^3.1.12"
     "@sentry/react" "^8.35.0"
     "@stripe/react-stripe-js" "^3.6.0"
