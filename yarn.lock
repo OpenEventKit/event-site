@@ -15194,10 +15194,10 @@ open@^8.4.0:
     is-docker "^2.1.1"
     is-wsl "^2.2.0"
 
-openstack-uicore-foundation@4.2.10:
-  version "4.2.10"
-  resolved "https://registry.yarnpkg.com/openstack-uicore-foundation/-/openstack-uicore-foundation-4.2.10.tgz#8809e323b2d878d7ff2aaa14f4b127eeff674b3f"
-  integrity sha512-uxgXJmu0t3gzx6mnGt8dHgbY7HtAi2m43SCF7kQxPmuaCYnweAm1Ubye33mZv92Keuh+AcupEO4SwHA7bmIcOA==
+openstack-uicore-foundation@4.2.11:
+  version "4.2.11"
+  resolved "https://registry.yarnpkg.com/openstack-uicore-foundation/-/openstack-uicore-foundation-4.2.11.tgz#de4c3a1879a0b379dfe066bfb47da6d276ed6ab1"
+  integrity sha512-qjTitwqJDowO+QfbVRbmJhyXqpYWvuRBtXzezMtzaXOI2AosobWH7kmhvjqoeVpHUD4+0xDOnH2pMn/amcnMXg==
 
 opentracing@^0.14.7:
   version "0.14.7"
@@ -19415,10 +19415,10 @@ sudo-prompt@^8.2.0:
   resolved "https://registry.yarnpkg.com/sudo-prompt/-/sudo-prompt-8.2.5.tgz#cc5ef3769a134bb94b24a631cc09628d4d53603e"
   integrity sha512-rlBo3HU/1zAJUrkY6jNxDOC9eVYliG6nS4JA8u8KAshITd07tafMc/Br7xQwCSseXwJ2iCcHCE8SNWX3q8Z+kw==
 
-summit-registration-lite@6.0.3-beta.2:
-  version "6.0.3-beta.2"
-  resolved "https://registry.yarnpkg.com/summit-registration-lite/-/summit-registration-lite-6.0.3-beta.2.tgz#8cae4813a4a583566c1abb00373d3d1decfb6fe6"
-  integrity sha512-qJqantuVzBpmhtTYGp9Fvm6Jea/nfpriHzTe3Y3AeQkaLvLdM8vvguS5J27AMdMGGc1DDnJhNuwSiFwbHtbQ9A==
+summit-registration-lite@6.0.3-beta.3:
+  version "6.0.3-beta.3"
+  resolved "https://registry.yarnpkg.com/summit-registration-lite/-/summit-registration-lite-6.0.3-beta.3.tgz#207f99ab7dc25e6b2b5dde6888315d006b458076"
+  integrity sha512-EYKuTW5YTL+02P3dWab5auuTJvYjKQdK2LVuG2LCgXwvStbWy0i4XApQYxfEaLdu5BXVGx1O2qTfHywW/c6Otg==
   dependencies:
     "@emotion/react" "^11.11.4"
     "@emotion/styled" "^11.11.5"
