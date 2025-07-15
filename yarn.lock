@@ -14781,10 +14781,10 @@ mux.js@6.0.1:
     "@babel/runtime" "^7.11.2"
     global "^4.4.0"
 
-my-orders-tickets-widget@1.0.0-beta.58:
-  version "1.0.0-beta.58"
-  resolved "https://registry.yarnpkg.com/my-orders-tickets-widget/-/my-orders-tickets-widget-1.0.0-beta.58.tgz#60903b44e0018109c44bea62313f9a9f4195271e"
-  integrity sha512-p6f+FyP+gfIVcmXMzioomX/OR+8Gzd+G2H9bvkr2BybHQBVBn2KZ8R7zNl7wLbo3bFZpurVCwRPwjdyEthVyNA==
+my-orders-tickets-widget@1.0.0-beta.59:
+  version "1.0.0-beta.59"
+  resolved "https://registry.yarnpkg.com/my-orders-tickets-widget/-/my-orders-tickets-widget-1.0.0-beta.59.tgz#2fc732fcac064f590f2c3c61fe1b11a8fb7a68eb"
+  integrity sha512-BaJcqdPJSxtAYTeijADZSL3QVj81EKtIsG24fKAfnVTQ3n82Uzu+IGi/VzEMmbFhbP+4faI5hD0/olQG6h0AHQ==
   dependencies:
     "@emotion/react" "^11.11.4"
     "@emotion/styled" "^11.11.5"
