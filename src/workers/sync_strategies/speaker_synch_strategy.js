@@ -36,7 +36,7 @@ class SpeakerSynchStrategy extends AbstractSynchStrategy {
         this.allIDXSpeakers = rebuildIndex(this.allSpeakers);
 
         // Update events where speaker is listed
-        for (const eventId of entity.all_presentations || []) {
+        for (const eventId of entity.presentations || []) {
             const res = getIndexedItem(this.allIDXEvents, eventsData, eventId);
             if (!res || !Array.isArray(res.item.speakers)) {
                 console.log(`SpeakerSynchStrategy::process: event ${eventId} not found or invalid`);
@@ -54,7 +54,7 @@ class SpeakerSynchStrategy extends AbstractSynchStrategy {
         }
 
         // Update events where speaker is moderator
-        for (const eventId of entity.all_moderated_presentations || []) {
+        for (const eventId of entity.moderated_presentations || []) {
             const res = getIndexedItem(this.allIDXEvents, eventsData, eventId);
             if (!res) {
                 console.log(`SpeakerSynchStrategy::process: moderator event ${eventId} not found`);

@@ -8,8 +8,9 @@ const {
 } = require("gatsby-source-filesystem");
 const SentryWebpackPlugin = require("@sentry/webpack-plugin");
 const { ClientCredentials } = require("simple-oauth2");
-const SummitAPIRequest = require("./src/utils/build-json/SummitAPIRequest");
 const URI = require("urijs")
+const SummitAPIRequest = require("./src/utils/build-json/SummitAPIRequest");
+const EventAPIRequest = require("./src/utils/build-json/EventsAPIRequest");
 
 const myEnv = require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
@@ -39,6 +40,9 @@ const {
   generateFontScssFile,
   generateColorsScssFile
 } = require("./src/utils/scssUtils");
+
+const { FIFTY_PER_PAGE } = require("./src/utils/build-json/constants");
+const SpeakersAPIRequest = require("./src/utils/build-json/SpeakersAPIRequest");
 
 const fileBuildTimes = [];
 
@@ -94,52 +98,21 @@ const SSR_getMarketingSettings = async (baseUrl, summitId) => {
 
 const SSR_getEvents = async (baseUrl, summitId, accessToken) => {
 
-  const endpoint = `${baseUrl}/api/v1/summits/${summitId}/events/published`;
+  const apiUrl = URI(`${baseUrl}/api/v1/summits/${summitId}/events/published`);
 
-  const speakers_fields = ['id', 'first_name', 'last_name', 'title', 'bio', 'member_id', 'pic', 'big_pic', 'company'];
-  const current_attendance_fields = ['member_first_name', 'member_last_name', 'member_pic'];
-  const first_level_fields = [
-    "id",
-    "created",
-    "last_edited",
-    "title",
-    "description",
-    "social_description",
-    "start_date",
-    "end_date",
-    "location_id",
-    "class_name",
-    "allow_feedback",
-    "avg_feedback_rate",
-    "published_date",
-    "head_count",
-    "attendance_count",
-    "current_attendance_count",
-    "image",
-    "level",
-    "show_sponsors",
-    "duration",
-    "moderator_speaker_id",
-    "problem_addressed",
-    "attendees_expected_learnt",
-    "to_record",
-    "attending_media",
-  ];
-  const fields = `${first_level_fields.join(",")},speakers.${speakers_fields.join(",speakers.")},current_attendance.${current_attendance_fields.join(',current_attendance.')}`;
-  const params = {
-    access_token: accessToken,
-    per_page: 50,
-    page: 1,
-    expand: 'slides,links,videos,media_uploads,type,track,track.subtracks,track.allowed_access_levels,location,location.venue,location.floor,speakers,moderator,sponsors,groups,rsvp_template,tags,current_attendance',
-    relations: 'speakers.badge_features,speakers.affiliations,speakers.languages,speakers.other_presentation_links,speakers.areas_of_expertise,speakers.travel_preferences,speakers.organizational_roles,speakers.all_presentations,speakers.all_moderated_presentations',
-    fields: fields,
-  }
+  apiUrl.addQuery('access_token', accessToken);  
+  apiUrl.addQuery('per_page', FIFTY_PER_PAGE);
+  apiUrl.addQuery('page', 1);
 
-  return await axios.get(endpoint, { params }).then(async ({ data }) => {
+  const apiUrlWithParams = EventAPIRequest.build(apiUrl);
+
+  const params = EventAPIRequest.getParams(apiUrl);
+
+  return await axios.get(apiUrlWithParams).then(async ({ data }) => {
 
     console.log(`SSR_getEvents then data.current_page ${data.current_page} data.last_page ${data.last_page} total ${data.total}`)
 
-    let remainingPages = await SSR_GetRemainingPages(endpoint, params, data.last_page);
+    let remainingPages = await SSR_GetRemainingPages(apiUrlWithParams, params, data.last_page);
 
     return [...data.data, ...remainingPages];
 
@@ -196,43 +169,21 @@ const SSR_getSponsorCollections = async (allSponsors, baseUrl, summitId, accessT
 
 const SSR_getSpeakers = async (baseUrl, summitId, accessToken, filter = null) => {
 
-  const speakers_relations = [
-    'badge_features',
-    'affiliations',
-    'languages',
-    'other_presentation_links',
-    'areas_of_expertise',
-    'travel_preferences',
-    'organizational_roles',
-    'all_presentations',
-    'all_moderated_presentations',
-  ];
+  const apiUrl = URI(`${baseUrl}/api/v1/summits/${summitId}/speakers/on-schedule`);
 
-  const speakers_fields =
-    ['id', 'first_name', 'last_name', 'title', 'bio', 'member_id', 'pic', 'big_pic', 'company'];
+  apiUrl.addQuery('access_token', accessToken);  
+  apiUrl.addQuery('per_page', 30);
+  apiUrl.addQuery('page', 1);
 
-  const params = {
-    access_token: accessToken,
-    per_page: 30,
-    page: 1,
-    relations: speakers_relations.join(','),
-    fields: speakers_fields.join(',')
-  };
+  const apiUrlWithParams = SpeakersAPIRequest.build(apiUrl);  
 
-  const endpoint = `${baseUrl}/api/v1/summits/${summitId}/speakers/on-schedule`;
-
-  if (filter) {
-    params["filter[]"] = filter;
-  }
-
-  return await axios.get(
-    endpoint,
-    { params }
-  )
+  const params = SpeakersAPIRequest.getParams(apiUrl);
+ 
+  return await axios.get(apiUrlWithParams)
     .then(async ({ data }) => {
       console.log(`SSR_getSpeakers then data.current_page ${data.current_page} data.last_page ${data.last_page} total ${data.total}`)
 
-      let remainingPages = await SSR_GetRemainingPages(endpoint, params, data.last_page);
+      let remainingPages = await SSR_GetRemainingPages(apiUrlWithParams, params, data.last_page);
 
       return [...data.data, ...remainingPages];
     })

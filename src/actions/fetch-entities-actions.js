@@ -1,5 +1,7 @@
 import URI from "urijs";
 import SummitAPIRequest from "../utils/build-json/SummitAPIRequest";
+import EventAPIRequest from "../utils/build-json/EventsAPIRequest";
+import SpeakersAPIRequest from "../utils/build-json/SpeakersAPIRequest";
 
 /**
  * @param summitId
@@ -15,39 +17,9 @@ export const fetchEventById = async (summitId, eventId, accessToken = null) => {
         apiUrl.addQuery('access_token', accessToken);
     }
 
-    const speakers_fields = ['id', 'first_name', 'last_name', 'title', 'bio', 'member_id', 'pic', 'big_pic', 'company'];
-    const current_attendance_fields = ['member_first_name', 'member_last_name', 'member_pic'];
-    const first_level_fields = [
-        "id",
-        "created",
-        "last_edited",
-        "title",
-        "description",
-        "social_description",
-        "start_date",
-        "end_date",
-        "location_id",
-        "class_name",
-        "allow_feedback",
-        "avg_feedback_rate",
-        "published_date",
-        "head_count",
-        "attendance_count",
-        "current_attendance_count",
-        "image",
-        "level",
-        "show_sponsors",
-        "duration",
-        "moderator_speaker_id",
-        "problem_addressed",
-        "attendees_expected_learnt",
-        "to_record",
-        "attending_media",
-    ];
-    apiUrl.addQuery('expand', 'slides, links, videos, media_uploads, type, track, track.allowed_access_levels, location, location.venue, location.floor, speakers, moderator, sponsors, current_attendance, groups, rsvp_template, tags');
-    apiUrl.addQuery('relations', "speakers.badge_features,speakers.affiliations,speakers.languages,speakers.other_presentation_links,speakers.areas_of_expertise,speakers.travel_preferences,speakers.organizational_roles,speakers.all_presentations,speakers.all_moderated_presentations");
-    apiUrl.addQuery('fields', `${first_level_fields.join(",")},speakers.${speakers_fields.join(",speakers.")},current_attendance.${current_attendance_fields.join(',current_attendance.')}`);
-    return fetch(apiUrl.toString(), {
+    const apiUrlWithParams = EventAPIRequest.build(apiUrl);
+
+    return fetch(apiUrlWithParams, {
         method: 'GET'
     }).then(async (response) => {
         if (response.status === 200) {
@@ -143,27 +115,11 @@ export const fetchSpeakerById = async (summitId, speakerId, accessToken = null) 
     if (accessToken) {
         apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/v1/summits/${summitId}/speakers/${speakerId}`);
         apiUrl.addQuery('access_token', accessToken);
-    }
+    }    
 
-    const speakers_relations = [
-        'badge_features',
-        'affiliations',
-        'languages',
-        'other_presentation_links',
-        'areas_of_expertise',
-        'travel_preferences',
-        'organizational_roles',
-        'all_presentations',
-        'all_moderated_presentations',
-    ];
-
-    const speakers_fields =
-        ['id', 'first_name', 'last_name', 'title', 'bio', 'member_id', 'pic', 'big_pic', 'company'];
-
-    apiUrl.addQuery('relations', speakers_relations.join(','));
-    apiUrl.addQuery('fields', speakers_fields.join(','));
-
-    return fetch(apiUrl.toString(), {
+    const apiUrlWithParams = SpeakersAPIRequest.build(apiUrl);
+    
+    return fetch(apiUrlWithParams, {
         method: 'GET',
         cache: "no-store",
     }).then(async (response) => {
@@ -185,7 +141,7 @@ export const fetchSummitById = async (summitId, accessToken = null) => {
 
     apiUrl.addQuery('access_token', accessToken);
     apiUrl.addQuery('t', Date.now());
-  
+
     const apiUrlWithParams = SummitAPIRequest.build(apiUrl);
 
     return fetch(apiUrlWithParams, {
