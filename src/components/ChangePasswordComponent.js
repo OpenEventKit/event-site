@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 
 import styles from "../styles/change-password.module.scss";
 
-const ChangePasswordComponent = ({ updatePassword }) => {
+const ChangePasswordComponent = ({updatePassword}) => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [displayCurrentPassword, setDisplayCurrentPassword] = useState(false);
   const [newPassword, setNewPassword] = useState("");
@@ -14,13 +14,26 @@ const ChangePasswordComponent = ({ updatePassword }) => {
 
   useEffect(() => {
     return () => {
-      setCurrentPassword("");
-      setNewPassword("");
-      setChangePassword(false);
-      setDisplayCurrentPassword(false);
-      setDisplayNewPassword(false);
+      resetFields();
     };
   }, []);
+
+  const resetFields = () => {
+    setCurrentPassword("");
+    setNewPassword("");
+    setNewPasswordConfirm("");
+    setChangePassword(false);
+    setDisplayCurrentPassword(false);
+    setDisplayNewPassword(false);
+    setDisplayNewPasswordConfirm(false);
+  }
+
+  const handleUpdatePassword = (e) => {
+    updatePassword(currentPassword, newPassword, newPasswordConfirm)
+      .finally(() => {
+        resetFields();
+      })
+  }
 
   return (
     <div className={styles.changePassowordContainer}>
@@ -45,7 +58,7 @@ const ChangePasswordComponent = ({ updatePassword }) => {
                   value={currentPassword}
                 />
                 <button className="link" onClick={() => setDisplayCurrentPassword(!displayCurrentPassword)}>
-                  <i className={`fa fa-2x ${displayCurrentPassword ? "fa-eye-slash" : "fa-eye"} icon is-large`} />
+                  <i className={`fa fa-2x ${displayCurrentPassword ? "fa-eye-slash" : "fa-eye"} icon is-large`}/>
                 </button>
               </div>
             </div>
@@ -60,7 +73,7 @@ const ChangePasswordComponent = ({ updatePassword }) => {
                   value={newPassword}
                 />
                 <button className="link" onClick={() => setDisplayNewPassword(!displayNewPassword)}>
-                  <i className={`fa fa-2x ${displayNewPassword ? "fa-eye-slash" : "fa-eye"} icon is-large`} />
+                  <i className={`fa fa-2x ${displayNewPassword ? "fa-eye-slash" : "fa-eye"} icon is-large`}/>
                 </button>
               </div>
             </div>
@@ -75,7 +88,7 @@ const ChangePasswordComponent = ({ updatePassword }) => {
                   value={newPasswordConfirm}
                 />
                 <button className="link" onClick={() => setDisplayNewPasswordConfirm(!displayNewPasswordConfirm)}>
-                  <i className={`fa fa-2x ${displayNewPasswordConfirm ? "fa-eye-slash" : "fa-eye"} icon is-large`} />
+                  <i className={`fa fa-2x ${displayNewPasswordConfirm ? "fa-eye-slash" : "fa-eye"} icon is-large`}/>
                 </button>
               </div>
             </div>
@@ -83,8 +96,8 @@ const ChangePasswordComponent = ({ updatePassword }) => {
           <div className={`columns is-mobile ${styles.buttons}`}>
             <div className={`column is-full`}>
               <button disabled={!newPassword || !newPasswordConfirm}
-                className="button is-large"
-                onClick={() => updatePassword(currentPassword, newPassword, newPasswordConfirm)}
+                      className="button is-large"
+                      onClick={handleUpdatePassword}
               >
                 Update
               </button>

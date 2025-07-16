@@ -173,7 +173,7 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
             password,
             password_confirmation
         };
-        updatePassword(passwordObject);
+        return updatePassword(passwordObject);
     };
 
     const handleTogglePopup = (profile) => {
