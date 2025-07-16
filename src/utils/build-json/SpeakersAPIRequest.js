@@ -7,13 +7,13 @@ class SpeakersAPIRequest extends BaseAPIRequest {
         const primary_fields =
             ['id', 'first_name', 'last_name', 'title', 'bio', 'member_id', 'pic', 'big_pic', 'company'];
 
-        const badge_features_fields = 
+        const badge_features_fields =
             ['badge_features.id', 'badge_features.image', 'badge_features.name'];
 
         const relations = [
-            'badge_features',            
-            'all_presentations',
-            'all_moderated_presentations',
+            'badge_features',
+            'presentations',
+            'moderated_presentations',
         ];
 
         const expands = [
