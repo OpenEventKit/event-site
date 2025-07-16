@@ -68,7 +68,7 @@ class EventAPIRequest extends BaseAPIRequest {
             "allowed_ticket_types"
         ];
 
-        const speakers_relations = ["speakers.badge_features", "speakers.all_presentations", "speakers.all_moderated_presentations"];
+        const speakers_relations = ["speakers.badge_features", "speakers.presentations", "speakers.moderated_presentations"];
 
         const track_relations = ["track.track_groups"];
 

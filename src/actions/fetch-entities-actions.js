@@ -1,6 +1,7 @@
 import URI from "urijs";
 import SummitAPIRequest from "../utils/build-json/SummitAPIRequest";
 import EventAPIRequest from "../utils/build-json/EventsAPIRequest";
+import SpeakersAPIRequest from "../utils/build-json/SpeakersAPIRequest";
 
 /**
  * @param summitId
@@ -114,27 +115,11 @@ export const fetchSpeakerById = async (summitId, speakerId, accessToken = null) 
     if (accessToken) {
         apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/v1/summits/${summitId}/speakers/${speakerId}`);
         apiUrl.addQuery('access_token', accessToken);
-    }
+    }    
 
-    const speakers_relations = [
-        'badge_features',
-        'affiliations',
-        'languages',
-        'other_presentation_links',
-        'areas_of_expertise',
-        'travel_preferences',
-        'organizational_roles',
-        'all_presentations',
-        'all_moderated_presentations',
-    ];
-
-    const speakers_fields =
-        ['id', 'first_name', 'last_name', 'title', 'bio', 'member_id', 'pic', 'big_pic', 'company'];
-
-    apiUrl.addQuery('relations', speakers_relations.join(','));
-    apiUrl.addQuery('fields', speakers_fields.join(','));
-
-    return fetch(apiUrl.toString(), {
+    const apiUrlWithParams = SpeakersAPIRequest.build(apiUrl);
+    
+    return fetch(apiUrlWithParams, {
         method: 'GET',
         cache: "no-store",
     }).then(async (response) => {
