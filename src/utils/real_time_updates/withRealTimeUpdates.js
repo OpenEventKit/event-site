@@ -40,10 +40,13 @@ const withRealTimeUpdates = WrappedComponent => {
             this._checkForPastNoveltiesDebounced = _.debounce(this.checkForPastNovelties, CHECK_FOR_NOVELTIES_DELAY);
 
             try {
-                this._supabase = SupabaseClientBuilder.getClient(getEnvVariable(SUPABASE_URL), getEnvVariable(SUPABASE_KEY));
+                const supabaseUrl = getEnvVariable(SUPABASE_URL);
+                const supabaseKey = getEnvVariable(SUPABASE_KEY);
+                if(supabaseUrl && supabaseKey){
+                    this._supabase = SupabaseClientBuilder.getClient(supabaseUrl, supabaseKey);
+                }
             } catch (e) {
                 this._supabase = null;
-                console.log(e);
             }
 
             // attributes

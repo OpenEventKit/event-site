@@ -1,7 +1,7 @@
 {
   "name": "@openeventkit/event-site",
   "description": "Event Site",
-  "version": "2.1.11",
+  "version": "2.1.12-beta.5",
   "author": "Tipit LLC",
   "dependencies": {
     "@emotion/server": "^11.11.0",
@@ -55,6 +55,7 @@
     "final-form": "4.20.7",
     "font-awesome": "^4.7.0",
     "formik": "^2.4.6",
+    "fs-extra": "^11.3.0",
     "full-schedule-widget": "3.0.10",
     "gatsby": "^5.13.5",
     "gatsby-alias-imports": "^1.0.6",
