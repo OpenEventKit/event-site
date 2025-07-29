@@ -18324,10 +18324,10 @@ saxes@^6.0.0:
   dependencies:
     xmlchars "^2.2.0"
 
-schedule-filter-widget@3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/schedule-filter-widget/-/schedule-filter-widget-3.0.2.tgz#d6eecaab96e4fcd03ef797f671cc3945fbc08b88"
-  integrity sha512-DYKfj9gL2frLg1PXTFh/GwkB5vjouKYc26H+XbwSyfiP4iJj/+6MLnCMz/v/zbMOjFhrXVLkl8ewcB27TQLBYA==
+schedule-filter-widget@3.0.3-beta.1:
+  version "3.0.3-beta.1"
+  resolved "https://registry.yarnpkg.com/schedule-filter-widget/-/schedule-filter-widget-3.0.3-beta.1.tgz#37cc72af510eeb5f5a32bcacc52351d466672e3f"
+  integrity sha512-YkewvUclK7V21xmITZ+p7i7zQFThsHxsfUKzDpclH/yy3shuQ+kPzNdfEXSWhhHxO0RmpyihQwVIplCU+40+aQ==
   dependencies:
     crypto-js "^4.1.1"
     react-spring "^9.1.2"
