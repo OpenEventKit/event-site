@@ -20,7 +20,11 @@ class SUPARealTimeStrategy extends AbstractRealTimeStrategy {
         this._retrySubscriptionCounter = 0;
 
         try {
-            this._supabase = SupabaseClientBuilder.getClient(getEnvVariable(SUPABASE_URL), getEnvVariable(SUPABASE_KEY));
+            const supabaseUrl = getEnvVariable(SUPABASE_URL);
+            const supabaseKey = getEnvVariable(SUPABASE_KEY);
+            if(supabaseUrl && supabaseKey) {
+                this._supabase = SupabaseClientBuilder.getClient(supabaseUrl, supabaseKey);
+            }
         }
         catch (e){
             this._supabase = null;
