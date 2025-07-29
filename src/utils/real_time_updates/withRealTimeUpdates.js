@@ -47,7 +47,6 @@ const withRealTimeUpdates = WrappedComponent => {
                 }
             } catch (e) {
                 this._supabase = null;
-                console.log(e);
             }
 
             // attributes

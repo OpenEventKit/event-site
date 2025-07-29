@@ -1,6 +1,7 @@
 const axios = require("axios");
 const path = require("path");
-const fs = require("fs-extra");
+const fs = require("fs");
+const fsExtra = require("fs-extra");
 const webpack = require("webpack");
 const {
   createFilePath
@@ -446,7 +447,7 @@ exports.createSchemaCustomization = async ({ actions, reporter, getNodeAndSavePa
           const publicPath = path.join(publicStaticDir, fileName);
           if (!fs.existsSync(publicPath)) {
             try {
-              await fs.copy(details.absolutePath, publicPath, { dereference: true });
+              await fsExtra.copy(details.absolutePath, publicPath, { dereference: true });
             } catch (err) {
               reporter.panic(`Error copying file from ${details.absolutePath} to ${publicPath}: ${err.message}`);
               continue;
