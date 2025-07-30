@@ -191,21 +191,21 @@ export const getFilteredEvents = (events, filters, summitTimezone, hidePast) => 
 };
 
 export const syncFilters = (newFilters, currentFilters) => {
-  // new filters are the source of truth
-  Object.entries(newFilters).forEach(([key, value]) => {
-    value.values = [];
-    value.options = [];
+  /*
+   new filters are the source of truth
+   returns a clone
+   */
+  const synced = {};
 
-    if(currentFilters.hasOwnProperty(key)) {
-      // copy over values and options if they exists
-      const filter = currentFilters[key];
-      if(filter.hasOwnProperty("values"))
-        value.values = filter.values;
-      if(filter.hasOwnProperty("options"))
-        value.options = filter.options;
-    }
+  Object.entries(newFilters).forEach(([key, value]) => {
+    const existing = currentFilters[key] || {};
+    synced[key] = {
+      ...value,
+      values: Array.isArray(existing.values) ? [...existing.values] : [],
+      options: Array.isArray(existing.options) ? [...existing.options] : []
+    };
   });
-  return newFilters;
+  return synced;
 }
 
 export const savePendingAction = (action) => {
