@@ -1,7 +1,7 @@
 {
   "name": "@openeventkit/event-site",
   "description": "Event Site",
-  "version": "2.1.17-beta.5",
+  "version": "2.1.17-beta.6",
   "author": "Tipit LLC",
   "dependencies": {
     "@emotion/server": "^11.11.0",
@@ -152,11 +152,6 @@
     "xmlhttprequest": "^1.8.0",
     "yup": "^1.4.0"
   },
-  "peerDependencies": {
-    "babel-preset-gatsby": "3.14.0",
-    "gatsby": "5.14.5",
-    "openstack-uicore-foundation": "4.2.8"
-  },
   "keywords": [
     "Open Event Kit"
   ],
@@ -178,6 +173,8 @@
     "@testing-library/react": "^15.0.2",
     "@testing-library/user-event": "^14.5.2",
     "babel-jest": "^29.7.0",
+    "babel-preset-gatsby": "3.14.0",
+    "core-js": "3.39.0",
     "devcert": "1.1.0",
     "gatsby-plugin-webpack-speed-measure": "^0.1.1",
     "identity-obj-proxy": "^3.0.0",
@@ -186,6 +183,7 @@
     "jest-transform-stub": "^2.0.0",
     "js-yaml": "^4.1.0",
     "js-yaml-loader": "^1.2.2",
+    "openstack-uicore-foundation": "4.2.8",
     "prettier": "^2.0.5"
   },
   "jest": {
