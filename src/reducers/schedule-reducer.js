@@ -6,7 +6,7 @@ import {
 } from "../utils/schedule";
 
 import summitData from "data/summit.json";
-
+import cloneDeep from 'lodash/cloneDeep';
 const summitTimeZoneId = summitData.time_zone_id;  // TODO use reducer data
 
 const INITIAL_STATE = {
@@ -59,7 +59,8 @@ const scheduleReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 allEvents: allFilteredEvents,
-                baseFilters,
+                // baseFilters is immutable
+                baseFilters: cloneDeep(baseFilters),
                 filters: newFilters,
                 colorSource: color_source.toLowerCase(),
                 events,
