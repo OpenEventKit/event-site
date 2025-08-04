@@ -1,7 +1,7 @@
 {
   "name": "@openeventkit/event-site",
   "description": "Event Site",
-  "version": "2.1.17-beta.4",
+  "version": "2.1.17-beta.5",
   "author": "Tipit LLC",
   "dependencies": {
     "@emotion/server": "^11.11.0",
@@ -154,8 +154,8 @@
   },
   "peerDependencies": {
     "babel-preset-gatsby": "3.14.0",
-    "openstack-uicore-foundation": "4.2.8",
-    "gatsby": "5.14.5"
+    "gatsby": "5.14.5",
+    "openstack-uicore-foundation": "4.2.8"
   },
   "keywords": [
     "Open Event Kit"
