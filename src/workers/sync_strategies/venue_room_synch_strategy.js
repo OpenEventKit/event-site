@@ -4,9 +4,10 @@ import {
     BUCKET_EVENTS_DATA_KEY,
     BUCKET_EVENTS_IDX_DATA_KEY,
     BUCKET_SPEAKERS_DATA_KEY,
-    BUCKET_SPEAKERS_IDX_DATA_KEY,
+    BUCKET_SPEAKERS_IDX_DATA_KEY, BUCKET_SUMMIT_DATA_KEY,
     saveFile,
 } from "../../utils/dataUpdatesUtils";
+import moment from "moment-timezone";
 
 /**
  * VenueRoomSynchStrategy
@@ -39,11 +40,16 @@ class VenueRoomSynchStrategy extends AbstractSynchStrategy{
                     eventsData[idx] = {...formerEntity, location: entity};
                 }
 
+                // update summit
+                this.summit.timestamp = moment().unix();
+
                 // update files on cache
                 console.log(`VenueRoomSynchStrategy::process updating cache files`);
 
                 try {
                     const localNowUtc = Date.now();
+
+                    await saveFile(this.summit.id, BUCKET_SUMMIT_DATA_KEY, this.summit, localNowUtc);
 
                     await saveFile(this.summit.id, BUCKET_EVENTS_DATA_KEY, eventsData, localNowUtc);
 
