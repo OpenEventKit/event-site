@@ -13,3 +13,24 @@ export const insertSorted = (arr, elem, fnCheck) =>
     arr[i + 1] = elem;
     return i+1;
 }
+
+export const rebuildIndex = (array, key = 'id') => {
+    return array.reduce((acc, item, index) => {
+        acc[item[key]] = index;
+        return acc;
+    }, {});
+};
+
+export const getIndexedItem = (indexMap, array, id) => {
+    const idx = indexMap?.[id] ?? -1;
+    const item = idx !== -1 ? array[idx] : null;
+    return item && item.id === id ? { idx, item } : null;
+};
+
+export const replaceInArray = (array, predicate, newItem) => {
+    const found = array.findIndex(predicate);
+    if (found !== -1) {
+        return [...array.slice(0, found), newItem, ...array.slice(found + 1)];
+    }
+    return array;
+};

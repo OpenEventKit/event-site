@@ -4,6 +4,7 @@ import {
     BUCKET_SUMMIT_DATA_KEY,
     saveFile
 } from "../../utils/dataUpdatesUtils";
+import moment from "moment-timezone";
 
 /**
  * SummitSynchStrategy
@@ -16,12 +17,18 @@ class SummitSynchStrategy extends AbstractSynchStrategy {
 
         const {entity_operator} = payload;
 
-        const entity = await fetchSummitById(this.summit.id, this.accessToken);
+        let entity = await fetchSummitById(this.summit.id, this.accessToken);
 
         let eventsData = [...this.allEvents];
 
         if (entity_operator === 'UPDATE') {
             if (!entity) return Promise.reject('SummitSynchStrategy::process entity not found.');
+
+            // Update summit timestamp
+            entity = {
+                ...entity,
+                timestamp: moment().unix(),
+            };
 
             // update files on cache
             console.log(`SummitSynchStrategy::process updating cache files`);

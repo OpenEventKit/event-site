@@ -41,7 +41,11 @@ class VenueRoomSynchStrategy extends AbstractSynchStrategy{
                 }
 
                 // update summit
-                this.summit.timestamp = moment().unix();
+                // Update summit timestamp
+                this.summit = {
+                    ...this.summit,
+                    timestamp: moment().unix(),
+                };
 
                 // update files on cache
                 console.log(`VenueRoomSynchStrategy::process updating cache files`);

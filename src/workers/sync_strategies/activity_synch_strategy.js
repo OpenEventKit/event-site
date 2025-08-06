@@ -1,6 +1,6 @@
 import AbstractSynchStrategy from "./abstract_synch_strategy";
 import {fetchEventById, fetchStreamingInfoByEventId} from "../../actions/fetch-entities-actions";
-import {insertSorted, intCheck} from "../../utils/arrayUtils";
+import {insertSorted, intCheck, rebuildIndex} from "../../utils/arrayUtils";
 import {
     BUCKET_EVENTS_DATA_KEY,
     BUCKET_EVENTS_IDX_DATA_KEY,
@@ -62,10 +62,8 @@ class ActivitySynchStrategy extends AbstractSynchStrategy{
                 });
 
                 // Rebuild the full event index to be safe
-                this.allIDXEvents = eventsData.reduce((acc, e, i) => {
-                    acc[e.id] = i;
-                    return acc;
-                }, {});
+
+                this.allIDXEvents = rebuildIndex(this.allIDXEvents);
 
                 // Update speakers
                 if (entity.speakers) {
