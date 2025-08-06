@@ -1,6 +1,7 @@
 import AbstractSynchStrategy from "./abstract_synch_strategy";
 import {fetchSpeakerById} from "../../actions/fetch-entities-actions";
 import {
+    BUCKET_SUMMIT_DATA_KEY,
     BUCKET_EVENTS_DATA_KEY,
     BUCKET_EVENTS_IDX_DATA_KEY,
     BUCKET_SPEAKERS_DATA_KEY,
