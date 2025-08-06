@@ -138,7 +138,15 @@ const RegistrationLiteComponent = ({
                 title = 'Error';
                 break;
         }
-        Swal.fire(title, msg, icon)
+        
+        const stripeCode = exception?.error?.code || exception?.code;
+        const stripeMessage = exception?.error?.message || exception?.message || msg;
+
+        const fullMsg = stripeCode ? `[${stripeCode}] ${stripeMessage}` : stripeMessage;
+
+        Swal.fire(title, fullMsg, icon);
+
+        Sentry.captureException(exception || new Error(fullMsg));
     }
 
     const { getSettingByKey } = useMarketingSettings();
