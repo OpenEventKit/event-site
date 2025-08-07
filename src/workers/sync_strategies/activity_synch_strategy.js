@@ -63,7 +63,7 @@ class ActivitySynchStrategy extends AbstractSynchStrategy{
 
                 // Rebuild the full event index to be safe
 
-                this.allIDXEvents = rebuildIndex(this.allIDXEvents);
+                this.allIDXEvents = rebuildIndex(eventsData);
 
                 // Update speakers
                 if (entity.speakers) {
