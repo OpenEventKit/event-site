@@ -1,13 +1,8 @@
-
 import * as React from "react";
-import { useMemo } from "react";
-import { evaluateSync } from "@mdx-js/mdx";
-import * as jsxRuntime from "react/jsx-runtime";
-import remarkGfm from "remark-gfm";
-import rehypeExternalLinks from "rehype-external-links";
 import { navigate } from "gatsby";
 import PropTypes from "prop-types";
 import { GatsbyImage, getImage } from "gatsby-plugin-image";
+import Mdx from "../../components/Mdx";
 import Container from "./Container";
 import LiteScheduleComponent from "../../components/LiteScheduleComponent";
 import DisqusComponent from "../../components/DisqusComponent";
@@ -27,24 +22,8 @@ const onEventClick = (ev) => navigate(`/a/event/${ev.id}`);
 
 const MainColumn = ({ widgets, summitPhase, isLoggedUser, onEventClick, lastDataSync, fullWidth, maxHeight }) => {
   const { content, schedule, disqus, image } = widgets || {};
-  const scheduleProps = schedule && isLoggedUser && summitPhase !== PHASES.BEFORE ? { onEventClick } : {};
 
-  // Compile the MDX string into a React component once per body change
-  const MDXContent = useMemo(() => {
-    if (!content?.display || !content?.body) return null;
-    try {
-      const { default: Comp } = evaluateSync(content.body, {
-        ...jsxRuntime,
-        remarkPlugins: [remarkGfm],
-        rehypePlugins: [[rehypeExternalLinks, { target: "_blank", rel: ["nofollow","noopener","noreferrer"] }]],
-        useDynamicImport: false, // ensure no async imports in runtime content
-      });
-      return Comp;
-    } catch (err) {
-      console.error("MDX evaluate error:", err);
-      return null;
-    }
-  }, [content?.display, content?.body]);
+  const scheduleProps = schedule && isLoggedUser && summitPhase !== PHASES.BEFORE ? { onEventClick } : {};
 
   return (
       <div
@@ -52,8 +31,9 @@ const MainColumn = ({ widgets, summitPhase, isLoggedUser, onEventClick, lastData
           style={{ maxHeight: !fullWidth && maxHeight ? maxHeight : "none", overflowY: "auto" }}
       >
         <Container>
-          {MDXContent && <MDXContent components={shortcodes} />}
-
+          {content?.display && content?.body && (
+              <Mdx shortcodes={shortcodes} content={content.body}/>
+          )}
           {schedule?.display && (
               <>
                 <h2><b>{schedule.title}</b></h2>
@@ -62,24 +42,22 @@ const MainColumn = ({ widgets, summitPhase, isLoggedUser, onEventClick, lastData
                     lastDataSync={lastDataSync}
                     id={`marketing_lite_schedule_${lastDataSync}`}
                     page="marketing-site"
-                    showAllEvents
+                    showAllEvents={true}
                     showSearch={false}
-                    showNav
+                    showNav={true}
                 />
               </>
           )}
-
           {disqus?.display && (
               <>
                 <h2><b>{disqus.title}</b></h2>
                 <DisqusComponent page="marketing-site" />
               </>
           )}
-
           {image?.display && image?.image?.src && (
               <>
                 <h2><b>{image.title}</b></h2>
-                <br />
+                <br/>
                 <GatsbyImage image={getImage(image.image.src)} alt={image.image.alt ?? ""} />
               </>
           )}

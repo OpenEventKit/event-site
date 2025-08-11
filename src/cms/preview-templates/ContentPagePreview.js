@@ -1,62 +1,47 @@
-import React, { useMemo } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import { MDXProvider } from "@mdx-js/react";
-import { evaluateSync } from "@mdx-js/mdx";
-import * as jsxRuntime from "react/jsx-runtime";
-import remarkGfm from "remark-gfm";
-import rehypeExternalLinks from "rehype-external-links";
-
 import ContentPageTemplate from "../../templates/content-page/template";
 import shortcodes from "../../templates/content-page/shortcodes";
+import Mdx from "../../components/Mdx";
 
-// normalize Decap asset -> URL
-const toUrl = (asset) => {
-  if (!asset) return "";
-  if (typeof asset === "string") return asset;
-  if (asset.url) return asset.url;
-  if (typeof asset.toString === "function") return asset.toString();
-  return "";
-};
-
-// replace relative image URLs with absolute ones
+// function to transform content by replacing relative image URLs with absolute ones
 const transformContent = (mdx, getAsset) => {
-  const imageRegex = /!\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
-  return (mdx || "").replace(imageRegex, (m, alt, url) => {
-    if (/^https?:\/\//i.test(url)) return m;
-    const abs = toUrl(getAsset(url));
-    return abs ? `![${alt}](${abs})` : m;
-  });
+    // regex to identify Markdown image tags ![alt](url)
+    const imageRegex = /!\[([^\]]*)\]\(([^)]+)\)/g;
+
+    return mdx.replace(imageRegex, (match, alt, url) => {
+        // check if the URL is relative (does not start with http:// or https://)
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            const asset = getAsset(url);
+            if (asset && asset.url) {
+                return `![${alt}](${asset.url})`;
+            }
+        }
+        return match; // return the original match if it's already an absolute URL
+    });
 };
+
+// function to render transformed content with Mdx
+const renderContent = (mdx, getAsset) => (
+    <Mdx shortcodes={shortcodes} content={transformContent(mdx, getAsset)}/>
+);
 
 const ContentPagePreview = ({ entry, getAsset }) => {
-  const title = entry.getIn(["data", "title"]);
-  const body = entry.getIn(["data", "body"]) || "";
-
-  const mdxCode = useMemo(() => transformContent(body, getAsset), [body, getAsset]);
-
-  // Compile MDX to a React component (synchronously for preview)
-  const { default: Content } = useMemo(
-      () =>
-          evaluateSync(mdxCode, {
-            ...jsxRuntime,
-            remarkPlugins: [remarkGfm],
-            rehypePlugins: [[rehypeExternalLinks, { target: "_blank", rel: ["nofollow", "noopener", "noreferrer"] }]],
-            // keep it simple in preview; avoid dynamic import
-            useDynamicImport: false,
-          }),
-      [mdxCode]
-  );
-
-  return (
-      <MDXProvider components={shortcodes}>
-        <ContentPageTemplate title={title} content={<Content components={shortcodes} />} />
-      </MDXProvider>
-  );
+    const title = entry.getIn(["data", "title"]);
+    const body = entry.getIn(["data", "body"]);
+    return (
+        <ContentPageTemplate
+            title={title}
+            content={renderContent(body, getAsset)}
+        />
+    );
 };
 
 ContentPagePreview.propTypes = {
-  entry: PropTypes.shape({ getIn: PropTypes.func.isRequired }).isRequired,
-  getAsset: PropTypes.func.isRequired,
+    entry: PropTypes.shape({
+        getIn: PropTypes.func.isRequired
+    }).isRequired,
+    getAsset: PropTypes.func.isRequired
 };
 
 export default ContentPagePreview;
