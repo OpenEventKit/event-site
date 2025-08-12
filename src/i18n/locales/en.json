@@ -1,0 +1,13 @@
+{
+  "overflow_player": {
+    "no_stream_key": "No stream key provided. Please check the URL.",
+    "stream_unavailable": {
+      "title": "Stream Unavailable",
+      "message": "The overflow stream you're looking for is not currently available.\nPlease check with event staff or try again later."
+    },
+    "no_stream_available": {
+      "title": "No Stream Available",
+      "message": "No event data found for this overflow stream."
+    }
+  }
+}

@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { connect } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { getOverflowEventByKey } from "../../actions/event-actions";
-import { Container, Box, CircularProgress, Alert, Typography, Fade } from "@mui/material";
+import { Container, Box, CircularProgress, Typography, Fade } from "@mui/material";
 import VideoComponent from "../../components/VideoComponent";
+import ErrorMessage from "../../components/ErrorMessage";
+import "../../i18n";
 
 const OverflowPlayerPage = ({
   location,
@@ -14,6 +17,7 @@ const OverflowPlayerPage = ({
 }) => {
   const params = new URLSearchParams(location.search);
   const overflowStreamKey = params.get("k");
+  const { t } = useTranslation();
   const [showTitleFlash, setShowTitleFlash] = useState(false);
   const [videoError, setVideoError] = useState(false);
 
@@ -41,11 +45,11 @@ const OverflowPlayerPage = ({
 
   if (!overflowStreamKey) {
     return (
-      <Container maxWidth={false}>
-        <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-          <Alert severity="error">No stream key provided. Please check the URL.</Alert>
-        </Box>
-      </Container>
+      <ErrorMessage
+        title={t('overflow_player.stream_unavailable.title')}
+        message={t('overflow_player.no_stream_key')}
+        fullScreen={true}
+      />
     );
   }
 
@@ -58,36 +62,18 @@ const OverflowPlayerPage = ({
           </Box>
         </Container>
       ) : error ? (
-        <Container maxWidth={false}>
-          <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-            <Box textAlign="center" padding={4}>
-              <Typography variant="h3" component="h1" gutterBottom style={{ fontWeight: 'bold', color: '#333' }}>
-                Stream Unavailable
-              </Typography>
-              <Typography variant="h4" component="p" style={{ color: '#666', lineHeight: 1.6 }}>
-                The overflow stream you're looking for is not currently available.
-                <br />
-                Please check with event staff or try again later.
-              </Typography>
-            </Box>
-          </Box>
-        </Container>
+        <ErrorMessage
+          title={t('overflow_player.stream_unavailable.title')}
+          message={t('overflow_player.stream_unavailable.message')}
+          fullScreen={true}
+        />
       ) : event ? (
         videoError ? (
-          <Container maxWidth={false}>
-            <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-              <Box textAlign="center" padding={4}>
-                <Typography variant="h3" component="h1" gutterBottom style={{ fontWeight: 'bold', color: '#333' }}>
-                  Stream Unavailable
-                </Typography>
-                <Typography variant="h4" component="p" style={{ color: '#666', lineHeight: 1.6 }}>
-                  The overflow stream you're looking for is not currently available.
-                  <br />
-                  Please check with event staff or try again later.
-                </Typography>
-              </Box>
-            </Box>
-          </Container>
+          <ErrorMessage
+            title={t('overflow_player.stream_unavailable.title')}
+            message={t('overflow_player.stream_unavailable.message')}
+            fullScreen={true}
+          />
         ) : (
           <Box 
             width="100vw" 
@@ -140,18 +126,11 @@ const OverflowPlayerPage = ({
           </Box>
         )
       ) : (
-        <Container maxWidth={false}>
-          <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-            <Box textAlign="center" padding={4}>
-              <Typography variant="h3" component="h1" gutterBottom style={{ fontWeight: 'bold', color: '#333' }}>
-                No Stream Available
-              </Typography>
-              <Typography variant="h4" component="p" style={{ color: '#666' }}>
-                No event data found for this overflow stream.
-              </Typography>
-            </Box>
-          </Box>
-        </Container>
+        <ErrorMessage
+          title={t('overflow_player.no_stream_available.title')}
+          message={t('overflow_player.no_stream_available.message')}
+          fullScreen={true}
+        />
       )}
     </>
   );
