@@ -8,6 +8,7 @@ const DEFAULT_STATE = {
   event: null,
   lastUpdate: null,
   tokens:null,
+  error: null,
 };
 
 const eventReducer = (state = DEFAULT_STATE, action) => {
@@ -31,7 +32,7 @@ const eventReducer = (state = DEFAULT_STATE, action) => {
       const event = payload?.response ?? payload.event;
       // check if we need to update the current event or do we need to just use the new one
       const updatedEvent = event.id  === state?.event?.id ? {...state, ...event} : event;
-      return { ...state, loading: false, event: updatedEvent, tokens: null };
+      return { ...state, loading: false, event: updatedEvent, tokens: null, error: null };
     }
     case SYNC_DATA:{
       // update current event if we have one on data sync
@@ -46,7 +47,8 @@ const eventReducer = (state = DEFAULT_STATE, action) => {
       return state;
     }
     case GET_EVENT_DATA_ERROR: {
-      return { ...state, loading: false, event: null, tokens: null }
+      const errorMessage = payload?.message || payload?.error || 'Failed to load event';
+      return { ...state, loading: false, event: null, tokens: null, error: errorMessage }
     }
     // reload event state
     case RELOAD_EVENT_STATE:{

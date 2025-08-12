@@ -130,7 +130,7 @@ export const getOverflowEventByKey = (
     return getRequest(
         null,
         createAction(GET_EVENT_DATA),
-        `${window.SUMMIT_API_BASE_URL}/api/v1/public/summits/${window.SUMMIT_ID}/events/all/published/overflow`,
+        `${window.SUMMIT_API_BASE_URL}/api/public/v1/summits/${window.SUMMIT_ID}/events/all/published/overflow`,
         customErrorHandler
     )(params)(dispatch).then((payload) => {
         dispatch(stopLoading());
