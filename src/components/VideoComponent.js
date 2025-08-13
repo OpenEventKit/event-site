@@ -20,7 +20,7 @@ import SynchWordsPlayer from "./SyncWordsPlayer";
  * @returns {JSX.Element}
  * @constructor
  */
-const VideoComponent = ({ url, title, namespace, isLive, firstHalf, autoPlay, start, tokens, onError = () => {} }) => {
+const VideoComponent = ({ url, title, namespace, isLive, firstHalf, autoPlay, start, tokens, onError = () => {}, onLoaded = () => {} }) => {
 
     if (url) {
         // using mux player
@@ -46,6 +46,8 @@ const VideoComponent = ({ url, title, namespace, isLive, firstHalf, autoPlay, st
                     autoplay={autoPlay}
                     start={start}
                     className={styles.vimeoPlayer}
+                    onLoaded={onLoaded}
+                    onError={onError}
                 />
             );
         };
