@@ -31,7 +31,7 @@
     "@types/markerclustererplus": "^2.1.33",
     "@types/react": "^16.9.42",
     "@vimeo/player": "^2.16.3",
-    "ably": "^1.2.34",
+    "ably": "^2.11.0",
     "assert": "^2.1.0",
     "attendee-to-attendee-widget": "3.3.0",
     "autoprefixer": "10.4.14",
