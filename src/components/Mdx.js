@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { evaluateSync } from "@mdx-js/mdx";
 import * as jsxRuntime from "react/jsx-runtime";
 import remarkGfm from "remark-gfm";
