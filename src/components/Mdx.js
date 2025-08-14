@@ -1,29 +1,39 @@
+// src/components/Mdx.jsx
 import React, { useMemo } from "react";
 import { evaluateSync } from "@mdx-js/mdx";
 import * as jsxRuntime from "react/jsx-runtime";
 import remarkGfm from "remark-gfm";
 import rehypeExternalLinks from "rehype-external-links";
-import { MDXProvider } from "@mdx-js/react";
-
+import { MDXProvider, useMDXComponents } from "@mdx-js/react";
 
 const Mdx = ({ content, shortcodes }) => {
-    const mdxContent = useMemo(() => {
-        if ( !content) return null;
+    const Comp = useMemo(() => {
+        if (!content) return null;
         try {
-            const { default: Comp } = evaluateSync(content, {
+            const mod = evaluateSync(content, {
+                // MDX runtime needs the React jsx runtime symbols:
                 ...jsxRuntime,
                 remarkPlugins: [remarkGfm],
                 rehypePlugins: [[rehypeExternalLinks, { target: "_blank", rel: ["nofollow","noopener","noreferrer"] }]],
-                useDynamicImport: false, // ensure no async imports in runtime content
+                // Wire MDX context so MDXProvider / components prop actually work:
+                useMDXComponents
+                // development: process.env.NODE_ENV !== "production",
             });
-            return Comp;
+            return mod.default; // <-- this is the React component
         } catch (err) {
             console.error("MDX evaluate error:", err);
             return null;
         }
     }, [content]);
 
-    return <MDXProvider components={shortcodes}>{mdxContent}</MDXProvider>;
-}
+    if (!Comp) return null;
+
+    return (
+        <MDXProvider components={shortcodes}>
+            <Comp />
+        </MDXProvider>
+    );
+
+};
 
 export default Mdx;
