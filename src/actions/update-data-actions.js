@@ -243,10 +243,10 @@ export const synchEntityData = (
     if (entity && entity_type === 'PresentationSpeaker' && entity_operator === 'UPDATE' && event &&
       (
         // current loaded event is a presentation on where speakers is a presenter
-        (entity.all_presentations && entity.all_presentations.find(id => id == event?.id))
+        (entity?.presentations && entity.presentations.find(id => id == event?.id))
           ||
         // current loaded event is a presentation on where speakers is a moderator
-        (entity.all_moderated_presentations && entity.all_moderated_presentations.find(id => id == event?.id))
+        (entity?.moderated_presentations && entity.moderated_presentations.find(id => id == event?.id))
       )
     )
     {
