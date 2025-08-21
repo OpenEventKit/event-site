@@ -1,25 +1,25 @@
 import { reduceReducers } from '../utils/reducer-utils';
 import { LOGOUT_USER } from 'openstack-uicore-foundation/lib/security/actions';
 import {
-  GET_DISQUS_SSO,
-  GET_USER_PROFILE,
-  START_LOADING_PROFILE,
-  STOP_LOADING_PROFILE,
-  GET_IDP_PROFILE,
-  SET_USER_TICKET,
-  START_LOADING_IDP_PROFILE,
-  STOP_LOADING_IDP_PROFILE,
-  ADD_TO_SCHEDULE,
-  REMOVE_FROM_SCHEDULE,
-  SCHEDULE_SYNC_LINK_RECEIVED,
-  SET_USER_ORDER,
-  CAST_PRESENTATION_VOTE_RESPONSE,
-  UNCAST_PRESENTATION_VOTE_RESPONSE,
-  TOGGLE_PRESENTATION_VOTE,
-  TICKET_OWNER_CHANGED,
-  RECEIVE_INVITATION,
-  REQUEST_INVITATION,
-  REJECT_INVITATION
+    GET_DISQUS_SSO,
+    GET_USER_PROFILE,
+    START_LOADING_PROFILE,
+    STOP_LOADING_PROFILE,
+    GET_IDP_PROFILE,
+    SET_USER_TICKET,
+    START_LOADING_IDP_PROFILE,
+    STOP_LOADING_IDP_PROFILE,
+    ADD_TO_SCHEDULE,
+    REMOVE_FROM_SCHEDULE,
+    SCHEDULE_SYNC_LINK_RECEIVED,
+    SET_USER_ORDER,
+    CAST_PRESENTATION_VOTE_RESPONSE,
+    UNCAST_PRESENTATION_VOTE_RESPONSE,
+    TOGGLE_PRESENTATION_VOTE,
+    TICKET_OWNER_CHANGED,
+    RECEIVE_INVITATION,
+    REQUEST_INVITATION,
+    REJECT_INVITATION, RSVP_CONFIRMED, RSVP_CANCELLED
 } from '../actions/user-actions';
 import { RESET_STATE } from '../actions/base-actions-definitions';
 import { isAuthorizedUser } from '../utils/authorizedGroups';
@@ -82,6 +82,12 @@ const userReducer = (state = DEFAULT_STATE, action) => {
     case REMOVE_FROM_SCHEDULE: {
       return { ...state, userProfile: { ...state.userProfile, schedule_summit_events: [...state.userProfile.schedule_summit_events.filter(ev => ev.id !== payload.id)] } }
     }
+      case RSVP_CONFIRMED: {
+          return { ...state, userProfile: { ...state.userProfile, rsvp: [...state.userProfile.rsvp, {...payload} ] } }
+      }
+      case RSVP_CANCELLED: {
+          return { ...state, userProfile: { ...state.userProfile, rsvp: [...state.userProfile.rsvp.filter(r => r.event_id !== payload.id)] } }
+      }
     case GET_DISQUS_SSO:
       const disqus = payload.response;
       return { ...state, loading: false, disqusSSO: disqus };
