@@ -58,6 +58,8 @@ export const TICKET_OWNER_CHANGED = 'TICKET_OWNER_CHANGED';
 export const REQUEST_INVITATION = 'REQUEST_INVITATION';
 export const RECEIVE_INVITATION = 'RECEIVE_INVITATION';
 export const REJECT_INVITATION = 'REJECT_INVITATION';
+export const RSVP_CONFIRMED = 'RSVP_CONFIRMED';
+export const RSVP_CANCELLED = 'RSVP_CANCELLED';
 
 const DISQUS_SSO_EXPIRATION = "DISQUS_SSO_EXPIRATION";
 
@@ -103,11 +105,12 @@ export const getUserProfile = () => async (dispatch) => {
 
   let params = {
     access_token: accessToken,
+    fields:'rsvp.event_id,rsvp.seat_type,rsvp_invitations.event_id,rsvp_invitations.status',
     expand:
       'groups,summit_tickets,summit_tickets.ticket_type,summit_tickets.owner,summit_tickets.owner.presentation_votes,' +
       'summit_tickets.owner.extra_questions,summit_tickets.badge,summit_tickets.badge.features,summit_tickets.badge.type,' +
       'summit_tickets.badge.type.access_levels,summit_tickets.badge.type.features,favorite_summit_events,feedback,' +
-      'schedule_summit_events,rsvp,rsvp.answers'
+      'schedule_summit_events,rsvp,rsvp.answers,rsvp_invitations'
   };
 
   return getRequest(
@@ -250,6 +253,52 @@ export const removeFromSchedule = (event) => async (dispatch, getState) => {
     clearAccessToken();
     return e;
   });
+};
+
+/************************************** RSVP **************************************************************************/
+
+export const rsvpToEvent = (event) => async (dispatch, getState) => {
+
+    const accessToken = await getAccessTokenSafely()
+        .catch(() => {
+            dispatch(stopLoading());
+            return Promise.reject();
+        });
+
+    const url = `${getEnvVariable(SUMMIT_API_BASE_URL)}/api/v1/summits/${getEnvVariable(SUMMIT_ID)}/events/${event.id}/rsvp`;
+
+    return axios.post(
+        url, { access_token: accessToken }
+    ).then(() => {
+        dispatch(createAction(RSVP_CONFIRMED)(event));
+        return event;
+    }).catch(e => {
+        console.log('ERROR: ', e);
+        clearAccessToken();
+        return e;
+    });
+};
+
+export const cancelRSVP = (event) => async (dispatch, getState) => {
+
+    const accessToken = await getAccessTokenSafely()
+        .catch(() => {
+            dispatch(stopLoading());
+            return Promise.reject();
+        });
+
+    const url =`${getEnvVariable(SUMMIT_API_BASE_URL)}/api/v1/summits/${getEnvVariable(SUMMIT_ID)}/events/${event.id}/unrsvp`;
+
+    return axios.delete(
+        url, { data: { access_token: accessToken } }
+    ).then(() => {
+        dispatch(createAction(RSVP_CANCELLED)(event));
+        return event;
+    }).catch(e => {
+        console.log('ERROR: ', e);
+        clearAccessToken();
+        return e;
+    });
 };
 
 export const castPresentationVote = (presentation) => async (dispatch, getState) => {
