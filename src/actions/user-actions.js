@@ -9,7 +9,7 @@ import {
     stopLoading,
 } from 'openstack-uicore-foundation/lib/utils/actions';
 
-import {putOnLocalStorage, getFromLocalStorage} from 'openstack-uicore-foundation/lib/utils/methods';
+import { putOnLocalStorage, getFromLocalStorage } from 'openstack-uicore-foundation/lib/utils/methods';
 
 import {
     clearAccessToken,
@@ -18,13 +18,14 @@ import {
 } from 'openstack-uicore-foundation/lib/security/methods';
 
 import QuestionsSet from 'openstack-uicore-foundation/lib/utils/questions-set'
-
 import Swal from 'sweetalert2';
 import axios from "axios";
 import {navigate} from 'gatsby';
-import {customErrorHandler, customBadgeHandler, voidErrorHandler} from '../utils/customErrorHandler';
+import {customErrorHandler, customBadgeHandler, voidErrorHandler, customRSVPHandler} from '../utils/customErrorHandler';
 import {getEnvVariable, SUMMIT_API_BASE_URL, SUMMIT_ID} from "../utils/envVariables";
-import {getAccessTokenSafely} from "../utils/loginUtils";
+import expiredToken from "../utils/expiredToken";
+import { getAccessTokenSafely } from "../utils/loginUtils";
+
 import * as Sentry from "@sentry/react";
 
 export const GET_DISQUS_SSO = 'GET_DISQUS_SSO';
@@ -59,7 +60,11 @@ export const RECEIVE_INVITATION = 'RECEIVE_INVITATION';
 export const REJECT_INVITATION = 'REJECT_INVITATION';
 export const RSVP_CONFIRMED = 'RSVP_CONFIRMED';
 export const RSVP_CANCELLED = 'RSVP_CANCELLED';
-
+export const REQUEST_RSVP_INVITATION = 'REQUEST_RSVP_INVITATION';
+export const RECEIVE_RSVP_INVITATION = 'RECEIVE_RSVP_INVITATION';
+export const RSVP_INVITATION_ERROR = 'RSVP_INVITATION_ERROR';
+export const RSVP_INVITATION_ACCEPTED = 'RSVP_INVITATION_ACCEPTED';
+export const RSVP_INVITATION_REJECTED = 'RSVP_INVITATION_REJECTED';
 const DISQUS_SSO_EXPIRATION = "DISQUS_SSO_EXPIRATION";
 
 // shortName is the unique identifier assigned to a Disqus site.
@@ -89,7 +94,6 @@ export const getDisqusSSO = (shortName) => async (dispatch, getState) => {
             console.log('ERROR: ', e);
             Sentry.captureException(e)
             clearAccessToken();
-
             return Promise.reject(e);
         });
 }
@@ -168,6 +172,7 @@ export const requireExtraQuestions = () => (dispatch, getState) => {
 }
 
 export const checkRequireExtraQuestionsByAttendee = (attendee) => (dispatch, getState) => {
+
     const {summitState: {summit, extra_questions}} = getState();
     if (!attendee.first_name || !attendee.last_name || !attendee.company || !attendee.email) return true;
     const disclaimer = summit.registration_disclaimer_mandatory ? attendee.disclaimer_accepted : true;
@@ -666,3 +671,85 @@ export const rejectInvitation = (token) => async (dispatch) => {
 }
 
 
+export const getRSVPInvitation = (token, eventId) => async (dispatch) => {
+  let params = {
+    expand: "event,event.speakers",
+    fields: "id,is_accepted,status,event.title,event.description,event.moderator_speaker_id,event.speakers.first_name,event.speakers.last_name,event.speakers.company,event.speakers.title,event.speakers.pic",
+    relations: "event.none,event.speakers.none"
+  };
+
+  return getRequest(
+    createAction(REQUEST_RSVP_INVITATION),
+    createAction(RECEIVE_RSVP_INVITATION),
+    `${window.API_BASE_URL}/api/public/v1/summits/${window.SUMMIT_ID}/events/${eventId}/rsvp-invitations/${token}`,
+    null,
+  )(params)(dispatch)
+    .catch(({ err }) => {
+      let code = err.status;
+      console.log("CHJEC!", err)
+      dispatch(stopLoading());
+      let msg = '';
+      switch (code) {
+        case 401:
+          console.log('authErrorHandler 401 - re login');
+          expiredToken(err);
+          break;
+        case 404:
+          msg = "";
+          if (err.response.body && err.response.body.message) msg = err.response.body.message;
+          else if (err.response.error && err.response.error.message) msg = err.response.error.message;
+          else msg = err.message;
+          dispatch(createAction(RSVP_INVITATION_ERROR)({ errorMessage: msg }))
+          break;
+        case 412:
+          for (var [key, value] of Object.entries(err.response.body.errors)) {
+            if (isNaN(key)) {
+              msg += key + ': ';
+            }
+            msg += value + '<br>';
+          }
+          dispatch(createAction(RSVP_INVITATION_ERROR)({ errorMessage: msg }))
+          break;
+        default:
+          dispatch(createAction(RSVP_INVITATION_ERROR)({ errorMessage: "Internal Error. Please contact support " }))
+          break;
+      }
+    })
+    .finally(() => dispatch(stopLoading()));
+}
+
+export const acceptRSVPInvitation = (token, eventId) => async (dispatch) => {
+  let params = {
+    expand: "event,event.speakers",
+    fields: "id,is_accepted,status,event.title,event.description,event.moderator_speaker_id,event.speakers.first_name,event.speakers.last_name,event.speakers.company,event.speakers.title,event.speakers.pic",
+    relations: "event.none,event.speakers.none"
+  };
+
+  return putRequest(
+    null,
+    createAction(RSVP_INVITATION_ACCEPTED),
+    `${window.API_BASE_URL}/api/public/v1/summits/${window.SUMMIT_ID}/events/${eventId}/rsvp-invitations/${token}/accept`,
+    null,
+    customRSVPHandler
+  )(params)(dispatch)
+    .catch((err) => console.log("ERROR: ", err))
+    .finally(() => dispatch(stopLoading()));
+}
+
+export const declineRSVPInvitation = (token, eventId) => async (dispatch) => {
+  let params = {
+    expand: "event,event.speakers",
+    fields: "id,is_accepted,status,event.title,event.description,event.moderator_speaker_id,event.speakers.first_name,event.speakers.last_name,event.speakers.company,event.speakers.title,event.speakers.pic",
+    relations: "event.none,event.speakers.none"
+  };
+
+  return deleteRequest(
+    null,
+    createAction(RSVP_INVITATION_REJECTED),
+    `${window.API_BASE_URL}/api/public/v1/summits/${window.SUMMIT_ID}/events/${eventId}/rsvp-invitations/${token}/decline`,
+    null,
+    customRSVPHandler
+  )(params)(dispatch)
+    .catch((err) => console.log("ERROR: ", err))
+    .finally(() => dispatch(stopLoading()));
+}

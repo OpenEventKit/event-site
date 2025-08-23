@@ -1,6 +1,7 @@
 import { reduceReducers } from '../utils/reducer-utils';
 import { LOGOUT_USER } from 'openstack-uicore-foundation/lib/security/actions';
 import {
+
     GET_DISQUS_SSO,
     GET_USER_PROFILE,
     START_LOADING_PROFILE,
@@ -19,7 +20,15 @@ import {
     TICKET_OWNER_CHANGED,
     RECEIVE_INVITATION,
     REQUEST_INVITATION,
-    REJECT_INVITATION, RSVP_CONFIRMED, RSVP_CANCELLED
+    REJECT_INVITATION,
+    RSVP_CONFIRMED,
+    RSVP_CANCELLED,
+    REQUEST_RSVP_INVITATION,
+    RECEIVE_RSVP_INVITATION,
+    RSVP_INVITATION_ERROR,
+    RSVP_INVITATION_ACCEPTED,
+    RSVP_INVITATION_REJECTED
+
 } from '../actions/user-actions';
 import { RESET_STATE } from '../actions/base-actions-definitions';
 import { isAuthorizedUser } from '../utils/authorizedGroups';
@@ -34,6 +43,7 @@ const DEFAULT_STATE = {
   hasTicket: false,
   attendee: null,
   invitation: null,
+  rsvpInvitation: null,
 }
 
 const userReducer = (state = DEFAULT_STATE, action) => {
@@ -64,7 +74,7 @@ const userReducer = (state = DEFAULT_STATE, action) => {
       return { ...state, hasTicket: payload }
     case SET_USER_ORDER: {
       // we need to verify that the ticket is for current attendee
-      const currentUserTickets =  (payload?.tickets || []).filter(t => t?.owner?.email == state.userProfile?.email);
+      const currentUserTickets = (payload?.tickets || []).filter(t => t?.owner?.email == state.userProfile?.email);
       return {
         ...state,
         hasTicket: (state.hasTicket || currentUserTickets.length > 0),
@@ -99,10 +109,10 @@ const userReducer = (state = DEFAULT_STATE, action) => {
       const isUserTicket = state.userProfile?.summit_tickets.some(t => t.id === ticketUpdated.id);
       let currentUserTickets = [...state.userProfile?.summit_tickets];
       // if is an user ticket and is reassigned or unassiged, remove it from current user tickets
-      if(isUserTicket) {
-        if(ticketUpdated?.owner_id === 0 || ticketUpdated?.owner?.member_id !== state.userProfile.id) {
-          currentUserTickets = [...currentUserTickets].filter(t => t.id !== ticketUpdated.id) 
-        }          
+      if (isUserTicket) {
+        if (ticketUpdated?.owner_id === 0 || ticketUpdated?.owner?.member_id !== state.userProfile.id) {
+          currentUserTickets = [...currentUserTickets].filter(t => t.id !== ticketUpdated.id)
+        }
       }
       // if the new ticket belongs to the current user, add it to current user tickets
       if (ticketUpdated?.owner?.member_id === state.userProfile.id) {
@@ -118,13 +128,29 @@ const userReducer = (state = DEFAULT_STATE, action) => {
       };
     }
     case REQUEST_INVITATION: {
-      return {...state, invitation: null};
+      return { ...state, invitation: null };
     }
     case RECEIVE_INVITATION: {
-      return {...state, invitation: payload.response}
+      return { ...state, invitation: payload.response }
     }
     case REJECT_INVITATION: {
-      return {...state, invitation: {...state.invitation, status: 'Rejected'}}
+      return { ...state, invitation: { ...state.invitation, status: 'Rejected' } }
+    }
+    case REQUEST_RSVP_INVITATION: {
+      return { ...state, rsvpInvitation: null }
+    }
+    case RECEIVE_RSVP_INVITATION: {
+      return { ...state, rsvpInvitation: payload.response }
+    }
+    case RSVP_INVITATION_ERROR: {
+      const { errorMessage } = payload;
+      return { ...state, rsvpInvitation: { errorMessage } }
+    }
+    case RSVP_INVITATION_ACCEPTED: {
+      return { ...state, rsvpInvitation: payload.response }
+    }
+    case RSVP_INVITATION_REJECTED: {
+      return { ...state, rsvpInvitation: payload.response }
     }
     default:
       return state;
