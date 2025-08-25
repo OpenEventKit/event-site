@@ -24,7 +24,6 @@ import axios from "axios";
 import {navigate} from 'gatsby';
 import {customErrorHandler, customBadgeHandler, voidErrorHandler} from '../utils/customErrorHandler';
 import {getEnvVariable, SUMMIT_API_BASE_URL, SUMMIT_ID} from "../utils/envVariables";
-import expiredToken from "../utils/expiredToken";
 import {getAccessTokenSafely} from "../utils/loginUtils";
 import * as Sentry from "@sentry/react";
 
@@ -270,10 +269,15 @@ export const rsvpToEvent = (event) => async (dispatch, getState) => {
     const url = `${getEnvVariable(SUMMIT_API_BASE_URL)}/api/v1/summits/${getEnvVariable(SUMMIT_ID)}/events/${event.id}/rsvp`;
 
     return axios.post(
-        url, {access_token: accessToken}
+        url, {
+            access_token: accessToken,
+            fields: 'event_id,seat_type',
+            relations: 'none',
+        }
     ).then((payload) => {
         const {data: rsvp} = payload;
         dispatch(createAction(RSVP_CONFIRMED)(rsvp));
+        dispatch(createAction(ADD_TO_SCHEDULE)(event));
         return rsvp;
     }).catch(e => {
         console.log('ERROR: ', e);
@@ -292,9 +296,14 @@ export const cancelRSVP = (event) => async (dispatch, getState) => {
     const url = `${getEnvVariable(SUMMIT_API_BASE_URL)}/api/v1/summits/${getEnvVariable(SUMMIT_ID)}/events/${event.id}/unrsvp`;
 
     return axios.delete(
-        url, {data: {access_token: accessToken}}
+        url, {data: {
+            access_token: accessToken,
+            relations: 'none',
+            fields: 'id',
+        }}
     ).then(() => {
         dispatch(createAction(RSVP_CANCELLED)(event));
+        dispatch(createAction(REMOVE_FROM_SCHEDULE)(event));
         return event;
     }).catch(e => {
         console.log('ERROR: ', e);
