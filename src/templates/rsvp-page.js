@@ -5,8 +5,8 @@ import { useTranslation } from "react-i18next";
 import AjaxLoader from 'openstack-uicore-foundation/lib/components/ajaxloader'
 import Layout from "../components/Layout";
 import { acceptRSVPInvitation, declineRSVPInvitation, getRSVPInvitation } from "../actions/user-actions";
-
 import styles from "../styles/rsvp-page.module.scss"
+import { RSVP_STATUS } from "@utils/rsvpConstants";
 import { Badge } from "react-bootstrap";
 import "../i18n";
 
@@ -52,13 +52,13 @@ const RSVPPage = ({ location, rsvpInvitation, getRSVPInvitation, acceptRSVPInvit
       <AjaxLoader show={isLoading} size={120} />
       {!isLoading && (
         <div className={`container`}>
-          {rsvpInvitation?.status === "Rejected" && (
+          {rsvpInvitation?.status === RSVP_STATUS.rejected && (
             <h2>{t("rsvp_page.decline_message", { event: event?.title })} </h2>
           )}
-          {rsvpInvitation?.status === "Accepted" && (
+          {rsvpInvitation?.status === RSVP_STATUS.accepted && (
             <h2>{t("rsvp_page.confirm_message", { event: event?.title })} </h2>
           )}
-          {event && rsvpInvitation?.status === "Pending" ?
+          {event && rsvpInvitation?.status === RSVP_STATUS.pending ?
             (<>
               <h2>{t("rsvp_page.invite_message", { event: event?.title })} </h2>
 
