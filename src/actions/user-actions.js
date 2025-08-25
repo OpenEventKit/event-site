@@ -627,8 +627,6 @@ export const getRSVPInvitation = (token, eventId) => async (dispatch) => {
   )(params)(dispatch)
     .catch(({ err }) => {
       let code = err.status;
-      console.log("CHJEC!", err)
-      dispatch(stopLoading());
       let msg = '';
       switch (code) {
         case 401:

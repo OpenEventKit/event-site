@@ -38,7 +38,9 @@ const RSVPPage = ({ location, rsvpInvitation, getRSVPInvitation, acceptRSVPInvit
   const errorMessage = rsvpInvitation?.errorMessage;
 
   const handleConfirmRSVP = (isAccepted) => {
-    return isAccepted ? acceptRSVPInvitation(invitationToken, eventId) : declineRSVPInvitation(invitationToken, eventId);
+    setIsLoading(true);
+    const action = isAccepted ? acceptRSVPInvitation : declineRSVPInvitation;
+    return action(invitationToken, eventId).finally(() => setIsLoading(false));
   }
 
   if (!invitationToken || !eventId) {
@@ -53,7 +55,10 @@ const RSVPPage = ({ location, rsvpInvitation, getRSVPInvitation, acceptRSVPInvit
           {rsvpInvitation?.status === "Rejected" && (
             <h2>{t("rsvp_page.decline_message", { event: event?.title })} </h2>
           )}
-          {event ?
+          {rsvpInvitation?.status === "Accepted" && (
+            <h2>{t("rsvp_page.confirm_message", { event: event?.title })} </h2>
+          )}
+          {event && rsvpInvitation?.status === "Pending" ?
             (<>
               <h2>{t("rsvp_page.invite_message", { event: event?.title })} </h2>
 
@@ -98,7 +103,7 @@ const RSVPPage = ({ location, rsvpInvitation, getRSVPInvitation, acceptRSVPInvit
                 <button className="button is-large" onClick={() => handleConfirmRSVP(false)}>
                   {t("rsvp_page.decline_button")}
                 </button>
-                <button className="button is-large" onClick={() => handleConfirmRSVP(true)}>                  
+                <button className="button is-large" onClick={() => handleConfirmRSVP(true)}>
                   {t("rsvp_page.accept_button")}
                 </button>
               </div>
