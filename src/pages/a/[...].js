@@ -83,7 +83,7 @@ const App = ({ isLoggedUser, user, summitPhase, allowClick = true, data }) => {
             <MyTicketsPage path="/my-tickets" isLoggedIn={isLoggedUser} user={user} location={location} />
             <FullProfilePage path="/profile" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location} />
             <ExtraQuestionsPage path="/extra-questions" isLoggedIn={isLoggedUser} user={user} location={location} />
-            <RsvpPage path="/rsvp" isLoggedIn={isLoggedUser} user={user} location={location} />
+            <RsvpPage path="/rsvp" location={location} />
             { mySchedulePageJson && !mySchedulePageJson.needsTicketAuthz && mySchedulePage({location, summitPhase,isLoggedUser, user, allowClick, title:mySchedulePageJson.title, key: mySchedulePageJson.key }) }
             <WithAuthzRoute path="/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location}>
                 <PostersPage path="/posters" trackGroupId={0} location={location} />

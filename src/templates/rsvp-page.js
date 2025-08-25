@@ -1,15 +1,18 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "@gatsbyjs/reach-router";
+import { useTranslation } from "react-i18next";
 import AjaxLoader from 'openstack-uicore-foundation/lib/components/ajaxloader'
 import Layout from "../components/Layout";
 import { acceptRSVPInvitation, declineRSVPInvitation, getRSVPInvitation } from "../actions/user-actions";
 
 import styles from "../styles/rsvp-page.module.scss"
 import { Badge } from "react-bootstrap";
+import "../i18n";
 
 const RSVPPage = ({ location, rsvpInvitation, getRSVPInvitation, acceptRSVPInvitation, declineRSVPInvitation }) => {
 
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(true);
 
   const queryParams = useMemo(() => {
@@ -48,11 +51,11 @@ const RSVPPage = ({ location, rsvpInvitation, getRSVPInvitation, acceptRSVPInvit
       {!isLoading && (
         <div className={`container`}>
           {rsvpInvitation?.status === "Rejected" && (
-            <h2>You declined your invite to RSVP {event?.title} </h2>
+            <h2>{t("rsvp_page.decline_message", { event: event?.title })} </h2>
           )}
           {event ?
             (<>
-              <h2>You have been invited to RSVP {event?.title} </h2>
+              <h2>{t("rsvp_page.invite_message", { event: event?.title })} </h2>
 
               <br />
 
@@ -62,7 +65,7 @@ const RSVPPage = ({ location, rsvpInvitation, getRSVPInvitation, acceptRSVPInvit
 
               {event?.speakers?.length > 0 &&
                 <div>
-                  <b>Speakers</b>
+                  <b>{t("rsvp_page.speakers")}</b>
                   <div className={styles.speakerWrapper}>
                     {event.speakers.map((speaker) => {
                       const isModerator = speaker.id === moderatorId;
@@ -93,10 +96,10 @@ const RSVPPage = ({ location, rsvpInvitation, getRSVPInvitation, acceptRSVPInvit
 
               <div className={styles.buttonWrapper}>
                 <button className="button is-large" onClick={() => handleConfirmRSVP(false)}>
-                  NO, I will not attend.
+                  {t("rsvp_page.decline_button")}
                 </button>
-                <button className="button is-large" onClick={() => handleConfirmRSVP(true)}>
-                  YES, I will attend
+                <button className="button is-large" onClick={() => handleConfirmRSVP(true)}>                  
+                  {t("rsvp_page.accept_button")}
                 </button>
               </div>
             </>)
@@ -114,7 +117,6 @@ const RSVPPage = ({ location, rsvpInvitation, getRSVPInvitation, acceptRSVPInvit
 };
 
 const mapStateToProps = ({ userState }) => ({
-  user: userState,
   rsvpInvitation: userState.rsvpInvitation
 });
 
