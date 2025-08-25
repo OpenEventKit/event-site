@@ -234,7 +234,7 @@ export const addToSchedule = (event) => async (dispatch, getState) => {
         return event;
     }).catch(e => {
         console.log('ERROR: ', e);
-        clearAccessToken();
+        Sentry.captureException(e)
         return e;
     });
 };
@@ -256,7 +256,7 @@ export const removeFromSchedule = (event) => async (dispatch, getState) => {
         return event;
     }).catch(e => {
         console.log('ERROR: ', e);
-        clearAccessToken();
+        Sentry.captureException(e)
         return e;
     });
 };
@@ -286,6 +286,8 @@ export const rsvpToEvent = (event) => async (dispatch, getState) => {
         return rsvp;
     }).catch(e => {
         console.log('ERROR: ', e);
+        Swal.fire('Error', "There was an error at RSVP. Please retry.", "warning");
+        Sentry.captureException(e)
         return e;
     });
 };
@@ -312,6 +314,8 @@ export const cancelRSVP = (event) => async (dispatch, getState) => {
         return event;
     }).catch(e => {
         console.log('ERROR: ', e);
+        Swal.fire('Error', "There was an error at UnRSVP. Please retry.", "warning");
+        Sentry.captureException(e)
         return e;
     });
 };
@@ -764,9 +768,9 @@ export const getRSVPInvitation = (token, eventId) => async (dispatch) => {
 
 export const acceptRSVPInvitation = (token, eventId) => async (dispatch) => {
   let params = {
-    expand: "event,event.speakers",
-    fields: "id,is_accepted,status,event.title,event.description,event.moderator_speaker_id,event.speakers.first_name,event.speakers.last_name,event.speakers.company,event.speakers.title,event.speakers.pic",
-    relations: "event.none,event.speakers.none"
+    expand: "event,event.speakers,rsvp",
+    fields: "id,is_accepted,status,event.id,event.title,event.description,event.moderator_speaker_id,event.speakers.first_name,event.speakers.last_name,event.speakers.company,event.speakers.title,event.speakers.pic,rsvp.seat_type,rsvp.event_id",
+    relations: "event.none,event.speakers.none,rsvp,rsvp.none"
   };
 
   return putRequest(
@@ -776,6 +780,7 @@ export const acceptRSVPInvitation = (token, eventId) => async (dispatch) => {
     null,
     customRSVPHandler
   )(params)(dispatch)
+    .then((payload)=>   dispatch(createAction(ADD_TO_SCHEDULE)(payload.event)))
     .catch((err) => console.log("ERROR: ", err))
     .finally(() => dispatch(stopLoading()));
 }
@@ -783,7 +788,7 @@ export const acceptRSVPInvitation = (token, eventId) => async (dispatch) => {
 export const declineRSVPInvitation = (token, eventId) => async (dispatch) => {
   let params = {
     expand: "event,event.speakers",
-    fields: "id,is_accepted,status,event.title,event.description,event.moderator_speaker_id,event.speakers.first_name,event.speakers.last_name,event.speakers.company,event.speakers.title,event.speakers.pic",
+    fields: "id,is_accepted,status,event.id,event.title,event.description,event.moderator_speaker_id,event.speakers.first_name,event.speakers.last_name,event.speakers.company,event.speakers.title,event.speakers.pic",
     relations: "event.none,event.speakers.none"
   };
 
