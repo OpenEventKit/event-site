@@ -100,11 +100,11 @@ const RSVPPage = ({ location, rsvpInvitation, getRSVPInvitation, acceptRSVPInvit
               }
 
               <div className={styles.buttonWrapper}>
-                <button className="button is-large" onClick={() => handleConfirmRSVP(false)}>
-                  {t("rsvp_page.decline_button")}
-                </button>
                 <button className="button is-large" onClick={() => handleConfirmRSVP(true)}>
                   {t("rsvp_page.accept_button")}
+                </button>
+                <button className="button is-large" onClick={() => handleConfirmRSVP(false)}>
+                  {t("rsvp_page.decline_button")}
                 </button>
               </div>
             </>)
