@@ -35,7 +35,9 @@ class AuthorizationCallbackRoute extends AbstractAuthorizationCallbackRoute {
     _callback(backUrl) {
         this.props.getUserProfile().then(() => {
             const pendingAction = getPendingAction();
+
             if (pendingAction) {
+                console.log(`AuthorizationCallbackRoute::_callback pendingAction ${pendingAction}`);
                 const { action, event } = pendingAction;
                 switch (action.type) {
                     case "ADD_EVENT":
