@@ -723,9 +723,8 @@ export const rejectInvitation = (token) => async (dispatch) => {
 
 export const getRSVPInvitation = (token, eventId) => async (dispatch) => {
   let params = {
-    expand: "event,event.speakers",
-    fields: "id,is_accepted,status,event.title,event.description,event.moderator_speaker_id,event.speakers.first_name,event.speakers.last_name,event.speakers.company,event.speakers.title,event.speakers.pic",
-    relations: "event.none,event.speakers.none"
+    fields: "status,event_id",
+    relations: "none"
   };
 
   return getRequest(
@@ -768,7 +767,7 @@ export const getRSVPInvitation = (token, eventId) => async (dispatch) => {
 
 export const acceptRSVPInvitation = (token, eventId) => async (dispatch) => {
 
-  let params = {    
+  let params = {
     expand: "rsvp",
     fields: "status,event_id,rsvp.seat_type,rsvp.event_id",
     relations: "event.none,rsvp.none"
@@ -786,9 +785,8 @@ export const acceptRSVPInvitation = (token, eventId) => async (dispatch) => {
 }
 
 export const declineRSVPInvitation = (token, eventId) => async (dispatch) => {
-
-  let params = {    
-    fields: "status,event.id",
+  let params = {
+    fields: "status,event_id",
     relations: "event.none"
   };
 
