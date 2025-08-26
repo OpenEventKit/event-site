@@ -155,11 +155,11 @@ const userReducer = (state = DEFAULT_STATE, action) => {
       const userProfile = state.userProfile? {
           ...state?.userProfile,
           rsvp_invitations:[ ...state?.userProfile?.rsvp_invitations,{
-            event_id: invitation.event.id,
+            event_id: invitation.event_id,
             status: invitation.status,
           }],
           rsvp: [...state?.userProfile?.rsvp, {...invitation.rsvp}],
-          schedule_summit_events: [...state?.userProfile?.schedule_summit_events, {id: invitation.event.id}]
+          schedule_summit_events: [...state?.userProfile?.schedule_summit_events, {id: invitation.event_id}]
       } : null;
 
       return { ...state,
@@ -173,7 +173,7 @@ const userReducer = (state = DEFAULT_STATE, action) => {
         const invitation = payload.response;
         const userProfile = state.userProfile ? {...state?.userProfile,
             rsvp_invitations:[ ...state?.userProfile?.rsvp_invitations,{
-                event_id: invitation.event.id,
+                event_id: invitation.event_id,
                 status: invitation.status,
             }],
         }: null;
