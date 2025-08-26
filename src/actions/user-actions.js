@@ -780,7 +780,7 @@ export const acceptRSVPInvitation = (token, eventId) => async (dispatch) => {
     null,
     customRSVPHandler
   )(params)(dispatch)
-    .then((payload)=>   dispatch(createAction(ADD_TO_SCHEDULE)(payload.event)))
+    .then((payload)=>   dispatch(createAction(ADD_TO_SCHEDULE)(payload.response.event)))
     .catch((err) => console.log("ERROR: ", err))
     .finally(() => dispatch(stopLoading()));
 }
