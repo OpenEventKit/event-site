@@ -12,8 +12,8 @@
   },
   "rsvp_page": {
     "invite_message": "You have been invited to RSVP {{event}}",
-    "decline_message": "You declined your invite to RSVP {{event}}",
-    "confirm_message": "You confirmed your invite to RSVP {{event}}",
+    "decline_message": "You declined your invite to RSVP",
+    "confirm_message": "You confirmed your invite to RSVP",
     "speakers": "Speakers",
     "accept_button": "YES, I will attend.",
     "decline_button": "NO, I will not attend."
