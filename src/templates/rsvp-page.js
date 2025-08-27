@@ -54,7 +54,7 @@ const RSVPPage = ({ location, rsvpInvitation, event, getRSVPInvitation, acceptRS
       <AjaxLoader show={isLoading} size={120} />
       {!isLoading && (
         <div className={`container`}>
-          {event && !errorMessage ?
+          {event ?
             (<>
               <h2>{t("rsvp_page.invite_message", { event: event?.title })} </h2>
 
@@ -94,8 +94,10 @@ const RSVPPage = ({ location, rsvpInvitation, event, getRSVPInvitation, acceptRS
                   </div>
                 </div>
               }
-
               <div className={styles.buttonWrapper}>
+                {errorMessage && (
+                    <h3 dangerouslySetInnerHTML={{ __html: errorMessage }} />
+                )}
                 {rsvpInvitation?.status === RSVP_STATUS.rejected && (
                   <h4>{t("rsvp_page.decline_message")} </h4>
                 )}
@@ -117,7 +119,7 @@ const RSVPPage = ({ location, rsvpInvitation, event, getRSVPInvitation, acceptRS
             :
             (
               <>
-                <h3 dangerouslySetInnerHTML={{ __html: errorMessage }} />
+                  <h3>Activity not found.</h3>
               </>
             )
           }
