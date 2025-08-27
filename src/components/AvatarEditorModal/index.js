@@ -51,6 +51,7 @@ const AvatarUploadButton = ({
 const AvatarEditorContent = ({
   editorRef,
   image,
+  newImageSelected,
   onUpload,
   handleSave,
   handleClose
@@ -59,6 +60,12 @@ const AvatarEditorContent = ({
   const [scale, setScale] = useState(1);
   const [rotate, setRotate] = useState(0);
   const [newImage, setNewImage] = useState(false);
+
+  useEffect(() => {
+    if (newImageSelected) {
+      setNewImage(true);
+    }
+  }, [newImageSelected]);
 
   const handleScale = (e, newValue) => {
     setScale(newValue);
@@ -203,6 +210,7 @@ const AvatarEditorModal = ({
   const fileInputRef = useRef(null);
 
   const [image, setImage] = useState(null);
+  const [newImageSelected, setNewImageSelected] = useState(false);
   const [loadingPicture, setLoadingPicture] = useState(false);
   const [fetchError, setFetchError] = useState(false);
 
@@ -223,6 +231,7 @@ const AvatarEditorModal = ({
 
   const handleNewImage = (e) => {
     setImage(e.target.files[0]);
+    setNewImageSelected(true);
     setFetchError(false);
   };
 
@@ -340,6 +349,7 @@ const AvatarEditorModal = ({
             <AvatarEditorContent
               editorRef={editorRef}
               image={image}
+              newImageSelected={newImageSelected}
               onUpload={() => fileInputRef.current.click()}
               handleSave={handleSave}
               handleClose={handleClose}
