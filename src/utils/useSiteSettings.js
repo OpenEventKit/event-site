@@ -13,6 +13,17 @@ const siteSettingsQuery = graphql`
           publicURL
         }
       }
+      siteFont {
+        fontFamily
+        regularFont {
+          fontFile
+          fontFormat
+        }
+        boldFont {
+          fontFile
+          fontFormat
+        }
+      }
       widgets {
         chat {
           enabled

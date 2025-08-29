@@ -1,57 +1,72 @@
 import React from "react";
-import { withPrefix } from "gatsby";
 import { Document, Page, Text, View, Image, StyleSheet, Font, pdf } from "@react-pdf/renderer";
-import moment from "moment";
+
+import fontRegular from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-400.ttf";
+import fontBold from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-700.ttf";
+import fontItalic from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-400italic.ttf";
+import fontBoldItalic from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-700italic.ttf";
+import font200 from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-200.ttf";
+import font300 from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-300.ttf";
+import font500 from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-500.ttf";
+import font600 from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-600.ttf";
+import font800 from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-800.ttf";
+import font900 from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-900.ttf";
 
 const registerDefaultFont = () => {
-  Font.register({
-    family: "Nunito Sans",
-    fonts: [
-      {
-        src: withPrefix("/fonts/nunito-sans/nunito-sans-v18-latin-400.ttf"),
-        fontWeight: "normal"
-      },
-      {
-        src: withPrefix("/fonts/nunito-sans/nunito-sans-v18-latin-700.ttf"),
-        fontWeight: "bold"
-      },
-      {
-        src: withPrefix("/fonts/nunito-sans/nunito-sans-v18-latin-400italic.ttf"),
-        fontWeight: "normal",
-        fontStyle: "italic"
-      },
-      {
-        src: withPrefix("/fonts/nunito-sans/nunito-sans-v18-latin-700italic.ttf"),
-        fontWeight: "bold",
-        fontStyle: "italic"
-      },
-      // Additional weights for better typography
-      {
-        src: withPrefix("/fonts/nunito-sans/nunito-sans-v18-latin-200.ttf"),
-        fontWeight: 200
-      },
-      {
-        src: withPrefix("/fonts/nunito-sans/nunito-sans-v18-latin-300.ttf"),
-        fontWeight: 300
-      },
-      {
-        src: withPrefix("/fonts/nunito-sans/nunito-sans-v18-latin-500.ttf"),
-        fontWeight: 500
-      },
-      {
-        src: withPrefix("/fonts/nunito-sans/nunito-sans-v18-latin-600.ttf"),
-        fontWeight: 600
-      },
-      {
-        src: withPrefix("/fonts/nunito-sans/nunito-sans-v18-latin-800.ttf"),
-        fontWeight: 800
-      },
-      {
-        src: withPrefix("/fonts/nunito-sans/nunito-sans-v18-latin-900.ttf"),
-        fontWeight: 900
-      }
-    ]
-  });
+  try {
+    Font.register({
+      family: "Nunito Sans", 
+      fonts: [
+        {
+          src: fontRegular,
+          fontWeight: "normal"
+        },
+        {
+          src: fontBold,
+          fontWeight: "bold"
+        },
+        {
+          src: fontItalic,
+          fontWeight: "normal",
+          fontStyle: "italic"
+        },
+        {
+          src: fontBoldItalic,
+          fontWeight: "bold",
+          fontStyle: "italic"
+        },
+        // Additional weights
+        {
+          src: font200,
+          fontWeight: 200
+        },
+        {
+          src: font300,
+          fontWeight: 300
+        },
+        {
+          src: font500,
+          fontWeight: 500
+        },
+        {
+          src: font600,
+          fontWeight: 600
+        },
+        {
+          src: font800,
+          fontWeight: 800
+        },
+        {
+          src: font900,
+          fontWeight: 900
+        }
+      ]
+    });
+    return true;
+  } catch (error) {
+    console.error("Failed to register default font:", error);
+    return false;
+  }
 };
 
 // helper to convert relative font paths to absolute URLs
@@ -62,8 +77,12 @@ const getFontUrl = (fontPath) => {
     return fontPath;
   }
 
+  // For relative paths, prepend the origin
+  // Site settings fonts are served from /fonts/ (not /static/fonts/)
   if (typeof window !== "undefined") {
-    return `${window.location.origin}${fontPath}`;
+    // Remove /static prefix if present since fonts are served at root /fonts/
+    const cleanPath = fontPath.replace("/static/fonts/", "/fonts/");
+    return `${window.location.origin}${cleanPath}`;
   }
   
   return fontPath;
@@ -157,9 +176,10 @@ const CertificatePDF = ({
 
   const nameFontSize = calculateOptimalFontSize(fullName);
 
-  // Determine which font to use
+
   let fontFamily = "Nunito Sans";
-  if (settings.siteFont && settings.siteFont.fontFamily) {
+
+  if (settings?.siteFont && settings.siteFont.fontFamily) {
     const customFontRegistered = registerCustomFont(settings.siteFont);
     if (customFontRegistered) {
       fontFamily = settings.siteFont.fontFamily;
@@ -220,7 +240,7 @@ const CertificatePDF = ({
     summitName: {
       fontSize: 24,
       fontWeight: 400,
-      color: settings.colorPrimaryContrast || "#ff5e32",
+      color: settings.colorAccent || "#8DC63F",
       textAlign: "center",
       textTransform: "uppercase",
       letterSpacing: 0,
