@@ -218,7 +218,7 @@ const CertificatePDF = ({
     summitName: {
       fontSize: 24,
       fontWeight: 400,
-      color: settings.colorAccent || "#8DC63F",
+      color: settings.backgroundColor || settings.colorAccent || "#ff5e32",
       textAlign: "center",
       textTransform: "uppercase",
       letterSpacing: 0,
