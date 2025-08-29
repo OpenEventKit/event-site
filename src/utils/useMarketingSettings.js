@@ -59,15 +59,18 @@ export const MARKETING_SETTINGS_KEYS = {
   colorTextInputHintsLight: "color_text_input_hints_light",
   colorTextInputHintsDark: "color_text_input_hints_dark",
   colorTextInputHints: "color_text_input_hints",
-  // Certificate of Attendance settings (simplified)
+  // Certificate of Attendance settings
   certificateEnabled: "CERTIFICATE_ENABLED",
-  certificateBackgroundImage: "CERTIFICATE_BACKGROUND_IMG",
-  certificateBorderColor: "CERTIFICATE_BORDER_COLOR",
+  certificateHeight: "CERTIFICATE_HEIGHT",
+  certificateWidth: "CERTIFICATE_WIDTH",
+  certificateBackgroundColor: "CERTIFICATE_BACKGROUND_COLOR",
   certificateLogo: "CERTIFICATE_LOGO",
+  certificateLogoWidth: "CERTIFICATE_LOGO_WIDTH",
+  certificateLogoHeight: "CERTIFICATE_LOGO_HEIGHT",
   certificateTitleText: "CERTIFICATE_TITLE_TEXT",
-  certificateSubtitleText: "CERTIFICATE_SUBTITLE_TEXT",
+  certificateSummitName: "CERTIFICATE_SUMMIT_NAME",
+  certificateShowRole: "CERTIFICATE_SHOW_ROLE",
 }
-
 
 const marketingSettingsQuery = graphql`
   query {

@@ -1,7 +1,58 @@
-import React from 'react';
-import { Document, Page, Text, View, Image, StyleSheet, Font, pdf } from '@react-pdf/renderer';
-import moment from 'moment';
+import React from "react";
+import { Document, Page, Text, View, Image, StyleSheet, Font, pdf } from "@react-pdf/renderer";
+import moment from "moment";
 
+Font.register({
+  family: "Roboto",
+  fonts: [
+    {
+      src: "https://cdn.jsdelivr.net/npm/roboto-npm-webfont@1.0.1/full/fonts/Roboto-Regular.ttf",
+      fontWeight: "normal"
+    },
+    {
+      src: "https://cdn.jsdelivr.net/npm/roboto-npm-webfont@1.0.1/full/fonts/Roboto-Bold.ttf",
+      fontWeight: "bold"
+    },
+    {
+      src: "https://cdn.jsdelivr.net/npm/roboto-npm-webfont@1.0.1/full/fonts/Roboto-Italic.ttf",
+      fontStyle: "italic"
+    },
+    {
+      src: "https://cdn.jsdelivr.net/npm/roboto-npm-webfont@1.0.1/full/fonts/Roboto-BoldItalic.ttf",
+      fontWeight: "bold",
+      fontStyle: "italic"
+    }
+  ]
+});
+
+const calculateOptimalFontSize = (text, maxWidth = 650, initialFontSize = 48, minFontSize = 24) => {
+  // estimate average character width based on font size
+  // for most fonts, character width is roughly 0.5-0.6 times the font size
+  const avgCharWidthRatio = 0.55;
+  
+  // start with initial font size
+  let fontSize = initialFontSize;
+  
+  // calculate the approximate text width
+  const estimatedWidth = text.length * fontSize * avgCharWidthRatio;
+  
+  // if text fits within maxWidth, use initial font size
+  if (estimatedWidth <= maxWidth) {
+    return fontSize;
+  }
+  
+  // calculate optimal font size to fit within maxWidth
+  fontSize = Math.floor(maxWidth / (text.length * avgCharWidthRatio));
+  
+  // ensure font size is within bounds
+  fontSize = Math.max(minFontSize, Math.min(initialFontSize, fontSize));
+  
+  // round to common font sizes for better appearance
+  const commonSizes = [48, 44, 40, 36, 32, 28, 24];
+  const finalSize = commonSizes.find(size => size <= fontSize) || minFontSize;
+  
+  return finalSize;
+};
 
 const CertificatePDF = ({ 
   attendee, 
@@ -9,193 +60,152 @@ const CertificatePDF = ({
   settings, 
   isCheckedIn = true 
 }) => {
-  
 
-  // Determine role (Speaker or Attendee)
-  const role = attendee.role || 'Attendee';
-  
-  // Get company and position info
-  const position = attendee.jobTitle || 'Attendee';
-  const company = attendee.company || '';
-  
-  // Get the full name
+  const role = attendee.role || "Attendee";
+  const position = attendee.jobTitle || "";
+  const company = attendee.company || "";
+
   const fullName = `${attendee.firstName} ${attendee.lastName}`;
-  
-  // Calculate optimal font size using DOM measurement
-  const calculateOptimalFontSize = (text, maxWidth = 500, initialFontSize = 60, minFontSize = 30) => {
-    // Create a temporary DOM element for measurement
-    const tempElement = document.createElement('span');
-    tempElement.style.position = 'absolute';
-    tempElement.style.visibility = 'hidden';
-    tempElement.style.whiteSpace = 'nowrap';
-    tempElement.style.fontFamily = 'Helvetica';
-    tempElement.textContent = text;
-    
-    document.body.appendChild(tempElement);
-    
-    let fontSize = initialFontSize;
-    tempElement.style.fontSize = fontSize + 'px';
-    
-    // Reduce font size until text fits within maxWidth
-    while (tempElement.offsetWidth > maxWidth && fontSize > minFontSize) {
-      fontSize -= 2;
-      tempElement.style.fontSize = fontSize + 'px';
-    }
-    
-    document.body.removeChild(tempElement);
-    return fontSize;
-  };
-  
-  // Only calculate if we're in a browser environment
-  const optimalFontSize = typeof document !== 'undefined' 
-    ? calculateOptimalFontSize(fullName) 
-    : settings.nameFontSize || 60;
 
-  // Border thickness constant
-  const BORDER_WIDTH = 35;
+  const nameFontSize = calculateOptimalFontSize(fullName);
 
-  // Create styles dynamically based on settings
   const styles = StyleSheet.create({
     page: {
-      backgroundColor: settings.backgroundColor || '#ffffff',
-      width: settings.width || '11in',
-      height: settings.height || '8.5in',
-      position: 'relative',
-      fontFamily: settings.fontFamily || 'Helvetica',
+      width: settings.width || "11in",
+      height: settings.height || "8.5in",
+      backgroundColor: settings.backgroundColor || settings.colorAccent || "#ff5e32",
+      fontFamily: "Roboto",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: 40,
     },
-    outerBorder: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      borderWidth: BORDER_WIDTH,
-      borderColor: settings.borderColor || settings.eventNameColor || '#5865F2',
-      borderStyle: 'solid',
-    },
-    innerContent: {
-      position: 'absolute',
-      top: BORDER_WIDTH,
-      left: BORDER_WIDTH,
-      right: BORDER_WIDTH,
-      bottom: BORDER_WIDTH,
-      backgroundColor: settings.backgroundColor || '#ffffff',
-    },
-    backgroundImage: {
-      position: 'absolute',
-      width: '100%',
-      height: '100%',
-      top: 0,
-      left: 0,
+    whiteCard: {
+      width: "100%",
+      maxWidth: 680,
+      height: "100%",
+      maxHeight: 502,
+      backgroundColor: "#ffffff",
+      borderRadius: 4,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
     },
     content: {
-      position: 'relative',
-      width: '100%',
-      height: '100%',
-      padding: settings.margin || 60,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
+      position: "relative",
+      width: "100%",
+      height: "100%",
+      padding: 60,
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
     },
     logo: {
       width: settings.logoWidth || 150,
-      height: settings.logoHeight || 80,
-      marginBottom: 40,
-      objectFit: 'contain',
+      height: settings.logoHeight || 75,
+      marginBottom: 25,
+      objectFit: "contain",
     },
     title: {
-      fontSize: settings.titleFontSize || 32,
-      fontFamily: settings.fontFamily || 'Helvetica',
-      color: settings.titleColor || '#000000',
-      fontWeight: 'bold',
-      textAlign: 'center',
-      textTransform: 'uppercase',
-      letterSpacing: 2,
-      marginBottom: 10,
+      fontSize: 20,
+      fontWeight: 500,
+      color: "#000000",
+      textAlign: "center",
+      letterSpacing: 0.15,
+      lineHeight: "160%",
+      marginBottom: 8,
     },
-    subtitle: {
-      fontSize: settings.subtitleFontSize || 40,
-      fontFamily: settings.fontFamily || 'Helvetica',
-      color: settings.subtitleColor || '#5865F2',
-      textAlign: 'center',
-      textTransform: 'uppercase',
-      letterSpacing: 1,
-      marginBottom: 50,
+    summitName: {
+      fontSize: 24,
+      fontWeight: 400,
+      color: settings.colorPrimaryContrast || "#ff5e32",
+      textAlign: "center",
+      textTransform: "uppercase",
+      letterSpacing: 0,
+      lineHeight: "133%",
+      marginBottom: 36,
     },
     name: {
-      fontSize: optimalFontSize,
-      fontFamily: settings.fontFamily || 'Helvetica',
-      color: settings.nameColor || '#000000',
-      fontWeight: 'normal',
-      textAlign: 'center',
-      marginBottom: 15,
-      width: '100%',
+      fontSize: nameFontSize,
+      fontWeight: 400,
+      color: "#000000",
+      textAlign: "center",
+      letterSpacing: 0,
+      lineHeight: "117%",
+      marginBottom: 0,
     },
-    company: {
-      fontSize: settings.companyFontSize || 22,
-      fontFamily: settings.fontFamily || 'Helvetica',
-      color: settings.companyColor || '#000000',
-      textAlign: 'center',
-      marginBottom: 5,
+    nameUnderline: {
+      width: 450,
+      height: 1.2,
+      backgroundColor: "#000000",
+      marginTop: 12,
+      marginBottom: 16,
+    },
+    details: {
+      fontSize: 14,
+      fontWeight: 400,
+      color: "#000000",
+      textAlign: "center",
+      letterSpacing: 0.4,
+      lineHeight: "166%",
     },
     role: {
-      fontSize: settings.roleFontSize || 22,
-      fontFamily: settings.fontFamily || 'Helvetica',
-      color: settings.roleColor || '#000000',
-      textAlign: 'center',
-      marginBottom: 60,
+      fontSize: 14,
+      fontWeight: 400,
+      color: "#000000",
+      textAlign: "center",
+      letterSpacing: 0.4,
+      lineHeight: "166%",
+      marginTop: 6,
     },
   });
 
   return (
     <Document>
       <Page size="LETTER" orientation="landscape" style={styles.page}>
-        {/* Background Image */}
-        {settings.backgroundImage && (
-          <Image src={settings.backgroundImage} style={styles.backgroundImage} />
-        )}
-        
-        {/* Outer Border Frame */}
-        <View style={styles.outerBorder} />
-        
-        {/* Inner White Content Area */}
-        <View style={styles.innerContent}>
+        {/* White Card Container */}
+        <View style={styles.whiteCard}>
           <View style={styles.content}>
-          {/* Logo */}
-          {settings.logo && (
-            <Image src={settings.logo} style={styles.logo} />
-          )}
-          
-          {/* Title */}
-          <Text style={styles.title}>
-            {settings.titleText || 'CERTIFICATE OF ATTENDANCE'}
-          </Text>
-          
-          {/* Event Name as Subtitle */}
-          <Text style={styles.subtitle}>
-            {settings.subtitleText || summit.name}
-          </Text>
-          
-          {/* Attendee Name */}
-          <Text style={styles.name}>
-            {attendee.firstName} {attendee.lastName}
-          </Text>
-          
-          {/* Position, Company on same line - show company alone if no position */}
-          {(position !== 'Attendee' || company) && (
-            <Text style={styles.company}>
-              {position !== 'Attendee' ? position : ''}{position !== 'Attendee' && company ? ', ' : ''}{company}
+            {/* Logo */}
+            {(settings.logo || summit.logo) && (
+              <Image 
+                src={settings.logo || summit.logo} 
+                style={styles.logo} 
+              />
+            )}
+            
+            {/* Title */}
+            <Text style={styles.title}>
+              {settings.titleText || "CERTIFICATE OF ATTENDANCE"}
             </Text>
-          )}
-          
-          {/* Role (Speaker/Attendee) */}
-          {settings.roleDisplay && (
-            <Text style={styles.role}>
-              {role}
+            
+            {/* Event Name */}
+            <Text style={styles.summitName}>
+              {settings.summitName || summit.name || "EVENT NAME"}
             </Text>
-          )}
-          
+            
+            {/* Attendee Name */}
+            <Text style={styles.name}>
+              {fullName}
+            </Text>
+            
+            {/* Underline */}
+            <View style={styles.nameUnderline} />
+            
+            {/* Position and Company */}
+            {(position || company) && (
+              <Text style={styles.details}>
+                {position}{position && company ? ", " : ""}{company}
+              </Text>
+            )}
+            
+            {/* Role */}
+            {settings.showRole && (
+              <Text style={styles.role}>
+                {role}
+              </Text>
+            )}
           </View>
         </View>
       </Page>
@@ -203,23 +213,23 @@ const CertificatePDF = ({
   );
 };
 
-// Helper function to generate and download the certificate
+// helper function to generate and download the certificate
 export const generateCertificatePDF = async (attendee, summit, settings) => {
   try {
     const doc = <CertificatePDF attendee={attendee} summit={summit} settings={settings} />;
     const blob = await pdf(doc).toBlob();
     
-    // Create download link
+    // create download link
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = `certificate-${attendee.firstName}-${attendee.lastName}.pdf`.toLowerCase().replace(/\s+/g, '-');
+    link.download = `certificate-${attendee.firstName}-${attendee.lastName}.pdf`.toLowerCase().replace(/\s+/g, "-");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   } catch (error) {
-    console.error('Error generating certificate PDF:', error);
+    console.error("Error generating certificate PDF:", error);
     throw error;
   }
 };
