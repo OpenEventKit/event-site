@@ -172,7 +172,7 @@ const CertificatePDF = ({
     page: {
       width: settings.width || "11in",
       height: settings.height || "8.5in",
-      backgroundColor: settings.backgroundColor || settings.colorAccent || "#ff5e32",
+      backgroundColor: settings.mainColor || settings.colorAccent || "#ff5e32",
       fontFamily: fontFamily,
       display: "flex",
       alignItems: "center",
@@ -218,7 +218,7 @@ const CertificatePDF = ({
     summitName: {
       fontSize: 24,
       fontWeight: 400,
-      color: settings.backgroundColor || settings.colorAccent || "#ff5e32",
+      color: settings.mainColor || settings.colorAccent || "#ff5e32",
       textAlign: "center",
       textTransform: "uppercase",
       letterSpacing: 0,

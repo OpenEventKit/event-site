@@ -15,7 +15,7 @@ export const useCertificateSettings = (siteFont = null) => {
     enabled: MARKETING_SETTINGS_KEYS.certificateEnabled,
     height: MARKETING_SETTINGS_KEYS.certificateHeight,
     width: MARKETING_SETTINGS_KEYS.certificateWidth,
-    backgroundColor: MARKETING_SETTINGS_KEYS.certificateBackgroundColor,
+    mainColor: MARKETING_SETTINGS_KEYS.certificateMainColor,
     logo: MARKETING_SETTINGS_KEYS.certificateLogo,
     logoWidth: MARKETING_SETTINGS_KEYS.certificateLogoWidth,
     logoHeight: MARKETING_SETTINGS_KEYS.certificateLogoHeight,

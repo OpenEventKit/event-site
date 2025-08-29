@@ -63,7 +63,7 @@ export const MARKETING_SETTINGS_KEYS = {
   certificateEnabled: "CERTIFICATE_ENABLED",
   certificateHeight: "CERTIFICATE_HEIGHT",
   certificateWidth: "CERTIFICATE_WIDTH",
-  certificateBackgroundColor: "CERTIFICATE_BACKGROUND_COLOR",
+  certificateMainColor: "CERTIFICATE_MAIN_COLOR",
   certificateLogo: "CERTIFICATE_LOGO",
   certificateLogoWidth: "CERTIFICATE_LOGO_WIDTH",
   certificateLogoHeight: "CERTIFICATE_LOGO_HEIGHT",
