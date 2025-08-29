@@ -8,6 +8,15 @@ module.exports = `
   type Favicon {
     asset: File @fileByRelativePath
   }
+  type FontFile {
+    fontFile: String
+    fontFormat: String
+  }
+  type SiteFont {
+    fontFamily: String
+    regularFont: FontFile
+    boldFont: FontFile
+  }
   type Schedule {
     allowClick: Boolean
   }
@@ -42,6 +51,7 @@ module.exports = `
   type SiteSettingsJson implements Node {
     siteMetadata: SiteMetadata
     favicon: Favicon
+    siteFont: SiteFont
     widgets: Widgets
     idpLogo: IdpLogo
     identityProviderButtons: [IdentityProviderButton]
