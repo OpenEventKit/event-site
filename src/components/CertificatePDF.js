@@ -1,29 +1,117 @@
 import React from "react";
+import { withPrefix } from "gatsby";
 import { Document, Page, Text, View, Image, StyleSheet, Font, pdf } from "@react-pdf/renderer";
 import moment from "moment";
 
-Font.register({
-  family: "Roboto",
-  fonts: [
-    {
-      src: "https://cdn.jsdelivr.net/npm/roboto-npm-webfont@1.0.1/full/fonts/Roboto-Regular.ttf",
-      fontWeight: "normal"
-    },
-    {
-      src: "https://cdn.jsdelivr.net/npm/roboto-npm-webfont@1.0.1/full/fonts/Roboto-Bold.ttf",
-      fontWeight: "bold"
-    },
-    {
-      src: "https://cdn.jsdelivr.net/npm/roboto-npm-webfont@1.0.1/full/fonts/Roboto-Italic.ttf",
-      fontStyle: "italic"
-    },
-    {
-      src: "https://cdn.jsdelivr.net/npm/roboto-npm-webfont@1.0.1/full/fonts/Roboto-BoldItalic.ttf",
-      fontWeight: "bold",
-      fontStyle: "italic"
+const registerDefaultFont = () => {
+  Font.register({
+    family: "Nunito Sans",
+    fonts: [
+      {
+        src: withPrefix("/fonts/nunito-sans/nunito-sans-v18-latin-400.ttf"),
+        fontWeight: "normal"
+      },
+      {
+        src: withPrefix("/fonts/nunito-sans/nunito-sans-v18-latin-700.ttf"),
+        fontWeight: "bold"
+      },
+      {
+        src: withPrefix("/fonts/nunito-sans/nunito-sans-v18-latin-400italic.ttf"),
+        fontWeight: "normal",
+        fontStyle: "italic"
+      },
+      {
+        src: withPrefix("/fonts/nunito-sans/nunito-sans-v18-latin-700italic.ttf"),
+        fontWeight: "bold",
+        fontStyle: "italic"
+      },
+      // Additional weights for better typography
+      {
+        src: withPrefix("/fonts/nunito-sans/nunito-sans-v18-latin-200.ttf"),
+        fontWeight: 200
+      },
+      {
+        src: withPrefix("/fonts/nunito-sans/nunito-sans-v18-latin-300.ttf"),
+        fontWeight: 300
+      },
+      {
+        src: withPrefix("/fonts/nunito-sans/nunito-sans-v18-latin-500.ttf"),
+        fontWeight: 500
+      },
+      {
+        src: withPrefix("/fonts/nunito-sans/nunito-sans-v18-latin-600.ttf"),
+        fontWeight: 600
+      },
+      {
+        src: withPrefix("/fonts/nunito-sans/nunito-sans-v18-latin-800.ttf"),
+        fontWeight: 800
+      },
+      {
+        src: withPrefix("/fonts/nunito-sans/nunito-sans-v18-latin-900.ttf"),
+        fontWeight: 900
+      }
+    ]
+  });
+};
+
+// helper to convert relative font paths to absolute URLs
+const getFontUrl = (fontPath) => {
+  if (!fontPath) return null;
+  
+  if (fontPath.startsWith("http://") || fontPath.startsWith("https://")) {
+    return fontPath;
+  }
+
+  if (typeof window !== "undefined") {
+    return `${window.location.origin}${fontPath}`;
+  }
+  
+  return fontPath;
+};
+
+// register custom font from site settings if available
+const registerCustomFont = (siteFont) => {
+  if (!siteFont || !siteFont.fontFamily || !siteFont.regularFont || !siteFont.boldFont) {
+    return false;
+  }
+  
+  const fonts = [];
+
+  if (siteFont.regularFont.fontFile && siteFont.regularFont.fontFormat === "ttf") {
+    const fontUrl = getFontUrl(siteFont.regularFont.fontFile);
+    if (fontUrl) {
+      fonts.push({
+        src: fontUrl,
+        fontWeight: "normal"
+      });
     }
-  ]
-});
+  }
+
+  if (siteFont.boldFont.fontFile && siteFont.boldFont.fontFormat === "ttf") {
+    const fontUrl = getFontUrl(siteFont.boldFont.fontFile);
+    if (fontUrl) {
+      fonts.push({
+        src: fontUrl,
+        fontWeight: "bold"
+      });
+    }
+  }
+
+  if (fonts.length > 0) {
+    try {
+      Font.register({
+        family: siteFont.fontFamily,
+        fonts: fonts
+      });
+      return true;
+    } catch (error) {
+      console.warn("Failed to register custom font:", error);
+      return false;
+    }
+  }
+  
+  return false;
+};
 
 const calculateOptimalFontSize = (text, maxWidth = 650, initialFontSize = 48, minFontSize = 24) => {
   // estimate average character width based on font size
@@ -69,12 +157,25 @@ const CertificatePDF = ({
 
   const nameFontSize = calculateOptimalFontSize(fullName);
 
+  // Determine which font to use
+  let fontFamily = "Nunito Sans";
+  if (settings.siteFont && settings.siteFont.fontFamily) {
+    const customFontRegistered = registerCustomFont(settings.siteFont);
+    if (customFontRegistered) {
+      fontFamily = settings.siteFont.fontFamily;
+    } else {
+      registerDefaultFont();
+    }
+  } else {
+    registerDefaultFont();
+  }
+
   const styles = StyleSheet.create({
     page: {
       width: settings.width || "11in",
       height: settings.height || "8.5in",
       backgroundColor: settings.backgroundColor || settings.colorAccent || "#ff5e32",
-      fontFamily: "Roboto",
+      fontFamily: fontFamily,
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -139,8 +240,8 @@ const CertificatePDF = ({
       width: 450,
       height: 1.2,
       backgroundColor: "#000000",
-      marginTop: 12,
-      marginBottom: 16,
+      marginTop: 8,
+      marginBottom: 20,
     },
     details: {
       fontSize: 14,

@@ -1,6 +1,6 @@
 import useMarketingSettings, { MARKETING_SETTINGS_KEYS, DISPLAY_OPTIONS } from './useMarketingSettings';
 
-export const useCertificateSettings = () => {
+export const useCertificateSettings = (siteFont = null) => {
   const { getSettingByKey } = useMarketingSettings();
   
   const certificateKeys = {
@@ -35,6 +35,11 @@ export const useCertificateSettings = () => {
 
   certificateSettings.enabled = certificateSettings.enabled !== DISPLAY_OPTIONS.hide;
   certificateSettings.showRole = certificateSettings.showRole !== DISPLAY_OPTIONS.hide;
+  
+  // Pass through the site font information if available
+  if (siteFont) {
+    certificateSettings.siteFont = siteFont;
+  }
   
   return certificateSettings;
 };
