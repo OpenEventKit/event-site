@@ -148,6 +148,7 @@ const siteSettings = {
             selectField({
               label: "Font Format",
               name: "fontFormat",
+              hint: "TTF format is required for certificate PDF generation",
               multiple: false,
               required: false,
               options: mapObjectToSelectOptions(FONT_FORMATS)
@@ -167,6 +168,7 @@ const siteSettings = {
             selectField({
               label: "Font Format",
               name: "fontFormat",
+              hint: "TTF format is required for certificate PDF generation",
               multiple: false,
               required: false,
               options: mapObjectToSelectOptions(FONT_FORMATS)
