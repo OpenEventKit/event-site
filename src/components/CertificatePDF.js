@@ -4,11 +4,7 @@ import { Document, Page, Text, View, Image, StyleSheet, Font, pdf } from "@react
 import fontRegular from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-400.ttf";
 import fontBold from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-700.ttf";
 import fontItalic from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-400italic.ttf";
-import fontBoldItalic from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-700italic.ttf";
-import font200 from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-200.ttf";
-import font300 from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-300.ttf";
 import font500 from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-500.ttf";
-import font600 from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-600.ttf";
 import font800 from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-800.ttf";
 import font900 from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-900.ttf";
 
@@ -31,26 +27,8 @@ const registerDefaultFont = () => {
           fontStyle: "italic"
         },
         {
-          src: fontBoldItalic,
-          fontWeight: "bold",
-          fontStyle: "italic"
-        },
-        // Additional weights
-        {
-          src: font200,
-          fontWeight: 200
-        },
-        {
-          src: font300,
-          fontWeight: 300
-        },
-        {
           src: font500,
           fontWeight: 500
-        },
-        {
-          src: font600,
-          fontWeight: 600
         },
         {
           src: font800,
