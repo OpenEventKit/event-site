@@ -96,6 +96,7 @@ const CertificateSection = ({
 
       const summitData = {
         name: summit.name,
+        logo: summit.logo,
         start_date: summit.start_date,
         end_date: summit.end_date
       };
