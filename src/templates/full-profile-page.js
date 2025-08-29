@@ -224,12 +224,13 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
             }
         } catch (err) {
             console.error('Profile page - Error fetching tickets:', err);
+        } finally {
+            setTicketsFetched(true);
         }
     };
 
     useEffect(() => {
         if (summit && user.idpProfile && !ticketsFetched) {
-            setTicketsFetched(true);
             fetchFreshTickets();
         }
     }, [summit, user.idpProfile, ticketsFetched]);
@@ -679,11 +680,19 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                             </div>
                         </div>
                     </div>
-                    <div className="column is-3">
-                        {showCertificate ? (
-                            <CertificateSection freshTickets={freshTickets} />
-                        ) : (
-                            <>
+                    {(() => {
+                        if (certificatesEnabled && !ticketsFetched) {
+                            return null;
+                        }
+                        if (showCertificate) {
+                            return (
+                                <div className="column is-3">
+                                    <CertificateSection freshTickets={freshTickets} />
+                                </div>
+                            );
+                        }
+                        return (
+                            <div className="column is-3">
                                 <h2 className={styles.header}>My Schedule</h2>
                                 <LiteScheduleComponent
                                     onEventClick={(ev) => onEventChange(ev)}
@@ -694,9 +703,9 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                                     eventCount={10}
                                     schedKey="my-schedule-main"
                                 />
-                            </>
-                        )}
-                    </div>
+                            </div>
+                        );
+                    })()}
                 </div>
             </div>
             {showProfile &&
