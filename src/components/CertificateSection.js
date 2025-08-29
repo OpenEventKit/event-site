@@ -113,16 +113,18 @@ const CertificateSection = ({
     <div>
       <h3 className={styles.header}>Certificate of Attendance</h3>
       
-      <div style={{ padding: '15px 0' }}>
-        <div style={{ fontSize: '14px', color: '#666', marginBottom: '10px' }}>
-          {summit.name} • {userRole}
-        </div>
-        
+      <div style={{ padding: '20px 0' }}>
         <button 
           className={`button is-large ${downloading ? 'is-loading' : ''}`}
           onClick={() => handleDownloadCertificate(checkedInTickets[0])}
           disabled={downloading}
-          style={{ width: '100%', height: '3rem' }}
+          style={{ 
+            width: '100%', 
+            height: '5.5rem',
+            color: 'var(--color_input_text_color)',
+            backgroundColor: 'var(--color_input_background_color)',
+            borderColor: 'var(--color_input_border_color)'
+          }}
         >
           {downloading ? 'Generating...' : 'Download Certificate'}
         </button>
