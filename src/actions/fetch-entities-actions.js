@@ -20,7 +20,8 @@ export const fetchEventById = async (summitId, eventId, accessToken = null) => {
     const apiUrlWithParams = EventAPIRequest.build(apiUrl);
 
     return fetch(apiUrlWithParams, {
-        method: 'GET'
+        method: 'GET',
+        cache: "no-store",
     }).then(async (response) => {
         if (response.status === 200) {
             return await response.json();
@@ -39,7 +40,8 @@ export const fetchStreamingInfoByEventId = async (summitId, eventId, accessToken
     const apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/v1/summits/${summitId}/events/${eventId}/published/streaming-info`);
     apiUrl.addQuery('access_token', accessToken);
     return fetch(apiUrl.toString(), {
-        method: 'GET'
+        method: 'GET',
+        cache: "no-store",
     }).then(async (response) => {
         if (response.status === 200) {
             return await response.json();
@@ -63,7 +65,8 @@ export const fetchEventTypeById = async (summitId, eventTypeId, accessToken = nu
     }
 
     return fetch(apiUrl.toString(), {
-        method: 'GET'
+        method: 'GET',
+        cache: "no-store",
     }).then(async (response) => {
         if (response.status === 200) {
             return await response.json();
@@ -92,7 +95,8 @@ export const fetchLocationById = async (summitId, locationId, expand, accessToke
         apiUrl.addQuery('expand', expand);
 
     return fetch(apiUrl.toString(), {
-        method: 'GET'
+        method: 'GET',
+        cache: "no-store",
     }).then(async (response) => {
         if (response.status === 200) {
             return await response.json();
@@ -115,10 +119,10 @@ export const fetchSpeakerById = async (summitId, speakerId, accessToken = null) 
     if (accessToken) {
         apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/v1/summits/${summitId}/speakers/${speakerId}`);
         apiUrl.addQuery('access_token', accessToken);
-    }    
+    }
 
     const apiUrlWithParams = SpeakersAPIRequest.build(apiUrl);
-    
+
     return fetch(apiUrlWithParams, {
         method: 'GET',
         cache: "no-store",
@@ -137,15 +141,18 @@ export const fetchSpeakerById = async (summitId, speakerId, accessToken = null) 
  * @returns {Promise<Response>}
  */
 export const fetchSummitById = async (summitId, accessToken = null) => {
-    let apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/v2/summits/${summitId}`);
+    let apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/public/v1/summits/${summitId}`);
 
-    apiUrl.addQuery('access_token', accessToken);
-    apiUrl.addQuery('t', Date.now());
+    if (accessToken) {
+        apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/v1/summits/${summitId}`);
+        apiUrl.addQuery('access_token', accessToken);
+    }
 
     const apiUrlWithParams = SummitAPIRequest.build(apiUrl);
 
     return fetch(apiUrlWithParams, {
-        method: 'GET'
+        method: 'GET',
+        cache: "no-store",
     }).then(async (response) => {
         if (response.status === 200) {
             return await response.json();
@@ -170,7 +177,8 @@ export const fetchTrackById = async (summitId, trackId, accessToken = null) => {
     apiUrl.addQuery('expand', expand.join(','));
 
     return fetch(apiUrl.toString(), {
-        method: 'GET'
+        method: 'GET',
+        cache: "no-store",
     }).then(async (response) => {
         if (response.status === 200) {
             return await response.json();
