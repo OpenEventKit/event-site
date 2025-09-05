@@ -1,6 +1,11 @@
 import expiredToken from './expiredToken';
-import { stopLoading } from "openstack-uicore-foundation/lib/utils/actions";
 import Swal from 'sweetalert2';
+import {RSVP_INVITATION_ERROR} from "../actions/user-actions";
+import {
+    createAction,
+    stopLoading,
+} from 'openstack-uicore-foundation/lib/utils/actions';
+
 
 export const customErrorHandler = (err, res) => (dispatch, state) => {
   let code = err.status;
@@ -94,8 +99,7 @@ export const customRSVPHandler = (err, res) => (dispatch, state) => {
       else if (err.response.error && err.response.error.message) msg = err.response.error.message;
       else msg = err.message;
 
-      Swal.fire("Not Found", msg, "warning");
-
+      dispatch(createAction(RSVP_INVITATION_ERROR)({ errorMessage: msg }))
       break;
     case 412:
       for (var [key, value] of Object.entries(err.response.body.errors)) {
@@ -105,9 +109,10 @@ export const customRSVPHandler = (err, res) => (dispatch, state) => {
 
         msg += value + '<br>';
       }
-      Swal.fire("Validation error", msg, "warning");
+        dispatch(createAction(RSVP_INVITATION_ERROR)({ errorMessage: msg }))
       break;
     default:
+        dispatch(createAction(RSVP_INVITATION_ERROR)({ errorMessage: "Internal Error. Please contact support " }))
       break;
   }
 }
