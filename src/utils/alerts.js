@@ -30,8 +30,8 @@ export const alertPopup = (title, html, confirmLabel, confirmAction, cancelLabel
     })
 };
 
-
 export const needsLogin = (action, msg = null) => {
+
     const defaultMessage = "Please log in to add sessions to My Schedule.";
 
     const login = () => {

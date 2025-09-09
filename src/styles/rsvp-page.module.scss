@@ -1,0 +1,63 @@
+.speakerWrapper {
+  color: var(--color_text_dark);
+  display: flex;
+  margin-top: 15px;
+
+  .name {
+    width: max-content;
+  }
+
+  .moderator {
+    font-size: 12px;
+    margin-top: -2px;
+  }
+
+  .job {
+    font-size: 10px;
+
+    .company {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: inherit;
+    }
+  }
+
+  .speaker {
+    height: 55px;
+    margin: 0 15px 15px 0;
+    border-radius: 4px;
+    display: flex;
+    flex: 1 0 auto;
+
+    .picWrapper {
+      height: 100%;
+      width: 55px;
+
+      .pic {
+        height: 100%;
+        width: 100%;
+        background-size: cover;
+        border-radius: 50%;
+      }
+    }
+
+    .nameWrapper {
+      background-color: var(--color_background_light);
+      height: 100%;
+      padding: 5px;
+      border-radius: 0 4px 4px 0;
+      overflow: hidden;
+      flex: 1 0;
+      min-width: 150px;
+      max-width: 300px;
+      margin-left: 5px;
+    }
+  }
+}
+
+.buttonWrapper {
+  margin-top: 15px;
+  display: flex;
+  gap: 15px;
+}
