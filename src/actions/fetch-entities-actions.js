@@ -170,10 +170,16 @@ export const fetchSummitById = async (summitId, accessToken = null) => {
 export const fetchTrackById = async (summitId, trackId, accessToken = null) => {
     let apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/public/v1/summits/${summitId}/tracks/${trackId}`);
 
-    const expand = [
-        'subtracks',
-    ]
+    const fields = [
+        "id", "name", "code", "order", "parent_id", "color","text_color",
+        "subtracks.id", "subtracks.name", "subtracks.code", "subtracks.order",
+        "subtracks.parent_id", "subtracks.color", "subtracks.text_color",
+    ];
+    const relations = ['subtracks','subtracks.none'];
+    const expand = ['subtracks']
 
+    apiUrl.addQuery('fields', fields.join(','));
+    apiUrl.addQuery('relations', relations.join(','));
     apiUrl.addQuery('expand', expand.join(','));
 
     return fetch(apiUrl.toString(), {
