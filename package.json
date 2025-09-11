@@ -148,7 +148,8 @@
     "web-vitals": "^1.1.2",
     "what-input": "^5.2.10",
     "xmlhttprequest": "^1.8.0",
-    "yup": "^1.4.0"
+    "yup": "^1.4.0",
+    "jsdom": "^24"
   },
   "keywords": [
     "Open Event Kit"
