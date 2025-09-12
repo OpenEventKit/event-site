@@ -17,7 +17,6 @@ const CertificateSection = ({
   summit, 
   freshTickets = []
 }) => {
-  const [downloading, setDownloading] = useState(false);
   const [error, setError] = useState(null);
   const { getSettingByKey } = useMarketingSettings();
   const siteSettings = useSiteSettings();
@@ -81,7 +80,6 @@ const CertificateSection = ({
   const userRole = getUserRole(checkedInTickets);
 
   const handleDownloadCertificate = async (ticket) => {
-    setDownloading(true);
     setError(null);
     
     try {
@@ -105,37 +103,30 @@ const CertificateSection = ({
     } catch (err) {
       console.error('Error downloading certificate:', err);
       setError('Failed to download certificate. Please try again.');
-    } finally {
-      setDownloading(false);
     }
   };
 
   return (
-    <div>
-      <h3 className={styles.header}>Certificate of Attendance</h3>
+    <div style={{ marginTop: '20px' }}>
+      <button 
+        className="button is-large"
+        onClick={() => handleDownloadCertificate(checkedInTickets[0])}
+        style={{ 
+          width: '100%', 
+          height: '5.5rem',
+          color: 'var(--color_input_text_color)',
+          backgroundColor: 'var(--color_input_background_color)',
+          borderColor: 'var(--color_input_border_color)'
+        }}
+      >
+        Download Certificate
+      </button>
       
-      <div style={{ padding: '20px 0' }}>
-        <button 
-          className={`button is-large ${downloading ? 'is-loading' : ''}`}
-          onClick={() => handleDownloadCertificate(checkedInTickets[0])}
-          disabled={downloading}
-          style={{ 
-            width: '100%', 
-            height: '5.5rem',
-            color: 'var(--color_input_text_color)',
-            backgroundColor: 'var(--color_input_background_color)',
-            borderColor: 'var(--color_input_border_color)'
-          }}
-        >
-          {downloading ? 'Generating...' : 'Download Certificate'}
-        </button>
-        
-        {error && (
-          <div style={{ padding: '10px 0 0 0', color: '#d32f2f', fontSize: '14px' }}>
-            {error}
-          </div>
-        )}
-      </div>
+      {error && (
+        <div style={{ color: '#d32f2f', fontSize: '14px', marginTop: '10px' }}>
+          {error}
+        </div>
+      )}
     </div>
   );
 };

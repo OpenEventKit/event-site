@@ -317,6 +317,9 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                         <h4>
                             @{user.idpProfile?.nickname}
                         </h4>
+                        {showCertificate && (
+                            <CertificateSection freshTickets={freshTickets} />
+                        )}
                         <ChangePasswordComponent updatePassword={handlePasswordUpdate} />
                     </div>
                     <div className="column">
@@ -680,32 +683,18 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                             </div>
                         </div>
                     </div>
-                    {(() => {
-                        if (certificatesEnabled && !ticketsFetched) {
-                            return null;
-                        }
-                        if (showCertificate) {
-                            return (
-                                <div className="column is-3">
-                                    <CertificateSection freshTickets={freshTickets} />
-                                </div>
-                            );
-                        }
-                        return (
-                            <div className="column is-3">
-                                <h2 className={styles.header}>My Schedule</h2>
-                                <LiteScheduleComponent
-                                    onEventClick={(ev) => onEventChange(ev)}
-                                    onViewAllEventsClick={() => onViewAllEventsClick()}
-                                    title=''
-                                    yourSchedule={true}
-                                    showNav={true}
-                                    eventCount={10}
-                                    schedKey="my-schedule-main"
-                                />
-                            </div>
-                        );
-                    })()}
+                    <div className="column is-3">
+                        <h2 className={styles.header}>My Schedule</h2>
+                        <LiteScheduleComponent
+                            onEventClick={(ev) => onEventChange(ev)}
+                            onViewAllEventsClick={() => onViewAllEventsClick()}
+                            title=''
+                            yourSchedule={true}
+                            showNav={true}
+                            eventCount={10}
+                            schedKey="my-schedule-main"
+                        />
+                    </div>
                 </div>
             </div>
             {showProfile &&
