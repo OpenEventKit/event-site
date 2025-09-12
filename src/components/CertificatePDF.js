@@ -201,8 +201,8 @@ const CertificatePDF = ({
       justifyContent: "center",
     },
     logo: {
-      width: settings.logoWidth || 150,
-      height: settings.logoHeight || 75,
+      maxWidth: settings.logoWidth || 250,
+      ...(settings.logoHeight && { maxHeight: settings.logoHeight }),
       marginBottom: 25,
       objectFit: "contain",
     },
