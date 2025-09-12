@@ -3,10 +3,6 @@ import { Document, Page, Text, View, Image, StyleSheet, Font, pdf } from "@react
 
 import fontRegular from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-400.ttf";
 import fontBold from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-700.ttf";
-import fontItalic from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-400italic.ttf";
-import font500 from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-500.ttf";
-import font800 from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-800.ttf";
-import font900 from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-900.ttf";
 
 const registerDefaultFont = () => {
   try {
@@ -21,23 +17,6 @@ const registerDefaultFont = () => {
           src: fontBold,
           fontWeight: "bold"
         },
-        {
-          src: fontItalic,
-          fontWeight: "normal",
-          fontStyle: "italic"
-        },
-        {
-          src: font500,
-          fontWeight: 500
-        },
-        {
-          src: font800,
-          fontWeight: 800
-        },
-        {
-          src: font900,
-          fontWeight: 900
-        }
       ]
     });
     return true;
@@ -208,34 +187,32 @@ const CertificatePDF = ({
     },
     title: {
       fontSize: 20,
-      fontWeight: 500,
+      fontWeight: "normal",
       color: "#000000",
       textAlign: "center",
       letterSpacing: 0.15,
       lineHeight: "160%",
-      marginBottom: 8,
     },
     summitName: {
       fontSize: 24,
-      fontWeight: 400,
+      fontWeight: "bold",
       color: settings.mainColor || settings.colorAccent || "#ff5e32",
       textAlign: "center",
       textTransform: "uppercase",
       letterSpacing: 0,
       lineHeight: "133%",
-      marginBottom: 36,
     },
     name: {
       fontSize: nameFontSize,
-      fontWeight: 400,
+      fontWeight: "normal",
       color: "#000000",
       textAlign: "center",
       letterSpacing: 0,
       lineHeight: "117%",
-      marginBottom: 0,
+      marginTop: 36,
     },
     nameUnderline: {
-      width: 450,
+      width: 500,
       height: 1.2,
       backgroundColor: "#000000",
       marginTop: 8,
@@ -243,7 +220,7 @@ const CertificatePDF = ({
     },
     details: {
       fontSize: 14,
-      fontWeight: 400,
+      fontWeight: "normal",
       color: "#000000",
       textAlign: "center",
       letterSpacing: 0.4,
@@ -251,7 +228,7 @@ const CertificatePDF = ({
     },
     role: {
       fontSize: 14,
-      fontWeight: 400,
+      fontWeight: "normal",
       color: "#000000",
       textAlign: "center",
       letterSpacing: 0.4,
