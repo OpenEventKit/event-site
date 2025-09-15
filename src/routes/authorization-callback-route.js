@@ -17,7 +17,7 @@ import { navigate } from "gatsby";
 import { Redirect } from "@gatsbyjs/reach-router";
 import { connect } from "react-redux";
 import AbstractAuthorizationCallbackRoute from "openstack-uicore-foundation/lib/security/abstract-auth-callback-route";
-import { getUserProfile, addToSchedule, removeFromSchedule } from "../actions/user-actions";
+import { getUserProfile, addToSchedule, removeFromSchedule, rsvpToEvent, cancelRSVP } from "../actions/user-actions";
 import Interstitial from "../components/Interstitial";
 import { getEnvVariable, IDP_BASE_URL, OAUTH2_CLIENT_ID } from "@utils/envVariables";
 import { getPendingAction } from "@utils/schedule";
@@ -35,9 +35,25 @@ class AuthorizationCallbackRoute extends AbstractAuthorizationCallbackRoute {
     _callback(backUrl) {
         this.props.getUserProfile().then(() => {
             const pendingAction = getPendingAction();
+
             if (pendingAction) {
+                console.log(`AuthorizationCallbackRoute::_callback pendingAction ${pendingAction}`);
                 const { action, event } = pendingAction;
-                action === "ADD_EVENT" ? this.props.addToSchedule(event) : this.props.removeFromSchedule(event);
+                switch (action.type) {
+                    case "ADD_EVENT":
+                        this.props.addToSchedule(event);
+                        break;
+                    case "REMOVE_EVENT":
+                        this.props.removeFromSchedule(event);
+                        break;
+                    case "ADD_RSVP":
+                        this.props.rsvpToEvent(event);
+                        break;
+                    case "REMOVE_RSVP":
+                        this.props.cancelRSVP(event);
+                        break;
+                }
+
             }
             backUrl = URI.decode(backUrl);
             // fallback
@@ -88,4 +104,6 @@ export default connect(mapStateToProps, {
     getUserProfile,
     addToSchedule,
     removeFromSchedule,
+    rsvpToEvent,
+    cancelRSVP,
 })(AuthorizationCallbackRoute);

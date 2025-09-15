@@ -6,7 +6,7 @@ class SummitAPIRequest extends BaseAPIRequest {
     constructor() {
         const primary_fields = [
             "id", "name", "start_date", "end_date", "time_zone_id", "time_zone_label", "secondary_logo", "slug",
-            "payment_profiles", "support_email", "start_showing_venues_date", "dates_with_events", "logo",
+            "support_email", "start_showing_venues_date", "dates_with_events", "logo",
             "registration_allowed_refund_request_till_date", "allow_update_attendee_extra_questions", "is_virtual",
             "registration_disclaimer_mandatory", "registration_disclaimer_content", "reassign_ticket_till_date",
             "is_main", "title", "description", "time_zone"
@@ -18,9 +18,9 @@ class SummitAPIRequest extends BaseAPIRequest {
         ];
 
         const tracks_fields = [
-            "tracks.id", "tracks.name", "tracks.code", "tracks.order", "tracks.parent_id", "tracks.color",
+            "tracks.id", "tracks.name", "tracks.code", "tracks.order", "tracks.parent_id", "tracks.color","tracks.text_color",
             "tracks.subtracks.id", "tracks.subtracks.name", "tracks.subtracks.code", "tracks.subtracks.order",
-            "tracks.subtracks.parent_id", "tracks.subtracks.color"
+            "tracks.subtracks.parent_id", "tracks.subtracks.color","tracks.subtracks.text_color",
         ];
 
         const ticket_types_fields = [
@@ -37,7 +37,7 @@ class SummitAPIRequest extends BaseAPIRequest {
         ];
 
         const ticket_types_relations = ["ticket_types.none"];
-        const tracks_relations = ["tracks.none", "tracks.subtracks.none"];
+        const tracks_relations = ["tracks", "tracks.subtracks.none"];
         const track_groups_relations = ["track_groups.none"];
         const location_relations = ["locations.none, locations.venue.none"];
         const event_types_relations = ["event_types.none"];

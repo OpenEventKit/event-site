@@ -34,6 +34,9 @@ class EventAPIRequest extends BaseAPIRequest {
             "attendees_expected_learnt",
             "show_sponsors",
             "duration",
+            // RSVP fields
+            'rsvp_type',
+            'rsvp_capacity',
         ];
 
         const type_fields = ["type.id", "type.name", "type.allows_publishing_dates", "type.color"];
