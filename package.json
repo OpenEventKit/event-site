@@ -1,7 +1,7 @@
 {
   "name": "@openeventkit/event-site",
   "description": "Event Site",
-  "version": "2.1.20",
+  "version": "2.1.21",
   "author": "Tipit LLC",
   "dependencies": {
     "@emotion/server": "^11.11.0",
@@ -78,6 +78,7 @@
     "immutability-helper": "2.9.1",
     "immutable": "^5.0.0-beta.5",
     "js-cookie": "^3.0.5",
+    "jsdom": "^24",
     "klaro": "^0.7.21",
     "lite-schedule-widget": "3.0.3",
     "live-event-widget": "4.0.4",
@@ -148,8 +149,7 @@
     "web-vitals": "^1.1.2",
     "what-input": "^5.2.10",
     "xmlhttprequest": "^1.8.0",
-    "yup": "^1.4.0",
-    "jsdom": "^24"
+    "yup": "^1.4.0"
   },
   "keywords": [
     "Open Event Kit"
