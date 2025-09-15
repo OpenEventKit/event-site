@@ -17,6 +17,11 @@ import LiteScheduleComponent from '../components/LiteScheduleComponent'
 import AvatarEditorModal from '../components/AvatarEditorModal'
 import ChangePasswordComponent from '../components/ChangePasswordComponent';
 import AccessTracker from "../components/AttendeeToAttendeeWidgetComponent";
+import CertificateSection from '../components/CertificateSection';
+import useMarketingSettings from '../utils/useMarketingSettings';
+import { MARKETING_SETTINGS_KEYS, DISPLAY_OPTIONS } from '../utils/useMarketingSettings';
+import { getAccessTokenSafely } from '../utils/loginUtils';
+import { getEnvVariable, SUMMIT_API_BASE_URL } from '../utils/envVariables';
 
 import { updateProfilePicture, updateProfile, getIDPProfile, updatePassword } from '../actions/user-actions'
 
@@ -24,9 +29,12 @@ import styles from '../styles/full-profile.module.scss'
 
 import "openstack-uicore-foundation/lib/css/components/inputs/datetimepicker.css";
 
-export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, updateProfilePicture, updatePassword }) => {
+export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, updateProfilePicture, updatePassword, summit }) => {
 
     const [showProfile, setShowProfile] = useState(false);
+    const [freshTickets, setFreshTickets] = useState([]);
+    const [ticketsFetched, setTicketsFetched] = useState(false);
+    const { getSettingByKey } = useMarketingSettings();
     const [personalProfile, setPersonalProfile] = useState({
         firstName: '',
         lastName: '',
@@ -193,6 +201,51 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
         navigate('/a/my-schedule')
     };
 
+    // Fetch fresh tickets for certificate validation
+    const fetchFreshTickets = async () => {
+        try {
+            const accessToken = await getAccessTokenSafely();
+            if (!accessToken || !summit) return;
+
+            const params = new URLSearchParams({
+                access_token: accessToken,
+                fields: 'id,status',
+                expand: 'owner'
+            });
+
+            const apiBaseUrl = getEnvVariable(SUMMIT_API_BASE_URL);
+            const url = `${apiBaseUrl}/api/v1/summits/${summit.id}/orders/all/tickets/me?${params}`;
+            
+            const response = await fetch(url);
+
+            if (response.ok) {
+                const data = await response.json();
+                setFreshTickets(data.data || []);
+            }
+        } catch (err) {
+            console.error('Profile page - Error fetching tickets:', err);
+        } finally {
+            setTicketsFetched(true);
+        }
+    };
+
+    useEffect(() => {
+        if (summit && user.idpProfile && !ticketsFetched) {
+            fetchFreshTickets();
+        }
+    }, [summit, user.idpProfile, ticketsFetched]);
+
+    // Check if certificates are enabled and user has checked-in tickets
+    const certificatesEnabled = getSettingByKey(MARKETING_SETTINGS_KEYS.certificateEnabled) !== DISPLAY_OPTIONS.hide;
+    const checkedInTickets = freshTickets.filter(ticket => {
+        const isCheckedIn = ticket.owner?.summit_hall_checked_in === true;
+        console.log(ticket)
+        const isValidTicket = ticket.status === 'Paid';
+        return isCheckedIn && isValidTicket;
+    });
+    
+    const showCertificate = certificatesEnabled && checkedInTickets.length > 0;
+
     const discardChanges = (state) => {
         switch (state) {
             case 'profile':
@@ -264,6 +317,9 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                         <h4>
                             @{user.idpProfile?.nickname}
                         </h4>
+                        {showCertificate && (
+                            <CertificateSection freshTickets={freshTickets} />
+                        )}
                         <ChangePasswordComponent updatePassword={handlePasswordUpdate} />
                     </div>
                     <div className="column">
@@ -661,6 +717,7 @@ const FullProfilePage = (
     {
         location,
         user,
+        summit,
         getIDPProfile,
         updateProfile,
         updateProfilePicture,
@@ -671,6 +728,7 @@ const FullProfilePage = (
         <Layout location={location}>
             <OrchestedTemplate
                 user={user}
+                summit={summit}
                 getIDPProfile={getIDPProfile}
                 updateProfile={updateProfile}
                 updateProfilePicture={updateProfilePicture}
@@ -695,8 +753,9 @@ FullProfilePageTemplate.propTypes = {
     updatePassword: PropTypes.func
 };
 
-const mapStateToProps = ({ userState }) => ({
+const mapStateToProps = ({ userState, summitState }) => ({
     user: userState,
+    summit: summitState.summit,
 });
 
 export default connect(mapStateToProps,
