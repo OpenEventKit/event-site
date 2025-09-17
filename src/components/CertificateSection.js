@@ -120,7 +120,7 @@ const CertificateSection = ({
             borderColor: 'var(--color_input_border_color)'
           }}
         >
-          Download Certificate
+          Download Certificate of Attendance
         </button>
         
         {error && (
