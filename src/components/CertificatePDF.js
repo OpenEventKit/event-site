@@ -181,7 +181,7 @@ const CertificatePDF = ({
     },
     logo: {
       maxWidth: settings.logoWidth || 250,
-      ...(settings.logoHeight && { maxHeight: settings.logoHeight }),
+      maxHeight: settings.logoHeight || 150,
       marginBottom: 25,
       objectFit: "contain",
     },
