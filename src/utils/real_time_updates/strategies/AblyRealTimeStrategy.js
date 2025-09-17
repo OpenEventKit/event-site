@@ -15,6 +15,10 @@ class AblyRealTimeStrategy extends AbstractRealTimeStrategy {
         console.log('AblyRealTimeStrategy::constructor');
         this._client = null;
         this._wsError = false;
+        this._closing = false;
+        this._channel = null;
+        this._onConn = null;
+        this._onMessage = null;
     }
 
     /**
@@ -29,12 +33,12 @@ class AblyRealTimeStrategy extends AbstractRealTimeStrategy {
         const key = getEnvVariable(ABLY_API_KEY);
 
         if(this._wsError) {
-            console.log('AblyRealTimeStrategy::create error state');
+            console.warn('AblyRealTimeStrategy::create error state');
             return;
         }
 
         if(!key){
-            console.log('AblyRealTimeStrategy::create ABLY_KEY is not set');
+            console.warn('AblyRealTimeStrategy::create ABLY_KEY is not set');
             this._wsError = true;
             return;
         }
@@ -50,22 +54,17 @@ class AblyRealTimeStrategy extends AbstractRealTimeStrategy {
             this._client.close();
         }
 
-        this._client = new Ably.Realtime({ key });
-
-        // start listening for event
-
-        const channel = this._client.channels.get(`${summitId}:*:*`);
-
-        channel.subscribe((message) => {
-            const { data : payload } = message;
-            console.log('AblyRealTimeStrategy::create Change received', payload)
-            this._callback(payload);
+        this._client = new Ably.Realtime({
+            key,
+            // see https://faqs.ably.com/ably-js-page-unload-behaviour
+            closeOnUnload: false,
         });
 
         // connect handler
-        this._client.connection.on((stateChange) => {
-            const { current: state } = stateChange;
-            console.log(`AblyRealTimeStrategy::connection WS ${state}`);
+
+        this._onConn = (stateChange) => {
+            const { current: state, reason } = stateChange;
+            console.log(`AblyRealTimeStrategy::connection WS ${state}`, reason || '');
             if(state  === 'connected') {
                 this._wsError = false;
                 // RELOAD
@@ -76,29 +75,80 @@ class AblyRealTimeStrategy extends AbstractRealTimeStrategy {
                 this.stopUsingFallback();
                 return;
             }
-            if(state  === 'suspended') {
+
+            if ((state === 'suspended' || state === 'failed') && !this._closing) {
                 if(!this._wsError) {
                     this._wsError = true;
                     this.startUsingFallback(summitId);
                 }
                 return;
             }
-            if(state  === 'failed') {
-                if(!this._wsError) {
-                    this._wsError = true;
-                    this.startUsingFallback(summitId);
-                }
-                return;
+            if (state === 'closed') {
+                // Expected on unmount, don’t start fallback, don’t log as error
+                this._wsError = false;
             }
-        });
+        };
+
+        this._client.connection.on(this._onConn);
+
+        // start listening for event
+
+        this._channel = this._client.channels.get(`${summitId}:*:*`);
+
+        this._onMessage = (message) => {
+            try {
+                const {data: payload} = message;
+                console.log('AblyRealTimeStrategy::create Change received', payload)
+                this._callback(payload);
+            }
+            catch (e) {
+                console.error('AblyRealTimeStrategy::message handler failed', e);
+            }
+        };
+
+        this._channel.subscribe(this._onMessage);
+
     }
 
     close() {
+        console.log("AblyRealTimeStrategy::close");
         super.close();
-        if(this._client){
-            console.log("AblyRealTimeStrategy::close");
-            this._client.close();
+        this._closing = true;
+        try { this.stopUsingFallback(); } catch {}
+
+        try { this._onMessage && this._channel?.unsubscribe(this._onMessage); }
+        catch (e){ console.warn('AblyRealTimeStrategy::close channel.unsubscribe',e); }
+        try { this._channel?.off(); }
+        catch(e) { console.warn('AblyRealTimeStrategy::close channel.off', e);}
+        try { this._onConn && this._client?.connection.off(this._onConn); }
+        catch(e) { console.warn('AblyRealTimeStrategy::close AblyRealTimeStrategy::close.off', e); }
+        this._onMessage = null;
+        this._onConn = null;
+
+        const client = this._client;
+        const channel = this._channel;
+
+        const tryRelease = () => {
+            try {
+                const releasable = ['initialized','detached','failed'].includes(channel?.state);
+                if (releasable) client?.channels.release(channel.name);
+            } catch {}
+            try { client?.close(); } catch(e) {
+                console.warn('AblyRealTimeStrategy::close client.close', e);
+            }
             this._client = null;
+            this._channel = null;
+            this._closing = false;
+            this._wsError = false;
+        };
+
+        if (client && channel && client.connection.state !== 'closed' &&
+            ['attached','attaching','detaching'].includes(channel.state)) {
+            // Detach asynchronously, then release if allowed
+            channel.detach(() => tryRelease());
+        } else {
+            // Already detached/failed/closed (or no channel) → just release if possible and close
+            tryRelease();
         }
     }
 }
