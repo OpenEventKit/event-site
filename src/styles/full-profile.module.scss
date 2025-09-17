@@ -162,3 +162,8 @@
         }
     }
 }
+
+// Certificate button focus state fix
+.certificateButton:focus {
+    color: var(--color_input_text_color) !important;
+}

@@ -107,27 +107,29 @@ const CertificateSection = ({
   };
 
   return (
-    <div style={{ marginTop: '20px' }}>
-      <button 
-        className="button is-large"
-        onClick={() => handleDownloadCertificate(checkedInTickets[0])}
-        style={{ 
-          width: '100%', 
-          height: '5.5rem',
-          color: 'var(--color_input_text_color)',
-          backgroundColor: 'var(--color_input_background_color)',
-          borderColor: 'var(--color_input_border_color)'
-        }}
-      >
-        Download Certificate
-      </button>
-      
-      {error && (
-        <div style={{ color: '#d32f2f', fontSize: '14px', marginTop: '10px' }}>
-          {error}
-        </div>
-      )}
-    </div>
+    <>
+      <div style={{ marginTop: '20px' }}>
+        <button 
+          className={`button is-large ${styles.certificateButton}`}
+          onClick={() => handleDownloadCertificate(checkedInTickets[0])}
+          style={{ 
+            width: '100%', 
+            height: '5.5rem',
+            color: 'var(--color_input_text_color)',
+            backgroundColor: 'var(--color_input_background_color)',
+            borderColor: 'var(--color_input_border_color)'
+          }}
+        >
+          Download Certificate
+        </button>
+        
+        {error && (
+          <div style={{ color: '#d32f2f', fontSize: '14px', marginTop: '10px' }}>
+            {error}
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 
