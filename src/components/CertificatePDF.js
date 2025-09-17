@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Document, Page, Text, View, Image, StyleSheet, Font, pdf } from "@react-pdf/renderer";
 
 import fontRegular from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-400.ttf";
@@ -89,65 +89,6 @@ const registerCustomFont = (siteFont) => {
   return false;
 };
 
-// Safe Image component that handles CORS and loading errors
-const SafeImage = ({ src, style, debug = false }) => {
-  const [imageState, setImageState] = useState('loading');
-  const [validatedSrc, setValidatedSrc] = useState(null);
-
-  useEffect(() => {
-    if (!src) {
-      setImageState('error');
-      return;
-    }
-
-    // Pre-validate image by attempting to fetch it
-    const validateImage = async () => {
-      try {
-        // Try to fetch with CORS first
-        const response = await fetch(src, {
-          method: 'GET',
-          mode: 'cors'
-        });
-        
-        if (response.ok) {
-          setValidatedSrc(src);
-          setImageState('ready');
-        } else {
-          setImageState('error');
-        }
-      } catch (error) {
-        // Try with no-cors as fallback
-        try {
-          const response = await fetch(src, {
-            method: 'HEAD',
-            mode: 'no-cors'
-          });
-          
-          // With no-cors we can't check the response, so we'll assume it failed
-          // This is the safer approach for certificate generation
-          setImageState('error');
-        } catch (fallbackError) {
-          setImageState('error');
-        }
-      }
-    };
-
-    // Always validate images, including external URLs
-    validateImage();
-  }, [src]);
-
-  if (imageState === 'error' || !validatedSrc) {
-    return null;
-  }
-
-  if (imageState === 'loading') {
-    return null;
-  }
-
-  // The Image component will handle CORS errors internally
-  // When debug=true, it will show a placeholder for failed images
-  return <Image src={validatedSrc} style={style} debug={debug} />;
-};
 
 const calculateOptimalFontSize = (text, maxWidth = 650, initialFontSize = 48, minFontSize = 24) => {
   // estimate average character width based on font size
@@ -178,13 +119,33 @@ const calculateOptimalFontSize = (text, maxWidth = 650, initialFontSize = 48, mi
   return finalSize;
 };
 
+// Validate image URL before PDF generation
+const validateImageUrl = async (url) => {
+  if (!url) return null;
+  
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      mode: 'cors'
+    });
+    
+    if (response.ok) {
+      return url;
+    }
+    return null;
+  } catch (error) {
+    console.warn("Image validation failed:", error);
+    return null;
+  }
+};
+
 const CertificatePDF = ({ 
   attendee, 
   summit, 
   settings, 
-  isCheckedIn = true 
+  isCheckedIn = true,
+  logoUrl = null
 }) => {
-
   const role = attendee.role || "Attendee";
   const position = attendee.jobTitle || "";
   const company = attendee.company || "";
@@ -304,11 +265,11 @@ const CertificatePDF = ({
         <View style={styles.whiteCard}>
           <View style={styles.content}>
             {/* Logo */}
-            {(settings.logo || summit.logo) && (
-              <SafeImage 
-                src={settings.logo || summit.logo} 
+            {logoUrl && (
+              <Image 
+                src={logoUrl} 
                 style={styles.logo}
-                debug={false} // When true, shows a visible error placeholder if image fails to load (useful for debugging)
+                debug={false} // When true, shows a visible error placeholder if image fails to load
               />
             )}
             
@@ -353,7 +314,16 @@ const CertificatePDF = ({
 // helper function to generate and download the certificate
 export const generateCertificatePDF = async (attendee, summit, settings) => {
   try {
-    const doc = <CertificatePDF attendee={attendee} summit={summit} settings={settings} />;
+    // Validate logo URL before generating PDF
+    const logoUrlToValidate = settings.logo || summit.logo;
+    const validatedLogoUrl = await validateImageUrl(logoUrlToValidate);
+    
+    const doc = <CertificatePDF 
+      attendee={attendee} 
+      summit={summit} 
+      settings={settings}
+      logoUrl={validatedLogoUrl}
+    />;
     const blob = await pdf(doc).toBlob();
     
     // create download link
