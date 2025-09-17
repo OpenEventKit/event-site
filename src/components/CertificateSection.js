@@ -22,7 +22,7 @@ const CertificateSection = ({
   const siteSettings = useSiteSettings();
 
   // Get certificate settings
-  const certificateSettings = useCertificateSettings(summit, siteSettings?.siteFont);
+  const certificateSettings = useCertificateSettings(siteSettings?.siteFont);
   
   // Check if certificates are enabled
   const certificatesEnabled = getSettingByKey(MARKETING_SETTINGS_KEYS.certificateEnabled) !== DISPLAY_OPTIONS.hide;
