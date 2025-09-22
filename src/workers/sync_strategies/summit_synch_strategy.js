@@ -58,6 +58,11 @@ class SummitSynchStrategy extends AbstractSynchStrategy {
             return Promise.resolve(res);
 
         }
+
+        // Unknown op
+        const msg = `SummitSynchStrategy::process unknown entity_operator '${entity_operator}'`;
+        console.warn(msg);
+        throw new Error(msg);
     }
 }
 

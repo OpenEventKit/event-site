@@ -83,6 +83,11 @@ class VenueRoomSynchStrategy extends AbstractSynchStrategy{
                 return Promise.resolve(res);
             }
         }
+
+        // Unknown op
+        const msg = `VenueRoomSynchStrategy::process unknown entity_operator '${entity_operator}'`;
+        console.warn(msg);
+        throw new Error(msg);
     }
 }
 
