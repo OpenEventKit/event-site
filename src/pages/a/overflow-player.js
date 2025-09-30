@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { getOverflowEventByKey } from "../../actions/event-actions";
 import { Container, Box, CircularProgress, Typography, Fade } from "@mui/material";
 import VideoComponent from "../../components/VideoComponent";
 import ErrorMessage from "../../components/ErrorMessage";
+import withRealTimeUpdates from "../../utils/real_time_updates/withRealTimeUpdates";
 import "../../i18n";
 
 const OverflowPlayerPage = ({
@@ -25,7 +25,7 @@ const OverflowPlayerPage = ({
     if (overflowStreamKey) {
       fetchOverflowEvent(overflowStreamKey);
     }
-  }, [overflowStreamKey, fetchOverflowEvent]);
+  }, [overflowStreamKey, fetchOverflowEvent, event?.overflow_streaming_url]);
 
   useEffect(() => {
     if (event && !loading && !error) {
@@ -146,4 +146,4 @@ const mapDispatchToProps = (dispatch) => ({
   fetchOverflowEvent: (streamKey) => dispatch(getOverflowEventByKey(streamKey))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(OverflowPlayerPage);
+export default connect(mapStateToProps, mapDispatchToProps)(withRealTimeUpdates(OverflowPlayerPage));
