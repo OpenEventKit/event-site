@@ -14,6 +14,8 @@
     "invite_message": "You have been invited to RSVP {{event}}",
     "decline_message": "You have declined your invitation.",
     "confirm_message": "Your attendance to this event is confirmed.",
+    "waitlist_message": "This activity is currently full, but you have been added to the wait list and will be automatically confirmed should space become available.",
+    "full_message": "This activity is full.",
     "speakers": "Speakers",
     "accept_button": "YES, I will attend.",
     "decline_button": "NO, I will not attend."
