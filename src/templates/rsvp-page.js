@@ -7,7 +7,7 @@ import Layout from "../components/Layout";
 import { acceptRSVPInvitation, declineRSVPInvitation, getRSVPInvitation } from "../actions/user-actions";
 import { getEventById } from "../actions/event-actions";
 import styles from "../styles/rsvp-page.module.scss"
-import { RSVP_STATUS } from "@utils/rsvpConstants";
+import { RSVP_STATUS, RSVP_CAPACITY } from "@utils/rsvpConstants";
 import { Badge } from "react-bootstrap";
 import "../i18n";
 
@@ -96,15 +96,18 @@ const RSVPPage = ({ location, rsvpInvitation, event, getRSVPInvitation, acceptRS
               }
               <div className={styles.buttonWrapper}>
                 {errorMessage && (
-                    <h3 dangerouslySetInnerHTML={{ __html: errorMessage }} />
+                  <h3 dangerouslySetInnerHTML={{ __html: errorMessage }} />
                 )}
                 {rsvpInvitation?.status === RSVP_STATUS.rejected && (
                   <h4>{t("rsvp_page.decline_message")} </h4>
                 )}
                 {rsvpInvitation?.status === RSVP_STATUS.accepted && (
-                  <h4>{t("rsvp_page.confirm_message")} </h4>
+                  rsvpInvitation?.rsvp?.seat_type === RSVP_CAPACITY.waitlist ?
+                    <h4>{t("rsvp_page.waitlist_message")} </h4>
+                    :
+                    <h4>{t("rsvp_page.confirm_message")} </h4>
                 )}
-                {rsvpInvitation?.status === RSVP_STATUS.pending && (
+                {rsvpInvitation?.status === RSVP_STATUS.pending && rsvpInvitation?.event?.rsvp_capacity !== RSVP_CAPACITY.full && (
                   <>
                     <button className="button is-large" onClick={() => handleConfirmRSVP(true)}>
                       {t("rsvp_page.accept_button")}
@@ -113,13 +116,18 @@ const RSVPPage = ({ location, rsvpInvitation, event, getRSVPInvitation, acceptRS
                       {t("rsvp_page.decline_button")}
                     </button>
                   </>
-                )}
+                )
+                }
+                {rsvpInvitation?.status === RSVP_STATUS.pending && rsvpInvitation?.event?.rsvp_capacity === RSVP_CAPACITY.full && (
+                  <h4>{t("rsvp_page.full_message")} </h4>
+                )
+                }
               </div>
             </>)
             :
             (
               <>
-                  <h3>Activity not found.</h3>
+                <h3>Activity not found.</h3>
               </>
             )
           }

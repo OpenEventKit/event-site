@@ -678,8 +678,9 @@ export const rejectInvitation = (token) => async (dispatch) => {
 
 export const getRSVPInvitation = (token, eventId) => async (dispatch) => {
   let params = {
-    fields: "status,event_id",
-    relations: "none"
+    fields: "status,event.id,event.rsvp_capacity",
+    expand: "event",
+    relations: "none,event.none"
   };
 
   return getRequest(

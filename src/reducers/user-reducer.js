@@ -144,7 +144,9 @@ const userReducer = (state = DEFAULT_STATE, action) => {
       return { ...state, rsvpInvitation: null }
     }
     case RECEIVE_RSVP_INVITATION: {
-      return { ...state, rsvpInvitation: payload.response }
+      let invitation = payload.response;
+      invitation.event_id = invitation.event.id;
+      return { ...state, rsvpInvitation: invitation }
     }
     case RSVP_INVITATION_ERROR: {
       const { errorMessage } = payload;

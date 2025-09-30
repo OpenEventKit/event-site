@@ -4,4 +4,10 @@ const RSVP_STATUS = {
   rejected: "Rejected"
 };
 
-export { RSVP_STATUS };
+const RSVP_CAPACITY = {
+  regular: "Regular",
+  waitlist: "WaitList",
+  full: "Full",
+};
+
+export { RSVP_STATUS, RSVP_CAPACITY };
