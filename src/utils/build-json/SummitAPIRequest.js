@@ -65,6 +65,7 @@ class SummitAPIRequest extends BaseAPIRequest {
 
         const expands = [
             "event_types",
+            "badge_types",
             "badge_features_types",
             "tracks",
             "track_groups",

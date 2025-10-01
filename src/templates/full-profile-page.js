@@ -209,8 +209,8 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
 
             const params = new URLSearchParams({
                 access_token: accessToken,
-                fields: 'id,status',
-                expand: 'owner'
+                fields: 'id,status,badge.id,badge.type_id,badge.features',
+                expand: 'owner,badge,badge.type,badge.features'
             });
 
             const apiBaseUrl = getEnvVariable(SUMMIT_API_BASE_URL);

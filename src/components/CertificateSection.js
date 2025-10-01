@@ -58,17 +58,15 @@ const CertificateSection = ({
     // Check if any ticket has speaker role
     const hasSpeakerTicket = allTickets.some(ticket => {
       // Check badge type name for speaker
-      const badgeType = summit?.badge_types?.find(bt => bt.id === ticket.badge?.type_id);
+      const badgeType = ticket.badge?.type;
+      
       if (badgeType?.name?.toLowerCase().includes('speaker')) {
         return true;
       }
       
-      // Check badge features for speaker
-      const featureIds = ticket.badge?.features || [];
-      const badgeFeaturesTypes = summit?.badge_features_types || [];
+      const features = ticket.badge?.features || [];
       
-      return featureIds.some(featureId => {
-        const feature = badgeFeaturesTypes.find(f => f.id === featureId);
+      return features.some(feature => {
         return feature?.name?.toLowerCase().includes('speaker');
       });
     });
