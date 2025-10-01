@@ -95,8 +95,7 @@ const CertificateSection = ({
       const summitData = {
         name: summit.name,
         logo: summit.logo,
-        start_date: summit.start_date,
-        end_date: summit.end_date
+        dates_label: summit.dates_label
       };
 
       await generateCertificatePDF(attendeeData, summitData, certificateSettings);

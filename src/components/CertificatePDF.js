@@ -223,6 +223,15 @@ const CertificatePDF = ({
       letterSpacing: 0,
       lineHeight: "133%",
     },
+    summitDate: {
+      fontSize: 16,
+      fontWeight: "normal",
+      color: "#000000",
+      textAlign: "center",
+      letterSpacing: 0.15,
+      lineHeight: "150%",
+      marginTop: 8,
+    },
     name: {
       fontSize: nameFontSize,
       fontWeight: "normal",
@@ -282,6 +291,13 @@ const CertificatePDF = ({
             <Text style={styles.summitName}>
               {settings.summitName || summit.name || "EVENT NAME"}
             </Text>
+            
+            {/* Summit Date */}
+            {summit.dates_label && (
+              <Text style={styles.summitDate}>
+                {summit.dates_label}
+              </Text>
+            )}
             
             {/* Attendee Name */}
             <Text style={styles.name}>
