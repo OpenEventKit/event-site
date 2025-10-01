@@ -213,6 +213,7 @@ const CertificatePDF = ({
       textAlign: "center",
       letterSpacing: 0.15,
       lineHeight: "160%",
+      marginBottom: 5,
     },
     summitName: {
       fontSize: 24,
