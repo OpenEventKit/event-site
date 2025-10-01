@@ -114,7 +114,11 @@ const CertificateSection = ({
             height: '5.5rem',
             color: 'var(--color_input_text_color)',
             backgroundColor: 'var(--color_input_background_color)',
-            borderColor: 'var(--color_input_border_color)'
+            borderColor: 'var(--color_input_border_color)',
+            whiteSpace: 'normal',
+            wordBreak: 'break-word',
+            lineHeight: '1.2',
+            padding: '1rem'
           }}
         >
           Download Certificate of Attendance
