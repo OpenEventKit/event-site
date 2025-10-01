@@ -1,8 +1,9 @@
 import React from "react";
 import { Document, Page, Text, View, Image, StyleSheet, Font, pdf } from "@react-pdf/renderer";
 
-import fontRegular from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-400.ttf";
-import fontBold from "../../static/fonts/nunito-sans/nunito-sans-v18-latin-700.ttf";
+import fontRegular from "../../../static/fonts/nunito-sans/nunito-sans-v18-latin-400.ttf";
+import fontBold from "../../../static/fonts/nunito-sans/nunito-sans-v18-latin-700.ttf";
+import { USER_ROLES } from './constants';
 
 const registerDefaultFont = () => {
   try {
@@ -147,6 +148,7 @@ const CertificatePDF = ({
   logoUrl = null
 }) => {
   const role = attendee.role || "Attendee";
+  const isSpeaker = role === USER_ROLES.SPEAKER;
   const position = attendee.jobTitle || "";
   const company = attendee.company || "";
 
@@ -285,7 +287,11 @@ const CertificatePDF = ({
             
             {/* Title */}
             <Text style={styles.title}>
-              {settings.titleText || "CERTIFICATE OF ATTENDANCE"}
+              {isSpeaker && settings.speakerTitleText ? 
+                settings.speakerTitleText :
+                !isSpeaker && settings.attendeeTitleText ?
+                  settings.attendeeTitleText :
+                  settings.titleText || (isSpeaker ? "SPEAKER CERTIFICATE" : "CERTIFICATE OF ATTENDANCE")}
             </Text>
             
             {/* Event Name */}
@@ -329,7 +335,7 @@ const CertificatePDF = ({
 };
 
 // helper function to generate and download the certificate
-export const generateCertificatePDF = async (attendee, summit, settings) => {
+export const generatePDF = async (attendee, summit, settings) => {
   try {
     // Validate logo URL before generating PDF
     const logoUrlToValidate = settings.logo || summit.logo;
@@ -358,4 +364,3 @@ export const generateCertificatePDF = async (attendee, summit, settings) => {
   }
 };
 
-export default CertificatePDF;

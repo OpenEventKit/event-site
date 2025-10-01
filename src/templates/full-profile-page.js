@@ -17,7 +17,7 @@ import LiteScheduleComponent from '../components/LiteScheduleComponent'
 import AvatarEditorModal from '../components/AvatarEditorModal'
 import ChangePasswordComponent from '../components/ChangePasswordComponent';
 import AccessTracker from "../components/AttendeeToAttendeeWidgetComponent";
-import CertificateSection from '../components/CertificateSection';
+import { DownloadButton as CertificateDownloadButton } from '../components/Certificates';
 import useMarketingSettings from '../utils/useMarketingSettings';
 import { MARKETING_SETTINGS_KEYS, DISPLAY_OPTIONS } from '../utils/useMarketingSettings';
 import { getAccessTokenSafely } from '../utils/loginUtils';
@@ -244,7 +244,7 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
         return isCheckedIn && isValidTicket;
     });
     
-    const showCertificate = certificatesEnabled && checkedInTickets.length > 0;
+    const showCertificateDownload = certificatesEnabled && checkedInTickets.length > 0;
 
     const discardChanges = (state) => {
         switch (state) {
@@ -317,8 +317,8 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                         <h4>
                             @{user.idpProfile?.nickname}
                         </h4>
-                        {showCertificate && (
-                            <CertificateSection freshTickets={freshTickets} />
+                        {showCertificateDownload && (
+                            <CertificateDownloadButton freshTickets={freshTickets} />
                         )}
                         <ChangePasswordComponent updatePassword={handlePasswordUpdate} />
                     </div>

@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { generateCertificatePDF } from './CertificatePDF';
-import { useCertificateSettings } from '../utils/certificateSettings';
-import useMarketingSettings from '../utils/useMarketingSettings';
-import { MARKETING_SETTINGS_KEYS, DISPLAY_OPTIONS } from '../utils/useMarketingSettings';
-import useSiteSettings from '../utils/useSiteSettings';
-import styles from '../styles/full-profile.module.scss';
-
-const USER_ROLES = {
-  SPEAKER: 'Speaker',
-  ATTENDEE: 'Attendee'
-};
+import { generatePDF } from './generatePDF';
+import { useCertificateSettings } from './settings';
+import useMarketingSettings from '../../utils/useMarketingSettings';
+import { MARKETING_SETTINGS_KEYS, DISPLAY_OPTIONS } from '../../utils/useMarketingSettings';
+import useSiteSettings from '../../utils/useSiteSettings';
+import styles from '../../styles/full-profile.module.scss';
+import { USER_ROLES } from './constants';
 
 const CertificateSection = ({ 
   user, 
@@ -96,7 +92,7 @@ const CertificateSection = ({
         dates_label: summit.dates_label
       };
 
-      await generateCertificatePDF(attendeeData, summitData, certificateSettings);
+      await generatePDF(attendeeData, summitData, certificateSettings);
     } catch (err) {
       console.error('Error downloading certificate:', err);
       setError('Failed to download certificate. Please try again.');
