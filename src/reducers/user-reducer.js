@@ -177,6 +177,7 @@ const userReducer = (state = DEFAULT_STATE, action) => {
             rsvp_invitations:[ ...state?.userProfile?.rsvp_invitations,{
                 event_id: invitation.event_id,
                 status: invitation.status,
+            schedule_summit_events: [...state.userProfile.schedule_summit_events.filter(ev => ev.id !== invitation.event_id)]
             }],
         }: null;
         return { ...state,
