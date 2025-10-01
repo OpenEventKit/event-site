@@ -21,7 +21,7 @@ const Seo = ({ title, description, location, children }) => {
   const { pathname } = location;
 
   const seo = {
-    title: title ? `${siteTitle} - ${title}` : siteTitle,
+    title: title && siteTitle ? `${siteTitle} - ${title}` : (title || siteTitle || ''),
     description: description || defaultDescription,
     url: buildUrl(scheme, host, pathname),
     image: host && image ? buildUrl(scheme, host, image.publicURL) : null,
