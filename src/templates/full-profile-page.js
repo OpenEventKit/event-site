@@ -209,7 +209,7 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
 
             const params = new URLSearchParams({
                 access_token: accessToken,
-                fields: 'id,status,badge.id,badge.type_id,badge.features',
+                fields: 'id,status,owner.summit_hall_checked_in,owner.first_name,owner.last_name,owner.company,owner.email,badge.type.name,badge.features.name',
                 expand: 'owner,badge,badge.type,badge.features'
             });
 
@@ -239,7 +239,6 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
     const certificatesEnabled = getSettingByKey(MARKETING_SETTINGS_KEYS.certificateEnabled) !== DISPLAY_OPTIONS.hide;
     const checkedInTickets = freshTickets.filter(ticket => {
         const isCheckedIn = ticket.owner?.summit_hall_checked_in === true;
-        console.log(ticket)
         const isValidTicket = ticket.status === 'Paid';
         return isCheckedIn && isValidTicket;
     });
