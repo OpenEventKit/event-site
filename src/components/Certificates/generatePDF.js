@@ -291,7 +291,7 @@ const CertificatePDF = ({
                 settings.speakerTitleText :
                 !isSpeaker && settings.attendeeTitleText ?
                   settings.attendeeTitleText :
-                  settings.titleText || (isSpeaker ? "SPEAKER CERTIFICATE" : "CERTIFICATE OF ATTENDANCE")}
+                  settings.titleText || (isSpeaker ? "CERTIFICATE OF APPRECIATION" : "CERTIFICATE OF ATTENDANCE")}
             </Text>
             
             {/* Event Name */}
