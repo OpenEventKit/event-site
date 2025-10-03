@@ -1,7 +1,6 @@
 import { reduceReducers } from '../utils/reducer-utils';
 import { LOGOUT_USER } from 'openstack-uicore-foundation/lib/security/actions';
 import {
-
     GET_DISQUS_SSO,
     GET_USER_PROFILE,
     START_LOADING_PROFILE,
@@ -65,7 +64,7 @@ const userReducer = (state = DEFAULT_STATE, action) => {
       const { response: userProfile } = payload;
       return {
         ...state,
-        userProfile: userProfile,
+        userProfile: { ...userProfile, rsvp_invitations: [] },
         isAuthorized: isAuthorizedUser(userProfile.groups),
         hasTicket: userProfile.summit_tickets?.length > 0
       }
@@ -92,16 +91,18 @@ const userReducer = (state = DEFAULT_STATE, action) => {
     case REMOVE_FROM_SCHEDULE: {
       return { ...state, userProfile: { ...state.userProfile, schedule_summit_events: [...state.userProfile.schedule_summit_events.filter(ev => ev.id !== payload.id)] } }
     }
-      case RSVP_CONFIRMED: {
-          return { ...state, userProfile: { ...state.userProfile, rsvp: [...state.userProfile.rsvp, {...payload} ] } }
+    case RSVP_CONFIRMED: {
+      return { ...state, userProfile: { ...state.userProfile, rsvp: [...state.userProfile.rsvp, { ...payload }] } }
+    }
+    case RSVP_CANCELLED: {
+      return {
+        ...state, userProfile: {
+          ...state.userProfile,
+          rsvp: [...state?.userProfile?.rsvp?.filter(r => r.event_id !== payload.id)],
+          rsvp_invitations: state?.userProfile?.rsvp_invitations?.filter(i => i.event_id !== payload.id),
+        }
       }
-      case RSVP_CANCELLED: {
-          return { ...state, userProfile: {
-              ...state.userProfile,
-              rsvp: [...state?.userProfile?.rsvp?.filter(r => r.event_id !== payload.id)],
-              rsvp_invitations:state?.userProfile?.rsvp_invitations?.filter(i => i.event_id !== payload.id),
-          } }
-      }
+    }
     case GET_DISQUS_SSO:
       const disqus = payload.response;
       return { ...state, loading: false, disqusSSO: disqus };
@@ -154,34 +155,37 @@ const userReducer = (state = DEFAULT_STATE, action) => {
     }
     case RSVP_INVITATION_ACCEPTED: {
       const invitation = payload.response;
-      const userProfile = state.userProfile? {
-          ...state?.userProfile,
-          rsvp_invitations:[ ...state?.userProfile?.rsvp_invitations,{
-            event_id: invitation.event_id,
-            status: invitation.status,
-          }],
-          rsvp: [...state?.userProfile?.rsvp, {...invitation.rsvp}],
-          schedule_summit_events: [...state?.userProfile?.schedule_summit_events, {id: invitation.event_id}]
+      const userProfile = state.userProfile ? {
+        ...state?.userProfile,
+        rsvp_invitations: [...state?.userProfile?.rsvp_invitations, {
+          event_id: invitation.event_id,
+          status: invitation.status,
+        }],
+        rsvp: [...state?.userProfile?.rsvp, { ...invitation.rsvp }],
+        schedule_summit_events: [...state?.userProfile?.schedule_summit_events, { id: invitation.event_id }]
       } : null;
 
-      return { ...state,
-          rsvpInvitation: invitation,
-          // update invitations and rsvps
-          userProfile: userProfile,
+      return {
+        ...state,
+        rsvpInvitation: invitation,
+        // update invitations and rsvps
+        userProfile: userProfile,
       }
     }
     case RSVP_INVITATION_REJECTED: {
-        // update invitations
-        const invitation = payload.response;
-        const userProfile = state.userProfile ? {...state?.userProfile,
-            rsvp_invitations:[ ...state?.userProfile?.rsvp_invitations,{
-                event_id: invitation.event_id,
-                status: invitation.status,
-            }],
-        }: null;
-        return { ...state,
-          rsvpInvitation: invitation,
-          userProfile: userProfile,
+      // update invitations
+      const invitation = payload.response;
+      const userProfile = state.userProfile ? {
+        ...state?.userProfile,
+        rsvp_invitations: [...state?.userProfile?.rsvp_invitations, {
+          event_id: invitation.event_id,
+          status: invitation.status,
+        }],
+      } : null;
+      return {
+        ...state,
+        rsvpInvitation: invitation,
+        userProfile: userProfile,
       }
     }
     default:
