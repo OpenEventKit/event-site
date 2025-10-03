@@ -3,7 +3,13 @@ const BaseAPIRequest = require("./BaseAPIRequest");
 class SummitAPIRequest extends BaseAPIRequest {
     static instance;
 
+
     constructor() {
+        /*
+         *  WARNING
+         *  if any of these fields , relations or expand changes should be replicated here
+         *  https://github.com/fntechgit/pub-api/blob/main/api/utils/summit_api_requests/summit_api_request.py
+         */
         const primary_fields = [
             "id", "name", "start_date", "end_date", "time_zone_id", "time_zone_label", "secondary_logo", "slug",
             "support_email", "start_showing_venues_date", "dates_with_events", "logo", "dates_label",
@@ -12,7 +18,6 @@ class SummitAPIRequest extends BaseAPIRequest {
             "is_main", "title", "description", "time_zone"
         ];
 
-        // TODO: to be reviewed later with data syncs actions to match the needs of the data update
         const event_types_fields = [
             "event_types.id"
         ];

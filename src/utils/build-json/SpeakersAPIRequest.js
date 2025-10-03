@@ -3,7 +3,11 @@ class SpeakersAPIRequest extends BaseAPIRequest {
     static instance;
 
     constructor() {
-
+        /*
+         *  WARNING
+         *  if any of these fields , relations or expand changes should be replicated here
+         *  https://github.com/fntechgit/pub-api/blob/main/api/utils/summit_api_requests/speaker_api_request.py
+         */
         const primary_fields =
             ['id', 'first_name', 'last_name', 'title', 'bio', 'member_id', 'pic', 'big_pic', 'company'];
 

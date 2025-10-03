@@ -8,6 +8,11 @@ class EventAPIRequest extends BaseAPIRequest {
     static instance;
 
     constructor() {
+        /*
+        *  WARNING
+        *  if any of these fields , relations or expand changes should be replicated here
+        *  https://github.com/fntechgit/pub-api/blob/main/api/utils/summit_api_requests/event_api_request.py
+        */
         const primary_fields = [
             "id",
             "created",
@@ -78,8 +83,6 @@ class EventAPIRequest extends BaseAPIRequest {
         const type_relations = ["type.allowed_ticket_types"];
 
         const locations_relations = ["location.venue", "location.floor", "location.venue.none", "location.floor.none"];
-
-        // TODO: review relations for "current_attendance"
 
         const relations = [
             ...track_relations,
