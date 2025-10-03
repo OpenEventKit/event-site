@@ -68,6 +68,8 @@ export const MARKETING_SETTINGS_KEYS = {
   certificateLogoWidth: "CERTIFICATE_LOGO_WIDTH",
   certificateLogoHeight: "CERTIFICATE_LOGO_HEIGHT",
   certificateTitleText: "CERTIFICATE_TITLE_TEXT",
+  certificateAttendeeTitleText: "CERTIFICATE_ATTENDEE_TITLE_TEXT",
+  certificateSpeakerTitleText: "CERTIFICATE_SPEAKER_TITLE_TEXT",
   certificateSummitName: "CERTIFICATE_SUMMIT_NAME",
   certificateShowRole: "CERTIFICATE_SHOW_ROLE",
 }

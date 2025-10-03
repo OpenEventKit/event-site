@@ -6,7 +6,7 @@ class SummitAPIRequest extends BaseAPIRequest {
     constructor() {
         const primary_fields = [
             "id", "name", "start_date", "end_date", "time_zone_id", "time_zone_label", "secondary_logo", "slug",
-            "support_email", "start_showing_venues_date", "dates_with_events", "logo",
+            "support_email", "start_showing_venues_date", "dates_with_events", "logo", "dates_label",
             "registration_allowed_refund_request_till_date", "allow_update_attendee_extra_questions", "is_virtual",
             "registration_disclaimer_mandatory", "registration_disclaimer_content", "reassign_ticket_till_date",
             "is_main", "title", "description", "time_zone"

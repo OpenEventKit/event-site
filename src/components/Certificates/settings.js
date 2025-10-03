@@ -1,4 +1,4 @@
-import useMarketingSettings, { MARKETING_SETTINGS_KEYS, DISPLAY_OPTIONS } from './useMarketingSettings';
+import useMarketingSettings, { MARKETING_SETTINGS_KEYS, DISPLAY_OPTIONS } from '../../utils/useMarketingSettings';
 
 export const useCertificateSettings = (siteFont = null) => {
   const { getSettingByKey } = useMarketingSettings();
@@ -20,6 +20,8 @@ export const useCertificateSettings = (siteFont = null) => {
     logoWidth: MARKETING_SETTINGS_KEYS.certificateLogoWidth,
     logoHeight: MARKETING_SETTINGS_KEYS.certificateLogoHeight,
     titleText: MARKETING_SETTINGS_KEYS.certificateTitleText,
+    attendeeTitleText: MARKETING_SETTINGS_KEYS.certificateAttendeeTitleText,
+    speakerTitleText: MARKETING_SETTINGS_KEYS.certificateSpeakerTitleText,
     summitName: MARKETING_SETTINGS_KEYS.certificateSummitName,
     showRole: MARKETING_SETTINGS_KEYS.certificateShowRole,
   };
