@@ -215,7 +215,7 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
 
             const apiBaseUrl = getEnvVariable(SUMMIT_API_BASE_URL);
             const url = `${apiBaseUrl}/api/v1/summits/${summit.id}/orders/all/tickets/me?${params}`;
-            
+
             const response = await fetch(url);
 
             if (response.ok) {
@@ -310,11 +310,14 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                             </div>
                         </button>
                         <h3>
-                            Hello, <br />
-                            {user.idpProfile.given_name} {user.idpProfile.family_name}
+                            Hello <br />
+                            {personalProfile.firstName || personalProfile.lastName ?
+                                `, ${personalProfile.firstName} ${personalProfile.lastName}`
+                                : ""
+                            }
                         </h3>
                         <h4>
-                            @{user.idpProfile?.nickname}
+                            @{personalProfile?.identifier}
                         </h4>
                         {showCertificateDownload && (
                             <CertificateDownloadButton freshTickets={freshTickets} />
@@ -498,7 +501,7 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                             <div className={`columns is-mobile`}>
                                 <div className={`column is-full`}>
                                     <span>
-                                        By electing to show your information you are indicating that other attendees at the 
+                                        By electing to show your information you are indicating that other attendees at the
                                         event(s) you are registered for will be able to see this information.
                                     </span>
                                 </div>
@@ -697,13 +700,13 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
                 </div>
             </div>
             {showProfile &&
-            <AvatarEditorModal
-              userProfile={user.idpProfile}
-              open={showProfile}
-              idpLoading={user.loadingIDP}
-              changePicture={handlePictureUpdate}
-              handleClose={() => handleTogglePopup(false)}
-            />
+                <AvatarEditorModal
+                    userProfile={user.idpProfile}
+                    open={showProfile}
+                    idpLoading={user.loadingIDP}
+                    changePicture={handlePictureUpdate}
+                    handleClose={() => handleTogglePopup(false)}
+                />
             }
             <AccessTracker updateChatProfileEnabled={true} />
         </React.Fragment>
