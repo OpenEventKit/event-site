@@ -42,7 +42,7 @@ class SummitAPIRequest extends BaseAPIRequest {
         ];
 
         const ticket_types_relations = ["ticket_types.none"];
-        const tracks_relations = ["tracks", "tracks.subtracks.none"];
+        const tracks_relations = ["tracks", "tracks.subtracks", "tracks.subtracks.none"];
         const track_groups_relations = ["track_groups.none"];
         const location_relations = ["locations.none", "locations.venue.none"];
         const event_types_relations = ["event_types.none"];
