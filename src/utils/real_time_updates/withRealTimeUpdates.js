@@ -62,6 +62,13 @@ const withRealTimeUpdates = WrappedComponent => {
             );
         }
 
+        shouldFetchStreamingInfo() {            
+            const { location } = this.props;
+            const path = location?.pathname || '';        
+            const streamingPages = ['/a/event/'];
+            return streamingPages.some(page => path.includes(page));
+        }
+
         /**
          *
          * @param updates
@@ -70,6 +77,8 @@ const withRealTimeUpdates = WrappedComponent => {
         async processUpdates(updates) {
 
             const {summit, allEvents, allIDXEvents, allSpeakers, allIDXSpeakers, synchEntityData} = this.props;
+
+            const fetchStreamingInfo = this.shouldFetchStreamingInfo(this.props.location?.pathname);
 
             if(!this._worker)
             {
@@ -92,6 +101,7 @@ const withRealTimeUpdates = WrappedComponent => {
                 allIDXEvents: JSON.stringify(allIDXEvents),
                 allSpeakers: JSON.stringify(allSpeakers),
                 allIDXSpeakers: JSON.stringify(allIDXSpeakers),
+                fetchStreamingInfo: fetchStreamingInfo
             });
 
             this._worker.onmessage = ({
