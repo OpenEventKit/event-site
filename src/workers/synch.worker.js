@@ -13,6 +13,32 @@ let currentAccessToken = null;
 const pool = new Map();
 let seq = 0;
 
+// ---- Jitter / backoff configuration ----
+const JITTER = {
+    enabled: true,
+    minMs: 100,            // e.g., 50–300ms smooths spikes without much latency
+    maxMs: 500,
+    applyProbability: 1.0, // 1.0 = always apply; lower if you want probabilistic jitter
+    skipDelete: true,       // don’t delay DELETE to keep removals fast
+    onErrorExtraMs: [150, 600], // random backoff window on errors
+};
+
+/** Sleep helper */
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// Random “salt” so different workers distribute differently
+const workerSalt = Math.floor(Math.random() * 1e9);
+
+/** Random integer in [min, max] */
+const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+function computeJitterMs(payload) {
+    if (!JITTER.enabled) return 0;
+    if (JITTER.skipDelete && payload?.entity_operator === "DELETE") return 0;
+    if (Math.random() > (JITTER.applyProbability ?? 1)) return 0;
+    return randInt(JITTER.minMs, JITTER.maxMs);
+}
+
 // Helper: coalescing precedence
 function mergePayload(oldEntry, newPayload) {
     if (!oldEntry) return newPayload; // nothing to merge
@@ -126,6 +152,7 @@ async function runBatch(batch) {
             currentAccessToken,
             payload
         );
+
         lastPayload = payload;
 
         if (!s) {
@@ -134,6 +161,12 @@ async function runBatch(batch) {
         }
 
         try {
+            // ---- JITTER BEFORE TOUCHING BACKEND/STATE ----
+            // Apply a small randomized delay to desynchronize bursts across clients.
+            const jitterMs = computeJitterMs(payload);
+            console.log(`"synch worker: jitterMs ${jitterMs}`);
+            if (jitterMs) await sleep(jitterMs);
+
             const res = await s.process(payload);
             const {
                 summit:        resSummit,
