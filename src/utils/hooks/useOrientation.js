@@ -1,20 +1,29 @@
 import { useState, useEffect } from "react";
-import useEventListener from "./useEventListener";
 
 const useOrientation = () => {
-  const [isPortrait, setIsPortrait] = useState(false);
-
-  const checkOrientation = () => {
-    const portrait = window.innerHeight > window.innerWidth;
-    setIsPortrait(portrait);
-  };
+  const getOrientation = () => window.innerHeight > window.innerWidth;
+  
+  const [isPortrait, setIsPortrait] = useState(getOrientation());
 
   useEffect(() => {
-    checkOrientation();
-  }, []);
+    const checkOrientation = () => {
+      const portrait = getOrientation();
+      setIsPortrait(portrait);
+    };
 
-  useEventListener("resize", checkOrientation);
-  useEventListener("orientationchange", checkOrientation);
+    // Check on mount
+    checkOrientation();
+
+    // Add event listeners
+    window.addEventListener("resize", checkOrientation);
+    window.addEventListener("orientationchange", checkOrientation);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener("resize", checkOrientation);
+      window.removeEventListener("orientationchange", checkOrientation);
+    };
+  }, []);
 
   return { isPortrait, isLandscape: !isPortrait };
 };
