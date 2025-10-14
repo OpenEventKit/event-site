@@ -20,12 +20,12 @@ const OverflowPlayerPage = ({
                                 error
                             }) => {
     const params = new URLSearchParams(location.search);
-    const overflowStreamKey = params.get("k");
     const { t } = useTranslation();
     const [showTitleFlash, setShowTitleFlash] = useState(false);
     const [videoError, setVideoError] = useState(false);
     const { isPortrait } = useOrientation();
     const latestEventIdRef = useRef(null);
+    const [overflowStreamKey, setOverflowStreamKey] = useState(params.get("k"));
 
     useEffect(() => {
         if (event?.id) {
