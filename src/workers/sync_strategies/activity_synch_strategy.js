@@ -155,11 +155,6 @@ class ActivitySynchStrategy extends AbstractSynchStrategy{
             case 'INSERT':
             case 'UPDATE':{
                 let entity = await fetchEventById(this.summit.id, entity_id, this.accessToken);
-                if(this.accessToken) {
-                    const streaming_info = await fetchStreamingInfoByEventId(this.summit.id, entity_id, this.accessToken);
-                    if(streaming_info) entity = {...entity, ...streaming_info};
-                }
-
                 if(!entity){
                     // was deleted ( un - published)
                     return this._handleDeleteOrUnpublish(entity_id, payload, eventsData);
