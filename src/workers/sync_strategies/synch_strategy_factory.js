@@ -18,13 +18,13 @@ class SynchStrategyFactory {
      * @param allIDXSpeakers
      * @param accessToken
      * @param payload
-     * @param fetchStreamingInfo
+     * @param currentLocation
      * @returns {null|*}
      */
-    static build(summit, allEvents, allIDXEvents, allSpeakers, allIDXSpeakers, accessToken, payload, fetchStreamingInfo) {
+    static build(summit, allEvents, allIDXEvents, allSpeakers, allIDXSpeakers, accessToken, payload, currentLocation) {
         const {entity_type} = payload;
         if (isSummitEventDataUpdate(entity_type)) {
-            return new ActivitySynchStrategy(summit, allEvents, allIDXEvents, allSpeakers, allIDXSpeakers, accessToken, fetchStreamingInfo);
+            return new ActivitySynchStrategy(summit, allEvents, allIDXEvents, allSpeakers, allIDXSpeakers, accessToken, currentLocation);
         }
         if (isSummitEventTypeDataUpdate(entity_type)) {
             return new ActivityTypeSynchStrategy(summit, allEvents, allIDXEvents, allSpeakers, allIDXSpeakers, accessToken);

@@ -10,16 +10,14 @@ class AbstractSynchStrategy {
      * @param allSpeakers
      * @param allIDXSpeakers
      * @param accessToken
-     * @param fetchStreamingInfo
      */
-    constructor(summit, allEvents, allIDXEvents, allSpeakers, allIDXSpeakers, accessToken, fetchStreamingInfo = false) {
+    constructor(summit, allEvents, allIDXEvents, allSpeakers, allIDXSpeakers, accessToken) {
         this.summit = summit;
         this.allEvents = allEvents;
         this.allIDXEvents = allIDXEvents;
         this.allSpeakers = allSpeakers;
         this.allIDXSpeakers = allIDXSpeakers;
         this.accessToken = accessToken;
-        this.fetchStreamingInfo = fetchStreamingInfo;
     }
 
     async process(payload){
