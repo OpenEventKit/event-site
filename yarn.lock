@@ -2373,7 +2373,7 @@
   dependencies:
     "@babel/runtime" "^7.23.9"
 
-"@mui/material@^5.14.18", "@mui/material@^5.15.20":
+"@mui/material@^5.15.20":
   version "5.18.0"
   resolved "https://registry.yarnpkg.com/@mui/material/-/material-5.18.0.tgz#71e72d52338252edc6f8d9461e04fdf0d61905cd"
   integrity sha512-bbH/HaJZpFtXGvWg3TsBWG4eyt3gah3E7nCNU8GLyRjVoWcA91Vm/T+sjHfUcwgJSw9iLtucfHBoq+qW/T30aA==
@@ -15465,10 +15465,10 @@ open@^8.4.0:
     is-docker "^2.1.1"
     is-wsl "^2.2.0"
 
-openstack-uicore-foundation@4.2.8:
-  version "4.2.8"
-  resolved "https://registry.yarnpkg.com/openstack-uicore-foundation/-/openstack-uicore-foundation-4.2.8.tgz#0ad8d89141cfbbc87fc57a3ab436f2a2beb21dd7"
-  integrity sha512-YTPlnWYkGUPyWunFyqLbkrMP6OaxMf0Fl9sQMTM4uNKOnIyB0y4LzeO6VXM0gO9whBcvRcG6kbsfOJsC8eEFtA==
+openstack-uicore-foundation@4.2.14:
+  version "4.2.14"
+  resolved "https://registry.yarnpkg.com/openstack-uicore-foundation/-/openstack-uicore-foundation-4.2.14.tgz#d759a6358ede869f356fdf387065632b341bcf6a"
+  integrity sha512-ECwPZ7QOUrhW/fKbyWUfsYx/x207WPuLx9VfDLS2i46p3CoD+z6XT2a4AoUzYBoOa9iRdhXAtJUsymN8sGIzYA==
 
 opentracing@^0.14.7:
   version "0.14.7"
@@ -19792,15 +19792,16 @@ sudo-prompt@^8.2.0:
   resolved "https://registry.yarnpkg.com/sudo-prompt/-/sudo-prompt-8.2.5.tgz#cc5ef3769a134bb94b24a631cc09628d4d53603e"
   integrity sha512-rlBo3HU/1zAJUrkY6jNxDOC9eVYliG6nS4JA8u8KAshITd07tafMc/Br7xQwCSseXwJ2iCcHCE8SNWX3q8Z+kw==
 
-summit-registration-lite@6.0.5-beta.1:
-  version "6.0.5-beta.1"
-  resolved "https://registry.yarnpkg.com/summit-registration-lite/-/summit-registration-lite-6.0.5-beta.1.tgz#1e4f404e8c17073426832fd1e339396298ac89b7"
-  integrity sha512-QwHznbU+bS1Icfv9n2q071ZUUGHumqkFyn2h4z2pu2Hu2OEOy7HMocJaIj+EySqjbcXgWep0a6C/CC49iI2xNQ==
+summit-registration-lite@6.0.5:
+  version "6.0.5"
+  resolved "https://registry.yarnpkg.com/summit-registration-lite/-/summit-registration-lite-6.0.5.tgz#7694f0657c18419e347ac4b796d62798a28debae"
+  integrity sha512-SkC8ha1kYZlNHYsXwLzdKYica8ZdIVq1eOb02OKcPVEHfxUPhc9hZj91F/zAUQSf/Y2UvKJedYfuGwGSUguhTA==
   dependencies:
-    "@emotion/react" "^11.11.1"
-    "@emotion/styled" "^11.11.0"
+    "@emotion/react" "^11.11.4"
+    "@emotion/styled" "^11.11.5"
     "@mui/icons-material" "^5.14.18"
-    "@mui/material" "^5.14.18"
+    "@mui/material" "^5.15.20"
+    "@mui/utils" "^5.16.8"
     "@react-pdf/renderer" "^3.1.12"
     "@sentry/react" "^8.35.0"
     "@stripe/react-stripe-js" "^3.6.0"
