@@ -10,6 +10,8 @@ import {RELOAD_SCHED_DATA, RELOAD_USER_PROFILE} from "./schedule-actions";
 
 import {RESET_STATE, SYNC_DATA, GET_THIRD_PARTY_PROVIDERS, UPDATE_LAST_CHECK_FOR_NOVELTIES } from './base-actions-definitions';
 
+import { getEnvVariable, TENANT_ID } from '../utils/envVariables';
+
 export const resetState = () => (dispatch) => {
   dispatch(createAction(RESET_STATE)({}));
 };
@@ -58,7 +60,7 @@ export const getThirdPartyProviders = () => (dispatch) => {
   return getRequest(
     null,
     createAction(GET_THIRD_PARTY_PROVIDERS),
-    `${window.IDP_BASE_URL}/oauth2/.well-known/openid-configuration`,
+    `${window.IDP_BASE_URL}/oauth2/.well-known/openid-configuration${getEnvVariable(TENANT_ID) ? `?tenant=${getEnvVariable(TENANT_ID)}` : ""}`,
     customErrorHandler
   )({})(dispatch).then(payload => {
     dispatch(stopLoading());
