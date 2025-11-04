@@ -77,6 +77,10 @@ export const getEnvVariable = (name) => {
   return res;
 }
 
+export const getEnvVariableAsQueryParam = (env, param) => {
+  return `${getEnvVariable(env) ? `?${param}=${getEnvVariable(env)}` : ""}`;
+}
+
 if (typeof window === "object") {
   window.SITE_URL = processEnv[SITE_URL];
   window.OAUTH2_FLOW = processEnv[OAUTH2_FLOW];

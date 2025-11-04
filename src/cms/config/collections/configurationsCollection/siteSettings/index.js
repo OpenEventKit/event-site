@@ -17,7 +17,7 @@ import {
 } from "@utils/filePath";
 
 import {
-  getEnvVariable,
+  getEnvVariableAsQueryParam,
   IDP_BASE_URL,
   TENANT_ID
 } from "@utils/envVariables";
@@ -222,7 +222,7 @@ const siteSettings = {
           widget: "identityProviderParam",
           label: "Provider Param",
           name: "providerParam",
-          endpoint: `${getEnvVariable(IDP_BASE_URL)}/oauth2/.well-known/openid-configuration${getEnvVariable(TENANT_ID) ? `?tenant=${getEnvVariable(TENANT_ID)}` : ""}`,
+          endpoint: `${getEnvVariable(IDP_BASE_URL)}/oauth2/.well-known/openid-configuration${getEnvVariableAsQueryParam(TENANT_ID, "tenant")}`,
           required: false
         },
         imageField({
