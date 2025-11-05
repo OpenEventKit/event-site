@@ -62,6 +62,11 @@ const withRealTimeUpdates = WrappedComponent => {
             );
         }
 
+        getCurrentLocation() {
+            const { location } = this.props;
+            return location?.pathname || '';
+        }
+
         /**
          *
          * @param updates
@@ -92,6 +97,7 @@ const withRealTimeUpdates = WrappedComponent => {
                 allIDXEvents: JSON.stringify(allIDXEvents),
                 allSpeakers: JSON.stringify(allSpeakers),
                 allIDXSpeakers: JSON.stringify(allIDXSpeakers),
+                currentLocation: this.getCurrentLocation()
             });
 
             this._worker.onmessage = ({

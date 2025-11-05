@@ -8,6 +8,7 @@ let localAllIDXEvents = null;
 let localAllSpeakers = null;
 let localAllIDXSpeakers = null;
 let currentAccessToken = null;
+let currentLocation = '';
 
 // Dedup/backpressure pool: key -> { payload, seq }
 const pool = new Map();
@@ -68,6 +69,7 @@ self.onmessage = (e) => {
         allIDXEvents,
         allSpeakers,
         allIDXSpeakers,
+        currentLocation: location
     } = e.data || {};
 
     // Initialize persistent state once
@@ -76,6 +78,8 @@ self.onmessage = (e) => {
     if (localAllIDXEvents === null)localAllIDXEvents = maybeParseJSON(allIDXEvents);
     if (localAllSpeakers === null) localAllSpeakers  = maybeParseJSON(allSpeakers);
     if (localAllIDXSpeakers === null) localAllIDXSpeakers = maybeParseJSON(allIDXSpeakers);
+
+    currentLocation = location ?? currentLocation;
 
     currentAccessToken = accessToken ?? currentAccessToken;
 
@@ -150,7 +154,8 @@ async function runBatch(batch) {
             localAllSpeakers,
             localAllIDXSpeakers,
             currentAccessToken,
-            payload
+            payload,
+            currentLocation
         );
 
         lastPayload = payload;

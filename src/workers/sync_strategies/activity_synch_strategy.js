@@ -104,6 +104,13 @@ class ActivitySynchStrategy extends AbstractSynchStrategy{
         if (entity?.moderator) this._upsertSpeaker(entity.moderator);
     }
 
+    /** only fetch streaming info based on event detail page */
+    _shouldFetchStreamingInfo(currentLocation) {
+        if (!currentLocation) return false;
+        const streamingPages = ['/a/event/'];
+        return streamingPages.some(page => currentLocation.includes(page));
+    }
+
     async _handleUpsert(entity, payload, eventsData) {
         console.log("ActivitySynchStrategy::process upsert", { id: entity?.id });
 
@@ -155,6 +162,11 @@ class ActivitySynchStrategy extends AbstractSynchStrategy{
             case 'INSERT':
             case 'UPDATE':{
                 let entity = await fetchEventById(this.summit.id, entity_id, this.accessToken);
+                if(this.accessToken && this._shouldFetchStreamingInfo(this.currentLocation)) {
+                    const streaming_info = await fetchStreamingInfoByEventId(this.summit.id, entity_id, this.accessToken);
+                    if(streaming_info) entity = {...entity, ...streaming_info};
+                }
+
                 if(!entity){
                     // was deleted ( un - published)
                     return this._handleDeleteOrUnpublish(entity_id, payload, eventsData);
