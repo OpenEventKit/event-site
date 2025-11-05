@@ -17,8 +17,9 @@ import {
 } from "@utils/filePath";
 
 import {
-  getEnvVariable,
-  IDP_BASE_URL
+  getEnvVariableAsQueryParam,
+  IDP_BASE_URL,
+  TENANT_ID
 } from "@utils/envVariables";
 
 import { mapObjectToSelectOptions } from "../../../utils";
@@ -221,7 +222,7 @@ const siteSettings = {
           widget: "identityProviderParam",
           label: "Provider Param",
           name: "providerParam",
-          endpoint: `${getEnvVariable(IDP_BASE_URL)}/oauth2/.well-known/openid-configuration`,
+          endpoint: `${getEnvVariable(IDP_BASE_URL)}/oauth2/.well-known/openid-configuration${getEnvVariableAsQueryParam(TENANT_ID, "tenant")}`,
           required: false
         },
         imageField({
