@@ -2,6 +2,7 @@ import Swal from "sweetalert2";
 import { doLogin } from 'openstack-uicore-foundation/lib/security/methods'
 import URI from "urijs"
 import { savePendingAction } from "./schedule";
+import { getEnvVariable, TENANT_ID } from "@utils/envVariables";
 
 export const alertPopup = (title, html, confirmLabel, confirmAction, cancelLabel = 'Dismiss') => {
     Swal.fire({
@@ -38,7 +39,7 @@ export const needsLogin = (action, msg = null) => {
         let backUrl = window?.location?.href ?? '/a';
         let encodedBackUrl = URI.encode(backUrl);
         if (action) savePendingAction(action);
-        return doLogin(encodedBackUrl);
+        return doLogin(encodedBackUrl, null, null, null, null, getEnvVariable(TENANT_ID));
     }
 
     alertPopup('Login', msg || defaultMessage, 'Login', login, 'OK');

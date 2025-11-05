@@ -24,7 +24,7 @@ import "summit-registration-lite/dist/index.css";
 import useSiteSettings from "@utils/useSiteSettings";
 import usePaymentSettings from "@utils/usePaymentSettings";
 import useMarketingSettings, { MARKETING_SETTINGS_KEYS }  from "@utils/useMarketingSettings";
-import { getEnvVariable, SUMMIT_API_BASE_URL, OAUTH2_CLIENT_ID, REGISTRATION_BASE_URL, SUPPORT_EMAIL } from "@utils/envVariables";
+import { getEnvVariable, SUMMIT_API_BASE_URL, OAUTH2_CLIENT_ID, REGISTRATION_BASE_URL, SUPPORT_EMAIL, TENANT_ID } from "@utils/envVariables";
 import { userHasAccessLevel, VIRTUAL_ACCESS_LEVEL } from "@utils/authorizedGroups";
 import { validateIdentityProviderButtons } from "@utils/loginUtils";
 import { triggerTagManagerTrackEvent } from "@utils/eventTriggers";
@@ -83,7 +83,7 @@ const RegistrationLiteComponent = ({
     }
 
     const onClickLogin = (provider) => {
-        doLogin(getBackURL(), provider);
+        doLogin(getBackURL(), provider, null, null, null, getEnvVariable(TENANT_ID));
     };
 
     const handleCompanyError = () => {

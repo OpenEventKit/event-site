@@ -20,6 +20,7 @@ import { getDefaultLocation, validateIdentityProviderButtons } from "@utils/logi
 import { userHasAccessLevel, VIRTUAL_ACCESS_LEVEL } from "@utils/authorizedGroups";
 import useSiteSettings from "@utils/useSiteSettings";
 import { PHASES } from "@utils/phasesUtils";
+import { getEnvVariable, TENANT_ID } from "@utils/envVariables";
 
 import styles from "../styles/auth-component.module.scss";
 
@@ -81,7 +82,7 @@ const AuthComponent = ({
     };
 
     const onClickLogin = (provider) => {
-        doLogin(getBackURL(), provider, null, initialEmailValue || null);
+        doLogin(getBackURL(), provider, null, initialEmailValue || null, null, getEnvVariable(TENANT_ID));
     };
 
     const handleClosePopup = () => {

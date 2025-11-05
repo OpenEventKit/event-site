@@ -7,6 +7,7 @@ import { handleResetReducers } from "../actions/event-actions";
 import Interstitial from "../components/Interstitial";
 import { userHasAccessLevel, VIRTUAL_ACCESS_LEVEL } from "@utils/authorizedGroups";
 import { getDefaultLocation } from "@utils/loginUtils";
+import { getEnvVariable, TENANT_ID } from "@utils/envVariables";
 
 export const TokenExpirePageTemplate = class extends React.Component {
 
@@ -27,7 +28,7 @@ export const TokenExpirePageTemplate = class extends React.Component {
 
       setTimeout(() => {
         handleResetReducers();
-        doLogin(backUrl);
+        doLogin(backUrl, null, null, null, null, getEnvVariable(TENANT_ID));
       }, 1500);
     }
   }
