@@ -13,6 +13,7 @@
 import URI from "urijs"
 import React from 'react'
 import {connect} from "react-redux";
+import { getEnvVariable, TENANT_ID } from "@utils/envVariables";
 
 /**
  * class LogInCallbackRoute
@@ -47,7 +48,7 @@ class LogInCallbackRoute extends React.Component {
             otpLoginHint = encodeURI(query["otp_login_hint"]);
         }
 
-        doLogin(backUrl, loginHint, otpLoginHint);
+        doLogin(backUrl, loginHint, otpLoginHint, null, null, getEnvVariable(TENANT_ID));
     }
 
 

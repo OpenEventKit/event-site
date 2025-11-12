@@ -17,6 +17,7 @@ import {
 } from "@utils/filePath";
 
 import {
+  getEnvVariable,
   getEnvVariableAsQueryParam,
   IDP_BASE_URL,
   TENANT_ID
