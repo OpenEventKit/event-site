@@ -4184,11 +4184,6 @@
   dependencies:
     "@types/node" "*"
 
-"@types/is-hotkey@^0.1.1":
-  version "0.1.10"
-  resolved "https://registry.yarnpkg.com/@types/is-hotkey/-/is-hotkey-0.1.10.tgz#cf440fab9bf75ffba4e1a16e8df28938de0778c9"
-  integrity sha512-RvC8KMw5BCac1NvRRyaHgMMEtBaZ6wh0pyPTBu7izn4Sj/AX9Y4aXU5c7rX8PnM/knsuUpC1IeoBkANtxBypsQ==
-
 "@types/istanbul-lib-coverage@*", "@types/istanbul-lib-coverage@^2.0.0", "@types/istanbul-lib-coverage@^2.0.1":
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/@types/istanbul-lib-coverage/-/istanbul-lib-coverage-2.0.6.tgz#7739c232a1fee9b4d3ce8985f314c0c6d33549d7"
@@ -4253,7 +4248,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/lodash@^4.14.149", "@types/lodash@^4.14.175", "@types/lodash@^4.14.92":
+"@types/lodash@^4.14.175", "@types/lodash@^4.14.92":
   version "4.17.20"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.17.20.tgz#1ca77361d7363432d29f5e55950d9ec1e1c6ea93"
   integrity sha512-H3MHACvFUEiujabxhaI/ImO6gUrd8oOurg7LQtS7mbwIXA/cUqWrvBsaeJ23aZEPk1TAYkurjfMbSELfoCXlGA==
@@ -4917,11 +4912,6 @@ ajv-errors@^1.0.0:
   resolved "https://registry.yarnpkg.com/ajv-errors/-/ajv-errors-1.0.1.tgz#f35986aceb91afadec4102fbd85014950cefa64d"
   integrity sha512-DCRfO/4nQ+89p/RK43i8Ezd41EqdGIU4ld7nGF8OQ14oc/we5rEntLCUa7+jrn3nn83BosfwZA0wb4pon2o8iQ==
 
-ajv-errors@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/ajv-errors/-/ajv-errors-3.0.0.tgz#e54f299f3a3d30fe144161e5f0d8d51196c527bc"
-  integrity sha512-V3wD15YHfHz6y0KdhYFjyy9vWtEVALT9UrxfN3zqlI6dMioHnJrqOYfyPKol3oqrnCM9uwkcdCwkJ0WUcbLMTQ==
-
 ajv-formats@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/ajv-formats/-/ajv-formats-2.1.1.tgz#6e669400659eb74973bbf2e33327180a0996b520"
@@ -4951,7 +4941,7 @@ ajv@^6.1.0, ajv@^6.10.0, ajv@^6.12.2, ajv@^6.12.4, ajv@^6.12.5:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-ajv@^8.0.0, ajv@^8.0.1, ajv@^8.17.1, ajv@^8.9.0:
+ajv@^8.0.0, ajv@^8.0.1, ajv@^8.9.0:
   version "8.17.1"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.17.1.tgz#37d9a5c776af6bc92d7f4f9510eba4c0a60d11a6"
   integrity sha512-B/gBuNg5SiMTrPkC+A2+cW0RszwxYmn6VYxB/inlBStS5nx6xHIt/ehKRhIMhqusl7a8LjQoZnjCs5vhwxOQ1g==
@@ -6597,10 +6587,10 @@ compression@^1.7.4:
     safe-buffer "5.2.1"
     vary "~1.1.2"
 
-compute-scroll-into-view@^1.0.20:
-  version "1.0.20"
-  resolved "https://registry.yarnpkg.com/compute-scroll-into-view/-/compute-scroll-into-view-1.0.20.tgz#1768b5522d1172754f5d0c9b02de3af6be506a43"
-  integrity sha512-UCB0ioiyj8CRjtrvaceBLqqhZCVP+1B8+NWQhmdsm0VXOJtobBCf1dBQmebCCo34qZmUwZfIH2MZLqNHazrfjg==
+compute-scroll-into-view@^3.0.2:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/compute-scroll-into-view/-/compute-scroll-into-view-3.1.1.tgz#02c3386ec531fb6a9881967388e53e8564f3e9aa"
+  integrity sha512-VRhuHOLoKYOy4UbilLbUzbYg93XLjv2PncJC50EuTWPA3gaja1UjBsUP/D/9/juV3vQFr6XBEzn9KCAHdUvOHw==
 
 concat-map@0.0.1:
   version "0.0.1"
@@ -7257,57 +7247,53 @@ decamelize@^1.2.0:
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
   integrity sha512-z2S+W9X73hAUUki+N+9Za2lBlun89zigOyGrsax+KUQ6wKW4ZoWpEYBkGhQjwAjjDCkWxhY0VKEhk8wzY7F5cA==
 
-decap-cms-app@^3.1.10:
-  version "3.8.3"
-  resolved "https://registry.yarnpkg.com/decap-cms-app/-/decap-cms-app-3.8.3.tgz#5644bf727bdbb174818abacad366ede196cb16cf"
-  integrity sha512-89Ia2gN4blEsQjZTDSI+VbQTAN8B6qa8S+2ffzDv48/poeZDyF94lLn/akfckZVSnmSIur4TTP14BRiiEjVUVw==
+decap-cms-app@3.6.4:
+  version "3.6.4"
+  resolved "https://registry.yarnpkg.com/decap-cms-app/-/decap-cms-app-3.6.4.tgz#61f954a8dc4ecc731983de6ae8b1edb77c738a8b"
+  integrity sha512-oDiJfs06PIJB9lcKvTknlbrZd51Ka5S6AokrRfAwx+EEdZVzy29gN53GJ5z0fJA5s4WmidFJl2y7hLyYGgzl1g==
   dependencies:
     "@emotion/react" "^11.11.1"
     "@emotion/styled" "^11.11.0"
-    ajv "^8.17.1"
-    ajv-errors "^3.0.0"
-    ajv-keywords "^5.1.0"
     codemirror "^5.46.0"
     dayjs "^1.11.10"
-    decap-cms-backend-aws-cognito-github-proxy "^3.4.1"
-    decap-cms-backend-azure "^3.3.0"
-    decap-cms-backend-bitbucket "^3.3.0"
-    decap-cms-backend-git-gateway "^3.4.1"
-    decap-cms-backend-gitea "^3.3.0"
-    decap-cms-backend-github "^3.4.0"
-    decap-cms-backend-gitlab "^3.4.0"
-    decap-cms-backend-proxy "^3.3.0"
-    decap-cms-backend-test "^3.2.1"
-    decap-cms-core "^3.8.1"
-    decap-cms-editor-component-image "^3.2.0"
-    decap-cms-lib-auth "^3.0.6"
-    decap-cms-lib-util "^3.3.1"
-    decap-cms-lib-widgets "^3.2.1"
-    decap-cms-locales "^3.4.0"
-    decap-cms-ui-auth "^3.2.3"
-    decap-cms-ui-default "^3.3.0"
-    decap-cms-widget-boolean "^3.2.0"
-    decap-cms-widget-code "^3.2.0"
-    decap-cms-widget-colorstring "^3.2.0"
-    decap-cms-widget-datetime "^3.4.0"
-    decap-cms-widget-file "^3.2.0"
-    decap-cms-widget-image "^3.2.0"
-    decap-cms-widget-list "^3.4.0"
-    decap-cms-widget-map "^3.2.0"
-    decap-cms-widget-markdown "^3.5.0"
-    decap-cms-widget-number "^3.2.0"
-    decap-cms-widget-object "^3.4.0"
-    decap-cms-widget-relation "^3.5.2"
-    decap-cms-widget-select "^3.3.0"
-    decap-cms-widget-string "^3.2.0"
-    decap-cms-widget-text "^3.2.0"
+    decap-cms-backend-aws-cognito-github-proxy "^3.2.2"
+    decap-cms-backend-azure "^3.1.3"
+    decap-cms-backend-bitbucket "^3.1.4"
+    decap-cms-backend-git-gateway "^3.2.2"
+    decap-cms-backend-gitea "^3.1.5"
+    decap-cms-backend-github "^3.2.2"
+    decap-cms-backend-gitlab "^3.2.2"
+    decap-cms-backend-proxy "^3.1.4"
+    decap-cms-backend-test "^3.1.3"
+    decap-cms-core "^3.6.3"
+    decap-cms-editor-component-image "^3.1.3"
+    decap-cms-lib-auth "^3.0.5"
+    decap-cms-lib-util "^3.2.0"
+    decap-cms-lib-widgets "^3.1.0"
+    decap-cms-locales "^3.3.0"
+    decap-cms-ui-default "^3.1.4"
+    decap-cms-widget-boolean "^3.1.3"
+    decap-cms-widget-code "^3.1.4"
+    decap-cms-widget-colorstring "^3.1.3"
+    decap-cms-widget-datetime "^3.2.3"
+    decap-cms-widget-file "^3.1.3"
+    decap-cms-widget-image "^3.1.3"
+    decap-cms-widget-list "^3.3.0"
+    decap-cms-widget-map "^3.1.4"
+    decap-cms-widget-markdown "^3.3.0"
+    decap-cms-widget-number "^3.1.3"
+    decap-cms-widget-object "^3.3.1"
+    decap-cms-widget-relation "^3.3.2"
+    decap-cms-widget-select "^3.2.2"
+    decap-cms-widget-string "^3.1.3"
+    decap-cms-widget-text "^3.1.3"
     immutable "^3.7.6"
     lodash "^4.17.11"
     prop-types "^15.7.2"
     react-immutable-proptypes "^2.1.0"
     uuid "^8.3.2"
 
-decap-cms-backend-aws-cognito-github-proxy@^3.4.1:
+decap-cms-backend-aws-cognito-github-proxy@^3.2.2:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/decap-cms-backend-aws-cognito-github-proxy/-/decap-cms-backend-aws-cognito-github-proxy-3.4.1.tgz#438ab61b35a3644647e27a4d8ac29b40a9394918"
   integrity sha512-TGWxXBkGyQmHp4KT8IwUXjiegUYvFvnZaiZ8QeB+MA962HvvCOX1/4W8i5Ce6qlTx0bqwPAqQ8b3tKCpPUuPbQ==
@@ -7322,7 +7308,7 @@ decap-cms-backend-aws-cognito-github-proxy@^3.4.1:
     js-base64 "^3.0.0"
     semaphore "^1.1.0"
 
-decap-cms-backend-azure@^3.3.0:
+decap-cms-backend-azure@^3.1.3:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/decap-cms-backend-azure/-/decap-cms-backend-azure-3.3.0.tgz#d3c7c3f9bf792c4cc83de41de11970eed9917793"
   integrity sha512-M7dVYQBDnuQk2KSB617Au1xCFfwU359US6EqkHPh8KW/JNnyYUEn2a7x30dGxedjHdxEVvQtESxe54CEV09lvQ==
@@ -7331,7 +7317,7 @@ decap-cms-backend-azure@^3.3.0:
     path-browserify "^1.0.1"
     semaphore "^1.1.0"
 
-decap-cms-backend-bitbucket@^3.3.0:
+decap-cms-backend-bitbucket@^3.1.4:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/decap-cms-backend-bitbucket/-/decap-cms-backend-bitbucket-3.3.0.tgz#570c75e5ea05e29aace6322d668d00501044ce20"
   integrity sha512-MxxLV/FpOw4XYpM626NK404ZSx2IQ5ZPfNnMZthpl6DIgIbQeiNHsJca5rAkgwlqSz3UmJmjf7vD14VIHhzZqQ==
@@ -7343,7 +7329,7 @@ decap-cms-backend-bitbucket@^3.3.0:
     semaphore "^1.1.0"
     what-the-diff "^0.6.0"
 
-decap-cms-backend-git-gateway@^3.4.1:
+decap-cms-backend-git-gateway@^3.2.2:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/decap-cms-backend-git-gateway/-/decap-cms-backend-git-gateway-3.4.1.tgz#9e5f51c3ad80d34b8011828b37542efd03749d7e"
   integrity sha512-+6AUjThs6Py6rVCul62KPhvp3GkAixdkIIyGJ+GzwcBK5oPwGeJIz3yZd1qZ8afMWxatUrb/GhSnWKIRmz5ezw==
@@ -7353,7 +7339,7 @@ decap-cms-backend-git-gateway@^3.4.1:
     jwt-decode "^3.0.0"
     minimatch "^7.0.0"
 
-decap-cms-backend-gitea@^3.3.0:
+decap-cms-backend-gitea@^3.1.5:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/decap-cms-backend-gitea/-/decap-cms-backend-gitea-3.3.0.tgz#1ab635d58e94b60837a593b5fec1843df7b0b55e"
   integrity sha512-AABTNA8fKznYwchfCvnh+n0yTVDSzz5Z+d2HgY+BFSITjg1fo61iq75/qCuTZTEDz2Y1jrWDx6GFst1YbYO9PA==
@@ -7361,7 +7347,7 @@ decap-cms-backend-gitea@^3.3.0:
     js-base64 "^3.0.0"
     semaphore "^1.1.0"
 
-decap-cms-backend-github@^3.4.0:
+decap-cms-backend-github@^3.2.2:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/decap-cms-backend-github/-/decap-cms-backend-github-3.4.0.tgz#3f0f86c3636e4cf8145799fc50b150bf0ccb5025"
   integrity sha512-vyO6+wbTbGsl43nAULdonrWpcUAt4CGXucgthu2EllrxBle1rRpxEwCeIlChqo4P/gP5gwz1LGuk5f5DAF46Dg==
@@ -7377,7 +7363,7 @@ decap-cms-backend-github@^3.4.0:
     path-browserify "^1.0.1"
     semaphore "^1.1.0"
 
-decap-cms-backend-gitlab@^3.4.0:
+decap-cms-backend-gitlab@^3.2.2:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/decap-cms-backend-gitlab/-/decap-cms-backend-gitlab-3.4.0.tgz#a181adc098a73ebdbdffdfe79273583da769b9da"
   integrity sha512-N4Vhl//tNcvznnEi4PaDUu6M56eI2vQFReqjek5XiUZk/7MAJHWDA5eFovI+B5yYedSTmnCzoWg9jyH5RgXMuA==
@@ -7390,22 +7376,22 @@ decap-cms-backend-gitlab@^3.4.0:
     path-browserify "^1.0.1"
     semaphore "^1.1.0"
 
-decap-cms-backend-proxy@^3.3.0:
+decap-cms-backend-proxy@^3.1.4:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/decap-cms-backend-proxy/-/decap-cms-backend-proxy-3.3.0.tgz#dc60b6addfba36fb73bccc7a6c30e0905fde1084"
   integrity sha512-Tq+thq5JdjLEHr3mprI7tAmVIy+nIftL2Zqt+ndNo/QQX7LvBrottqXRZ6pg2HNQLl5tUQ8qozBTNpeLYkxGlQ==
 
-decap-cms-backend-test@^3.2.1:
+decap-cms-backend-test@^3.1.3:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/decap-cms-backend-test/-/decap-cms-backend-test-3.2.1.tgz#d73bf6f7890d8f893592a014e32380a493449cfd"
   integrity sha512-ZsUnZ1wB0NNIFRDcU9GJiR3hvx40xHZVp978HVasEXlzleG9VgBfWODgagWnX5NFyl9m4NUCQ2Yx/QaP+fBo0A==
   dependencies:
     path-browserify "^1.0.1"
 
-decap-cms-core@^3.8.1:
-  version "3.8.1"
-  resolved "https://registry.yarnpkg.com/decap-cms-core/-/decap-cms-core-3.8.1.tgz#a2a21044cce0b0ec0f6faf99aa0e673e66cff2f6"
-  integrity sha512-CLlVytv3cHGlJWYGszshqsW19FeyaFA0LLLY/oWyYipVqtPUpNykdI+8iPTlh9IqGlcLEwqrnMbPvd15UZ4WBQ==
+decap-cms-core@^3.6.3:
+  version "3.9.0"
+  resolved "https://registry.yarnpkg.com/decap-cms-core/-/decap-cms-core-3.9.0.tgz#80eee64c7d7dd7f5698439f446d6d55eec1efe12"
+  integrity sha512-845bPaXMlKWxZgYL1zWKDkemAdWwnwqk3BYDu62SJYAS7eH47+J/vP5GL6lmQnEKql7BYCWEbAMQLIssYoTShQ==
   dependencies:
     "@iarna/toml" "2.2.5"
     "@reduxjs/toolkit" "^1.9.1"
@@ -7458,17 +7444,17 @@ decap-cms-core@^3.8.1:
     what-input "^5.1.4"
     yaml "^1.8.3"
 
-decap-cms-editor-component-image@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/decap-cms-editor-component-image/-/decap-cms-editor-component-image-3.2.0.tgz#c351c383ebd120d8607513a7d9bac916a41b5866"
-  integrity sha512-rMNBxgSGlTKn0GXOIN1NdOPSFv3+E7QeusJkb7PW9N6b8J4XZepouZDgOn1i6QGjAMH7eKCRRc7V64Ujr1lKpw==
+decap-cms-editor-component-image@^3.1.3:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/decap-cms-editor-component-image/-/decap-cms-editor-component-image-3.2.1.tgz#f2a09ff25edee1a2bed0c3894fb49eebeea8ce4e"
+  integrity sha512-uFnPqLRaqL7FmRupKvMtL9oaE6d6gTuutcIJvuRkNmmToP/PeuFrpEIOBThyPxzjgX4AJm5OkdApiCeC1d0bzQ==
 
-decap-cms-lib-auth@^3.0.6:
+decap-cms-lib-auth@^3.0.5:
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/decap-cms-lib-auth/-/decap-cms-lib-auth-3.0.6.tgz#aa694f95d2e8f0836f7df17114467719017cd02a"
   integrity sha512-AhssFTm/DOZFHpoFv5eoXTF4P2NvFeQDQ0aFsVxOwz3hGnx/uZ/PtAqJkkz1zdRp4bMB8BM6Eh+lkVB2RQhSww==
 
-decap-cms-lib-util@^3.3.1:
+decap-cms-lib-util@^3.2.0:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/decap-cms-lib-util/-/decap-cms-lib-util-3.3.1.tgz#1afca0f88fc9fdc99fbdea494fd44d0538058301"
   integrity sha512-3hD8aHlh8tEG5qXmfonKBnn/k/YDaCEXqzu62MmOhsOdG/2Uyqs4ajPfm/hrsK9c/ZcDG75gdvwwi1WOy59vnQ==
@@ -7477,7 +7463,7 @@ decap-cms-lib-util@^3.3.1:
     localforage "^1.7.3"
     semaphore "^1.1.0"
 
-decap-cms-lib-widgets@^3.0.2, decap-cms-lib-widgets@^3.2.1:
+decap-cms-lib-widgets@^3.0.2, decap-cms-lib-widgets@^3.1.0:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/decap-cms-lib-widgets/-/decap-cms-lib-widgets-3.2.1.tgz#3280909d8193dfd02b38de1c267b7f94a782b395"
   integrity sha512-wUEfuLGzMCKiFp0Y8JQ/KGizEJx81pvFz2V6KcQvXTrmp28/JsFxXzEg+6B3kdUpbLM0t+76BNpJ5UpxVkKAYw==
@@ -7485,40 +7471,33 @@ decap-cms-lib-widgets@^3.0.2, decap-cms-lib-widgets@^3.2.1:
     dayjs "^1.11.10"
     path-browserify "^1.0.1"
 
-decap-cms-locales@^3.4.0:
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/decap-cms-locales/-/decap-cms-locales-3.4.0.tgz#0eface3dab72393ccb7f783396bf7392fe2a4339"
-  integrity sha512-CWTXt/72zrVTnIQvMTnFmwMPhotn600m88MkFcLEFxWf7QYTpPgpEpxrtTnxiuKJTyi5fQ7fpVzGYu72O5aowA==
+decap-cms-locales@^3.3.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/decap-cms-locales/-/decap-cms-locales-3.5.0.tgz#4f2ebcd468e2b35bdfe42232ef9aa46e7e95572d"
+  integrity sha512-xpef4MpR/QyDZqZrnF9dqBIgdWEtSztuom+LYZmh0CcCEBQjIetpktqdD3A72ZW8M5MVLEx5f8j0XFFRxvvWOw==
 
-decap-cms-ui-auth@^3.2.3:
-  version "3.2.3"
-  resolved "https://registry.yarnpkg.com/decap-cms-ui-auth/-/decap-cms-ui-auth-3.2.3.tgz#e9a7da5f8a6f6306bf3cba4522210c11111cf347"
-  integrity sha512-FNsNEPKXwLQ6si74d89nVs7yOb4yPS6dLE3odNQPPBj/tJKYRnj7NYOfMVOs91LYYrdBToMQO/L2wKKfiYiReg==
-  dependencies:
-    jwt-decode "^3.0.0"
-
-decap-cms-ui-default@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/decap-cms-ui-default/-/decap-cms-ui-default-3.3.0.tgz#ecb7006c143e80233175a7269a3aac327dbf91b8"
-  integrity sha512-4VUzWls3gevldL5ty73znuNbwFTLSsGjYtPunvDIhLK3N4jwMfuYLMdpLH7n3IAa6UUncrHOeUJVC0+y/bH6cA==
+decap-cms-ui-default@^3.1.4:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/decap-cms-ui-default/-/decap-cms-ui-default-3.5.0.tgz#f03a1c96c09a84a893934670edab5bbf4c38a711"
+  integrity sha512-8tvm3+HAaa0BhhA2yQq5iyS7A4KLI+hB5jm8A65/TbObkhWPxG02NLGcnyK1PXwt/A4ZATQrs0yKwbXiE271qg==
   dependencies:
     react-aria-menubutton "^7.0.0"
     react-transition-group "^4.4.5"
 
-decap-cms-widget-boolean@^3.2.0:
+decap-cms-widget-boolean@^3.1.3:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/decap-cms-widget-boolean/-/decap-cms-widget-boolean-3.2.0.tgz#8c179bd77fe85c4a6ffb2cf3b270c5f5a9b61459"
   integrity sha512-T4dId4WPmmWids+GOK5xK3CA7IzSfH1bLNCGE7OGOG/r9EIuDaHW5rIsVkAhLGz2Spg39xyPNk3dfHfBd3b4Dw==
 
-decap-cms-widget-code@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/decap-cms-widget-code/-/decap-cms-widget-code-3.2.0.tgz#6dd5ab5928a3c037149a376895eba3cbce53ac38"
-  integrity sha512-bEUkEpUhJS1iFtwu9p72iIdgdJZLXCysJyDjcT+791zJwTq+9tgmFNBJLCYflj2/tw9o8m60uJwUZvv2P49tmA==
+decap-cms-widget-code@^3.1.4:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/decap-cms-widget-code/-/decap-cms-widget-code-3.3.0.tgz#a7d5d23d4a9e1566fa78632b176c1d964e12d253"
+  integrity sha512-tb5YrGhH6Gam0rp+En5jkfdAidWcnxzPel6U4X5hRCkTSkA99oCsGV/5ezArpH4PFZq5Jg+GxrPJlUQcXt7FCA==
   dependencies:
     react-codemirror2 "^7.0.0"
     react-select "^5.10.0"
 
-decap-cms-widget-colorstring@^3.2.0:
+decap-cms-widget-colorstring@^3.1.3:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/decap-cms-widget-colorstring/-/decap-cms-widget-colorstring-3.2.0.tgz#c99de09a512b928386a378f01c7027ff6bf59c73"
   integrity sha512-dz1z5XxrQ9JZ/QTXOyk9Wcsx54BlTsgqxYgAQYZcjOpPTj4drXj0JJNmn0KzGxvWKhj0jzMWPhT1VC4Uvgw99Q==
@@ -7526,14 +7505,14 @@ decap-cms-widget-colorstring@^3.2.0:
     react-color "^2.18.1"
     tinycolor2 "^1.4.1"
 
-decap-cms-widget-datetime@^3.4.0:
+decap-cms-widget-datetime@^3.2.3:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/decap-cms-widget-datetime/-/decap-cms-widget-datetime-3.4.0.tgz#80b8125855f25307c01736eda9e3c0ebf90937fe"
   integrity sha512-v/eVBhWWVhEt+b+2l0KIPlAyLlZonKbR2q++5cNTZcEF88ylDNhj3dDzHCcDlIRWvpYwl+9jDkx7jHQxMVfOvw==
   dependencies:
     dayjs "^1.11.10"
 
-decap-cms-widget-file@^3.2.0:
+decap-cms-widget-file@^3.1.3:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/decap-cms-widget-file/-/decap-cms-widget-file-3.2.0.tgz#5d388c1e7cae9c6826ecd4c98e35c57e3005c0de"
   integrity sha512-QlId1KLaY+7kOK1ESqlevqSU3CCOIY0MlpUw6JPO3josRj39En7InraFWOewzdr9f+raKI6M0pf2RFTRYg7zPg==
@@ -7544,31 +7523,31 @@ decap-cms-widget-file@^3.2.0:
     array-move "4.0.0"
     common-tags "^1.8.0"
 
-decap-cms-widget-image@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/decap-cms-widget-image/-/decap-cms-widget-image-3.2.0.tgz#0cf4fecc6c3dfaf92a1475d8463bdc6dc955739f"
-  integrity sha512-IDTgczjocaKULTj2Z76u4i3YCUB4Fc4EschOeBwkD6Zen8LMrefhyCXaUJ8MP4cTA+cu147D05YYO8AgwOgWmA==
+decap-cms-widget-image@^3.1.3:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/decap-cms-widget-image/-/decap-cms-widget-image-3.2.1.tgz#6932128199d7eec7714adf64be35c491dbd3dc95"
+  integrity sha512-LCzIqUVNm+tWiLa56e1xe1w2Rfrjwie6gNhnchbX2o8XZoobNPbrg6kytp2+DiAuZGeEXKcv9E+HvPIeyzT1AA==
 
-decap-cms-widget-list@^3.4.0:
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/decap-cms-widget-list/-/decap-cms-widget-list-3.4.0.tgz#e9a13a7bf49cba4397419a60afb5a70ce42124e5"
-  integrity sha512-2QrZv5n/6uBHQvymSuwkdEk+4f6HogxyJm9iGPYw5xJn97dlY7jXtIl9KJJjs2jwjadZlKv93z7GA/joKyIpQQ==
+decap-cms-widget-list@^3.3.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/decap-cms-widget-list/-/decap-cms-widget-list-3.5.0.tgz#62f6847639e3154ac659f079ffcef2bf908f5612"
+  integrity sha512-qkEvymI6CrXnhannRguaYhV7rhCQGyRE9zqqeihXU3+FtxWisS8xAJD237Amyxf1e4EvghIXUJ2ALdBW/ENLNQ==
   dependencies:
     "@dnd-kit/core" "^6.0.8"
     "@dnd-kit/modifiers" "^6.0.1"
     "@dnd-kit/sortable" "^7.0.2"
 
-decap-cms-widget-map@^3.2.0:
+decap-cms-widget-map@^3.1.4:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/decap-cms-widget-map/-/decap-cms-widget-map-3.2.0.tgz#ba135e5221b0f1e481274eb4b07e17d56fed7315"
   integrity sha512-vCLkVFUO3pU5pDAxJziHMOwXvryBqqHLBMkzbHn07kByAvWx9TbqssbBS5/V/iXOW6e18vb+aw0ZJSvclD+Mwg==
   dependencies:
     ol "^6.9.0"
 
-decap-cms-widget-markdown@^3.5.0:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/decap-cms-widget-markdown/-/decap-cms-widget-markdown-3.5.0.tgz#83848be02eb8a49f3beeaeee7b53c63c77125061"
-  integrity sha512-4fR3/mlLnM/CIWhvggxjimU/KEk8wxut5rFrHdL+aaPpbTG8ReqYxF3rcYwZBnG9CJhFMCHvxSZgD7eENQbX2w==
+decap-cms-widget-markdown@^3.3.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/decap-cms-widget-markdown/-/decap-cms-widget-markdown-3.6.0.tgz#386652745c6a8e8e46d444d3a6c69beaed8c2e52"
+  integrity sha512-tjwL9EVH+6lD6AOoEl1HoKCC1E0fsuonVRemAm7YCDXbEWB3jdVS2a8OZritysZ/DxIwZVBqIK3IZFbGL1pzuw==
   dependencies:
     detab "^2.0.4"
     dompurify "^3.2.6"
@@ -7584,29 +7563,30 @@ decap-cms-widget-markdown@^3.5.0:
     remark-slate "^1.8.6"
     remark-slate-transformer "^0.7.4"
     remark-stringify "^6.0.4"
-    slate "^0.91.1"
+    slate "^0.118.1"
     slate-base64-serializer "^0.2.107"
-    slate-history "^0.93.0"
-    slate-hyperscript "^0.77.0"
-    slate-plain-serializer "^0.7.1"
-    slate-react "^0.91.2"
+    slate-dom "^0.118.1"
+    slate-history "^0.113.1"
+    slate-hyperscript "^0.100.0"
+    slate-plain-serializer "^0.7.3"
+    slate-react "^0.117.4"
     slate-soft-break "^0.9.0"
     unified "^9.2.0"
     unist-builder "^1.0.3"
     unist-util-visit-parents "^2.0.1"
     vfile-location "^2.0.6"
 
-decap-cms-widget-number@^3.2.0:
+decap-cms-widget-number@^3.1.3:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/decap-cms-widget-number/-/decap-cms-widget-number-3.2.0.tgz#65b97b6473d3a20e450b15b1c46be2fed294133b"
   integrity sha512-+H57DZSPZduk/Z0hGNNGoCcd89/zPUgiPDn8lXmTzALqusK1GOReOvhfwwEK69/UYQ8NxJl8m+ipjKKLY2P7Aw==
 
-decap-cms-widget-object@^3.4.0:
+decap-cms-widget-object@^3.3.1:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/decap-cms-widget-object/-/decap-cms-widget-object-3.4.0.tgz#66835ad63dd8f71ed4872f9ec44c1d135da86186"
   integrity sha512-Q/p5IHmANLs7J0SXv/fcdyXChtT/7YuhVHMvztDZQTjnEdV40F4EZzmQybYu1JvKL1LllFudRCeXbjULl7ql2A==
 
-decap-cms-widget-relation@^3.5.2:
+decap-cms-widget-relation@^3.3.2:
   version "3.5.2"
   resolved "https://registry.yarnpkg.com/decap-cms-widget-relation/-/decap-cms-widget-relation-3.5.2.tgz#4c7cec6de983a4311a933b1f3aa190688f132935"
   integrity sha512-ceeOvY3J11xZXD6ijk6spvC0HrK5GwDYTGVkaDYo3ex5HGnIgxDDh9Z302lYp+WIWC85Q6j+SN6Qc+Vk4BOulQ==
@@ -7617,19 +7597,19 @@ decap-cms-widget-relation@^3.5.2:
     react-select "^5.10.0"
     react-window "^1.8.5"
 
-decap-cms-widget-select@^3.3.0:
+decap-cms-widget-select@^3.2.2:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/decap-cms-widget-select/-/decap-cms-widget-select-3.3.0.tgz#e6040c506e1a9f229dedf8933b46549286cd1cd3"
   integrity sha512-5xeOhlImDDZYhXMzMYn2lzwsMDeBtK9IGJK2V5rq6jEi5wBZK0MVwSyDwAttUcp/WCJDEtNiZowjElC/f9bgsw==
   dependencies:
     react-select "^5.10.0"
 
-decap-cms-widget-string@^3.2.0:
+decap-cms-widget-string@^3.1.3:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/decap-cms-widget-string/-/decap-cms-widget-string-3.2.0.tgz#e6594e9e4d3e3ed4692d7490fa31ffeeac8c48c6"
   integrity sha512-RcdSQEhvyIPDNlKm0GZcPWIlCDO+SpxewxK424RKazodimSwJGjmBfUWhDkVbbzS8TNQkgXVOqycYNGkWGKW9g==
 
-decap-cms-widget-text@^3.2.0:
+decap-cms-widget-text@^3.1.3:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/decap-cms-widget-text/-/decap-cms-widget-text-3.2.0.tgz#07d29c51fc247f05541eb4504d7c5f62d043ae38"
   integrity sha512-dUZzNW1YQwbrylGMLu+bDSfvLOsMlpCMb1AoOEeHgTyNvKS5/x+7t0vVh8Insz78i+z2eSv4uM9j31z4VzZfPg==
@@ -7857,7 +7837,7 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
-direction@^1.0.3:
+direction@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/direction/-/direction-1.0.4.tgz#2b86fb686967e987088caf8b89059370d4837442"
   integrity sha512-GYqKi1aH7PJXxdhTeZBFrg8vUBeKXi+cNprXsC1kpJcbcVnV9wBsrOu1cQEdG0WeQwlfHiy3XvnKfIrJ2R0NzQ==
@@ -11368,7 +11348,7 @@ immer@^10.0.3:
   resolved "https://registry.yarnpkg.com/immer/-/immer-10.1.1.tgz#206f344ea372d8ea176891545ee53ccc062db7bc"
   integrity sha512-s2MPrmjovJcoMaHtx6K11Ra7oD05NT97w1IC5zpMkT6Atjr7H8LjaDd81iIxUYpMKSRRNMJE703M1Fhr/TctHw==
 
-immer@^9.0.0, immer@^9.0.21, immer@^9.0.6, immer@^9.0.7:
+immer@^9.0.0, immer@^9.0.21, immer@^9.0.7:
   version "9.0.21"
   resolved "https://registry.yarnpkg.com/immer/-/immer-9.0.21.tgz#1e025ea31a40f24fb064f1fef23e931496330176"
   integrity sha512-bc4NBHqOqSfRW7POMkHd51LvClaeMXpm8dx0e8oE2GORbq5aRK7Bxl4FyzVLdGtLmvLKL7BTDBG5ACQm4HWjTA==
@@ -11779,11 +11759,6 @@ is-hexadecimal@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/is-hexadecimal/-/is-hexadecimal-2.0.1.tgz#86b5bf668fca307498d319dfc03289d781a90027"
   integrity sha512-DgZQp241c8oO6cA1SbTEWiXeoxV42vlcJxgH+B3hi1AiqqKruZR3ZGF8In3fj4+/y/7rHvlOZLZtgJ/4ttYGZg==
-
-is-hotkey@^0.1.6:
-  version "0.1.8"
-  resolved "https://registry.yarnpkg.com/is-hotkey/-/is-hotkey-0.1.8.tgz#6b1f4b2d0e5639934e20c05ed24d623a21d36d25"
-  integrity sha512-qs3NZ1INIS+H+yeo7cD9pDfwYV/jqRh1JG9S9zYrNudkoUQg7OL7ziXqRKu+InFjUIDoP2o6HIkLYMh1pcWgyQ==
 
 is-hotkey@^0.2.0:
   version "0.2.0"
@@ -15465,10 +15440,10 @@ open@^8.4.0:
     is-docker "^2.1.1"
     is-wsl "^2.2.0"
 
-openstack-uicore-foundation@4.2.14:
-  version "4.2.14"
-  resolved "https://registry.yarnpkg.com/openstack-uicore-foundation/-/openstack-uicore-foundation-4.2.14.tgz#d759a6358ede869f356fdf387065632b341bcf6a"
-  integrity sha512-ECwPZ7QOUrhW/fKbyWUfsYx/x207WPuLx9VfDLS2i46p3CoD+z6XT2a4AoUzYBoOa9iRdhXAtJUsymN8sGIzYA==
+openstack-uicore-foundation@4.2.16:
+  version "4.2.16"
+  resolved "https://registry.yarnpkg.com/openstack-uicore-foundation/-/openstack-uicore-foundation-4.2.16.tgz#c5d504499305eb5ed20db94281a8810c3fcd67dd"
+  integrity sha512-rBV9GAaO8H+a32eg++xA3X9TB8ETFJgZVQX7XT0OC/u//VF97qhHeORBWwSXX/Wg1zLb1bjCbolWpdzuwAzWsQ==
 
 opentracing@^0.14.7:
   version "0.14.7"
@@ -18670,12 +18645,12 @@ screenfull@^5.1.0:
   resolved "https://registry.yarnpkg.com/screenfull/-/screenfull-5.2.0.tgz#6533d524d30621fc1283b9692146f3f13a93d1ba"
   integrity sha512-9BakfsO2aUQN2K9Fdbj87RJIEZ82Q9IGim7FqM5OsebfoFC6ZHXgDq/KvniuLTPdeM8wY2o6Dj3WQ7KeQCj3cA==
 
-scroll-into-view-if-needed@^2.2.20:
-  version "2.2.31"
-  resolved "https://registry.yarnpkg.com/scroll-into-view-if-needed/-/scroll-into-view-if-needed-2.2.31.tgz#d3c482959dc483e37962d1521254e3295d0d1587"
-  integrity sha512-dGCXy99wZQivjmjIqihaBQNjryrz5rueJY7eHfTdyWEiR4ttYpsajb14rn9s5d4DY4EcY6+4+U/maARBXJedkA==
+scroll-into-view-if-needed@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/scroll-into-view-if-needed/-/scroll-into-view-if-needed-3.1.0.tgz#fa9524518c799b45a2ef6bbffb92bcad0296d01f"
+  integrity sha512-49oNpRjWRvnU8NyGVmUaYG4jtTkNonFZI86MmGRDqBphEK2EXT9gdEUoQPZhuBM8yWHxCWbobltqYO5M4XrUvQ==
   dependencies:
-    compute-scroll-into-view "^1.0.20"
+    compute-scroll-into-view "^3.0.2"
 
 seamless-immutable@^7.1.4:
   version "7.1.4"
@@ -18989,52 +18964,61 @@ slate-base64-serializer@^0.2.107:
   dependencies:
     isomorphic-base64 "^1.0.2"
 
-slate-history@^0.93.0:
-  version "0.93.0"
-  resolved "https://registry.yarnpkg.com/slate-history/-/slate-history-0.93.0.tgz#d2fad47e4e8b262ab7c86b653f5dd6d9b6d85277"
-  integrity sha512-Gr1GMGPipRuxIz41jD2/rbvzPj8eyar56TVMyJBvBeIpQSSjNISssvGNDYfJlSWM8eaRqf6DAcxMKzsLCYeX6g==
+slate-dom@^0.118.1:
+  version "0.118.1"
+  resolved "https://registry.yarnpkg.com/slate-dom/-/slate-dom-0.118.1.tgz#162f79e9d1c02270f8cdc0c5991492d9a5ba60bb"
+  integrity sha512-D6J0DF9qdJrXnRDVhYZfHzzpVxzqKRKFfS0Wcin2q0UC+OnQZ0lbCGJobatVbisOlbSe7dYFHBp9OZ6v1lEcbQ==
+  dependencies:
+    "@juggle/resize-observer" "^3.4.0"
+    direction "^1.0.4"
+    is-hotkey "^0.2.0"
+    is-plain-object "^5.0.0"
+    lodash "^4.17.21"
+    scroll-into-view-if-needed "^3.1.0"
+    tiny-invariant "1.3.1"
+
+slate-history@^0.113.1:
+  version "0.113.1"
+  resolved "https://registry.yarnpkg.com/slate-history/-/slate-history-0.113.1.tgz#00582db9fd23c1761552e3f5cea83468ddcece32"
+  integrity sha512-J9NSJ+UG2GxoW0lw5mloaKcN0JI0x2IA5M5FxyGiInpn+QEutxT1WK7S/JneZCMFJBoHs1uu7S7e6pxQjubHmQ==
   dependencies:
     is-plain-object "^5.0.0"
 
-slate-hyperscript@^0.77.0:
-  version "0.77.0"
-  resolved "https://registry.yarnpkg.com/slate-hyperscript/-/slate-hyperscript-0.77.0.tgz#72c1c0fbd54dc6b6210ecd81d020c8d3d0ab8eae"
-  integrity sha512-M6uRpttwKnosniQORNPYQABHQ9XWC7qaSr/127LWWPjTOR5MSSwrHGrghN81BhZVqpICHrI7jkPA2813cWdHNA==
+slate-hyperscript@^0.100.0:
+  version "0.100.0"
+  resolved "https://registry.yarnpkg.com/slate-hyperscript/-/slate-hyperscript-0.100.0.tgz#79470c385e96bd3c5fb6477c610c2102d4a889a9"
+  integrity sha512-fb2KdAYg6RkrQGlqaIi4wdqz3oa0S4zKNBJlbnJbNOwa23+9FLD6oPVx9zUGqCSIpy+HIpOeqXrg0Kzwh/Ii4A==
   dependencies:
     is-plain-object "^5.0.0"
 
-slate-plain-serializer@^0.7.1:
+slate-plain-serializer@^0.7.3:
   version "0.7.13"
   resolved "https://registry.yarnpkg.com/slate-plain-serializer/-/slate-plain-serializer-0.7.13.tgz#6de8f5c645dd749f1b2e4426c20de74bfd213adf"
   integrity sha512-TtrlaslxQBEMV0LYdf3s7VAbTxRPe1xaW10WNNGAzGA855/0RhkaHjKkQiRjHv5rvbRleVf7Nxr9fH+4uErfxQ==
 
-slate-react@^0.91.2:
-  version "0.91.11"
-  resolved "https://registry.yarnpkg.com/slate-react/-/slate-react-0.91.11.tgz#f7cdf6b8f5e86a28983f4ef49afa0624070ea531"
-  integrity sha512-2nS29rc2kuTTJrEUOXGyTkFATmTEw/R9KuUXadUYiz+UVwuFOUMnBKuwJWyuIBOsFipS+06SkIayEf5CKdARRQ==
+slate-react@^0.117.4:
+  version "0.117.4"
+  resolved "https://registry.yarnpkg.com/slate-react/-/slate-react-0.117.4.tgz#04c925b41e9cc507937819b4d7192e1fc2bb85a9"
+  integrity sha512-9ckilyUzQS1VHJnstIpgInhcWnTDgv2Cd7m1HOQVl3zasChoapPSMftzT/wl/48grZaZYZIi4xVuzGTcFRUWFg==
   dependencies:
     "@juggle/resize-observer" "^3.4.0"
-    "@types/is-hotkey" "^0.1.1"
-    "@types/lodash" "^4.14.149"
-    direction "^1.0.3"
-    is-hotkey "^0.1.6"
-    is-plain-object "^5.0.0"
-    lodash "^4.17.4"
-    scroll-into-view-if-needed "^2.2.20"
-    tiny-invariant "1.0.6"
+    direction "^1.0.4"
+    is-hotkey "^0.2.0"
+    lodash "^4.17.21"
+    scroll-into-view-if-needed "^3.1.0"
+    tiny-invariant "1.3.1"
 
 slate-soft-break@^0.9.0:
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/slate-soft-break/-/slate-soft-break-0.9.0.tgz#7fb2a22eb8600717ee299f7866469cb9c705a53d"
   integrity sha512-iTy2bl/G+tphN10YQBOPDRxDqgM46ZH1UUz0ublmL6PLtwJ3jJK1n08w37YxnY/ge4aW31UN386KV6qvFx6Hsw==
 
-slate@^0.91.1:
-  version "0.91.4"
-  resolved "https://registry.yarnpkg.com/slate/-/slate-0.91.4.tgz#759764d63c8a8a7aff29a29e598e593ed80277f9"
-  integrity sha512-aUJ3rpjrdi5SbJ5G1Qjr3arytfRkEStTmHjBfWq2A2Q8MybacIzkScSvGJjQkdTk3djCK9C9SEOt39sSeZFwTw==
+slate@^0.118.1:
+  version "0.118.1"
+  resolved "https://registry.yarnpkg.com/slate/-/slate-0.118.1.tgz#8403a5604994d02b4fb2a9db4435ce034c42d774"
+  integrity sha512-6H1DNgnSwAFhq/pIgf+tLvjNzH912M5XrKKhP9Frmbds2zFXdSJ6L/uFNyVKxQIkPzGWPD0m+wdDfmEuGFH5Tg==
   dependencies:
-    immer "^9.0.6"
-    is-plain-object "^5.0.0"
+    immer "^10.0.3"
     tiny-warning "^1.0.3"
 
 slice-ansi@^4.0.0:
@@ -20116,10 +20100,10 @@ tiny-inflate@^1.0.0, tiny-inflate@^1.0.3:
   resolved "https://registry.yarnpkg.com/tiny-inflate/-/tiny-inflate-1.0.3.tgz#122715494913a1805166aaf7c93467933eea26c4"
   integrity sha512-pkY1fj1cKHb2seWDy0B16HeWyczlJA9/WW3u3c4z/NiWDsO3DOU5D7nhTLE9CF0yXv/QZFY7sEJmj24dK+Rrqw==
 
-tiny-invariant@1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/tiny-invariant/-/tiny-invariant-1.0.6.tgz#b3f9b38835e36a41c843a3b0907a5a7b3755de73"
-  integrity sha512-FOyLWWVjG+aC0UqG76V53yAWdXfH8bO6FNmyZOuUrzDzK8DI3/JRY25UD7+g49JWM1LXwymsKERB+DzI0dTEQA==
+tiny-invariant@1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/tiny-invariant/-/tiny-invariant-1.3.1.tgz#8560808c916ef02ecfd55e66090df23a4b7aa642"
+  integrity sha512-AD5ih2NlSssTCwsMznbvwMZpJ1cbhkGd2uueNxzv2jDlEeZdU04JQfRnggJQ8DrcVBGjAsCKwFBbDlVNtEMlzw==
 
 tiny-invariant@^1.0.2:
   version "1.3.3"
