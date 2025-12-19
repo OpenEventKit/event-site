@@ -194,16 +194,24 @@ const AuthComponent = ({
         </Link>
     );
 
+    // Determine if we should show any button
+    const showLoginButton = !isLoggedUser;
+    const showEnterButton = isLoggedUser && summitPhase >= PHASES.DURING && hasVirtualBadge;
+
+    // Don't render wrapper if no button to show and modal not active
+    if (!showLoginButton && !showEnterButton && !isActive) {
+        return null;
+    }
+
     return (
         <div style={style} className={styles.authComponent}>
-            {!isLoggedUser ?
+            {showLoginButton ?
                 renderLoginButton ? renderLoginButton(handleOpenPopup) : defaultLoginButton()
                 :
-                (summitPhase >= PHASES.DURING && hasVirtualBadge ?
+                showEnterButton ?
                     renderEnterButton ? renderEnterButton(handleEnterEvent) : defaultEnterButton()
                     :
                     null
-                )
             }
             {isActive &&
                 <div id={`${styles.modal}`} className="modal is-active">
