@@ -1,21 +1,20 @@
 import React from "react";
 import { Document, Page, Text, View, Image, StyleSheet, Font, pdf } from "@react-pdf/renderer";
 
-import fontRegular from "../../../static/fonts/nunito-sans/nunito-sans-v18-latin-400.ttf";
-import fontBold from "../../../static/fonts/nunito-sans/nunito-sans-v18-latin-700.ttf";
+import fontVariable from "../../../static/fonts/nunito-sans/NunitoSans-Variable.ttf";
 import { USER_ROLES } from './constants';
 
 const registerDefaultFont = () => {
   try {
     Font.register({
-      family: "Nunito Sans", 
+      family: "Nunito Sans",
       fonts: [
         {
-          src: fontRegular,
+          src: fontVariable,
           fontWeight: "normal"
         },
         {
-          src: fontBold,
+          src: fontVariable,
           fontWeight: "bold"
         },
       ]
