@@ -18,4 +18,4 @@ yalc.lock
 
 # this data should be empty due is calculted on SSR time at gatsby-node.js
 
-src/data/*
+src/data/*.playwright-mcp/
