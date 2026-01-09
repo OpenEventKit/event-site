@@ -103,14 +103,7 @@ export const getEventStreamingInfoById = (
         customErrorHandler,
         {},
         true)
-    (params)(dispatch).then((payload) => {
-        return payload
-    }).catch(e => {
-        dispatch(createAction(GET_EVENT_DATA_ERROR)(e));
-        console.log('ERROR: ', e);
-        clearAccessToken();
-        return (e);
-    });
+    (params)(dispatch);
 };
 
 /**
