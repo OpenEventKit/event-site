@@ -19,8 +19,8 @@ import IconButton from "./IconButton";
 import iconButtonStyles from "./IconButton/styles.module.scss";
 import { SentryFallbackFunction } from "./SentryErrorComponent";
 
-import { RegistrationModal } from "summit-registration-lite/dist";
-import "summit-registration-lite/dist/index.css";
+import RegistrationModal from "summit-registration-lite/dist/components/registration-modal";
+import "summit-registration-lite/dist/components/registration-modal.css";
 
 import useSiteSettings from "@utils/useSiteSettings";
 import usePaymentSettings from "@utils/usePaymentSettings";
