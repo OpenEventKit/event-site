@@ -10,8 +10,8 @@ import { doLogin, doLogout, passwordlessStart } from "openstack-uicore-foundatio
 import Layout from "../components/Layout";
 import Seo from "../components/Seo";
 import { SentryFallbackFunction } from "../components/SentryErrorComponent";
-import { RegistrationForm } from "summit-registration-lite/dist";
-import "summit-registration-lite/dist/index.css";
+import RegistrationForm from "summit-registration-lite/dist/components/registration-form";
+import "summit-registration-lite/dist/components/registration-form.css";
 
 import { setPasswordlessLogin, setUserOrder, checkOrderData, getUserProfile, checkRequireExtraQuestionsByAttendee } from "../actions/user-actions";
 import { getThirdPartyProviders } from "../actions/base-actions";
