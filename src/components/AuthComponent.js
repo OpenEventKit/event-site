@@ -12,7 +12,8 @@ import { getThirdPartyProviders } from "../actions/base-actions";
 // these two libraries are client-side only
 import LoginComponent from "summit-registration-lite/dist/components/login";
 import PasswordlessLoginComponent from "summit-registration-lite/dist/components/login-passwordless";
-import "summit-registration-lite/dist/index.css";
+import "summit-registration-lite/dist/components/login.css";
+import "summit-registration-lite/dist/components/login-passwordless.css";
 import IconButton from "./IconButton";
 import Link from "./Link";
 

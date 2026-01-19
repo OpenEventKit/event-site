@@ -1,7 +1,8 @@
 import * as React from "react";
 import { getSrc } from "gatsby-plugin-image";
 import AuthComponent from "../AuthComponent";
-import RegistrationLiteComponent from "../RegistrationLiteComponent";
+import RegistrationModalComponent from "../RegistrationModalComponent";
+import RegisterButton from "../RegisterButton";
 
 import styles from "./styles.module.scss";
 
@@ -9,7 +10,12 @@ const ButtonGroup = ({ location, registerButton, loginButton }) => (
   <>
     {registerButton?.display && (
       <span className={styles.link}>
-        <RegistrationLiteComponent location={location} />
+        <RegisterButton />
+      </span>
+    )}
+    {registerButton?.display && (
+      <span className={styles.link}>
+        <RegistrationModalComponent location={location} />
       </span>
     )}
     {loginButton?.display && <AuthComponent location={location} />}

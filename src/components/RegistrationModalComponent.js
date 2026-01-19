@@ -5,82 +5,84 @@ import { navigate, withPrefix } from "gatsby";
 import { connect } from "react-redux";
 import URI from "urijs";
 import Swal from "sweetalert2";
-import {ERROR_TYPE_ERROR, ERROR_TYPE_VALIDATION, ERROR_TYPE_PAYMENT} from "summit-registration-lite/dist/utils/constants";
+import { ERROR_TYPE_ERROR, ERROR_TYPE_VALIDATION, ERROR_TYPE_PAYMENT } from "summit-registration-lite/dist/utils/constants";
+
 import FragmentParser from "openstack-uicore-foundation/lib/utils/fragment-parser";
-import { doLogin, passwordlessStart, getAccessToken } from "openstack-uicore-foundation/lib/security/methods"
+import { doLogin, passwordlessStart } from "openstack-uicore-foundation/lib/security/methods"
 import { doLogout } from "openstack-uicore-foundation/lib/security/actions"
-import { getUserProfile, setPasswordlessLogin, setUserOrder, checkOrderData } from "../actions/user-actions";
+
+import { getUserProfile, setPasswordlessLogin, setUserOrder, checkOrderData, checkRequireExtraQuestionsByAttendee } from "../actions/user-actions";
 import { getThirdPartyProviders } from "../actions/base-actions";
-import { checkRequireExtraQuestionsByAttendee } from "../actions/user-actions";
 import { getExtraQuestions } from "../actions/summit-actions";
 
 import IconButton from "./IconButton";
 import iconButtonStyles from "./IconButton/styles.module.scss";
-
 import { SentryFallbackFunction } from "./SentryErrorComponent";
-// these two libraries are client-side only
-import RegistrationLiteWidget from "summit-registration-lite/dist";
-import "summit-registration-lite/dist/index.css";
+
+import RegistrationModal from "summit-registration-lite/dist/components/registration-modal";
+import "summit-registration-lite/dist/components/registration-modal.css";
+
 import useSiteSettings from "@utils/useSiteSettings";
 import usePaymentSettings from "@utils/usePaymentSettings";
-import useMarketingSettings, { MARKETING_SETTINGS_KEYS }  from "@utils/useMarketingSettings";
-import { getEnvVariable, SUMMIT_API_BASE_URL, OAUTH2_CLIENT_ID, REGISTRATION_BASE_URL, SUPPORT_EMAIL, TENANT_ID } from "@utils/envVariables";
+import useMarketingSettings, { MARKETING_SETTINGS_KEYS } from "@utils/useMarketingSettings";
+import { getEnvVariable, SUMMIT_API_BASE_URL, OAUTH2_CLIENT_ID, SUPPORT_EMAIL, TENANT_ID } from "@utils/envVariables";
 import { userHasAccessLevel, VIRTUAL_ACCESS_LEVEL } from "@utils/authorizedGroups";
-import { validateIdentityProviderButtons } from "@utils/loginUtils";
+import { validateIdentityProviderButtons, getAccessTokenSafely } from "@utils/loginUtils";
 import { triggerTagManagerTrackEvent } from "@utils/eventTriggers";
 
-const RegistrationLiteComponent = ({
-   registrationProfile,
-   userProfile,
-   attendee,
-   getThirdPartyProviders,
-   availableThirdPartyProviders,
-   getUserProfile,
-   setPasswordlessLogin,
-   setUserOrder,
-   checkOrderData,
-   loadingProfile,
-   loadingIDP,
-   summit,
-   colorSettings,
-   marketingPageSettings,
-   allowsNativeAuth,
-   allowsOtpAuth,
-   checkRequireExtraQuestionsByAttendee,
-   getExtraQuestions,
-   children,
-   ignoreAutoOpen
+/**
+ * RegistrationModalComponent - Button that opens registration modal popup
+ *
+ * This component provides a registration button that:
+ * - Opens a modal popup with the registration form when clicked
+ * - Supports external registration links (redirects instead of modal)
+ * - Auto-opens modal if URL contains #registration=1
+ * - Can wrap custom children elements with onClick handler
+ * - Wrapped in Sentry for error tracking
+ */
+const RegistrationModalComponent = ({
+    summit,
+    userProfile,
+    idpProfile,
+    colorSettings,
+    attendee,
+    availableThirdPartyProviders,
+    allowsNativeAuth,
+    allowsOtpAuth,
+    loadingProfile,
+    loadingIDP,
+    marketingPageSettings,
+    setPasswordlessLogin,
+    setUserOrder,
+    checkOrderData,
+    getUserProfile,
+    getThirdPartyProviders,
+    getExtraQuestions,
+    checkRequireExtraQuestionsByAttendee,
+    children,
+    ignoreAutoOpen
 }) => {
-    const [isActive, setIsActive] = useState(false);
-    const [initialEmailValue, setInitialEmailValue] = useState("");
+    const [isOpen, setIsOpen] = useState(false);
+    const [initialEmailValue, setInitialEmailValue] = useState('');
 
     useEffect(() => {
         const fragmentParser = new FragmentParser();
-        if(!ignoreAutoOpen) {
-            setIsActive(fragmentParser.getParam("registration"));
-        }
-        const paramInitialEmailValue = fragmentParser.getParam("email");
-        if (paramInitialEmailValue)
+        const paramInitialEmailValue = fragmentParser.getParam('email');
+        if (paramInitialEmailValue) {
             setInitialEmailValue(paramInitialEmailValue);
-    }, []);
+        }
+        if (!ignoreAutoOpen && fragmentParser.getParam("registration")) {
+            setIsOpen(true);
+        }
+    }, [ignoreAutoOpen]);
 
     useEffect(() => {
         if (!availableThirdPartyProviders.length) getThirdPartyProviders();
     }, [availableThirdPartyProviders]);
 
     const getBackURL = () => {
-        let backUrl = "/#registration=1";
-        return URI.encode(backUrl);
+        return URI.encode('/#registration=1');
     };
-
-    const handleOpenPopup = () => {
-        const { registerButton } = marketingPageSettings.hero.buttons;
-        if(registerButton?.externalRegistrationLink){
-            window.location = registerButton.externalRegistrationLink;
-            return;
-        }
-        setIsActive(true);
-    }
 
     const onClickLogin = (provider) => {
         doLogin(getBackURL(), provider, null, null, null, getEnvVariable(TENANT_ID));
@@ -89,11 +91,10 @@ const RegistrationLiteComponent = ({
     const handleCompanyError = () => {
         console.log("company error...")
         Swal.fire("ERROR", "Hold on. Your session expired!.", "error").then(() => {
-            // save current location and summit slug, for further redirect logic
             window.localStorage.setItem("post_logout_redirect_path", new URI(window.location.href).pathname());
             doLogout();
         });
-    }
+    };
 
     const getPasswordlessCode = (email) => {
         const params = {
@@ -102,8 +103,7 @@ const RegistrationLiteComponent = ({
             redirect_uri: `${window.location.origin}/auth/callback`,
             email,
         };
-
-        return passwordlessStart(params)
+        return passwordlessStart(params);
     };
 
     const loginPasswordless = (code, email) => {
@@ -115,22 +115,37 @@ const RegistrationLiteComponent = ({
         return setPasswordlessLogin(params);
     };
 
+    const handleOpenPopup = () => {
+        const { registerButton } = marketingPageSettings.hero.buttons;
+        // If external registration link is configured, redirect instead of modal
+        if (registerButton?.externalRegistrationLink) {
+            window.location = registerButton.externalRegistrationLink;
+            return;
+        }
+        setIsOpen(true);
+    };
+
+    const handleClosePopup = () => {
+        setIsOpen(false);
+        // Reload user profile when modal closes
+        getUserProfile().catch((e) => console.log("getUserProfile error. Not logged in?"));
+    };
+
     const handleOnError = (e) => {
-        // this is a basic implementation using swal
-        const {type, msg, exception} = e;
+        const { type, msg } = e;
         let icon = 'error';
         let title = 'ERROR';
-        switch(type){
+        switch (type) {
             case ERROR_TYPE_ERROR:
                 icon = 'error';
                 title = 'Error';
-                break
+                break;
             case ERROR_TYPE_VALIDATION:
                 icon = 'warning';
-                title = 'Warning'
+                title = 'Warning';
                 break;
             case ERROR_TYPE_PAYMENT:
-                title = 'Payment Error'
+                title = 'Payment Error';
                 icon = 'warning';
                 break;
             default:
@@ -138,8 +153,8 @@ const RegistrationLiteComponent = ({
                 title = 'Error';
                 break;
         }
-        Swal.fire(title, msg, icon)
-    }
+        Swal.fire(title, msg, icon);
+    };
 
     const { getSettingByKey } = useMarketingSettings();
 
@@ -158,44 +173,41 @@ const RegistrationLiteComponent = ({
     const noAllowedTicketsMessage = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteNoAllowedTicketsMessage);
 
     const siteSettings = useSiteSettings();
-
     const paymentSettings = usePaymentSettings();
+
+    const { registerButton } = marketingPageSettings.hero.buttons;
+
+    // If no summit data, don't render
+    if (!summit) return null;
 
     const widgetProps = {
         apiBaseUrl: getEnvVariable(SUMMIT_API_BASE_URL),
         clientId: getEnvVariable(OAUTH2_CLIENT_ID),
         summitData: summit,
-        profileData: registrationProfile,
+        profileData: idpProfile,
         marketingData: colorSettings,
         loginOptions: validateIdentityProviderButtons(siteSettings?.identityProviderButtons, availableThirdPartyProviders),
         loading: loadingProfile || loadingIDP,
-        // only show info if its not a recent purchase
         ticketOwned: userProfile?.summit_tickets?.length > 0,
-        hasVIRTUAL_ACCESS_LEVEL: userHasAccessLevel(userProfile?.summit_tickets, VIRTUAL_ACCESS_LEVEL),
+        hasVirtualAccessLevel: userHasAccessLevel(userProfile?.summit_tickets, VIRTUAL_ACCESS_LEVEL),
         ownedTickets: attendee?.ticket_types || [],
         authUser: (provider) => onClickLogin(provider),
         getPasswordlessCode: getPasswordlessCode,
-        loginWithCode:  (code, email) =>  loginPasswordless(code, email).then( () =>  navigate("/#registration=1")),
-        getAccessToken: getAccessToken,
-        closeWidget:  () => {
-            // reload user profile
-            getUserProfile().catch((e) => console.log("getUserProfile error. Not logged in?"));
-            setIsActive(false);
-        },
+        loginWithCode: (code, email) => loginPasswordless(code, email).then(() => navigate("/#registration=1")),
+        getAccessToken: getAccessTokenSafely,
+        closeWidget: handleClosePopup,
         goToExtraQuestions: (attendeeId) => {
             navigate(`/a/extra-questions${attendeeId ? `/#attendee=${attendeeId}` : ''}`);
         },
         goToEvent: () => navigate("/a/"),
-        goToRegistration: () => navigate(`${getEnvVariable(REGISTRATION_BASE_URL)}/a/${summit.slug}`),
         goToMyOrders: () => navigate("/a/my-tickets"),
+        onPurchaseComplete: (order) => {
+            setUserOrder(order).then(() => checkOrderData(order));
+        },
         completedExtraQuestions: async (attendee) => {
             if (!attendee) return true;
             await getExtraQuestions(attendee?.id);
             return checkRequireExtraQuestionsByAttendee(attendee);
-        },
-        onPurchaseComplete: (order) => {
-            // check if it"s necessary to update profile
-            setUserOrder(order).then(()=> checkOrderData(order));
         },
         trackEvent: triggerTagManagerTrackEvent,
         inPersonDisclaimer: inPersonDisclaimer,
@@ -208,7 +220,6 @@ const RegistrationLiteComponent = ({
         },
         loginInitialEmailInputValue: initialEmailValue,
         authErrorCallback: (error) => {
-            // we have an auth Error, perform logout
             const fragment = window?.location?.hash;
             return navigate("/auth/logout", {
                 state: {
@@ -237,10 +248,8 @@ const RegistrationLiteComponent = ({
         onError: handleOnError,
     };
 
-    const { registerButton } = marketingPageSettings.hero.buttons;
-
     return (
-        <>
+        <Sentry.ErrorBoundary fallback={SentryFallbackFunction({componentName: "Registration Modal"})}>
             {children ?
                 React.cloneElement(children, { onClick: handleOpenPopup })
                 :
@@ -250,30 +259,28 @@ const RegistrationLiteComponent = ({
                     iconClass="fa fa-2x fa-edit"
                     buttonText={registerButton.text}
                     onClick={handleOpenPopup}
-                    disabled={isActive}
+                    disabled={isOpen}
                 />
             }
-            <Sentry.ErrorBoundary fallback={SentryFallbackFunction({componentName: "Registration Lite"})}>
-                {isActive && <RegistrationLiteWidget {...widgetProps} />}
-            </Sentry.ErrorBoundary>
-        </>
-    )
+            {isOpen && <RegistrationModal {...widgetProps} />}
+        </Sentry.ErrorBoundary>
+    );
 };
 
-RegistrationLiteComponent.defaultProps = {
+RegistrationModalComponent.defaultProps = {
     ignoreAutoOpen: false,
 };
 
-RegistrationLiteComponent.propTypes = {
+RegistrationModalComponent.propTypes = {
     ignoreAutoOpen: PropTypes.bool,
 };
 
-const mapStateToProps = ({userState, summitState, settingState}) => ({
-    registrationProfile: userState.idpProfile,
-    userProfile: userState.userProfile,
-    attendee: userState.attendee,
+const mapStateToProps = ({ userState, summitState, settingState }) => ({
     loadingProfile: userState.loading,
     loadingIDP: userState.loadingIDP,
+    userProfile: userState.userProfile,
+    idpProfile: userState.idpProfile,
+    attendee: userState.attendee,
     availableThirdPartyProviders: summitState.third_party_providers,
     allowsNativeAuth: summitState.allows_native_auth,
     allowsOtpAuth: summitState.allows_otp_auth,
@@ -283,11 +290,11 @@ const mapStateToProps = ({userState, summitState, settingState}) => ({
 });
 
 export default connect(mapStateToProps, {
-    getThirdPartyProviders,
-    getUserProfile,
     setPasswordlessLogin,
     setUserOrder,
     checkOrderData,
-    checkRequireExtraQuestionsByAttendee,
+    getUserProfile,
+    getThirdPartyProviders,
     getExtraQuestions,
-})(RegistrationLiteComponent);
+    checkRequireExtraQuestionsByAttendee
+})(RegistrationModalComponent);
