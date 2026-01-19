@@ -18,7 +18,7 @@ import {
 } from 'openstack-uicore-foundation/lib/security/methods';
 
 import QuestionsSet from 'openstack-uicore-foundation/lib/utils/questions-set'
-import Swal from 'sweetalert2';
+import { alertSuccess, alertWarning } from '@utils/alerts';
 import axios from "axios";
 import {navigate} from 'gatsby';
 import {customErrorHandler, customBadgeHandler, voidErrorHandler, customRSVPHandler} from '../utils/customErrorHandler';
@@ -128,7 +128,7 @@ export const getUserProfile = () => async (dispatch) => {
         console.log('ERROR: ', e);
         dispatch(createAction(STOP_LOADING_PROFILE)());
         clearAccessToken();
-        Swal.fire('Error', "There was an error at Login Flow. Please retry.", "warning");
+        alertWarning('Error', "There was an error at Login Flow. Please retry.");
         initLogOut();
         return (e);
     });
@@ -205,8 +205,7 @@ export const scanBadge = (sponsorId) => async (dispatch) => {
         // entity
     )(params)(dispatch)
         .then((payload) => {
-            let msg = 'Thanks for sharing your info!';
-            Swal.fire("Success", msg, "success");
+            alertSuccess("Success", "Thanks for sharing your info!");
             return (payload)
         })
         .catch(e => {
@@ -286,7 +285,7 @@ export const rsvpToEvent = (event) => async (dispatch, getState) => {
         return rsvp;
     }).catch(e => {
         console.log('ERROR: ', e);
-        Swal.fire('Error', "There was an error at RSVP. Please retry.", "warning");
+        alertWarning('Error', "There was an error at RSVP. Please retry.");
         Sentry.captureException(e)
         return e;
     });
@@ -314,7 +313,7 @@ export const cancelRSVP = (event) => async (dispatch, getState) => {
         return event;
     }).catch(e => {
         console.log('ERROR: ', e);
-        Swal.fire('Error', "There was an error at UnRSVP. Please retry.", "warning");
+        alertWarning('Error', "There was an error at UnRSVP. Please retry.");
         Sentry.captureException(e)
         return e;
     });
@@ -492,8 +491,7 @@ export const updatePassword = (password) => async (dispatch) => {
     )(params)(dispatch)
         .then(() => {
             dispatch(createAction(STOP_LOADING_IDP_PROFILE)());
-            let msg = 'Password Updated';
-            Swal.fire("Success", msg, "success");
+            alertSuccess("Success", "Password Updated");
         })
         .catch((e) => {
             console.log('ERROR: ', e);
@@ -537,12 +535,12 @@ export const saveAttendeeQuestions = (values, ticketId = null) => async (dispatc
         customErrorHandler
     )(params)(dispatch).then(() => {
         dispatch(stopLoading());
-        Swal.fire('Success', "Thank you, information saved", "success");
+        alertSuccess('Success', "Thank you, information saved");
         dispatch(getUserProfile());
         navigate('/')
     }).catch(e => {
         dispatch(stopLoading());
-        Swal.fire('Error', "Error saving your Attendee info. Please retry.", "warning");
+        alertWarning('Error', "Error saving your Attendee info. Please retry.");
         clearAccessToken();
         return e;
     });

@@ -13,7 +13,7 @@
 
 import i18n from '../../i18n';
 import IdTokenVerifier from 'idtoken-verifier';
-import Swal from 'sweetalert2';
+import { alertWarning, alertError } from '@utils/alerts';
 import {
     authErrorHandler,
     getRequest,
@@ -55,10 +55,10 @@ const customFetchErrorHandler = (response) => (dispatch) => {
     dispatch(stopLoading());
     switch (code) {
         case 403:
-            Swal.fire('ERROR', i18n.t('errors.user_not_authz'), 'warning');
+            alertWarning('ERROR', i18n.t('errors.user_not_authz'));
             break;
         case 401:
-            Swal.fire('ERROR', i18n.t('errors.session_expired'), 'error');
+            alertError('ERROR', i18n.t('errors.session_expired'));
             break;
         case 412:
             msg = '';
@@ -69,10 +69,10 @@ const customFetchErrorHandler = (response) => (dispatch) => {
 
                 msg += value + '<br>';
             }
-            Swal.fire('Validation error', msg, 'warning');
+            alertWarning('Validation error', msg);
             break;
         case 500:
-            Swal.fire('ERROR', i18n.t('errors.server_error'), 'error');
+            alertError('ERROR', i18n.t('errors.server_error'));
     }
 };
 
@@ -82,13 +82,13 @@ const customWithout412ErrorHandler = (
     dispatch(stopLoading());
     switch (err.status) {
         case 403:
-            Swal.fire('ERROR', i18n.t('errors.user_not_authz'), 'warning');
+            alertWarning('ERROR', i18n.t('errors.user_not_authz'));
             break;
         case 401:
-            Swal.fire('ERROR', i18n.t('errors.session_expired'), 'error');
+            alertError('ERROR', i18n.t('errors.session_expired'));
             break;
         case 500:
-            Swal.fire('ERROR', i18n.t('errors.server_error'), 'error');
+            alertError('ERROR', i18n.t('errors.server_error'));
             break;
     }
 };

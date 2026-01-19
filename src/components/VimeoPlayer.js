@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Player from '@vimeo/player';
 import * as Sentry from "@sentry/react";
 import eventNames from './VimeoPlayerEventNames';
-import Swal from 'sweetalert2';
+import { alertWarning } from '@utils/alerts';
 
 class VimeoPlayer extends React.Component {
 
@@ -386,7 +386,7 @@ VimeoPlayer.defaultProps = {
     dnt: false,
     speed: false,
     onError: (error) => {
-        Swal.fire('Error', 'This video stream will begin momentarily. Please standby.', "warning");
+        alertWarning('Error', 'This video stream will begin momentarily. Please standby.');
         console.log(error);
         Sentry.captureException(error)
     }
