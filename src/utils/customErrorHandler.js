@@ -1,5 +1,5 @@
 import expiredToken from './expiredToken';
-import Swal from 'sweetalert2';
+import { alertWarning } from '@utils/alerts';
 import {RSVP_INVITATION_ERROR} from "../actions/user-actions";
 import {
     createAction,
@@ -28,7 +28,7 @@ export const customErrorHandler = (err, res) => (dispatch, state) => {
       } else {
         msg = 'There was a problem with our server, please contact admin.';
       }
-      Swal.fire("Validation error", msg, "warning");
+      alertWarning("Validation error", msg);
       break;
     default:
       break;
@@ -65,7 +65,7 @@ export const customBadgeHandler = (err, res) => (dispatch, state) => {
       else if (err.response.error && err.response.error.message) msg = err.response.error.message;
       else msg = err.message;
 
-      Swal.fire("Not Found", msg, "warning");
+      alertWarning("Not Found", msg);
 
       break;
     case 412:
@@ -76,7 +76,7 @@ export const customBadgeHandler = (err, res) => (dispatch, state) => {
 
         msg += value + '<br>';
       }
-      Swal.fire("Validation error", msg, "warning");
+      alertWarning("Validation error", msg);
       break;
     default:
       break;
