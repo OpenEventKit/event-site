@@ -65,6 +65,16 @@ export const RECEIVE_RSVP_INVITATION = 'RECEIVE_RSVP_INVITATION';
 export const RSVP_INVITATION_ERROR = 'RSVP_INVITATION_ERROR';
 export const RSVP_INVITATION_ACCEPTED = 'RSVP_INVITATION_ACCEPTED';
 export const RSVP_INVITATION_REJECTED = 'RSVP_INVITATION_REJECTED';
+
+export const TICKET_ATTENDEE_KEYS = {
+    email: 'attendee_email',
+    firstName: 'attendee_first_name',
+    lastName: 'attendee_last_name',
+    company: 'attendee_company',
+    disclaimerAccepted: 'disclaimer_accepted',
+    extraQuestions: 'extra_questions'
+};
+
 const DISQUS_SSO_EXPIRATION = "DISQUS_SSO_EXPIRATION";
 
 // shortName is the unique identifier assigned to a Disqus site.

@@ -8,8 +8,7 @@ import * as Yup from 'yup';
 import { isEmpty } from "lodash";
 
 import { getExtraQuestions } from '../actions/summit-actions';
-import { saveAttendeeQuestions } from '../actions/user-actions';
-import { TICKET_ATTENDEE_KEYS as TicketKeys } from '../components/summit-my-orders-tickets/store/actions/ticket-actions';
+import { saveAttendeeQuestions, TICKET_ATTENDEE_KEYS as TicketKeys } from '../actions/user-actions';
 import Input from 'openstack-uicore-foundation/lib/components/inputs/text-input'
 import RegistrationCompanyInput  from 'openstack-uicore-foundation/lib/components/inputs/registration-company-input';
 import RawHTML from 'openstack-uicore-foundation/lib/components/raw-html';
