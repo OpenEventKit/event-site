@@ -8,7 +8,7 @@ export const useTicketDetails = ({ ticket, summit }) => {
     const {
         isPast,
         isStarted,
-        isReassignable,
+        isReassignable: isReassignDateValid,
         formattedDate,
         formattedReassignDate,
         daysUntilReassignDeadline
@@ -24,6 +24,9 @@ export const useTicketDetails = ({ ticket, summit }) => {
     const isActive = ticket.is_active && status.type !== STATUS_CANCELLED;
     const isUnassigned = status.type === STATUS_UNASSIGNED;
     const isRefundable = ticket.final_amount > 0 && ticket.final_amount > ticket.refunded_amount;
+
+    const ticketAllowsReassign = ticket.ticket_type?.allows_to_reassign !== false && ticket.promo_code?.allows_to_reassign !== false;
+    const isReassignable = isReassignDateValid && ticketAllowsReassign;
 
     const allowsDelegate = (ticket.ticket_type.allows_to_delegate || ticket.promo_code?.allows_to_delegate) && !isUnassigned && !ticket.owner?.manager?.id && !ticket.owner?.manager_id;
 
