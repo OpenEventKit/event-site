@@ -3189,7 +3189,7 @@
     parse-svg-path "^0.1.2"
     svg-arc-to-cubic-bezier "^3.2.0"
 
-"@react-pdf/renderer@^3.1.11", "@react-pdf/renderer@^3.1.12":
+"@react-pdf/renderer@^3.1.11", "@react-pdf/renderer@^3.1.12", "@react-pdf/renderer@^3.4.4":
   version "3.4.5"
   resolved "https://registry.yarnpkg.com/@react-pdf/renderer/-/renderer-3.4.5.tgz#e369149d12815b53934183353fcfcee2386fb862"
   integrity sha512-O1N8q45bTs7YuC+x9afJSKQWDYQy2RjoCxlxEGdbCwP+WD5G6dWRUWXlc8F0TtzU3uFglYMmDab2YhXTmnVN9g==
@@ -14972,10 +14972,10 @@ mux.js@6.0.1:
     "@babel/runtime" "^7.11.2"
     global "^4.4.0"
 
-my-orders-tickets-widget@1.0.7-beta.1:
-  version "1.0.7-beta.1"
-  resolved "https://registry.npmjs.org/my-orders-tickets-widget/-/my-orders-tickets-widget-1.0.7-beta.1.tgz#5d18d811460f89d0f2e9da23ea0bd63e9089e552"
-  integrity sha512-hZWhAaC4hUUchGCXyr+ZL6AeuEOpTWAIJ6j8Sa6OYFAkFWhUaVMEDrAiVaz2ZIj5WO13S8z8AkAJHABx8grVeQ==
+my-orders-tickets-widget@1.0.8-beta.1:
+  version "1.0.8-beta.1"
+  resolved "https://registry.yarnpkg.com/my-orders-tickets-widget/-/my-orders-tickets-widget-1.0.8-beta.1.tgz#d098a0f7646474de3118621a5e30c2e7e91d1c57"
+  integrity sha512-DXAUOjfIpxNlDM7qrkdkOeMW1xrPbWot/YpG+/uQpCxdm/lYtlICb7CYqB4Ev5q42Q+7JhuwINfxXJH6Nh4V9A==
   dependencies:
     "@emotion/react" "^11.11.4"
     "@emotion/styled" "^11.11.5"
@@ -14983,6 +14983,7 @@ my-orders-tickets-widget@1.0.7-beta.1:
     "@mui/material" "^5.15.20"
     "@mui/utils" "^5.16.8"
     "@mui/x-date-pickers" "^7.12.0"
+    "@react-pdf/renderer" "^3.4.4"
     "@reduxjs/toolkit" "^2.2.5"
     "@sentry/react" "^8.37.1"
     awesome-bootstrap-checkbox "^1.0.1"

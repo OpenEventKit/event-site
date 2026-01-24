@@ -72,6 +72,17 @@ export const MARKETING_SETTINGS_KEYS = {
   certificateSpeakerTitleText: "CERTIFICATE_SPEAKER_TITLE_TEXT",
   certificateSummitName: "CERTIFICATE_SUMMIT_NAME",
   certificateShowRole: "CERTIFICATE_SHOW_ROLE",
+  // Receipt settings
+  printLogo: "PRINT_LOGO",
+  receiptOrganizerLegalName: "RECEIPT_ORGANIZER_LEGAL_NAME",
+  receiptOrganizerAddressLine1: "RECEIPT_ORGANIZER_ADDRESS_LINE_1",
+  receiptOrganizerAddressLine2: "RECEIPT_ORGANIZER_ADDRESS_LINE_2",
+  receiptOrganizerCity: "RECEIPT_ORGANIZER_CITY",
+  receiptOrganizerState: "RECEIPT_ORGANIZER_STATE",
+  receiptOrganizerPostalCode: "RECEIPT_ORGANIZER_POSTAL_CODE",
+  receiptOrganizerCountry: "RECEIPT_ORGANIZER_COUNTRY",
+  receiptOrganizerTaxId: "RECEIPT_ORGANIZER_TAX_ID",
+  receiptOrganizerTaxIdLabel: "RECEIPT_ORGANIZER_TAX_ID_LABEL",
 }
 
 const marketingSettingsQuery = graphql`
