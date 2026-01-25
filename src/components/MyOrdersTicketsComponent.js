@@ -34,7 +34,7 @@ export const MyOrdersTicketsComponent = () => {
     const receiptSettings = {
         primaryColor: getSettingByKey(MARKETING_SETTINGS_KEYS.colorPrimary),
         fontFamily,
-        fontFile: fontUrl,
+        fontUrl,
         printLogo: getSettingByKey(MARKETING_SETTINGS_KEYS.printLogo),
         organizerLegalName: getSettingByKey(MARKETING_SETTINGS_KEYS.receiptOrganizerLegalName),
         organizerAddressLine1: getSettingByKey(MARKETING_SETTINGS_KEYS.receiptOrganizerAddressLine1),
