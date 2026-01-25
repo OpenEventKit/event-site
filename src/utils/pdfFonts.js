@@ -51,26 +51,22 @@ export const registerDefaultFont = (fontFile) => {
 };
 
 /**
- * Convert relative font paths to absolute URLs
+ * Convert font paths to consistent format
+ * Returns relative paths to avoid SSR/client hydration mismatch
  * @param {string} fontPath - The font path (relative or absolute)
- * @returns {string|null} - The absolute URL or null
+ * @returns {string|null} - The cleaned path or null
  */
 export const getFontUrl = (fontPath) => {
   if (!fontPath) return null;
 
+  // Already an absolute URL - return as-is
   if (fontPath.startsWith("http://") || fontPath.startsWith("https://")) {
     return fontPath;
   }
 
-  // For relative paths, prepend the origin
-  // Site settings fonts are served from /fonts/ (not /static/fonts/)
-  if (typeof window !== "undefined") {
-    // Remove /static prefix if present since fonts are served at root /fonts/
-    const cleanPath = fontPath.replace("/static/fonts/", "/fonts/");
-    return `${window.location.origin}${cleanPath}`;
-  }
-
-  return fontPath;
+  // Clean up the path - remove /static prefix since fonts are served at root /fonts/
+  // Always return relative path to avoid SSR/client hydration mismatch
+  return fontPath.replace("/static/fonts/", "/fonts/");
 };
 
 /**

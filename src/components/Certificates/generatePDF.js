@@ -37,26 +37,6 @@ const calculateOptimalFontSize = (text, maxWidth = 650, initialFontSize = 48, mi
   return finalSize;
 };
 
-// Validate image URL before PDF generation
-const validateImageUrl = async (url) => {
-  if (!url) return null;
-  
-  try {
-    const response = await fetch(url, {
-      method: 'GET',
-      mode: 'cors'
-    });
-    
-    if (response.ok) {
-      return url;
-    }
-    return null;
-  } catch (error) {
-    console.warn("Image validation failed:", error);
-    return null;
-  }
-};
-
 const CertificatePDF = ({ 
   attendee, 
   summit, 
@@ -252,15 +232,13 @@ const CertificatePDF = ({
 // helper function to generate and download the certificate
 export const generatePDF = async (attendee, summit, settings) => {
   try {
-    // Validate logo URL before generating PDF
-    const logoUrlToValidate = settings.logo || summit.logo;
-    const validatedLogoUrl = await validateImageUrl(logoUrlToValidate);
-    
-    const doc = <CertificatePDF 
-      attendee={attendee} 
-      summit={summit} 
+    const logoUrl = settings.logo || summit.logo || null;
+
+    const doc = <CertificatePDF
+      attendee={attendee}
+      summit={summit}
       settings={settings}
-      logoUrl={validatedLogoUrl}
+      logoUrl={logoUrl}
     />;
     const blob = await pdf(doc).toBlob();
     
