@@ -27,20 +27,14 @@ export const MyOrdersTicketsComponent = () => {
 
     // Get font info from site settings, defaulting to Nunito Sans
     const siteFont = siteSettings?.siteFont;
-    let fontFamily = DEFAULT_FONT_FAMILY;
-    let fontFile = getFontUrl(DEFAULT_FONT_PATH);
-
-    // Use custom site font if configured
-    if (siteFont?.fontFamily && siteFont?.regularFont?.fontFile) {
-        fontFamily = siteFont.fontFamily;
-        fontFile = getFontUrl(siteFont.regularFont.fontFile);
-    }
+    const fontFamily = siteFont?.fontFamily || DEFAULT_FONT_FAMILY;
+    const fontUrl = getFontUrl(siteFont?.regularFont?.fontFile || DEFAULT_FONT_PATH, window.location.origin);
 
     // Build receipt settings from marketing settings
     const receiptSettings = {
         primaryColor: getSettingByKey(MARKETING_SETTINGS_KEYS.colorPrimary),
         fontFamily,
-        fontFile,
+        fontFile: fontUrl,
         printLogo: getSettingByKey(MARKETING_SETTINGS_KEYS.printLogo),
         organizerLegalName: getSettingByKey(MARKETING_SETTINGS_KEYS.receiptOrganizerLegalName),
         organizerAddressLine1: getSettingByKey(MARKETING_SETTINGS_KEYS.receiptOrganizerAddressLine1),

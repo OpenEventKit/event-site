@@ -51,12 +51,12 @@ export const registerDefaultFont = (fontFile) => {
 };
 
 /**
- * Convert font paths to consistent format
- * Returns relative paths to avoid SSR/client hydration mismatch
+ * Convert font paths to absolute URLs
  * @param {string} fontPath - The font path (relative or absolute)
- * @returns {string|null} - The cleaned path or null
+ * @param {string} origin - The origin to use for absolute URL (e.g., window.location.origin)
+ * @returns {string|null} - The absolute URL or null
  */
-export const getFontUrl = (fontPath) => {
+export const getFontUrl = (fontPath, origin) => {
   if (!fontPath) return null;
 
   // Already an absolute URL - return as-is
@@ -65,8 +65,10 @@ export const getFontUrl = (fontPath) => {
   }
 
   // Clean up the path - remove /static prefix since fonts are served at root /fonts/
-  // Always return relative path to avoid SSR/client hydration mismatch
-  return fontPath.replace("/static/fonts/", "/fonts/");
+  const cleanPath = fontPath.replace("/static/fonts/", "/fonts/");
+
+  // Convert to absolute URL
+  return new URL(cleanPath, origin).href;
 };
 
 /**
@@ -83,9 +85,10 @@ export const registerCustomFont = (siteFont) => {
   }
 
   const fonts = [];
+  const origin = window.location.origin;
 
   if (siteFont.regularFont.fontFile && siteFont.regularFont.fontFormat === "ttf") {
-    const fontUrl = getFontUrl(siteFont.regularFont.fontFile);
+    const fontUrl = getFontUrl(siteFont.regularFont.fontFile, origin);
     if (fontUrl) {
       fonts.push({
         src: fontUrl,
@@ -95,7 +98,7 @@ export const registerCustomFont = (siteFont) => {
   }
 
   if (siteFont.boldFont.fontFile && siteFont.boldFont.fontFormat === "ttf") {
-    const fontUrl = getFontUrl(siteFont.boldFont.fontFile);
+    const fontUrl = getFontUrl(siteFont.boldFont.fontFile, origin);
     if (fontUrl) {
       fonts.push({
         src: fontUrl,
