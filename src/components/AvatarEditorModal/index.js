@@ -4,12 +4,9 @@ import AjaxLoader from "openstack-uicore-foundation/lib/components/ajaxloader";
 import { Box, Typography, Slider, Modal } from "@mui/material";
 import { Button, IconButton } from "../ui";
 import { styled } from "@mui/system";
-import {
-  //Close as CloseIcon,
-  CameraAlt as CameraAltIcon,
-  RotateLeft as RotateLeftIcon,
-  RotateRight as RotateRightIcon,
-} from "@mui/icons-material";
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import RotateLeftIcon from "@mui/icons-material/RotateLeft";
+import RotateRightIcon from "@mui/icons-material/RotateRight";
 import { create_UUID } from "@utils/uuidGenerator";
 
 const CustomSlider = styled(Slider)(({ theme }) => ({
