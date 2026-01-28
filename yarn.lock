@@ -14906,10 +14906,10 @@ mux.js@6.0.1:
     "@babel/runtime" "^7.11.2"
     global "^4.4.0"
 
-my-orders-tickets-widget@1.0.8-beta.4:
-  version "1.0.8-beta.4"
-  resolved "https://registry.yarnpkg.com/my-orders-tickets-widget/-/my-orders-tickets-widget-1.0.8-beta.4.tgz#403e7b400e12b1c6aad7ec0bd658dd6cd18eef12"
-  integrity sha512-p3j2Vt4J2nt8/0xqSfbq2S6XBV/Dbyd6AHI4GMPwiI2SA27u2WGgQh+02bflwdPx3doDzNZtmksObef+aiMb+A==
+my-orders-tickets-widget@1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/my-orders-tickets-widget/-/my-orders-tickets-widget-1.0.8.tgz#4c46d634764d700e3bfd2201f0fcdb067df2d74d"
+  integrity sha512-FGT383EYs6U9JaYgFQ/24SZ84b70Fur5zj5rovRusPPmERAf32RTS22G/ZY6xmZDvoQhPL9c1vDkqBfWGlnBGw==
   dependencies:
     "@emotion/react" "^11.11.4"
     "@emotion/styled" "^11.11.5"
@@ -14927,6 +14927,7 @@ my-orders-tickets-widget@1.0.8-beta.4:
     i18next "^23.11.5"
     i18next-browser-languagedetector "^8.0.0"
     js-cookie "^3.0.5"
+    p-limit "3.0.0"
     prop-types "^15.8.1"
     react-final-form "6.5.9"
     react-i18next "^14.1.2"
@@ -15430,6 +15431,13 @@ p-defer@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/p-defer/-/p-defer-3.0.0.tgz#d1dceb4ee9b2b604b1d94ffec83760175d4e6f83"
   integrity sha512-ugZxsxmtTln604yeYd29EGrNhazN2lywetzpKhfmQjW/VJmhpDmWbiX+h0zL8V91R0UXkhb3KtPmyq9PZw3aYw==
+
+p-limit@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/p-limit/-/p-limit-3.0.0.tgz#8a9da09ee359017af6a3aa6b8ede13f5894224ec"
+  integrity sha512-2FnzNu8nBx8Se231yrvScYw34Is5J5MtvKOQt7Lii+DGpM89xnCT7kIH/HJwniNkQpjB7zy/O3LckEfMVqYvFg==
+  dependencies:
+    p-try "^2.0.0"
 
 p-limit@3.1.0, p-limit@^3.0.2, p-limit@^3.1.0:
   version "3.1.0"
