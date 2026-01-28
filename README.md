@@ -120,6 +120,14 @@ MacOS users might also encounter some errors, for more info check [node-gyp](htt
 
 This plugin uses [gatsby-plugin-purgecss](https://www.gatsbyjs.org/packages/gatsby-plugin-purgecss/) and [bulma](https://bulma.io/). The bulma builds are usually ~170K but reduced 90% by purgecss.
 
+## Dependency Notes
+
+### cross-fetch Resolution
+
+The `cross-fetch` package is pinned to version 3.1.8 via `resolutions`/`overrides` in package.json to fix a "Failed to execute 'fetch' on 'Window': Illegal invocation" error that occurs with `@react-pdf/renderer` when loading custom fonts.
+
+See: https://github.com/diegomura/react-pdf/issues/3034
+
 # CONTRIBUTING
 
 Contributions are always welcome, no matter how large or small. Before contributing,

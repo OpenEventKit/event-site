@@ -1,93 +1,11 @@
 import React from "react";
-import { Document, Page, Text, View, Image, StyleSheet, Font, pdf } from "@react-pdf/renderer";
+import { Document, Page, Text, View, Image, StyleSheet, pdf } from "@react-pdf/renderer";
 
-import fontVariable from "../../../static/fonts/nunito-sans/NunitoSans-Variable.ttf";
+import {
+  getRegisteredFontFamily,
+  registerCustomFont
+} from "../../utils/pdfFonts";
 import { USER_ROLES } from './constants';
-
-const registerDefaultFont = () => {
-  try {
-    Font.register({
-      family: "Nunito Sans",
-      fonts: [
-        {
-          src: fontVariable,
-          fontWeight: "normal"
-        },
-        {
-          src: fontVariable,
-          fontWeight: "bold"
-        },
-      ]
-    });
-    return true;
-  } catch (error) {
-    console.error("Failed to register default font:", error);
-    return false;
-  }
-};
-
-// helper to convert relative font paths to absolute URLs
-const getFontUrl = (fontPath) => {
-  if (!fontPath) return null;
-  
-  if (fontPath.startsWith("http://") || fontPath.startsWith("https://")) {
-    return fontPath;
-  }
-
-  // For relative paths, prepend the origin
-  // Site settings fonts are served from /fonts/ (not /static/fonts/)
-  if (typeof window !== "undefined") {
-    // Remove /static prefix if present since fonts are served at root /fonts/
-    const cleanPath = fontPath.replace("/static/fonts/", "/fonts/");
-    return `${window.location.origin}${cleanPath}`;
-  }
-  
-  return fontPath;
-};
-
-// register custom font from site settings if available
-const registerCustomFont = (siteFont) => {
-  if (!siteFont || !siteFont.fontFamily || !siteFont.regularFont || !siteFont.boldFont) {
-    return false;
-  }
-  
-  const fonts = [];
-
-  if (siteFont.regularFont.fontFile && siteFont.regularFont.fontFormat === "ttf") {
-    const fontUrl = getFontUrl(siteFont.regularFont.fontFile);
-    if (fontUrl) {
-      fonts.push({
-        src: fontUrl,
-        fontWeight: "normal"
-      });
-    }
-  }
-
-  if (siteFont.boldFont.fontFile && siteFont.boldFont.fontFormat === "ttf") {
-    const fontUrl = getFontUrl(siteFont.boldFont.fontFile);
-    if (fontUrl) {
-      fonts.push({
-        src: fontUrl,
-        fontWeight: "bold"
-      });
-    }
-  }
-
-  if (fonts.length > 0) {
-    try {
-      Font.register({
-        family: siteFont.fontFamily,
-        fonts: fonts
-      });
-      return true;
-    } catch (error) {
-      console.warn("Failed to register custom font:", error);
-      return false;
-    }
-  }
-  
-  return false;
-};
 
 
 const calculateOptimalFontSize = (text, maxWidth = 650, initialFontSize = 48, minFontSize = 24) => {
@@ -119,26 +37,6 @@ const calculateOptimalFontSize = (text, maxWidth = 650, initialFontSize = 48, mi
   return finalSize;
 };
 
-// Validate image URL before PDF generation
-const validateImageUrl = async (url) => {
-  if (!url) return null;
-  
-  try {
-    const response = await fetch(url, {
-      method: 'GET',
-      mode: 'cors'
-    });
-    
-    if (response.ok) {
-      return url;
-    }
-    return null;
-  } catch (error) {
-    console.warn("Image validation failed:", error);
-    return null;
-  }
-};
-
 const CertificatePDF = ({ 
   attendee, 
   summit, 
@@ -156,17 +54,15 @@ const CertificatePDF = ({
   const nameFontSize = calculateOptimalFontSize(fullName);
 
 
-  let fontFamily = "Nunito Sans";
+  // Use fonts registered at app init, or try custom font from site settings
+  let fontFamily = getRegisteredFontFamily();
 
+  // If site settings has a custom font, try to register it (may already be registered at init)
   if (settings?.siteFont && settings.siteFont.fontFamily) {
     const customFontRegistered = registerCustomFont(settings.siteFont);
     if (customFontRegistered) {
       fontFamily = settings.siteFont.fontFamily;
-    } else {
-      registerDefaultFont();
     }
-  } else {
-    registerDefaultFont();
   }
 
   const styles = StyleSheet.create({
@@ -336,15 +232,13 @@ const CertificatePDF = ({
 // helper function to generate and download the certificate
 export const generatePDF = async (attendee, summit, settings) => {
   try {
-    // Validate logo URL before generating PDF
-    const logoUrlToValidate = settings.logo || summit.logo;
-    const validatedLogoUrl = await validateImageUrl(logoUrlToValidate);
-    
-    const doc = <CertificatePDF 
-      attendee={attendee} 
-      summit={summit} 
+    const logoUrl = settings.logo || summit.logo || null;
+
+    const doc = <CertificatePDF
+      attendee={attendee}
+      summit={summit}
       settings={settings}
-      logoUrl={validatedLogoUrl}
+      logoUrl={logoUrl}
     />;
     const blob = await pdf(doc).toBlob();
     

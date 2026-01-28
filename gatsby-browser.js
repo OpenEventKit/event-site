@@ -17,6 +17,9 @@ import "./src/styles/bulma.scss";
 import "./src/styles/style.scss";
 // import global fontawesome
 import "./src/utils/fontAwesome";
+// PDF font registration
+import { initializePdfFonts } from "./src/utils/pdfFonts";
+import fontVariable from "./static/fonts/nunito-sans/NunitoSans-Variable.ttf";
 
 import colors from "data/colors.json";
 import marketingSettings from "data/marketing-settings.json";
@@ -28,6 +31,18 @@ export const wrapRootElement = ({ element }) => {
 export const onClientEntry = () => {
   // smooth scroll polyfill needed for Safari
   smoothscroll.polyfill();
+
+  // Initialize PDF fonts for certificate and receipt generation
+  // Import site settings to check for custom fonts
+  import("./src/content/site-settings/index.json").then((siteSettings) => {
+    initializePdfFonts({
+      defaultFontFile: fontVariable,
+      siteFont: siteSettings.siteFont
+    });
+  }).catch(() => {
+    // Fall back to default font if site settings can't be loaded
+    initializePdfFonts({ defaultFontFile: fontVariable });
+  });
 
   // show cookie consent only if google tag manager was deferred loaded
   // see gatsby-google-tag-manager-plugin in gatsby-config
