@@ -7,7 +7,6 @@ import {
 
 import {
   getAccessToken,
-  clearAccessToken,
 } from 'openstack-uicore-foundation/lib/security/methods';
 
 import { customErrorHandler } from '../utils/customErrorHandler';
@@ -76,7 +75,6 @@ export const getAllVoteablePresentations = (page = 1, perPage = PresentationsDef
   }).catch(e => {
      console.log('ERROR: ', e);
     dispatch(stopLoading());
-    clearAccessToken();
     return (e);
   });
 }
@@ -105,7 +103,6 @@ export const getVoteablePresentations = (page = 1, perPage = PresentationsDefaul
     { page }
   )(params)(dispatch).catch(e => {
     console.log('ERROR: ', e);
-    clearAccessToken();
     return (e);
   });
 };
@@ -138,7 +135,6 @@ export const getPresentationById = (presentationId) => async (dispatch) => {
     console.log('ERROR: ', e);
     dispatch(stopLoading());
     dispatch(createAction(GET_PRESENTATION_DETAILS_ERROR)(e));
-    clearAccessToken();
     return Promise.reject(e);
   });
 };
@@ -174,7 +170,6 @@ export const getRecommendedPresentations = (trackGroups) => async (dispatch) => 
   }).catch(e => {
     console.log('ERROR: ', e);
     dispatch(stopLoading());
-    clearAccessToken();
     return (e);
   });
 };
