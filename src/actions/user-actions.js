@@ -12,7 +12,6 @@ import {
 import { putOnLocalStorage, getFromLocalStorage } from 'openstack-uicore-foundation/lib/utils/methods';
 
 import {
-    clearAccessToken,
     passwordlessLogin,
     initLogOut
 } from 'openstack-uicore-foundation/lib/security/methods';
@@ -94,7 +93,6 @@ export const getDisqusSSO = (shortName) => async (dispatch, getState) => {
         .catch(e => {
             console.log('ERROR: ', e);
             Sentry.captureException(e)
-            clearAccessToken();
             return Promise.reject(e);
         });
 }
@@ -128,7 +126,6 @@ export const getUserProfile = () => async (dispatch) => {
     }).catch((e) => {
         console.log('ERROR: ', e);
         dispatch(createAction(STOP_LOADING_PROFILE)());
-        clearAccessToken();
         alertWarning('Error', "There was an error at Login Flow. Please retry.");
         initLogOut();
         return (e);
@@ -158,7 +155,6 @@ export const getIDPProfile = () => async (dispatch) => {
         .catch((e) => {
             console.log('ERROR: ', e);
             dispatch(createAction(STOP_LOADING_IDP_PROFILE)())
-            clearAccessToken();
             return (e);
         });
 }
@@ -212,7 +208,6 @@ export const scanBadge = (sponsorId) => async (dispatch) => {
         .catch(e => {
             console.log('ERROR: ', e);
             dispatch(createAction(SCAN_BADGE_ERROR)(e));
-            clearAccessToken();
             return (e);
         });
 }
@@ -335,7 +330,9 @@ export const castPresentationVote = (presentation) => async (dispatch, getState)
 
     const errorHandler = (err) => (dispatch, state) => {
         const {status, response: {text}} = err;
-        if (status === 412) {
+        if (status === 401) {
+            expiredToken(err);
+        } else if (status === 412) {
             if (text.includes('already vote')) {
                 // 'confirm' as local vote
                 dispatch(createAction(TOGGLE_PRESENTATION_VOTE)({presentation, isVoted: true}));
@@ -363,7 +360,6 @@ export const castPresentationVote = (presentation) => async (dispatch, getState)
         {presentation}
     )(params)(dispatch).catch((e) => {
         console.log('ERROR: ', e);
-        clearAccessToken();
         // need to revert button state
         // first 'confirm' as local vote
         dispatch(createAction(TOGGLE_PRESENTATION_VOTE)({presentation, isVoted: true}));
@@ -387,7 +383,9 @@ export const uncastPresentationVote = (presentation) => async (dispatch, getStat
 
     const errorHandler = (err) => (dispatch, state) => {
         const {status, response: {text}} = err;
-        if (status === 412 && text.includes('Vote not found')) {
+        if (status === 401) {
+            expiredToken(err);
+        } else if (status === 412 && text.includes('Vote not found')) {
             // tried removing a vote not longer present in api
             // confirming removal
             dispatch(createAction(TOGGLE_PRESENTATION_VOTE)({presentation, isVoted: false}));
@@ -405,7 +403,6 @@ export const uncastPresentationVote = (presentation) => async (dispatch, getStat
         {presentation}
     )(params)(dispatch).catch((e) => {
         console.log('ERROR: ', e);
-        clearAccessToken();
         return e;
     });
 };
@@ -436,7 +433,6 @@ export const updateProfilePicture = (pic) => async (dispatch) => {
         .catch((e) => {
             console.log('ERROR: ', e);
             dispatch(createAction(STOP_LOADING_IDP_PROFILE)())
-            clearAccessToken();
             return e;
         });
 }
@@ -466,7 +462,6 @@ export const updateProfile = (profile) => async (dispatch) => {
         .catch((e) => {
             console.log('ERROR: ', e);
             dispatch(createAction(STOP_LOADING_IDP_PROFILE)());
-            clearAccessToken();
             return e;
         });
 }
@@ -497,7 +492,6 @@ export const updatePassword = (password) => async (dispatch) => {
         .catch((e) => {
             console.log('ERROR: ', e);
             dispatch(createAction(STOP_LOADING_IDP_PROFILE)())
-            clearAccessToken();
             return e;
         });
 }
@@ -542,7 +536,6 @@ export const saveAttendeeQuestions = (values, ticketId = null) => async (dispatc
     }).catch(e => {
         dispatch(stopLoading());
         alertWarning('Error', "Error saving your Attendee info. Please retry.");
-        clearAccessToken();
         return e;
     });
 };
@@ -581,7 +574,6 @@ export const getScheduleSyncLink = () => async (dispatch) => {
         customErrorHandler,
     )(params)(dispatch).catch((e) => {
         console.log('ERROR: ', e);
-        clearAccessToken();
         return e;
     });
 };
@@ -636,7 +628,6 @@ export const doVirtualCheckIn = (attendee) => async (dispatch, getState) => {
         voidErrorHandler
     )(params)(dispatch).catch((e) => {
         console.log('ERROR: ', e);
-        clearAccessToken();
         return e;
     });
 };
