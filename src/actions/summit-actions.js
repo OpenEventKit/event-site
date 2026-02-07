@@ -1,7 +1,3 @@
-import {
-    getAccessToken,
-    clearAccessToken,
-} from 'openstack-uicore-foundation/lib/security/methods';
 
 import {
     getRequest,
@@ -43,7 +39,6 @@ export const getExtraQuestions = (attendeeId = null) => async (dispatch, getStat
         dispatch(stopLoading());
     }).catch(e => {
         console.log('ERROR: ', e);
-        clearAccessToken();
         dispatch(stopLoading());
         return Promise.reject(e);
     });
