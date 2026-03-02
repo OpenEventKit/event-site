@@ -20,3 +20,4 @@ yalc.lock
 src/data/*
 CLAUDE.md
 .claude/
+.playwright-mcp/
