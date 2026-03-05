@@ -8,7 +8,7 @@ import LanguageInput from 'openstack-uicore-foundation/lib/components/inputs/lan
 import DateTimePicker from 'openstack-uicore-foundation/lib/components/inputs/datetimepicker'
 import moment from "moment-timezone";
 
-import Swal from 'sweetalert2';
+import { alertWarning } from '@utils/alerts';
 
 import Layout from '../components/Layout'
 import withOrchestra from "../utils/widgetOrchestra";
@@ -135,8 +135,7 @@ export const FullProfilePageTemplate = ({ user, getIDPProfile, updateProfile, up
             updateProfile(fromPopup)
         } else {
             if (!personalProfile.firstName || !personalProfile.lastName || !personalProfile.identifier || !personalProfile.email) {
-                const msg = `Required field missing`;
-                Swal.fire("Validation error", msg, "warning");
+                alertWarning("Validation error", "Required field missing");
             } else {
                 const newProfile = {
                     first_name: personalProfile.firstName,
