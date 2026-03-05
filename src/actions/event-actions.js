@@ -4,7 +4,6 @@ import {
     stopLoading,
     startLoading,
 } from 'openstack-uicore-foundation/lib/utils/actions';
-import { clearAccessToken } from 'openstack-uicore-foundation/lib/security/methods';
 import { getAccessTokenSafely } from '../utils/loginUtils';
 
 import { customErrorHandler } from '../utils/customErrorHandler';
@@ -72,7 +71,6 @@ export const getEventById = (
         dispatch(stopLoading());
         dispatch(createAction(GET_EVENT_DATA_ERROR)(e));
         console.log('ERROR: ', e);
-        clearAccessToken();
         return (e);
     });
 };
