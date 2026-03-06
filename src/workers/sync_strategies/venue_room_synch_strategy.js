@@ -1,5 +1,5 @@
 import AbstractSynchStrategy from "./abstract_synch_strategy";
-import { fetchLocationById } from "../../actions/fetch-entities-actions";
+import { clearEtagCacheForUrl, fetchLocationById } from "../../actions/fetch-entities-actions";
 import {
     BUCKET_EVENTS_DATA_KEY,
     BUCKET_EVENTS_IDX_DATA_KEY,
@@ -19,6 +19,8 @@ class VenueRoomSynchStrategy extends AbstractSynchStrategy{
         console.log(`VenueRoomSynchStrategy::process`, payload);
 
         const {entity_operator, entity_id} = payload;
+
+        clearEtagCacheForUrl(`/v1/summits/${this.summit.id}/locations/${entity_id}`);
 
         const entity = await fetchLocationById(this.summit.id, entity_id, 'floor,venue' , this.accessToken);
 
