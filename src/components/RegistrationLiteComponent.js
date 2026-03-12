@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import PropTypes from "prop-types";
 import * as Sentry from "@sentry/react";
 import { navigate, withPrefix } from "gatsby";
@@ -53,6 +53,7 @@ const RegistrationLiteComponent = ({
 }) => {
     const [isActive, setIsActive] = useState(false);
     const [initialEmailValue, setInitialEmailValue] = useState("");
+    const summitData = useMemo(() => summit, [summit?.id]);
 
     useEffect(() => {
         const fragmentParser = new FragmentParser();
@@ -164,7 +165,7 @@ const RegistrationLiteComponent = ({
     const widgetProps = {
         apiBaseUrl: getEnvVariable(SUMMIT_API_BASE_URL),
         clientId: getEnvVariable(OAUTH2_CLIENT_ID),
-        summitData: summit,
+        summitData,
         profileData: registrationProfile,
         marketingData: colorSettings,
         loginOptions: validateIdentityProviderButtons(siteSettings?.identityProviderButtons, availableThirdPartyProviders),
