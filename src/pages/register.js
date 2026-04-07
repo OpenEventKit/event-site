@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { navigate, withPrefix } from "gatsby";
 import URI from "urijs";
-import Swal from "sweetalert2";
+import { StyledSwal as Swal } from "@utils/alerts";
 import * as Sentry from "@sentry/react";
 import FragmentParser from "openstack-uicore-foundation/lib/utils/fragment-parser";
 import { doLogin, doLogout, passwordlessStart } from "openstack-uicore-foundation/lib/security/methods";
