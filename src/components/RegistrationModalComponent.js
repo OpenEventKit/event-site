@@ -127,8 +127,6 @@ const RegistrationModalComponent = ({
 
     const handleClosePopup = () => {
         setIsOpen(false);
-        // Reload user profile when modal closes
-        getUserProfile().catch((e) => console.log("getUserProfile error. Not logged in?"));
     };
 
     const handleOnError = (e) => {
@@ -202,7 +200,10 @@ const RegistrationModalComponent = ({
         goToEvent: () => navigate("/a/"),
         goToMyOrders: () => navigate("/a/my-tickets"),
         onPurchaseComplete: (order) => {
-            setUserOrder(order).then(() => checkOrderData(order));
+            setUserOrder(order)
+                .then(() => checkOrderData(order))
+                .then(() => getUserProfile())
+                .catch((e) => console.log("getUserProfile error"));
         },
         completedExtraQuestions: async (attendee) => {
             if (!attendee) return true;
