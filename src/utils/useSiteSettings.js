@@ -54,6 +54,10 @@ const siteSettingsQuery = graphql`
         }
         providerLogoSize
       }
+      registration {
+        registrationMode
+        registrationLink
+      }
       maintenanceMode {
         title
         subtitle

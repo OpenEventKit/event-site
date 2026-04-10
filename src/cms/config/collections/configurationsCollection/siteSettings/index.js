@@ -24,6 +24,7 @@ import {
 } from "@utils/envVariables";
 
 import { mapObjectToSelectOptions } from "../../../utils";
+import { REGISTRATION_MODE } from "@utils/registrationConstants";
 
 const FONT_FORMATS = {
   truetype: "ttf",
@@ -176,6 +177,26 @@ const siteSettings = {
               options: mapObjectToSelectOptions(FONT_FORMATS)
             })
           ]
+        })
+      ]
+    }),
+    objectField({
+      label: "Registration",
+      name: "registration",
+      fields: [
+        selectField({
+          label: "Registration Mode",
+          name: "registrationMode",
+          default: REGISTRATION_MODE.modal,
+          required: false,
+          options: mapObjectToSelectOptions(REGISTRATION_MODE),
+          hint: "MODAL: opens a popup overlay on the current page. STANDALONE: navigates to the built-in /register page. LINK: navigates to the URL in Registration Link below (use for content pages with an embedded <RegistrationForm /> shortcode, or external registration systems)."
+        }),
+        stringField({
+          label: "Registration Link",
+          name: "registrationLink",
+          required: false,
+          hint: "Only used when Registration Mode is LINK. Internal paths (e.g. /my-page) use site navigation. Full URLs (e.g. https://example.com) redirect externally. To embed the registration form in a content page, add <RegistrationForm /> in the page's MDX body."
         })
       ]
     }),

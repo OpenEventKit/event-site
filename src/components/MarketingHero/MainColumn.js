@@ -3,24 +3,30 @@ import { getSrc } from "gatsby-plugin-image";
 import AuthComponent from "../AuthComponent";
 import RegistrationModalComponent from "../RegistrationModalComponent";
 import RegisterButton from "../RegisterButton";
+import { REGISTRATION_MODE } from "@utils/registrationConstants";
+import useSiteSettings from "@utils/useSiteSettings";
 
 import styles from "./styles.module.scss";
 
-const ButtonGroup = ({ location, registerButton, loginButton }) => (
-  <>
-    {registerButton?.display && (
-      <span className={styles.link}>
-        <RegisterButton />
-      </span>
-    )}
-    {registerButton?.display && (
-      <span className={styles.link}>
-        <RegistrationModalComponent location={location} />
-      </span>
-    )}
-    {loginButton?.display && <AuthComponent location={location} />}
-  </>
-);
+const ButtonGroup = ({ location, registerButton, loginButton }) => {
+  const siteSettings = useSiteSettings();
+  const mode = siteSettings?.registration?.registrationMode || REGISTRATION_MODE.modal;
+  return (
+    <>
+      {registerButton?.display && (mode === REGISTRATION_MODE.standalone || mode === REGISTRATION_MODE.link) && (
+        <span className={styles.link}>
+          <RegisterButton />
+        </span>
+      )}
+      {registerButton?.display && mode === REGISTRATION_MODE.modal && (
+        <span className={styles.link}>
+          <RegistrationModalComponent location={location} />
+        </span>
+      )}
+      {loginButton?.display && <AuthComponent location={location} />}
+    </>
+  );
+};
 
 const MainColumn = ({ location, title, subTitle, date, time, buttons, backgroundSrc, fullWidth }) => {
   const backgroundImageStyle = backgroundSrc

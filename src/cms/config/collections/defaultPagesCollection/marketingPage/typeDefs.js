@@ -45,7 +45,6 @@ module.exports = `
   type MarketingPageHeroRegistrationButton {
     text: String
     display: Boolean
-    externalRegistrationLink: String
   }
   type MarketingPageHeroLoginButton {
     text: String

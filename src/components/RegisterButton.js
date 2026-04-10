@@ -5,26 +5,28 @@ import { connect } from "react-redux";
 
 import IconButton from "./IconButton";
 import iconButtonStyles from "./IconButton/styles.module.scss";
+import { REGISTRATION_MODE } from "@utils/registrationConstants";
+import useSiteSettings from "@utils/useSiteSettings";
 
-/**
- * RegisterButton - Button that navigates to /register page
- *
- * This component provides a registration button that:
- * - Checks for external registration links and redirects if configured
- * - Otherwise navigates to the internal /register page
- * - Can wrap custom children elements with onClick handler
- */
 const RegisterButton = ({
    marketingPageSettings,
    children,
 }) => {
+    const siteSettings = useSiteSettings();
+    const registration = siteSettings?.registration;
+    const mode = registration?.registrationMode || REGISTRATION_MODE.modal;
+
     const handleClick = () => {
-        const { registerButton } = marketingPageSettings.hero.buttons;
-        if (registerButton?.externalRegistrationLink) {
-            window.location = registerButton.externalRegistrationLink;
+        if (mode === REGISTRATION_MODE.link && registration?.registrationLink) {
+            const url = registration.registrationLink;
+            const isInternal = /^\/(?!\/)/.test(url);
+            if (isInternal) {
+                navigate(url);
+            } else {
+                window.location = url;
+            }
             return;
         }
-        // Navigate to dedicated registration page
         navigate("/register");
     }
 

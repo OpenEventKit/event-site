@@ -42,7 +42,6 @@ export const marketingPageQuery = graphql`
           registerButton {
             text
             display
-            externalRegistrationLink
           }
           loginButton {
             text

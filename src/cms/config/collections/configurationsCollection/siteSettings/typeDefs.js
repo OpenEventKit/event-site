@@ -43,12 +43,17 @@ module.exports = `
     providerLogo: File @fileByRelativePath
     providerLogoSize: Float
   }
+  type Registration {
+    registrationMode: String
+    registrationLink: String
+  }
   type MaintenanceMode {
     enabled: Boolean
     title: String
     subtitle: String
   }
   type SiteSettingsJson implements Node {
+    registration: Registration
     siteMetadata: SiteMetadata
     favicon: Favicon
     siteFont: SiteFont

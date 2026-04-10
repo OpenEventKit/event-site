@@ -21,9 +21,19 @@ const transformContent = (mdx, getAsset) => {
     });
 };
 
+// Override shortcodes that require Redux/Gatsby context with placeholders for CMS preview
+const previewShortcodes = {
+    ...shortcodes,
+    RegistrationForm: () => (
+        <div style={{ border: '2px dashed #ccc', padding: '2rem', textAlign: 'center', margin: '1rem 0' }}>
+            <p style={{ fontSize: '1.2rem', color: '#666' }}>Registration Form Widget (preview not available)</p>
+        </div>
+    )
+};
+
 // function to render transformed content with Mdx
 const renderContent = (mdx, getAsset) => (
-    <Mdx shortcodes={shortcodes} content={transformContent(mdx, getAsset)}/>
+    <Mdx shortcodes={previewShortcodes} content={transformContent(mdx, getAsset)}/>
 );
 
 const ContentPagePreview = ({ entry, getAsset }) => {
