@@ -79,7 +79,7 @@ const marketingPage = {
                   label: "Display",
                   name: "display",
                   required: false,
-                  hint: "Show or hide the register button on the hero. Registration mode and link are configured in Site Settings > Registration."
+                  hint: "Show or hide the register button on the hero. To change the register button behavior (open registration popup, navigate to standalone registration page, or redirect to an internal page or external URL), go to Site Settings > Registration."
                 }),
               ]
             }),
