@@ -6,6 +6,7 @@ import Mdx from "../../components/Mdx";
 
 // function to transform content by replacing relative image URLs with absolute ones
 const transformContent = (mdx, getAsset) => {
+    if (!mdx) return "";
     // regex to identify Markdown image tags ![alt](url)
     const imageRegex = /!\[([^\]]*)\]\(([^)]+)\)/g;
 
