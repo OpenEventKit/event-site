@@ -11,6 +11,9 @@ import { CONTENT_PAGES_DIR_PATH } from "@utils/filePath";
 import { USER_REQUIREMENTS } from "@utils/pageAccessConstants";
 
 import { mapObjectToSelectOptions } from "../../utils";
+import shortcodes from "../../../../templates/content-page/shortcodes";
+
+const shortcodesHint = `Available shortcodes: ${Object.keys(shortcodes).map(name => `<${name} />`).join(", ")}`;
 
 const contentPagesCollection = {
   ...collectionDefaults({
@@ -48,7 +51,8 @@ const contentPagesCollection = {
     }),
     markdownField({
       label: "Body",
-      name: "body"
+      name: "body",
+      hint: shortcodesHint
     })
   ]
 };
