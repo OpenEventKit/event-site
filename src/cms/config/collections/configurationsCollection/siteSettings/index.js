@@ -190,13 +190,13 @@ const siteSettings = {
           default: REGISTRATION_MODE.modal,
           required: false,
           options: mapObjectToSelectOptions(REGISTRATION_MODE),
-          hint: "MODAL: opens a popup overlay on the current page. STANDALONE: navigates to the built-in /register page. LINK: navigates to the URL in Registration Link below (use for content pages with an embedded <RegistrationForm /> shortcode, or external registration systems)."
+          hint: "MODAL: opens the registration form as a popup overlay. STANDALONE: redirects to a dedicated registration page. LINK: redirects to the URL specified in Registration Link, which can be an internal content page with an embedded registration form or an external URL."
         }),
         stringField({
           label: "Registration Link",
           name: "registrationLink",
           required: false,
-          hint: "Only used when Registration Mode is LINK. Internal paths (e.g. /my-page) use site navigation. Full URLs (e.g. https://example.com) redirect externally. To embed the registration form in a content page, add <RegistrationForm /> in the page's MDX body."
+          hint: "Only used when Registration Mode is LINK. Use a relative path (e.g. /my-page) for an internal page, or a full URL (e.g. https://example.com) for an external site. To embed the registration form in a content page, add the <RegistrationForm /> shortcode in the page body."
         })
       ]
     }),
