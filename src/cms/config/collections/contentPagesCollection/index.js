@@ -11,6 +11,9 @@ import { CONTENT_PAGES_DIR_PATH } from "@utils/filePath";
 import { USER_REQUIREMENTS } from "@utils/pageAccessConstants";
 
 import { mapObjectToSelectOptions } from "../../utils";
+import shortcodes from "../../../../templates/content-page/shortcodes";
+
+const shortcodesHint = `Available shortcodes: ${Object.keys(shortcodes).map(name => `<${name} />`).join(", ")}`;
 
 const contentPagesCollection = {
   ...collectionDefaults({
@@ -33,6 +36,12 @@ const contentPagesCollection = {
       label: "Title",
       name: "title"
     }),
+    stringField({
+      label: "Slug",
+      name: "slug",
+      required: false,
+      hint: "URL path for this page (e.g. registration). Leave empty to use the default path based on the title. Changing this will change the page URL."
+    }),
     selectField({
       label: "User Requirement",
       name: "userRequirement",
@@ -42,7 +51,8 @@ const contentPagesCollection = {
     }),
     markdownField({
       label: "Body",
-      name: "body"
+      name: "body",
+      hint: shortcodesHint
     })
   ]
 };

@@ -5,13 +5,11 @@
 // import Grid from "../../components/Grid";
 // import SpeakerCard from "../../components/SpeakerCard";
 import ResponsiveImage from "../../components/ResponsiveImage";
+import RegistrationForm from "../../components/RegistrationFormShortcode";
 
 const shortcodes = {
-  // Map your components here
-  // Example:
-  // Grid,
-  // SpeakerCard,
-  ResponsiveImage
+  ResponsiveImage,
+  RegistrationForm
 };
 
 export default shortcodes;

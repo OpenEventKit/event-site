@@ -6,6 +6,7 @@ module.exports = `
   type MdxFrontmatter {
     templateKey: String
     title: String
+    slug: String
     userRequirement: String
   }
   type Mdx {

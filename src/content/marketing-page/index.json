@@ -6,8 +6,7 @@
     "buttons": {
       "registerButton": {
         "text": "Register Now",
-        "display": true,
-        "externalRegistrationLink": ""
+        "display": true
       },
       "loginButton": {
         "text": "Log In",

@@ -454,6 +454,7 @@ exports.createPages = async ({ actions, graphql }) => {
           }
           frontmatter {
             templateKey
+            slug
           }
           internal {
             contentFilePath
@@ -471,17 +472,33 @@ exports.createPages = async ({ actions, graphql }) => {
   const nodes = result.data.allMdx.nodes;
 
   nodes.forEach((node) => {
-    const { id, fields: { slug }, frontmatter: { templateKey }, internal: { contentFilePath } } = node;
+    const { id, fields: { slug }, frontmatter: { templateKey, slug: frontmatterSlug }, internal: { contentFilePath } } = node;
     const template = require.resolve(`./src/templates/${String(templateKey)}`);
-    // remove content pages namespace from path
-    const path = slug.replace(`${CONTENT_PAGES_PATH_NAME}`, "/");
+    // use frontmatter slug if set, otherwise derive from filename
+    const pagePath = frontmatterSlug
+      ? `/${frontmatterSlug.replace(/^\/+/, '')}/`
+      : slug.replace(`/${CONTENT_PAGES_PATH_NAME}`, "");
     const page = {
-      path: path,
+      path: pagePath,
       component: `${template}?__contentFilePath=${contentFilePath}`,
       context: { id }
     };
     createPage(page);
   });
+
+  // Conditionally create /register page based on registrationMode
+  if (fs.existsSync(SITE_SETTINGS_FILE_PATH)) {
+    const siteSettings = JSON.parse(fs.readFileSync(SITE_SETTINGS_FILE_PATH));
+    const { REGISTRATION_MODE } = require('./src/utils/registrationConstants');
+    const registrationMode = siteSettings.registration?.registrationMode;
+    if (registrationMode === REGISTRATION_MODE.standalone) {
+      createPage({
+        path: '/register/',
+        component: require.resolve('./src/templates/register-page.js'),
+        context: {}
+      });
+    }
+  }
 };
 
 exports.onCreatePage = async ({ page, actions }) => {

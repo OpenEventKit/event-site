@@ -1,0 +1,23 @@
+.registerPage {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px 10px;
+  background-color: #fff;
+
+  @media (max-width: 768px) {
+    padding: 0;
+  }
+}
+
+.formContainer {
+  width: 100%;
+  max-width: 800px;
+  padding: 10px;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    padding: 0;
+  }
+}

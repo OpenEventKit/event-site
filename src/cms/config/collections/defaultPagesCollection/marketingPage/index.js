@@ -78,12 +78,8 @@ const marketingPage = {
                 booleanField({
                   label: "Display",
                   name: "display",
-                  required: false
-                }),
-                stringField({
-                  label: "External Registration Link",
-                  name: "externalRegistrationLink",
-                  required: false
+                  required: false,
+                  hint: "Show or hide the register button on the hero. To change the register button behavior (open registration popup, navigate to standalone registration page, or redirect to an internal page or external URL), go to Site Settings > Registration."
                 }),
               ]
             }),
