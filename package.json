@@ -123,7 +123,8 @@
     "redux-thunk": "^2.4.1",
     "rehype-external-links": "^3.0.0",
     "rehype-mdx-import-media": "^1.2.0",
-    "remark-gfm": "^4.0.1",
+    "remark-gfm": "3.0.1",
+    "remark-gfm-4": "npm:remark-gfm@^4.0.1",
     "sass": "^1.49.9",
     "schedule-filter-widget": "3.0.7",
     "simple-chat-widget": "^1.0.31",
@@ -194,6 +195,7 @@
       "^@mdx-js/mdx$": "<rootDir>/__mocks__/@mdx-js/mdx.js",
       "^@mdx-js/react$": "<rootDir>/__mocks__/@mdx-js/react.js",
       "^remark-gfm$": "<rootDir>/__mocks__/remark-gfm.js",
+      "^remark-gfm-4$": "<rootDir>/src/__mocks__/remark-gfm.js",
       "^rehype-external-links$": "<rootDir>/__mocks__/rehype-external-links.js"
     },
     "testMatch": [
