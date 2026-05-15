@@ -126,8 +126,11 @@ export const getUserProfile = () => async (dispatch) => {
     }).catch((e) => {
         console.log('ERROR: ', e);
         dispatch(createAction(STOP_LOADING_PROFILE)());
-        alertWarning('Error', "There was an error at Login Flow. Please retry.");
-        initLogOut();
+        if (e?.status === 401) {
+            initLogOut();
+        } else {
+            alertWarning('Error', "There was an error at Login Flow. Please retry.");
+        }
         return (e);
     });
 }
