@@ -1,5 +1,5 @@
 import AbstractSynchStrategy from "./abstract_synch_strategy";
-import {fetchSummitById} from "../../actions/fetch-entities-actions";
+import {clearEtagCacheForUrl, fetchSummitById} from "../../actions/fetch-entities-actions";
 import {
     BUCKET_SUMMIT_DATA_KEY,
     saveFile
@@ -16,6 +16,8 @@ class SummitSynchStrategy extends AbstractSynchStrategy {
         console.log(`SummitSynchStrategy::process`, payload);
 
         const {entity_operator} = payload;
+
+        clearEtagCacheForUrl(`/v1/summits/${this.summit.id}?`);
 
         let entity = await fetchSummitById(this.summit.id, this.accessToken);
 
