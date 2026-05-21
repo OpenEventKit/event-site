@@ -232,7 +232,10 @@ export const addToSchedule = (event) => async (dispatch, getState) => {
         return event;
     }).catch(e => {
         console.log('ERROR: ', e);
-        Sentry.captureException(e)
+        // 412 is expected when event is already in schedule (double-click, race condition)
+        if (e?.response?.status !== 412) {
+            Sentry.captureException(e);
+        }
         return e;
     });
 };
@@ -254,7 +257,10 @@ export const removeFromSchedule = (event) => async (dispatch, getState) => {
         return event;
     }).catch(e => {
         console.log('ERROR: ', e);
-        Sentry.captureException(e)
+        // 412 is expected when event is not in schedule (double-click, race condition)
+        if (e?.response?.status !== 412) {
+            Sentry.captureException(e);
+        }
         return e;
     });
 };
