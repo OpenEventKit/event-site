@@ -28,7 +28,6 @@ const states = {
   loggedUserState: reducers.loggedUserReducer,
   settingState: reducers.settingReducer,
   userState: reducers.userReducer,
-  clockState: reducers.clockReducer,
   summitState: reducers.summitReducer,
   allSchedulesState: reducers.allSchedulesReducer,
   presentationsState: reducers.presentationsReducer,
