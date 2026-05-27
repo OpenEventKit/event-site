@@ -41,8 +41,10 @@ const {
   generateColorsScssFile
 } = require("./src/utils/scssUtils");
 
-const { FIFTY_PER_PAGE } = require("./src/utils/build-json/constants");
+const { FIFTY_PER_PAGE, BUILD_REQUEST_TIMEOUT_MS } = require("./src/utils/build-json/constants");
 const SpeakersAPIRequest = require("./src/utils/build-json/SpeakersAPIRequest");
+
+axios.defaults.timeout = BUILD_REQUEST_TIMEOUT_MS;
 
 const fileBuildTimes = [];
 

@@ -1,5 +1,8 @@
 const FIFTY_PER_PAGE = "50";
 
+const BUILD_REQUEST_TIMEOUT_MS = 30000;
+
 module.exports = {
-    FIFTY_PER_PAGE
+    FIFTY_PER_PAGE,
+    BUILD_REQUEST_TIMEOUT_MS
 };
