@@ -43,6 +43,7 @@ const {
 
 const { FIFTY_PER_PAGE, BUILD_REQUEST_TIMEOUT_MS } = require("./src/utils/build-json/constants");
 const SpeakersAPIRequest = require("./src/utils/build-json/SpeakersAPIRequest");
+const getWithRetry = require("./src/utils/build-json/getWithRetry");
 
 axios.defaults.timeout = BUILD_REQUEST_TIMEOUT_MS;
 
@@ -66,7 +67,7 @@ const SSR_GetRemainingPages = async (endpoint, params, lastPage) => {
   }
 
   let remainingPages = await Promise.all(pages.map(pageIdx => {
-    return axios.get(endpoint,
+    return getWithRetry(endpoint,
       {
         params: {
           ...params,
@@ -95,7 +96,7 @@ const SSR_getMarketingSettings = async (baseUrl, summitId) => {
     page: 1
   };
 
-  return await axios.get(endpoint, { params }).then(async ({ data }) => {
+  return await getWithRetry(endpoint, { params }).then(async ({ data }) => {
 
     console.log(`SSR_getMarketingSettings then data.current_page ${data.current_page} data.last_page ${data.last_page} total ${data.total}`)
 
@@ -118,7 +119,7 @@ const SSR_getEvents = async (baseUrl, summitId, accessToken) => {
 
   const params = EventAPIRequest.getParams(apiUrl);
 
-  return await axios.get(apiUrlWithParams).then(async ({ data }) => {
+  return await getWithRetry(apiUrlWithParams).then(async ({ data }) => {
 
     console.log(`SSR_getEvents then data.current_page ${data.current_page} data.last_page ${data.last_page} total ${data.total}`)
 
@@ -141,7 +142,7 @@ const SSR_getSponsors = async (baseUrl, summitId, accessToken) => {
     expand: 'company,sponsorship,sponsorship.type',
   }
 
-  return await axios.get(endpoint, { params }).then(async ({ data }) => {
+  return await getWithRetry(endpoint, { params }).then(async ({ data }) => {
 
     console.log(`SSR_getSponsors then data.current_page ${data.current_page} data.last_page ${data.last_page} total ${data.total}`)
 
@@ -160,7 +161,7 @@ const SSR_getSponsorCollections = async (allSponsors, baseUrl, summitId, accessT
     page: 1,
   }
 
-  const getSponsorCollection = async (endpoint, params) => await axios.get(endpoint, { params }).then(async ({ data }) => {
+  const getSponsorCollection = async (endpoint, params) => await getWithRetry(endpoint, { params }).then(async ({ data }) => {
     console.log(`SSR_getSponsorCollection then data.current_page ${data.current_page} data.last_page ${data.last_page} total ${data.total}`)
     let remainingPages = await SSR_GetRemainingPages(endpoint, params, data.last_page);
     return [...data.data, ...remainingPages];
@@ -189,7 +190,7 @@ const SSR_getSpeakers = async (baseUrl, summitId, accessToken, filter = null) =>
 
   const params = SpeakersAPIRequest.getParams(apiUrl);
  
-  return await axios.get(apiUrlWithParams)
+  return await getWithRetry(apiUrlWithParams)
     .then(async ({ data }) => {
       console.log(`SSR_getSpeakers then data.current_page ${data.current_page} data.last_page ${data.last_page} total ${data.total}`)
 
@@ -209,7 +210,7 @@ const SSR_getSummit = async (baseUrl, summitId, accessToken) => {
 
   const apiUrlWithParams = SummitAPIRequest.build(apiUrl);
 
-  return await axios.get(
+  return await getWithRetry(
     apiUrlWithParams
   )
     .then(({ data }) => data)
@@ -228,7 +229,7 @@ const SSR_getVoteablePresentations = async (baseUrl, summitId, accessToken) => {
     expand: "slides,links,videos,media_uploads,type,track,track.allowed_access_levels,location,location.venue,location.floor,speakers,moderator,sponsors,current_attendance,groups,rsvp_template,tags",
   };
 
-  return await axios.get(endpoint,
+  return await getWithRetry(endpoint,
     { params }).then(async ({ data }) => {
 
       console.log(`SSR_getVoteablePresentations  then data.current_page ${data.current_page} data.last_page ${data.last_page} total ${data.total}`)
