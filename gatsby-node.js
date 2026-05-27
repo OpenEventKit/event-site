@@ -54,7 +54,7 @@ const getAccessToken = async (config, scope) => {
   try {
     return await client.getToken({ scope });
   } catch (error) {
-    console.log("Access Token error", error);
+    throw new Error(`Failed to obtain build access token: ${error?.message || error}`, { cause: error });
   }
 };
 
