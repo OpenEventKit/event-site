@@ -41,8 +41,11 @@ const {
   generateColorsScssFile
 } = require("./src/utils/scssUtils");
 
-const { FIFTY_PER_PAGE } = require("./src/utils/build-json/constants");
+const { FIFTY_PER_PAGE, BUILD_REQUEST_TIMEOUT_MS, BUILD_PAGE_FETCH_CONCURRENCY } = require("./src/utils/build-json/constants");
 const SpeakersAPIRequest = require("./src/utils/build-json/SpeakersAPIRequest");
+const getWithRetry = require("./src/utils/build-json/getWithRetry");
+
+axios.defaults.timeout = BUILD_REQUEST_TIMEOUT_MS;
 
 const fileBuildTimes = [];
 
@@ -52,29 +55,36 @@ const getAccessToken = async (config, scope) => {
   try {
     return await client.getToken({ scope });
   } catch (error) {
-    console.log("Access Token error", error);
+    throw new Error(`Failed to obtain build access token: ${error?.message || error}`, { cause: error });
   }
 };
 
 const SSR_GetRemainingPages = async (endpoint, params, lastPage) => {
-  // create an array with remaining pages to perform Promise.All
   const pages = [];
   for (let i = 2; i <= lastPage; i++) {
     pages.push(i);
   }
 
-  let remainingPages = await Promise.all(pages.map(pageIdx => {
-    return axios.get(endpoint,
-      {
-        params: {
-          ...params,
-          page: pageIdx
-        }
-      }).then(({ data }) => data);
-  }));
+  const fetchPage = (pageIdx) =>
+    getWithRetry(endpoint, { params: { ...params, page: pageIdx } }).then(({ data }) => data);
+
+  const remainingPages = [];
+  for (let i = 0; i < pages.length; i += BUILD_PAGE_FETCH_CONCURRENCY) {
+    const chunk = pages.slice(i, i + BUILD_PAGE_FETCH_CONCURRENCY);
+    const chunkResults = await Promise.all(chunk.map(fetchPage));
+    remainingPages.push(...chunkResults);
+  }
 
   return remainingPages.sort((a, b,) => a.current_page - b.current_page).map(p => p.data).flat();
 }
+
+const SSR_handleError = (e) => {
+  const status = e?.response?.status;
+  const statusText = e?.response?.statusText;
+  const url = e?.config?.url;
+  const detail = status ? `HTTP ${status} ${statusText || ""}`.trim() : (e?.message || String(e));
+  throw new Error(`Build API request failed: ${detail}${url ? ` (url: ${url})` : ""}`, { cause: e });
+};
 
 const SSR_getMarketingSettings = async (baseUrl, summitId) => {
 
@@ -85,7 +95,7 @@ const SSR_getMarketingSettings = async (baseUrl, summitId) => {
     page: 1
   };
 
-  return await axios.get(endpoint, { params }).then(async ({ data }) => {
+  return await getWithRetry(endpoint, { params }).then(async ({ data }) => {
 
     console.log(`SSR_getMarketingSettings then data.current_page ${data.current_page} data.last_page ${data.last_page} total ${data.total}`)
 
@@ -93,7 +103,7 @@ const SSR_getMarketingSettings = async (baseUrl, summitId) => {
 
     return [...data.data, ...remainingPages];
 
-  }).catch(e => console.log("ERROR: ", e));
+  }).catch(SSR_handleError);
 };
 
 const SSR_getEvents = async (baseUrl, summitId, accessToken) => {
@@ -108,7 +118,7 @@ const SSR_getEvents = async (baseUrl, summitId, accessToken) => {
 
   const params = EventAPIRequest.getParams(apiUrl);
 
-  return await axios.get(apiUrlWithParams).then(async ({ data }) => {
+  return await getWithRetry(apiUrlWithParams).then(async ({ data }) => {
 
     console.log(`SSR_getEvents then data.current_page ${data.current_page} data.last_page ${data.last_page} total ${data.total}`)
 
@@ -116,7 +126,7 @@ const SSR_getEvents = async (baseUrl, summitId, accessToken) => {
 
     return [...data.data, ...remainingPages];
 
-  }).catch(e => console.log("ERROR: ", e));
+  }).catch(SSR_handleError);
 };
 
 const SSR_getSponsors = async (baseUrl, summitId, accessToken) => {
@@ -131,7 +141,7 @@ const SSR_getSponsors = async (baseUrl, summitId, accessToken) => {
     expand: 'company,sponsorship,sponsorship.type',
   }
 
-  return await axios.get(endpoint, { params }).then(async ({ data }) => {
+  return await getWithRetry(endpoint, { params }).then(async ({ data }) => {
 
     console.log(`SSR_getSponsors then data.current_page ${data.current_page} data.last_page ${data.last_page} total ${data.total}`)
 
@@ -139,7 +149,7 @@ const SSR_getSponsors = async (baseUrl, summitId, accessToken) => {
 
     return [...data.data, ...remainingPages];
 
-  }).catch(e => console.log('ERROR: ', e));
+  }).catch(SSR_handleError);
 };
 
 const SSR_getSponsorCollections = async (allSponsors, baseUrl, summitId, accessToken) => {
@@ -150,11 +160,11 @@ const SSR_getSponsorCollections = async (allSponsors, baseUrl, summitId, accessT
     page: 1,
   }
 
-  const getSponsorCollection = async (endpoint, params) => await axios.get(endpoint, { params }).then(async ({ data }) => {
+  const getSponsorCollection = async (endpoint, params) => await getWithRetry(endpoint, { params }).then(async ({ data }) => {
     console.log(`SSR_getSponsorCollection then data.current_page ${data.current_page} data.last_page ${data.last_page} total ${data.total}`)
     let remainingPages = await SSR_GetRemainingPages(endpoint, params, data.last_page);
     return [...data.data, ...remainingPages];
-  }).catch(e => console.log('ERROR: ', e));
+  }).catch(SSR_handleError);
 
   const sponsorsWithCollections = await Promise.all(allSponsors.map(async (sponsor) => {
     console.log(`Collections for ${sponsor.company.name}...`);
@@ -179,7 +189,7 @@ const SSR_getSpeakers = async (baseUrl, summitId, accessToken, filter = null) =>
 
   const params = SpeakersAPIRequest.getParams(apiUrl);
  
-  return await axios.get(apiUrlWithParams)
+  return await getWithRetry(apiUrlWithParams)
     .then(async ({ data }) => {
       console.log(`SSR_getSpeakers then data.current_page ${data.current_page} data.last_page ${data.last_page} total ${data.total}`)
 
@@ -187,7 +197,7 @@ const SSR_getSpeakers = async (baseUrl, summitId, accessToken, filter = null) =>
 
       return [...data.data, ...remainingPages];
     })
-    .catch(e => console.log("ERROR: ", e));
+    .catch(SSR_handleError);
 };
 
 const SSR_getSummit = async (baseUrl, summitId, accessToken) => {
@@ -199,11 +209,11 @@ const SSR_getSummit = async (baseUrl, summitId, accessToken) => {
 
   const apiUrlWithParams = SummitAPIRequest.build(apiUrl);
 
-  return await axios.get(
+  return await getWithRetry(
     apiUrlWithParams
   )
     .then(({ data }) => data)
-    .catch(e => console.log("ERROR: ", e));
+    .catch(SSR_handleError);
 };
 
 const SSR_getVoteablePresentations = async (baseUrl, summitId, accessToken) => {
@@ -218,7 +228,7 @@ const SSR_getVoteablePresentations = async (baseUrl, summitId, accessToken) => {
     expand: "slides,links,videos,media_uploads,type,track,track.allowed_access_levels,location,location.venue,location.floor,speakers,moderator,sponsors,current_attendance,groups,rsvp_template,tags",
   };
 
-  return await axios.get(endpoint,
+  return await getWithRetry(endpoint,
     { params }).then(async ({ data }) => {
 
       console.log(`SSR_getVoteablePresentations  then data.current_page ${data.current_page} data.last_page ${data.last_page} total ${data.total}`)
@@ -227,7 +237,7 @@ const SSR_getVoteablePresentations = async (baseUrl, summitId, accessToken) => {
 
       return [...data.data, ...remainingPages];
     })
-    .catch(e => console.log("ERROR: ", e));
+    .catch(SSR_handleError);
 };
 
 exports.onPreBootstrap = async () => {
