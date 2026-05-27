@@ -21,6 +21,7 @@ import { getDefaultLocation, validateIdentityProviderButtons } from "@utils/logi
 import { userHasAccessLevel, VIRTUAL_ACCESS_LEVEL } from "@utils/authorizedGroups";
 import useSiteSettings from "@utils/useSiteSettings";
 import { PHASES } from "@utils/phasesUtils";
+import { useSummitPhase } from "@utils/hooks/useSummitPhase";
 import { getEnvVariable, TENANT_ID } from "@utils/envVariables";
 
 import styles from "../styles/auth-component.module.scss";
@@ -34,7 +35,6 @@ const AuthComponent = ({
     allowsNativeAuth,
     allowsOtpAuth,
     isLoggedUser,
-    summitPhase,
     userProfile,
     eventRedirect,
     location,
@@ -43,6 +43,7 @@ const AuthComponent = ({
     renderLoginButton = null,
     renderEnterButton = null
 }) => {
+    const summitPhase = useSummitPhase();
     const [isActive, setIsActive] = useState(false);
     const [initialEmailValue, setInitialEmailValue] = useState('');
     const [otpLogin, setOtpLogin] = useState(false);
@@ -235,7 +236,7 @@ const AuthComponent = ({
     )
 };
 
-const mapStateToProps = ({ userState, summitState, settingState, clockState, loggedUserState }) => {
+const mapStateToProps = ({ userState, summitState, settingState, loggedUserState }) => {
     return ({
         loadingProfile: userState.loading,
         loadingIDP: userState.loadingIDP,
@@ -246,7 +247,6 @@ const mapStateToProps = ({ userState, summitState, settingState, clockState, log
         colorSettings: settingState.colorSettings,
         userProfile: userState.userProfile,
         marketingPageSettings: settingState.marketingPageSettings,
-        summitPhase: clockState.summit_phase,
         isLoggedUser: loggedUserState.isLoggedUser,
         // TODO: move to site settings i/o marketing page settings
         eventRedirect: settingState.marketingPageSettings.eventRedirect

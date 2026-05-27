@@ -30,13 +30,11 @@ const componentWrapper = (WrappedComponent) => ({schedules, ...props}) => {
 
 const mapStateToProps = ({
   summitState,
-  clockState,
   loggedUserState,
   allSchedulesState,
   settingState,
 }) => ({
   summit: summitState.summit,
-  summitPhase: clockState.summit_phase,
   isLoggedUser: loggedUserState.isLoggedUser,
   schedules: allSchedulesState.schedules,
   colorSettings: settingState.colorSettings,

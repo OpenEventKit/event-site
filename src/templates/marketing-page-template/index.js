@@ -11,7 +11,7 @@ import { useResize } from "@utils/hooks";
 
 import styles from "./styles.module.scss";
 
-const MarketingPageTemplate = ({ data, location, summit, summitPhase, isLoggedUser, lastDataSync }) => {
+const MarketingPageTemplate = ({ data, location, summit, isLoggedUser, lastDataSync }) => {
   const masonryRef = useRef();
   const [rightColumnHeight, setRightColumnHeight] = useState();
 
@@ -46,7 +46,6 @@ const MarketingPageTemplate = ({ data, location, summit, summitPhase, isLoggedUs
       <div className="columns is-marginless">
         <MainColumn
           widgets={widgets}
-          summitPhase={summitPhase}
           isLoggedUser={isLoggedUser}
           maxHeight={rightColumnHeight}
           fullWidth={!shouldRenderMasonry}
@@ -65,7 +64,6 @@ MarketingPageTemplate.propTypes = {
   data: PropTypes.object,
   lastDataSync: PropTypes.number,
   summit: PropTypes.object,
-  summitPhase: PropTypes.number,
   isLoggedUser: PropTypes.bool
 };
 

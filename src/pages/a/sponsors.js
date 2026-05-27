@@ -35,16 +35,15 @@ export const expoHallPageQuery = graphql`
 const App = ({
   data,
   isLoggedUser,
-  user,
-  summitPhase
+  user
 }) => {
   return (
     <Location>
       {({ location }) => (
       <Router basepath="/a" >
         <WithAuthRoute path="/" isLoggedIn={isLoggedUser} location={location}>
-          <WithAuthzRoute path="/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location}>
-            <ShowOpenRoute path="/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location}>
+          <WithAuthzRoute path="/" isLoggedIn={isLoggedUser} user={user} location={location}>
+            <ShowOpenRoute path="/" isLoggedIn={isLoggedUser} user={user} location={location}>
               <ExpoHallPage path="/sponsors/" location={location} data={data}/>
             </ShowOpenRoute>
           </WithAuthzRoute>
@@ -57,10 +56,9 @@ const App = ({
 
 const mapStateToProps = ({
   loggedUserState,
-  userState, clockState
+  userState
 }) => ({
   isLoggedUser: loggedUserState.isLoggedUser,
-  summitPhase: clockState.summit_phase,
   user: userState
 });
 

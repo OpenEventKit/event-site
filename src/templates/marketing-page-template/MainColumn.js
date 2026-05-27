@@ -10,6 +10,7 @@ import ResponsiveImage from "../../components/ResponsiveImage";
 import Link from "../../components/Link";
 
 import { PHASES } from "@utils/phasesUtils";
+import { useSummitPhase } from "@utils/hooks/useSummitPhase";
 
 import styles from "./styles.module.scss";
 
@@ -20,8 +21,9 @@ const shortcodes = {
 
 const onEventClick = (ev) => navigate(`/a/event/${ev.id}`);
 
-const MainColumn = ({ widgets, summitPhase, isLoggedUser, onEventClick, lastDataSync, fullWidth, maxHeight }) => {
+const MainColumn = ({ widgets, isLoggedUser, onEventClick, lastDataSync, fullWidth, maxHeight }) => {
   const { content, schedule, disqus, image } = widgets || {};
+  const summitPhase = useSummitPhase();
 
   const scheduleProps = schedule && isLoggedUser && summitPhase !== PHASES.BEFORE ? { onEventClick } : {};
 
@@ -68,7 +70,6 @@ const MainColumn = ({ widgets, summitPhase, isLoggedUser, onEventClick, lastData
 
 MainColumn.propTypes = {
   widgets: PropTypes.object,
-  summitPhase: PropTypes.number,
   isLoggedUser: PropTypes.bool,
   lastDataSync: PropTypes.number,
   fullWidth: PropTypes.bool,

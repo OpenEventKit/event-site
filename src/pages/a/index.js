@@ -43,14 +43,14 @@ export const lobbyPageQuery = graphql`
   }
 `;
 
-const App = ({ data, isLoggedUser, user, summitPhase }) => {
+const App = ({ data, isLoggedUser, user }) => {
   return (
     <Location>
       {({ location }) => (
       <Router basepath="/a" >
         <WithAuthRoute path="/" isLoggedIn={isLoggedUser} location={location}>
-          <WithAuthzRoute path="/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location}>
-            <ShowOpenRoute path="/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location}>
+          <WithAuthzRoute path="/" isLoggedIn={isLoggedUser} user={user} location={location}>
+            <ShowOpenRoute path="/" isLoggedIn={isLoggedUser} user={user} location={location}>
               <LobbyPage path="/" data={data} isLoggedIn={isLoggedUser} user={user} location={location} />
             </ShowOpenRoute>
           </WithAuthzRoute>
@@ -61,9 +61,8 @@ const App = ({ data, isLoggedUser, user, summitPhase }) => {
   );
 };
 
-const mapStateToProps = ({ loggedUserState, userState, clockState }) => ({
+const mapStateToProps = ({ loggedUserState, userState }) => ({
   isLoggedUser: loggedUserState.isLoggedUser,
-  summitPhase: clockState.summit_phase,
   user: userState
 });
 
