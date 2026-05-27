@@ -76,6 +76,14 @@ const SSR_GetRemainingPages = async (endpoint, params, lastPage) => {
   return remainingPages.sort((a, b,) => a.current_page - b.current_page).map(p => p.data).flat();
 }
 
+const SSR_handleError = (e) => {
+  const status = e?.response?.status;
+  const statusText = e?.response?.statusText;
+  const url = e?.config?.url;
+  const detail = status ? `HTTP ${status} ${statusText || ""}`.trim() : (e?.message || String(e));
+  throw new Error(`Build API request failed: ${detail}${url ? ` (url: ${url})` : ""}`, { cause: e });
+};
+
 const SSR_getMarketingSettings = async (baseUrl, summitId) => {
 
   const endpoint = `${baseUrl}/api/public/v1/config-values/all/shows/${summitId}`;
@@ -93,7 +101,7 @@ const SSR_getMarketingSettings = async (baseUrl, summitId) => {
 
     return [...data.data, ...remainingPages];
 
-  }).catch(e => console.log("ERROR: ", e));
+  }).catch(SSR_handleError);
 };
 
 const SSR_getEvents = async (baseUrl, summitId, accessToken) => {
@@ -116,7 +124,7 @@ const SSR_getEvents = async (baseUrl, summitId, accessToken) => {
 
     return [...data.data, ...remainingPages];
 
-  }).catch(e => console.log("ERROR: ", e));
+  }).catch(SSR_handleError);
 };
 
 const SSR_getSponsors = async (baseUrl, summitId, accessToken) => {
@@ -139,7 +147,7 @@ const SSR_getSponsors = async (baseUrl, summitId, accessToken) => {
 
     return [...data.data, ...remainingPages];
 
-  }).catch(e => console.log('ERROR: ', e));
+  }).catch(SSR_handleError);
 };
 
 const SSR_getSponsorCollections = async (allSponsors, baseUrl, summitId, accessToken) => {
@@ -154,7 +162,7 @@ const SSR_getSponsorCollections = async (allSponsors, baseUrl, summitId, accessT
     console.log(`SSR_getSponsorCollection then data.current_page ${data.current_page} data.last_page ${data.last_page} total ${data.total}`)
     let remainingPages = await SSR_GetRemainingPages(endpoint, params, data.last_page);
     return [...data.data, ...remainingPages];
-  }).catch(e => console.log('ERROR: ', e));
+  }).catch(SSR_handleError);
 
   const sponsorsWithCollections = await Promise.all(allSponsors.map(async (sponsor) => {
     console.log(`Collections for ${sponsor.company.name}...`);
@@ -187,7 +195,7 @@ const SSR_getSpeakers = async (baseUrl, summitId, accessToken, filter = null) =>
 
       return [...data.data, ...remainingPages];
     })
-    .catch(e => console.log("ERROR: ", e));
+    .catch(SSR_handleError);
 };
 
 const SSR_getSummit = async (baseUrl, summitId, accessToken) => {
@@ -203,7 +211,7 @@ const SSR_getSummit = async (baseUrl, summitId, accessToken) => {
     apiUrlWithParams
   )
     .then(({ data }) => data)
-    .catch(e => console.log("ERROR: ", e));
+    .catch(SSR_handleError);
 };
 
 const SSR_getVoteablePresentations = async (baseUrl, summitId, accessToken) => {
@@ -227,7 +235,7 @@ const SSR_getVoteablePresentations = async (baseUrl, summitId, accessToken) => {
 
       return [...data.data, ...remainingPages];
     })
-    .catch(e => console.log("ERROR: ", e));
+    .catch(SSR_handleError);
 };
 
 exports.onPreBootstrap = async () => {
