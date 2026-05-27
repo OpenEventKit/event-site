@@ -22,6 +22,8 @@ import { PHASES } from "../utils/phasesUtils";
 import { getEventById, getEventStreamingInfoById } from "../actions/event-actions";
 import URI from "urijs";
 import useMarketingSettings, { MARKETING_SETTINGS_KEYS } from "@utils/useMarketingSettings";
+import { useEventPhase } from "@utils/hooks/useEventPhase";
+import { useClock } from "openstack-uicore-foundation/lib/components/clock-context";
 import { checkMuxTokens, isMuxVideo } from "../utils/videoUtils";
 
 /**
@@ -36,19 +38,15 @@ export const EventPageTemplate = class extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const {eventId, event, eventTokens, eventsPhases, lastDataSync} = this.props;
+    const {eventId, event, eventTokens, eventPhase, lastDataSync} = this.props;
     if (eventId !== nextProps.eventId) return true;
     if (!isEqual(event, nextProps.event)) return true;
     if (!isEqual(eventTokens, nextProps.eventTokens)) return true;
     // a synch did happened!
     if (lastDataSync !== nextProps.lastDataSync) return true;
     // compare current event phase with next one
-    const currentPhase = eventsPhases.find((e) => parseInt(e.id) === parseInt(eventId))?.phase;
-    const nextCurrentPhase = nextProps.eventsPhases.find(
-      (e) => parseInt(e.id) === parseInt(eventId)
-    )?.phase;
-    const finishing = (currentPhase === PHASES.DURING && nextCurrentPhase === PHASES.AFTER);
-    return (currentPhase !== nextCurrentPhase && !finishing );
+    const finishing = (eventPhase === PHASES.DURING && nextProps.eventPhase === PHASES.AFTER);
+    return (eventPhase !== nextProps.eventPhase && !finishing );
   }
 
   canRenderVideo = (currentPhase) => {
@@ -77,11 +75,9 @@ export const EventPageTemplate = class extends React.Component {
 
   render() {
 
-    const {event, eventTokens, user, loading, nowUtc, summit, eventsPhases, eventId, lastDataSync, activityCtaText} = this.props;
-    // get current event phase
-    const currentPhaseInfo = eventsPhases.find((e) => parseInt(e.id) === parseInt(eventId));
-    const currentPhase = currentPhaseInfo?.phase;
-    console.log(`EventPageTemplate::render lastDataSync ${lastDataSync} currentPhase ${currentPhase}`, currentPhaseInfo);
+    const {event, eventTokens, user, loading, nowUtc, summit, eventPhase, eventId, lastDataSync, activityCtaText} = this.props;
+    const currentPhase = eventPhase;
+    console.log(`EventPageTemplate::render lastDataSync ${lastDataSync} currentPhase ${currentPhase}`);
     const firstHalf = currentPhase === PHASES.DURING ? nowUtc < ((event?.start_date + event?.end_date) / 2) : false;
     const eventQuery = event.streaming_url ? URI(event.streaming_url).search(true) : null;
     const autoPlay = eventQuery?.autoplay !== '0';
@@ -216,8 +212,6 @@ const EventPage = ({
    eventTokens,
    eventId,
    user,
-   eventsPhases,
-   nowUtc,
    getEventById,
    getEventStreamingInfoById,
    lastUpdate,
@@ -226,6 +220,8 @@ const EventPage = ({
 
   const { getSettingByKey } = useMarketingSettings();
   const activityCtaText = getSettingByKey(MARKETING_SETTINGS_KEYS.activityCtaText);
+  const nowUtc = useClock();
+  const eventPhase = useEventPhase(event);
 
   return (
     <Layout location={location}>
@@ -243,7 +239,7 @@ const EventPage = ({
         eventId={eventId}
         loading={loading}
         user={user}
-        eventsPhases={eventsPhases}
+        eventPhase={eventPhase}
         nowUtc={nowUtc}
         location={location}
         getEventById={getEventById}
@@ -263,7 +259,6 @@ EventPage.propTypes = {
   lastUpdate: PropTypes.object,
   eventId: PropTypes.string,
   user: PropTypes.object,
-  eventsPhases: PropTypes.array,
   getEventById: PropTypes.func,
   getEventStreamingInfoById: PropTypes.func,
 };
@@ -275,7 +270,8 @@ EventPageTemplate.propTypes = {
   loading: PropTypes.bool,
   eventId: PropTypes.string,
   user: PropTypes.object,
-  eventsPhases: PropTypes.array,
+  eventPhase: PropTypes.number,
+  nowUtc: PropTypes.number,
   getEventById: PropTypes.func,
   getEventStreamingInfoById: PropTypes.func,
   activityCtaText: PropTypes.string,
@@ -285,7 +281,6 @@ const mapStateToProps = ({
     eventState,
     summitState,
     userState,
-    clockState,
     settingState
 }) => ({
   loading: eventState.loading,
@@ -293,8 +288,6 @@ const mapStateToProps = ({
   eventTokens: eventState.tokens,
   user: userState,
   summit: summitState.summit,
-  eventsPhases: clockState.events_phases,
-  nowUtc: clockState.nowUtc,
   lastUpdate: eventState.lastUpdate,
   lastDataSync: settingState.lastDataSync,
 });
