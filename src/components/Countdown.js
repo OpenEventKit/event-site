@@ -12,59 +12,51 @@
  **/
 
 import React from 'react';
-import { connect } from "react-redux";
 import moment from "moment-timezone";
 import { epochToMomentTimeZone } from "openstack-uicore-foundation/lib/utils/methods";
+import { useClock } from "openstack-uicore-foundation/lib/components/clock-context";
 
 import styles from '../styles/countdown.module.scss'
 
-class Countdown extends React.Component {
+const Countdown = ({ summit, text }) => {
+  const now = useClock();
 
-  render() {
-    const { summit, now, text } = this.props;
+  if (!now || !summit.start_date || !summit.time_zone_id) return null;
 
-    if (!now || !summit.start_date || !summit.time_zone_id) return null;
+  let summitDate = epochToMomentTimeZone(summit.start_date, summit.time_zone_id)
+  let nowFormatted = epochToMomentTimeZone(now, summit.time_zone_id)
 
-    let summitDate = epochToMomentTimeZone(summit.start_date, summit.time_zone_id)
-    let nowFormatted = epochToMomentTimeZone(now, summit.time_zone_id)
+  let diff = moment.duration(summitDate.diff(nowFormatted));
+  let days = parseInt(diff.asDays());
+  let hours = parseInt(diff.asHours()); //2039 hours, but it gives total hours in given miliseconds which is not expacted.
+  hours = hours - days * 24;
+  let minutes = parseInt(diff.asMinutes()); //122360 minutes,but it gives total minutes in given miliseconds which is not expacted.
+  minutes = minutes - (days * 24 * 60 + hours * 60);
 
-    let diff = moment.duration(summitDate.diff(nowFormatted));
-    let days = parseInt(diff.asDays());
-    let hours = parseInt(diff.asHours()); //2039 hours, but it gives total hours in given miliseconds which is not expacted.
-    hours = hours - days * 24;
-    let minutes = parseInt(diff.asMinutes()); //122360 minutes,but it gives total minutes in given miliseconds which is not expacted.
-    minutes = minutes - (days * 24 * 60 + hours * 60);
-
-    if (diff.asMilliseconds() > 0) {
-      return (
-        <div className={styles.countdown}>
-          <div className={`${styles.countdownColumns} columns is-gapless`}>
-            <div className={`${styles.leftColumn} column is-6 is-black`}>
-              <div>{text}</div>
-            </div>
-            <div className={`${styles.rightColumn} column is-6 is-black`}>
-              <div>
-                <span className={styles.days}>{days}</span> Days
-            </div>
-              <div>
-                <span className={styles.hours}>{hours}</span> Hours
-            </div>
-              <div>
-                <span className={styles.minutes}>{minutes}</span> Minutes
-            </div>
-            </div>
+  if (diff.asMilliseconds() > 0) {
+    return (
+      <div className={styles.countdown}>
+        <div className={`${styles.countdownColumns} columns is-gapless`}>
+          <div className={`${styles.leftColumn} column is-6 is-black`}>
+            <div>{text}</div>
+          </div>
+          <div className={`${styles.rightColumn} column is-6 is-black`}>
+            <div>
+              <span className={styles.days}>{days}</span> Days
+          </div>
+            <div>
+              <span className={styles.hours}>{hours}</span> Hours
+          </div>
+            <div>
+              <span className={styles.minutes}>{minutes}</span> Minutes
+          </div>
           </div>
         </div>
-      )
-    } else {
-      return null
-    }
+      </div>
+    )
+  } else {
+    return null
   }
+};
 
-}
-
-const mapStateToProps = ({ clockState }) => ({  
-  now: clockState.nowUtc,
-})
-
-export default connect(mapStateToProps, null)(Countdown);
+export default Countdown;
