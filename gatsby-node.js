@@ -41,7 +41,7 @@ const {
   generateColorsScssFile
 } = require("./src/utils/scssUtils");
 
-const { FIFTY_PER_PAGE, BUILD_REQUEST_TIMEOUT_MS } = require("./src/utils/build-json/constants");
+const { FIFTY_PER_PAGE, BUILD_REQUEST_TIMEOUT_MS, BUILD_PAGE_FETCH_CONCURRENCY } = require("./src/utils/build-json/constants");
 const SpeakersAPIRequest = require("./src/utils/build-json/SpeakersAPIRequest");
 const getWithRetry = require("./src/utils/build-json/getWithRetry");
 
@@ -60,21 +60,20 @@ const getAccessToken = async (config, scope) => {
 };
 
 const SSR_GetRemainingPages = async (endpoint, params, lastPage) => {
-  // create an array with remaining pages to perform Promise.All
   const pages = [];
   for (let i = 2; i <= lastPage; i++) {
     pages.push(i);
   }
 
-  let remainingPages = await Promise.all(pages.map(pageIdx => {
-    return getWithRetry(endpoint,
-      {
-        params: {
-          ...params,
-          page: pageIdx
-        }
-      }).then(({ data }) => data);
-  }));
+  const fetchPage = (pageIdx) =>
+    getWithRetry(endpoint, { params: { ...params, page: pageIdx } }).then(({ data }) => data);
+
+  const remainingPages = [];
+  for (let i = 0; i < pages.length; i += BUILD_PAGE_FETCH_CONCURRENCY) {
+    const chunk = pages.slice(i, i + BUILD_PAGE_FETCH_CONCURRENCY);
+    const chunkResults = await Promise.all(chunk.map(fetchPage));
+    remainingPages.push(...chunkResults);
+  }
 
   return remainingPages.sort((a, b,) => a.current_page - b.current_page).map(p => p.data).flat();
 }
