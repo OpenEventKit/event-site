@@ -23,7 +23,7 @@ import { getEventById, getEventStreamingInfoById } from "../actions/event-action
 import URI from "urijs";
 import useMarketingSettings, { MARKETING_SETTINGS_KEYS } from "@utils/useMarketingSettings";
 import { useEventPhase } from "@utils/hooks/useEventPhase";
-import { useClock } from "openstack-uicore-foundation/lib/components/clock-context";
+import { useClockSelector } from "openstack-uicore-foundation/lib/components/clock-context";
 import { checkMuxTokens, isMuxVideo } from "../utils/videoUtils";
 
 /**
@@ -38,12 +38,13 @@ export const EventPageTemplate = class extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const {eventId, event, eventTokens, eventPhase, lastDataSync} = this.props;
+    const {eventId, event, eventTokens, eventPhase, firstHalf, lastDataSync} = this.props;
     if (eventId !== nextProps.eventId) return true;
     if (!isEqual(event, nextProps.event)) return true;
     if (!isEqual(eventTokens, nextProps.eventTokens)) return true;
     // a synch did happened!
     if (lastDataSync !== nextProps.lastDataSync) return true;
+    if (firstHalf !== nextProps.firstHalf) return true;
     // compare current event phase with next one
     const finishing = (eventPhase === PHASES.DURING && nextProps.eventPhase === PHASES.AFTER);
     return (eventPhase !== nextProps.eventPhase && !finishing );
@@ -75,8 +76,7 @@ export const EventPageTemplate = class extends React.Component {
 
   render() {
 
-    const {event, eventTokens, user, loading, nowUtc, summit, eventPhase, eventId, lastDataSync, activityCtaText} = this.props;
-    const firstHalf = eventPhase === PHASES.DURING ? nowUtc < ((event?.start_date + event?.end_date) / 2) : false;
+    const {event, eventTokens, user, loading, summit, eventPhase, firstHalf, eventId, lastDataSync, activityCtaText} = this.props;
     const eventQuery = event.streaming_url ? URI(event.streaming_url).search(true) : null;
     const autoPlay = eventQuery?.autoplay !== '0';
     // Start time set into seconds, first number is minutes so it multiply per 60
@@ -218,8 +218,12 @@ const EventPage = ({
 
   const { getSettingByKey } = useMarketingSettings();
   const activityCtaText = getSettingByKey(MARKETING_SETTINGS_KEYS.activityCtaText);
-  const nowUtc = useClock();
   const eventPhase = useEventPhase(event);
+  const firstHalf = useClockSelector((nowUtc) =>
+    eventPhase === PHASES.DURING && event
+      ? nowUtc < ((event.start_date + event.end_date) / 2)
+      : false
+  );
 
   return (
     <Layout location={location}>
@@ -238,7 +242,7 @@ const EventPage = ({
         loading={loading}
         user={user}
         eventPhase={eventPhase}
-        nowUtc={nowUtc}
+        firstHalf={firstHalf}
         location={location}
         getEventById={getEventById}
         getEventStreamingInfoById={getEventStreamingInfoById}
@@ -269,7 +273,7 @@ EventPageTemplate.propTypes = {
   eventId: PropTypes.string,
   user: PropTypes.object,
   eventPhase: PropTypes.number,
-  nowUtc: PropTypes.number,
+  firstHalf: PropTypes.bool,
   getEventById: PropTypes.func,
   getEventStreamingInfoById: PropTypes.func,
   activityCtaText: PropTypes.string,
