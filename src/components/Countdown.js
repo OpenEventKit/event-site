@@ -14,12 +14,12 @@
 import React from 'react';
 import moment from "moment-timezone";
 import { epochToMomentTimeZone } from "openstack-uicore-foundation/lib/utils/methods";
-import { useClock } from "openstack-uicore-foundation/lib/components/clock-context";
+import { useClockMinute } from "@utils/hooks/useClockMinute";
 
 import styles from '../styles/countdown.module.scss'
 
 const Countdown = ({ summit, text }) => {
-  const now = useClock();
+  const now = useClockMinute();
 
   if (!now || !summit.start_date || !summit.time_zone_id) return null;
 

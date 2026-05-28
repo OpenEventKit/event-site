@@ -6,12 +6,12 @@ import 'speakers-widget/dist/index.css';
 // awesome-bootstrap-checkbox css dependency
 // https://cdnjs.cloudflare.com/ajax/libs/awesome-bootstrap-checkbox/1.0.2/awesome-bootstrap-checkbox.min.css
 // injected through HeadComponents
-import { useClock } from "openstack-uicore-foundation/lib/components/clock-context";
+import { useClockMinute } from "@utils/hooks/useClockMinute";
 
 import { SentryFallbackFunction } from "./SentryErrorComponent";
 
 const SpeakersWidgetComponent = ({colorSettings, allEvents, speakers, schedules, ...props}) => {
-    const now = useClock();
+    const now = useClockMinute();
     const scheduleState = schedules?.find( s => s.key === 'schedule-main');
 
     const widgetProps = {
