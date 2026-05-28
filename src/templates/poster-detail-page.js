@@ -24,9 +24,9 @@ import AccessTracker, { AttendeesWidget } from '../components/AttendeeToAttendee
 import { getAllVoteablePresentations, getPresentationById, setInitialDataset } from '../actions/presentation-actions';
 import { castPresentationVote, uncastPresentationVote } from '../actions/user-actions';
 
-import { PHASES } from '../utils/phasesUtils';
 import { isAuthorizedBadge } from '../utils/authorizedGroups';
 import { useVotingPeriodsPhasesMap } from '@utils/hooks/useVotingPeriodPhase';
+import { useVotingPeriodNotifications } from '@utils/hooks/useVotingPeriodNotifications';
 
 import useMarketingSettings, { MARKETING_SETTINGS_KEYS } from "@utils/useMarketingSettings";
 
@@ -55,12 +55,9 @@ export const PosterDetailPage = ({
     posterViewable: false
   });
 
-  const [notifiedVotingPeriodsOnLoad, setNotifiedVotingPeriodsOnLoad] = useState(false);
-  const [notifiedMaximunAllowedVotesOnLoad, setNotifiedMaximunAllowedVotesOnLoad] = useState(false);
   const [votedPosterTrackGroups, setVotedPosterTrackGroups] = useState([]);
 
   const votingPeriodsPhases = useVotingPeriodsPhasesMap(votingPeriods);
-  const previousPhasesRef = useRef(votingPeriodsPhases);
 
   const notificationRef = useRef(null);
 
@@ -87,60 +84,14 @@ export const PosterDetailPage = ({
     }).catch(e => console.log(e));
   }, [presentationId]);
 
-  useEffect(() => {
-    const previousPhases = previousPhasesRef.current;
-    if (!notifiedVotingPeriodsOnLoad &&
-      posterTrackGroups.length &&
-      posterTrackGroups.map(tg => votingPeriods[tg]).every(vp => vp !== undefined)) {
-      posterTrackGroups.forEach(tg => {
-        if (votingPeriodsPhases[tg] === PHASES.BEFORE) {
-          const startDate = new Date(votingPeriods[tg].startDate * 1000).toLocaleDateString('en-US');
-          const startTime = new Date(votingPeriods[tg].startDate * 1000).toLocaleTimeString('en-US');
-          pushNotification(`Voting has not begun. ${votingPeriods[tg].name} will allow for votes starting on ${startDate} ${startTime}`);
-          setNotifiedVotingPeriodsOnLoad(true);
-        } else if (votingPeriodsPhases[tg] === PHASES.AFTER) {
-          const endDate = new Date(votingPeriods[tg].endDate * 1000).toLocaleDateString('en-US');
-          const endTime = new Date(votingPeriods[tg].endDate * 1000).toLocaleTimeString('en-US');
-          pushNotification(`Voting has ended. ${votingPeriods[tg].name} does not allow for votes after ${endDate} ${endTime}`);
-          setNotifiedVotingPeriodsOnLoad(true);
-        }
-      });
-    }
-    if (posterTrackGroups.length &&
-      posterTrackGroups.map(tg => votingPeriods[tg]).every(vp => vp !== undefined) &&
-      posterTrackGroups.map(tg => previousPhases[tg]).every(p => p !== undefined)) {
-      posterTrackGroups.forEach(tg => {
-        if (previousPhases[tg] === PHASES.BEFORE && votingPeriodsPhases[tg] === PHASES.DURING) {
-          pushNotification(`Voting has now begun! You are allowed ${votingPeriods[tg].maxAttendeeVotes} votes in ${votingPeriods[tg].name}`);
-        } else if (previousPhases[tg] === PHASES.DURING && votingPeriodsPhases[tg] === PHASES.AFTER) {
-          const endDate = new Date(votingPeriods[tg].endDate * 1000).toLocaleDateString('en-US');
-          const endTime = new Date(votingPeriods[tg].endDate * 1000).toLocaleTimeString('en-US');
-          pushNotification(`Voting has ended. ${votingPeriods[tg].name} does not allow for votes after ${endDate} ${endTime}`);
-        }
-      });
-    }
-    if (!notifiedMaximunAllowedVotesOnLoad &&
-      posterTrackGroups.length &&
-      posterTrackGroups.map(tg => votingPeriods[tg]).every(vp => vp !== undefined)) {
-      posterTrackGroups.forEach(tg => {
-        if (votingPeriodsPhases[tg] === PHASES.DURING && votingPeriods[tg].remainingVotes === 0) {
-          pushNotification(`You've reached your maximum votes. ${votingPeriods[tg].name} only allows for ${votingPeriods[tg].maxAttendeeVotes} votes per attendee`);
-          setNotifiedMaximunAllowedVotesOnLoad(true);
-        }
-      });
-    } else if (votedPosterTrackGroups &&
-        votedPosterTrackGroups.length &&
-        posterTrackGroups.length &&
-        posterTrackGroups.map(tg => votingPeriods[tg]).every(vp => vp !== undefined)) {
-        votedPosterTrackGroups.forEach(tg => {
-        if (votingPeriodsPhases[tg] === PHASES.DURING && votingPeriods[tg].remainingVotes === 0) {
-          pushNotification(`You've reached your maximum votes. ${votingPeriods[tg].name} only allows for ${votingPeriods[tg].maxAttendeeVotes} votes per attendee`);
-          setVotedPosterTrackGroups([]);
-        }
-      });
-    }
-    previousPhasesRef.current = votingPeriodsPhases;
-  }, [posterTrackGroups, votingPeriods, votingPeriodsPhases]);
+  useVotingPeriodNotifications({
+    trackGroups: posterTrackGroups,
+    votingPeriods,
+    votingPeriodsPhases,
+    votedTrackGroups: votedPosterTrackGroups,
+    onVotedTrackGroupsHandled: () => setVotedPosterTrackGroups([]),
+    pushNotification,
+  });
 
   const { getSettingByKey } = useMarketingSettings();
 
