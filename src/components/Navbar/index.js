@@ -8,13 +8,13 @@ import { userHasAccessLevel, VIRTUAL_ACCESS_LEVEL } from "@utils/authorizedGroup
 import { getDefaultLocation } from "@utils/loginUtils";
 
 import { PHASES } from "@utils/phasesUtils";
+import { useSummitPhase } from "@utils/hooks/useSummitPhase";
 import { USER_REQUIREMENTS, PAGE_RESTRICTIONS } from "@utils/pageAccessConstants";
 
 import navbarContent from "content/navbar/index.json";
 
 const Navbar = ({
   location,
-  summitPhase,
   summit,
   isLoggedUser,
   isAuthorized,
@@ -23,6 +23,7 @@ const Navbar = ({
   userProfile,
   eventRedirect
 }) => {
+  const summitPhase = useSummitPhase();
 
   // we store this calculation to use it later
   const hasVirtualBadge = useMemo(() =>
@@ -110,14 +111,12 @@ const Navbar = ({
 };
 
 const mapStateToProps = ({
-  clockState,
   settingState,
   summitState,
   loggedUserState,
   userState
 }) => ({
   summit: summitState.summit,
-  summitPhase: clockState.summit_phase,
   isLoggedUser: loggedUserState.isLoggedUser,
   isAuthorized: userState.isAuthorized,
   hasTicket: userState.hasTicket,

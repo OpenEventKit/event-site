@@ -23,17 +23,16 @@ import Link from "../../components/Link";
 import { titleFromPathname } from "../../utils/urlFormating";
 import {graphql} from "gatsby";
 
-const mySchedulePage = ({ location, summitPhase,isLoggedUser, user, allowClick, title, key }) => {
+const mySchedulePage = ({ location, isLoggedUser, user, allowClick, title, key }) => {
   return  <SchedulePage
     path="/my-schedule"
     location={location}
-    summitPhase={summitPhase}
     isLoggedIn={isLoggedUser}
     user={user}
     scheduleProps={{
       title: title,
       showSync: true,
-      showShare: false,             
+      showShare: false,
       subtitle: <Link to={"/a/schedule"}>Show Schedule</Link>
     }}
     schedKey={key}
@@ -61,7 +60,7 @@ export const appQuery = graphql`
 `;
 
 
-const App = ({ isLoggedUser, user, summitPhase, allowClick = true, data }) => {
+const App = ({ isLoggedUser, user, allowClick = true, data }) => {
 
   const { mySchedulePageJson } = data;
 
@@ -82,21 +81,21 @@ const App = ({ isLoggedUser, user, summitPhase, allowClick = true, data }) => {
           <RsvpPage path="/rsvp" location={location} />
           <WithAuthRoute path="/" isLoggedIn={isLoggedUser} location={location}>
             <MyTicketsPage path="/my-tickets" isLoggedIn={isLoggedUser} user={user} location={location} />
-            <FullProfilePage path="/profile" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location} />
+            <FullProfilePage path="/profile" isLoggedIn={isLoggedUser} user={user} location={location} />
             <ExtraQuestionsPage path="/extra-questions" isLoggedIn={isLoggedUser} user={user} location={location} />
 
-            { mySchedulePageJson && !mySchedulePageJson.needsTicketAuthz && mySchedulePage({location, summitPhase,isLoggedUser, user, allowClick, title:mySchedulePageJson.title, key: mySchedulePageJson.key }) }
-            <WithAuthzRoute path="/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location}>
+            { mySchedulePageJson && !mySchedulePageJson.needsTicketAuthz && mySchedulePage({location, isLoggedUser, user, allowClick, title:mySchedulePageJson.title, key: mySchedulePageJson.key }) }
+            <WithAuthzRoute path="/" isLoggedIn={isLoggedUser} user={user} location={location}>
                 <PostersPage path="/posters" trackGroupId={0} location={location} />
                 <PostersPage path="/posters/:trackGroupId" location={location} />
                 <PosterDetailPage path="/poster/:presentationId/" isLoggedIn={isLoggedUser} user={user} location={location} />
-                { mySchedulePageJson && mySchedulePageJson.needsTicketAuthz && mySchedulePage({location, summitPhase,isLoggedUser, user, allowClick, title: mySchedulePageJson.title, key: mySchedulePageJson.key }) }
-                <ShowOpenRoute path="/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location}>
-                  <WithBadgeRoute path="/event/:eventId" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location}>
-                    <EventPage path="/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location} />
+                { mySchedulePageJson && mySchedulePageJson.needsTicketAuthz && mySchedulePage({location, isLoggedUser, user, allowClick, title: mySchedulePageJson.title, key: mySchedulePageJson.key }) }
+                <ShowOpenRoute path="/" isLoggedIn={isLoggedUser} user={user} location={location}>
+                  <WithBadgeRoute path="/event/:eventId" isLoggedIn={isLoggedUser} user={user} location={location}>
+                    <EventPage path="/" isLoggedIn={isLoggedUser} user={user} location={location} />
                   </WithBadgeRoute>
-                  <SponsorPage path="/sponsor/:sponsorId" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location} />
-                  <ExpoHallPage path="/sponsors/" summitPhase={summitPhase} isLoggedIn={isLoggedUser} user={user} location={location} />
+                  <SponsorPage path="/sponsor/:sponsorId" isLoggedIn={isLoggedUser} user={user} location={location} />
+                  <ExpoHallPage path="/sponsors/" isLoggedIn={isLoggedUser} user={user} location={location} />
                 </ShowOpenRoute>
             </WithAuthzRoute>
           </WithAuthRoute>
@@ -106,9 +105,8 @@ const App = ({ isLoggedUser, user, summitPhase, allowClick = true, data }) => {
   );
 };
 
-const mapStateToProps = ({ loggedUserState, userState, clockState, settingState, summitState }) => ({
+const mapStateToProps = ({ loggedUserState, userState, settingState, summitState }) => ({
   isLoggedUser: loggedUserState.isLoggedUser,
-  summitPhase: clockState.summit_phase,
   user: userState,
   summitId: summitState?.summit?.id,
   lastBuild: settingState.lastBuild,

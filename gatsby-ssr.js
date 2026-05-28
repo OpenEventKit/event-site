@@ -9,6 +9,7 @@ import {
 } from "./src/components/HeadComponents";
 import ReduxWrapper from "./src/state/ReduxWrapper";
 import wrapThemeProvider from "./src/utils/wrapThemeProvider";
+import ClockProvider from "./src/components/ClockProvider";
 
 // Polyfills for build environment
 import "./src/utils/buildPolyfills";
@@ -17,7 +18,11 @@ const renderToStringWithEmotion = (bodyComponent) => {
   const cache = createEmotionCache();
   const { extractCriticalToChunks, constructStyleTagsFromChunks } = createEmotionServer(cache);
 
-  const wrappedComponent = wrapThemeProvider({ element: ReduxWrapper({ element: bodyComponent }) });
+  const wrappedComponent = wrapThemeProvider({
+    element: ReduxWrapper({
+      element: <ClockProvider>{bodyComponent}</ClockProvider>,
+    }),
+  });
 
   const html = ReactDOMServer.renderToString(wrappedComponent);
   const emotionChunks = extractCriticalToChunks(html);

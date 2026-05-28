@@ -15369,10 +15369,12 @@ open@^8.4.0:
     is-docker "^2.1.1"
     is-wsl "^2.2.0"
 
-openstack-uicore-foundation@4.2.30:
-  version "4.2.30"
-  resolved "https://registry.yarnpkg.com/openstack-uicore-foundation/-/openstack-uicore-foundation-4.2.30.tgz#a7671ae66bcb465d4be7cf763dd8321218725ae3"
-  integrity sha512-GSH67s/XqviESUY/gSfQ0eRIDYSoy6MX5UYE0zhCFkg7tEFVBSBbuQwEGy2/Cida/uhcxhj58Txl9FStiWsK4Q==
+openstack-uicore-foundation@4.2.31:
+  version "4.2.31"
+  resolved "https://registry.yarnpkg.com/openstack-uicore-foundation/-/openstack-uicore-foundation-4.2.31.tgz#593b12ee1cd80cfa299f813b2470dcbde46cc580"
+  integrity sha512-DE44A0hr5mM9OCak8h4uEdNSjqBzeI+9yPf1/J+TgfzJPtZNrkW2+y43Z8jIHoByI6lBOCug31FuAo6ysDyaiw==
+  dependencies:
+    use-sync-external-store "^1.6.0"
 
 opentracing@^0.14.7:
   version "0.14.7"
@@ -20884,6 +20886,11 @@ use-ssr@^1.0.25:
   version "1.0.25"
   resolved "https://registry.yarnpkg.com/use-ssr/-/use-ssr-1.0.25.tgz#c7f54b59d6e52db26749b1d4115a650101a190bd"
   integrity sha512-VYF8kJKI+X7+U4XgGoUER2BUl0vIr+8OhlIhyldgSGE0KHMoDRXPvWeHUUeUktq7ACEOVLzXGq1+QRxcvtwvyQ==
+
+use-sync-external-store@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/use-sync-external-store/-/use-sync-external-store-1.6.0.tgz#b174bfa65cb2b526732d9f2ac0a408027876f32d"
+  integrity sha512-Pp6GSwGP/NrPIrxVFAIkOQeyw8lFenOHijQWkUTrDvrF4ALqylP2C/KCkeS9dpUM3KvYRQhna5vt7IL95+ZQ9w==
 
 utf8-byte-length@^1.0.1:
   version "1.0.5"

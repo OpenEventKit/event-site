@@ -10,13 +10,14 @@ import AttendanceTrackerComponent from "../components/AttendanceTrackerComponent
 import AccessTracker from "../components/AttendeeToAttendeeWidgetComponent";
 import { PageScrollInspector, SCROLL_DIRECTION } from '../components/PageScrollInspector';
 import { PHASES } from "../utils/phasesUtils";
+import { useSummitPhase } from "../utils/hooks/useSummitPhase";
 import FilterButton from "../components/FilterButton";
 import NotFoundPage from "../pages/404";
 import withScheduleData from '../utils/withScheduleData'
 import styles from "../styles/full-schedule.module.scss";
 
-const SchedulePage = ({ summit, scheduleState, summitPhase, isLoggedUser, location, colorSettings, updateFilter, scheduleProps, schedKey, allowClick, lastDataSync, clearFilters, callAction }) => {
-
+const SchedulePage = ({ summit, scheduleState, isLoggedUser, location, colorSettings, updateFilter, scheduleProps, schedKey, allowClick, lastDataSync, clearFilters, callAction }) => {
+  const summitPhase = useSummitPhase();
   const [showFilters, setShowfilters] = useState(false);
   const filtersWrapperRef = useRef(null);
   const { key, events, allEvents, filters, view, timezone, timeFormat, colorSource } = scheduleState || {};
@@ -109,7 +110,6 @@ const SchedulePage = ({ summit, scheduleState, summitPhase, isLoggedUser, locati
 
 SchedulePage.propTypes = {
   schedKey: PropTypes.string.isRequired,
-  summitPhase: PropTypes.number,
   isLoggedUser: PropTypes.bool,
 };
 

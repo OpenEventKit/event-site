@@ -7,14 +7,14 @@ import { PHASES } from '../../utils/phasesUtils';
 
 import styles from './index.module.scss';
 
-const PosterGrid = ({ posters, showDetailPage = null, votingAllowed, votingPeriods, votes, toggleVote }) => {
+const PosterGrid = ({ posters, showDetailPage = null, votingAllowed, votingPeriods, votingPeriodsPhases, votes, toggleVote }) => {
 
   const isDuringVotingPhase = useCallback((poster) => {
     const results = poster.track?.track_groups?.map(trackGroupId =>
-      votingPeriods[trackGroupId]?.phase === PHASES.DURING
+      votingPeriodsPhases[trackGroupId] === PHASES.DURING
     );
     return results && results.length ? results.every(r => !!r) : false;
-  }, [votingPeriods]);
+  }, [votingPeriodsPhases]);
 
   const canVote = useCallback((poster) => {
     const results = poster.track?.track_groups?.map(trackGroupId =>
@@ -25,7 +25,7 @@ const PosterGrid = ({ posters, showDetailPage = null, votingAllowed, votingPerio
 
   if (!posters) return null;
 
-  const cards = posters.map(poster => 
+  const cards = posters.map(poster =>
     <PosterCard
       key={`poster-${poster.id}`}
       poster={poster}
@@ -48,6 +48,7 @@ PosterGrid.propTypes = {
   showDetailPage: PropTypes.func,
   votingAllowed: PropTypes.bool.isRequired,
   votingPeriods: PropTypes.object.isRequired,
+  votingPeriodsPhases: PropTypes.object.isRequired,
   votes: PropTypes.array.isRequired,
   toggleVote: PropTypes.func.isRequired
 };

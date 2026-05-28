@@ -19,6 +19,7 @@ import {
   SUPABASE_KEY,
 } from "@utils/envVariables";
 import {PHASES} from "@utils/phasesUtils";
+import {useSummitPhase} from "@utils/hooks/useSummitPhase";
 
 import "attendee-to-attendee-widget/dist/index.css";
 
@@ -203,7 +204,8 @@ const mapState = ({settingState}) => ({
 
 export const AttendeesWidget = connect(mapState)(AttendeesWidgetComponent);
 
-const AccessTracker = ({user, isLoggedUser, summitPhase, chatSettings, updateChatProfileEnabled = false}) => {
+const AccessTracker = ({user, isLoggedUser, chatSettings, updateChatProfileEnabled = false}) => {
+  const summitPhase = useSummitPhase();
   const chatProps = {
     streamApiKey: getEnvVariable(STREAM_IO_API_KEY),
     apiBaseUrl: getEnvVariable(IDP_BASE_URL),
@@ -317,10 +319,9 @@ const AccessTracker = ({user, isLoggedUser, summitPhase, chatSettings, updateCha
   return <Tracker {...widgetProps} ref={trackerRef}/>;
 };
 
-const mapStateToProps = ({loggedUserState, userState, clockState, settingState}) => ({
+const mapStateToProps = ({loggedUserState, userState, settingState}) => ({
   isLoggedUser: loggedUserState.isLoggedUser,
   user: userState,
-  summitPhase: clockState.summit_phase,
   chatSettings: settingState.widgets.chat
 });
 
