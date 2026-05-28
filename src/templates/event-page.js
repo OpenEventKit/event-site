@@ -49,9 +49,9 @@ export const EventPageTemplate = class extends React.Component {
     return (eventPhase !== nextProps.eventPhase && !finishing );
   }
 
-  canRenderVideo = (currentPhase) => {
+  canRenderVideo = (eventPhase) => {
     const {event} = this.props;
-    return (currentPhase >= PHASES.DURING || event.streaming_type === 'VOD') && event.streaming_url;
+    return (eventPhase >= PHASES.DURING || event.streaming_type === 'VOD') && event.streaming_url;
   };
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -76,16 +76,14 @@ export const EventPageTemplate = class extends React.Component {
   render() {
 
     const {event, eventTokens, user, loading, nowUtc, summit, eventPhase, eventId, lastDataSync, activityCtaText} = this.props;
-    const currentPhase = eventPhase;
-    console.log(`EventPageTemplate::render lastDataSync ${lastDataSync} currentPhase ${currentPhase}`);
-    const firstHalf = currentPhase === PHASES.DURING ? nowUtc < ((event?.start_date + event?.end_date) / 2) : false;
+    const firstHalf = eventPhase === PHASES.DURING ? nowUtc < ((event?.start_date + event?.end_date) / 2) : false;
     const eventQuery = event.streaming_url ? URI(event.streaming_url).search(true) : null;
     const autoPlay = eventQuery?.autoplay !== '0';
     // Start time set into seconds, first number is minutes so it multiply per 60
     const startTime = eventQuery?.start?.split(',').reduce((a, b, index) => (index === 0 ? parseInt(b) * 60 : parseInt(b)) + a, 0);
 
     // if event is loading or we are still calculating the current phase ...
-    if (loading || currentPhase === undefined || currentPhase === null) {
+    if (loading || eventPhase === undefined || eventPhase === null) {
       return <Interstitial title="Loading event" contained />;
     }
 
@@ -101,7 +99,7 @@ export const EventPageTemplate = class extends React.Component {
       <React.Fragment>
         <section className="section px-0 py-0">
           <div className="columns is-gapless">
-            {this.canRenderVideo(currentPhase) ? (
+            {this.canRenderVideo(eventPhase) ? (
               <div className="column is-three-quarters px-0 py-0">
                 <VideoComponent
                   url={event.streaming_url}
@@ -121,7 +119,7 @@ export const EventPageTemplate = class extends React.Component {
                 <PrePostEventSlide
                   summit={summit}
                   event={event}
-                  eventPhase={currentPhase}
+                  eventPhase={eventPhase}
                 />
               </div>
             )}
