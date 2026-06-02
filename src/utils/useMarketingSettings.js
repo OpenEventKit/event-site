@@ -26,7 +26,6 @@ export const MARKETING_SETTINGS_KEYS = {
   regLiteOrderComplete2ndParagraph: "REG_LITE_ORDER_COMPLETE_STEP_2ND_PARAGRAPH",
   regLiteOrderCompleteButton: "REG_LITE_ORDER_COMPLETE_BTN_LABEL",
   regLiteNoAllowedTicketsMessage: "REG_LITE_NO_ALLOWED_TICKETS_MESSAGE",
-  regLiteNoTicketsAvailableMessage: "REG_LITE_NO_TICKETS_AVAILABLE_MESSAGE",
   // Color settings (from scssUtils/defaults)
   colorAccent: "color_accent",
   colorAlerts: "color_alerts",

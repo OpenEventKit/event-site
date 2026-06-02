@@ -125,7 +125,6 @@ const useRegistrationWidgetProps = ({
     const orderComplete2ndParagraph = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteOrderComplete2ndParagraph);
     const orderCompleteButton = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteOrderCompleteButton);
     const noAllowedTicketsMessage = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteNoAllowedTicketsMessage);
-    const noTicketsAvailableMessage = getSettingByKey(MARKETING_SETTINGS_KEYS.regLiteNoTicketsAvailableMessage);
 
     const siteSettings = useSiteSettings();
     const paymentSettings = usePaymentSettings();
@@ -191,7 +190,6 @@ const useRegistrationWidgetProps = ({
         orderComplete2ndParagraph,
         orderCompleteButton,
         noAllowedTicketsMessage,
-        noTicketsAvailableMessage,
         showCompanyInput,
         showCompanyInputDefaultOptions,
         idpLogoLight: siteSettings?.idpLogo?.idpLogoLight?.publicURL,
