@@ -19867,10 +19867,10 @@ sudo-prompt@^8.2.0:
   resolved "https://registry.yarnpkg.com/sudo-prompt/-/sudo-prompt-8.2.5.tgz#cc5ef3769a134bb94b24a631cc09628d4d53603e"
   integrity sha512-rlBo3HU/1zAJUrkY6jNxDOC9eVYliG6nS4JA8u8KAshITd07tafMc/Br7xQwCSseXwJ2iCcHCE8SNWX3q8Z+kw==
 
-summit-registration-lite@7.0.4:
-  version "7.0.4"
-  resolved "https://registry.npmjs.org/summit-registration-lite/-/summit-registration-lite-7.0.4.tgz#f8b55393c081a6c0b8a7114b22c71f824b66f0cc"
-  integrity sha512-lizvSV4KvdOHpCWdCNfTxDJPzwLx7YQ/sjw/y+EbSq3RLLIErzkZbYXJtw5HbPikSIot062SPSUsSlTff5snwQ==
+summit-registration-lite@7.0.6:
+  version "7.0.6"
+  resolved "https://registry.yarnpkg.com/summit-registration-lite/-/summit-registration-lite-7.0.6.tgz#eee7ff36113ec557cbb023d8c2d1af1b711d85d9"
+  integrity sha512-/g3PIyOfoHaEWPRRZdFDb+B9POs+hRQS7v7EPAPns3YkOGE1rWJUiXbqXceAkjK/7JR+hgkzJIfo2YotW2Y06g==
   dependencies:
     "@emotion/react" "^11.11.4"
     "@emotion/styled" "^11.11.5"
