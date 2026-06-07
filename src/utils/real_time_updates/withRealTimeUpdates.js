@@ -73,12 +73,11 @@ const withRealTimeUpdates = WrappedComponent => {
          * @returns {Promise<void>}
          */
         async processUpdates(updates) {
-
             const {summit, allEvents, allIDXEvents, allSpeakers, allIDXSpeakers, synchEntityData} = this.props;
 
-            if(!this._worker)
-            {
-                console.log('withRealTimeUpdates::processUpdates worker is null');
+            const worker = this._worker;
+            if (!worker) {
+                console.log('withRealTimeUpdates::processUpdates worker is null (early return)');
                 return;
             }
 
@@ -87,9 +86,15 @@ const withRealTimeUpdates = WrappedComponent => {
                 accessToken = await getAccessToken();
             } catch (e) {
                 console.log('withRealTimeUpdates::processUpdates getAccessToken error: ', e);
+                return;
             }
 
-            this._worker.postMessage({
+            if (worker !== this._worker) {
+                console.log('withRealTimeUpdates::processUpdates worker changed or was destroyed (post-await)');
+                return;
+            }
+
+            worker.postMessage({
                 accessToken: accessToken,
                 noveltiesArray: JSON.stringify(updates),
                 summit: JSON.stringify(summit),
@@ -100,22 +105,19 @@ const withRealTimeUpdates = WrappedComponent => {
                 currentLocation: this.getCurrentLocation()
             });
 
-            this._worker.onmessage = ({
-                                    data: {
-                                        payload,
-                                        entity,
-                                        summit,
-                                        eventsData,
-                                        allIDXEvents: newAllIDXEvents,
-                                        allSpeakers: newAllSpeakers,
-                                        allIDXSpeakers: newAllIDXSpeakers
-                                    }
-                                }) => {
-
+            worker.onmessage = ({
+                data: {
+                    payload,
+                    entity,
+                    summit,
+                    eventsData,
+                    allIDXEvents: newAllIDXEvents,
+                    allSpeakers: newAllSpeakers,
+                    allIDXSpeakers: newAllIDXSpeakers
+                }
+            }) => {
                 console.log('withRealTimeUpdates::processUpdates calling synch worker on message ');
-
-                synchEntityData
-                (
+                synchEntityData(
                     payload,
                     entity,
                     summit,
@@ -123,8 +125,8 @@ const withRealTimeUpdates = WrappedComponent => {
                     newAllIDXEvents,
                     newAllSpeakers,
                     newAllIDXSpeakers
-                )
-            }
+                );
+            };
         }
 
         /**
