@@ -31,7 +31,10 @@
       "title": "My Schedule",
       "link": "/a/my-schedule",
       "display": true,
-      "userRequirement": "NONE"
+      "userRequirement": "NONE",
+      "pageRestriction": [
+        "ANY"
+      ]
     },
     {
       "title": "My Profile",
@@ -41,6 +44,15 @@
       "pageRestriction": [
         "ANY"
       ]
+    },
+    {
+      "userRequirement": "NONE",
+      "pageRestriction": [
+        "ANY"
+      ],
+      "showOnlyAtShowTime": false,
+      "title": "test",
+      "link": "/test"
     }
   ]
 }
