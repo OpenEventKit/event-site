@@ -1,7 +1,9 @@
+import React from "react";
 import * as Sentry from "@sentry/gatsby";
 import { RewriteFrames as RewriteFramesIntegration } from "@sentry/integrations";
 import ReduxWrapper from "./src/state/ReduxWrapper";
 import wrapThemeProvider from "./src/utils/wrapThemeProvider";
+import ClockProvider from "./src/components/ClockProvider";
 import CookieManager from "./src/utils/cookies/CookieManager";
 import KlaroProvider from "./src/utils/cookies/providers/KlaroProvider";
 import cookieServices from "./src/utils/cookies/services";
@@ -25,7 +27,11 @@ import colors from "data/colors.json";
 import marketingSettings from "data/marketing-settings.json";
 
 export const wrapRootElement = ({ element }) => {
-  return wrapThemeProvider({ element: ReduxWrapper({ element }) });
+  return wrapThemeProvider({
+    element: ReduxWrapper({
+      element: <ClockProvider>{element}</ClockProvider>,
+    }),
+  });
 };
 
 export const onClientEntry = () => {

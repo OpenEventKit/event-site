@@ -5,14 +5,14 @@ import { PHASES } from '../utils/phasesUtils';
 
 import styles from '../styles/poster-components.module.scss';
 
-const PosterDescription = ({ poster: { speakers, title, description, custom_order, track }, poster, votingPeriods, votes, isVoted, toggleVote, votingAllowed }) => {
+const PosterDescription = ({ poster: { speakers, title, description, custom_order, track }, poster, votingPeriods, votingPeriodsPhases, votes, isVoted, toggleVote, votingAllowed }) => {
 
   const isDuringVotingPhase = useCallback((poster) => {
     const results = poster.track?.track_groups?.map(trackGroupId =>
-      votingPeriods[trackGroupId]?.phase === PHASES.DURING
+      votingPeriodsPhases[trackGroupId] === PHASES.DURING
     );
     return results && results.length ? results.every(r => !!r) : false;
-  }, [votingPeriods]);
+  }, [votingPeriodsPhases]);
 
   const canVote = useCallback((poster) => {
     const results = poster.track?.track_groups?.map(trackGroupId =>

@@ -13,7 +13,6 @@ import { customErrorHandler } from '../utils/customErrorHandler';
 
 import { VotingPeriod } from '../model/VotingPeriod';
 
-import { getVotingPeriodPhase } from '../utils/phasesUtils';
 import { mapVotesPerTrackGroup } from '../utils/voting-utils';
 
 import { getEnvVariable, SUMMIT_API_BASE_URL, SUMMIT_ID } from '../utils/envVariables';
@@ -28,7 +27,6 @@ export const GET_PRESENTATION_DETAILS = 'GET_PRESENTATION_DETAILS';
 export const GET_PRESENTATION_DETAILS_ERROR = 'GET_PRESENTATION_DETAILS_ERROR';
 export const GET_RECOMMENDED_PRESENTATIONS = 'GET_RECOMMENDED_PRESENTATIONS';
 export const VOTING_PERIODS_CREATE = 'VOTING_PERIODS_CREATE';
-export const VOTING_PERIODS_PHASE_CHANGE = 'VOTING_PERIODS_PHASE_CHANGE';
 const PresentationsDefaultPageSize = 30;
 
 export const setInitialDataset = () => (dispatch) => Promise.resolve().then(() => {
@@ -174,25 +172,8 @@ export const getRecommendedPresentations = (trackGroups) => async (dispatch) => 
   });
 };
 
-export const updateVotingPeriodsPhase = () => (dispatch, getState) => {
-  const { clockState: { nowUtc }, presentationsState: { votingPeriods } } = getState();
-  if (Object.keys(votingPeriods).length) {
-    const phaseChanges = [];
-    Object.entries(votingPeriods).forEach(entry => {
-      const [trackGroupId, votingPeriod] = entry;
-      const newPhase = getVotingPeriodPhase(votingPeriod, nowUtc);
-      if (newPhase !== votingPeriod.phase) {
-        phaseChanges.push({ trackGroupId, phase: newPhase });
-      }
-    });
-    if (phaseChanges.length)
-      dispatch(createAction(VOTING_PERIODS_PHASE_CHANGE)(phaseChanges));
-  }
-};
-
 export const createVotingPeriods = () => (dispatch, getState) => {
-  const { clockState: { nowUtc },
-          userState: { attendee },
+  const { userState: { attendee },
           summitState: { summit: { track_groups: trackGroups } },
           presentationsState: { voteablePresentations: { ssrPresentations: allBuildTimePresentations } } } = getState();
 
@@ -203,7 +184,7 @@ export const createVotingPeriods = () => (dispatch, getState) => {
     const { name, begin_attendee_voting_period_date: startDate,
             end_attendee_voting_period_date: endDate,
             max_attendee_votes: maxAttendeeVotes } = trackGroup;
-    const votingPeriod = VotingPeriod({ name, startDate, endDate, maxAttendeeVotes }, nowUtc);
+    const votingPeriod = VotingPeriod({ name, startDate, endDate, maxAttendeeVotes });
     if (votesPerTrackGroup[trackGroup.id]) votingPeriod.addVotes = votesPerTrackGroup[trackGroup.id];
     votingPeriods.push({ trackGroupId: trackGroup.id, votingPeriod });
   });

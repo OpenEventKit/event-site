@@ -21,7 +21,6 @@ import {
   GET_PRESENTATION_DETAILS,
   GET_RECOMMENDED_PRESENTATIONS,
   VOTING_PERIODS_CREATE,
-  VOTING_PERIODS_PHASE_CHANGE,
 } from "../actions/presentation-actions";
 
 import { filterEventsByAccessLevels } from "../utils/authorizedGroups";
@@ -133,19 +132,6 @@ const votingPeriods = (state = {}, action) => {
         newState = {
           ...newState,
           [trackGroupId]: votingPeriod
-        };
-      }
-      return newState;
-    }
-    case VOTING_PERIODS_PHASE_CHANGE: {
-      var newState = { ...state };
-      for (const { trackGroupId, phase } of payload) {
-        newState = {
-          ...newState,
-          [trackGroupId]: {
-            ...newState[trackGroupId], 
-            phase
-          }
         };
       }
       return newState;

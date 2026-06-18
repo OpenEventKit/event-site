@@ -2,6 +2,7 @@ import React, {useEffect} from "react";
 import { connect } from "react-redux";
 
 import { PHASES } from "../utils/phasesUtils";
+import { useSummitPhase } from "../utils/hooks/useSummitPhase";
 import { requireExtraQuestions, doVirtualCheckIn } from "../actions/user-actions";
 import Interstitial from "../components/Interstitial";
 import  FragmentParser from "openstack-uicore-foundation/lib/utils/fragment-parser";
@@ -11,7 +12,6 @@ import moment from "moment-timezone";
  *
  * @param children
  * @param isAuthorized
- * @param summitPhase
  * @param requireExtraQuestions
  * @param hasTicket
  * @param userProfile
@@ -22,12 +22,12 @@ import moment from "moment-timezone";
 const ShowOpenRoute = ({
   children,
   isAuthorized,
-  summitPhase,
   requireExtraQuestions,
   hasTicket,
   userProfile,
   doVirtualCheckIn
 }) => {
+  const summitPhase = useSummitPhase();
 
   // if we are at show time, and we have an attendee, perform virtual check-in
   useEffect(() => {

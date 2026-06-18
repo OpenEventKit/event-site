@@ -113,7 +113,6 @@ const MarketingPage = ({
   data,
   lastDataSync,
   summit,
-  summitPhase,
   isLoggedUser,
 }) => (
   <MarketingPageTemplate
@@ -121,7 +120,6 @@ const MarketingPage = ({
     data={data}
     lastDataSync={lastDataSync}
     summit={summit}
-    summitPhase={summitPhase}
     isLoggedUser={isLoggedUser}
   />
 );
@@ -129,12 +127,10 @@ const MarketingPage = ({
 const mapStateToProps = ({
   settingState,
   summitState,
-  clockState,
   loggedUserState
 }) => ({
   lastDataSync: settingState.lastDataSync,
   summit: summitState.summit,
-  summitPhase: clockState.summit_phase,
   isLoggedUser: loggedUserState.isLoggedUser,
 });
 
