@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { navigate } from "gatsby";
 import * as Sentry from "@sentry/react";
@@ -8,7 +8,7 @@ import { SentryFallbackFunction } from "./SentryErrorComponent";
 import RegistrationForm from "summit-registration-lite/dist/components/registration-form";
 import "summit-registration-lite/dist/components/registration-form.css";
 
-import { setPasswordlessLogin, setUserOrder, checkOrderData, getUserProfile, checkRequireExtraQuestionsByAttendee } from "../actions/user-actions";
+import { setPasswordlessLogin, setUserOrder, checkOrderData, refreshUserProfile, checkRequireExtraQuestionsByAttendee } from "../actions/user-actions";
 import { getThirdPartyProviders } from "../actions/base-actions";
 import { getExtraQuestions } from "../actions/summit-actions";
 
@@ -28,19 +28,24 @@ const RegistrationFormShortcode = ({
     setPasswordlessLogin,
     setUserOrder,
     checkOrderData,
-    getUserProfile,
+    refreshUserProfile,
     getThirdPartyProviders,
     getExtraQuestions,
     checkRequireExtraQuestionsByAttendee
 }) => {
     const backUrl = typeof window !== 'undefined' ? window.location.pathname : '/';
 
+    // The persisted profile can hold stale ticket ownership; refresh on mount.
+    useEffect(() => {
+        refreshUserProfile();
+    }, [refreshUserProfile]);
+
     const widgetProps = useRegistrationWidgetProps({
         summit, userProfile, idpProfile, attendee, colorSettings,
         loadingProfile, loadingIDP, availableThirdPartyProviders,
         allowsNativeAuth, allowsOtpAuth,
         setPasswordlessLogin, setUserOrder, checkOrderData,
-        getThirdPartyProviders, getExtraQuestions, checkRequireExtraQuestionsByAttendee,
+        refreshUserProfile, getThirdPartyProviders, getExtraQuestions, checkRequireExtraQuestionsByAttendee,
         backUrl,
         closeWidget: () => navigate("/"),
     });
@@ -75,7 +80,7 @@ export default connect(mapStateToProps, {
     setPasswordlessLogin,
     setUserOrder,
     checkOrderData,
-    getUserProfile,
+    refreshUserProfile,
     getThirdPartyProviders,
     getExtraQuestions,
     checkRequireExtraQuestionsByAttendee

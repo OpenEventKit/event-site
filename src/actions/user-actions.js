@@ -97,6 +97,20 @@ export const getDisqusSSO = (shortName) => async (dispatch, getState) => {
         });
 }
 
+/**
+ * Refetches the user profile at the point of use. userState is persisted
+ * across sessions, so profile-derived authority (ticket ownership, authz
+ * groups) can go stale whenever the backend changes (refunds, deactivations,
+ * group edits): surfaces that render ownership or gate on it should dispatch
+ * this before trusting the snapshot. No-ops while logged out or while a
+ * profile fetch is already in flight.
+ */
+export const refreshUserProfile = () => (dispatch, getState) => {
+    const { loggedUserState, userState } = getState();
+    if (!loggedUserState.isLoggedUser || userState.loading) return Promise.resolve();
+    return dispatch(getUserProfile()).catch((e) => console.log("getUserProfile error", e));
+};
+
 export const getUserProfile = () => async (dispatch) => {
 
     const accessToken = await getAccessTokenSafely()
