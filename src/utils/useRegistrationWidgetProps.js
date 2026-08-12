@@ -154,7 +154,8 @@ const useRegistrationWidgetProps = ({
             setUserOrder(order)
                 .then(() => checkOrderData(order))
                 .then(() => refreshUserProfile())
-                .catch((e) => console.log("refreshUserProfile error"));
+                // Any of the three steps can be the one that failed.
+                .catch((e) => console.log("onPurchaseComplete error", e));
         },
         completedExtraQuestions: async (attendee) => {
             if (!attendee) return true;
