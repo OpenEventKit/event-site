@@ -1,28 +1,9 @@
 import { applyMiddleware, compose, createStore } from "redux";
 import { persistCombineReducers, persistStore } from "redux-persist";
-import storage from "redux-persist/lib/storage";
 import thunk from "redux-thunk";
 
 import * as reducers from "../reducers";
-
-// Get from process.env because window is not set yet
-const clientId = process.env.GATSBY_OAUTH2_CLIENT_ID;
-const summitID = process.env.GATSBY_SUMMIT_ID;
-
-const config = {
-  key: `root_${clientId}_${summitID}`,
-  storage,
-  blacklist: [
-    // this will be not saved to persistent storage see
-    // https://github.com/rt2zz/redux-persist#blacklist--whitelist
-    "summitState",
-    "allSchedulesState",
-    "presentationsState",
-    "eventState",
-    "speakerState",
-    "sponsorState",
-  ],
-};
+import { persistConfig } from "./persistConfig";
 
 const states = {
   loggedUserState: reducers.loggedUserReducer,
@@ -52,7 +33,7 @@ const enhancer = composeEnhancers(applyMiddleware(appendLoggedUser, thunk));
 
 // Create store with persistor
 export const { store, persistor } = (() => {
-  const persistedReducers = persistCombineReducers(config, states);
+  const persistedReducers = persistCombineReducers(persistConfig, states);
 
   const store = createStore(persistedReducers, enhancer);
   const onRehydrateComplete = () => {};
