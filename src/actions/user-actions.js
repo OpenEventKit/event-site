@@ -12,12 +12,12 @@ import {
 import { putOnLocalStorage, getFromLocalStorage } from 'openstack-uicore-foundation/lib/utils/methods';
 
 import {
-    passwordlessLogin,
-    initLogOut
+    passwordlessLogin
 } from 'openstack-uicore-foundation/lib/security/methods';
 
 import QuestionsSet from 'openstack-uicore-foundation/lib/utils/questions-set'
 import { alertSuccess, alertWarning } from '@utils/alerts';
+import { collapsingQueue } from '@utils/collapsingQueue';
 import axios from "axios";
 import {navigate} from 'gatsby';
 import {customErrorHandler, customBadgeHandler, voidErrorHandler, customRSVPHandler} from '../utils/customErrorHandler';
@@ -97,21 +97,10 @@ export const getDisqusSSO = (shortName) => async (dispatch, getState) => {
         });
 }
 
-/**
- * Refetches the user profile at the point of use. userState is persisted
- * across sessions, so profile-derived authority (ticket ownership, authz
- * groups) can go stale whenever the backend changes (refunds, deactivations,
- * group edits): surfaces that render ownership or gate on it should dispatch
- * this before trusting the snapshot. No-ops while logged out or while a
- * profile fetch is already in flight.
- */
-export const refreshUserProfile = () => (dispatch, getState) => {
-    const { loggedUserState, userState } = getState();
-    if (!loggedUserState.isLoggedUser || userState.loading) return Promise.resolve();
-    return dispatch(getUserProfile()).catch((e) => console.log("getUserProfile error", e));
-};
-
-export const getUserProfile = () => async (dispatch) => {
+// The bare /members/me fetch: ticket ownership expands, loading flags, error
+// policy injected. The login flow and the registration refresh both build on
+// this.
+const fetchUserProfile = (errorHandler) => async (dispatch) => {
 
     const accessToken = await getAccessTokenSafely()
         .catch(() => {
@@ -133,23 +122,59 @@ export const getUserProfile = () => async (dispatch) => {
         createAction(START_LOADING_PROFILE),
         createAction(GET_USER_PROFILE),
         `${window.SUMMIT_API_BASE_URL}/api/v1/summits/${window.SUMMIT_ID}/members/me`,
-        customErrorHandler
-    )(params)(dispatch).then(() => {
-        dispatch(createAction(STOP_LOADING_PROFILE)());
+        errorHandler
+    )(params)(dispatch)
+        .finally(() => dispatch(createAction(STOP_LOADING_PROFILE)()));
+};
+
+// Every /members/me request rides this one queue, login flow included.
+// uicore aborts a second request to the same URL and an aborted request
+// never settles, so one at a time is the only safe number. Not gated on
+// userState.loading: that flag is persisted, and a stale true would block
+// refreshing forever. Each caller is answered by a fetch sent after their
+// call, so a post-purchase refresh cannot see a pre-purchase profile.
+//
+// Quiet at the request layer; 401 still routes through expiredToken. No
+// logged-in check inside the run -- the login flow rides it, and at callback
+// time the flag may not be set yet. A refresh queued across a logout just
+// fails at the token and repeats the logout navigation.
+const queuedProfileFetch = collapsingQueue((dispatch) =>
+    dispatch(fetchUserProfile(voidErrorHandler))
+);
+
+/**
+ * Refetches the profile at the point of use. userState is persisted across
+ * sessions, so ticket ownership and authz groups go stale after a refund,
+ * deactivation or group edit: every registration surface dispatches this on
+ * open instead of trusting the cached snapshot.
+ */
+export const refreshUserProfile = () => (dispatch, getState) => {
+    if (!getState().loggedUserState.isLoggedUser) return Promise.resolve();
+    return queuedProfileFetch(dispatch)
+        .catch((e) => console.log("refreshUserProfile error", e));
+};
+
+// The login flow: profile, then IDP profile, then schedule sync link,
+// failures surfaced to the user. The profile leg rides the shared queue.
+export const getUserProfile = () => async (dispatch) => {
+    return queuedProfileFetch(dispatch).then(() => {
         return dispatch(getIDPProfile()).then(() => dispatch(getScheduleSyncLink()));
     }).catch((e) => {
         console.log('ERROR: ', e);
-        dispatch(createAction(STOP_LOADING_PROFILE)());
-        if (e?.status === 401) {
-            initLogOut();
-        } else {
+        // 401 already sent the user to /auth/expired via expiredToken;
+        // alerting over it would fight that. The status lives on e.res --
+        // getRequest rejects with { err, res } -- not on e.status.
+        if (e?.res?.statusCode !== 401) {
             alertWarning('Error', "There was an error at Login Flow. Please retry.");
         }
         return (e);
     });
 }
 
-export const getIDPProfile = () => async (dispatch) => {
+// Same hazard as /members/me, one URL over: two login flows settling
+// together fired two IDP GETs, and the abort stranded the first caller on
+// "Checking credentials...". One queue per URL.
+const queuedIDPFetch = collapsingQueue(async (dispatch) => {
 
     const accessToken = await getAccessTokenSafely()
         .catch(() => {
@@ -174,7 +199,9 @@ export const getIDPProfile = () => async (dispatch) => {
             dispatch(createAction(STOP_LOADING_IDP_PROFILE)())
             return (e);
         });
-}
+});
+
+export const getIDPProfile = () => (dispatch) => queuedIDPFetch(dispatch);
 
 export const requireExtraQuestions = () => (dispatch, getState) => {
     const {userState: {userProfile}} = getState();
