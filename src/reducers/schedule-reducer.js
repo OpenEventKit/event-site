@@ -20,6 +20,7 @@ const INITIAL_STATE = {
     is_my_schedule: false,
     only_events_with_attendee_access: false,
     hide_past_events_with_show_always_on_schedule: false,
+    customEventIds: [],
 };
 
 const scheduleReducer = (state = INITIAL_STATE, action) => {
@@ -50,11 +51,12 @@ const scheduleReducer = (state = INITIAL_STATE, action) => {
                 time_format
             } = payload; // data from JSON
 
+            const {customEventIds} = state;
             const filterByAccessLevel = only_events_with_attendee_access && isLoggedUser;
             const filterByMySchedule = is_my_schedule && isLoggedUser;
             const allFilteredEvents = preFilterEvents(all_events, pre_filters, summitTimeZoneId, userProfile, filterByAccessLevel, filterByMySchedule, hide_past_events_with_show_always_on_schedule);
             const newFilters = syncFilters(filters, state.filters);
-            const events = getFilteredEvents(allFilteredEvents, newFilters, summitTimeZoneId, hide_past_events_with_show_always_on_schedule);
+            const events = getFilteredEvents(allFilteredEvents, newFilters, summitTimeZoneId, hide_past_events_with_show_always_on_schedule, customEventIds);
 
             return {
                 ...state,
@@ -67,13 +69,15 @@ const scheduleReducer = (state = INITIAL_STATE, action) => {
                 is_my_schedule,
                 only_events_with_attendee_access,
                 hide_past_events_with_show_always_on_schedule,
-                timeFormat: state.timeFormat || time_format || '12h'
+                timeFormat: state.timeFormat || time_format || '12h',
+                // preserved across reloads - not part of the API payload
+                customEventIds
             };
         }
         case `SCHED_UPDATE_FILTER`: {
            
             const { type : filterType, values, hide_past_events_with_show_always_on_schedule } = payload;
-            const { filters, allEvents } = state;
+            const { filters, allEvents, customEventIds } = state;
             // update the filters with new values
             const newFilters = {
             ...filters,
@@ -86,24 +90,24 @@ const scheduleReducer = (state = INITIAL_STATE, action) => {
             return {...state,
                 filters : newFilters ,
                 // refilter events
-                events: getFilteredEvents(allEvents, newFilters, summitTimeZoneId, hide_past_events_with_show_always_on_schedule)}
+                events: getFilteredEvents(allEvents, newFilters, summitTimeZoneId, hide_past_events_with_show_always_on_schedule, customEventIds)}
         }
         case `SCHED_UPDATE_FILTERS`: {
             const {filters, view} = payload;
-            const {allEvents, hide_past_events_with_show_always_on_schedule} = state;
-            
+            const {allEvents, hide_past_events_with_show_always_on_schedule, customEventIds} = state;
+
             // update events
-            const events = getFilteredEvents(allEvents, filters, summitTimeZoneId, hide_past_events_with_show_always_on_schedule);
+            const events = getFilteredEvents(allEvents, filters, summitTimeZoneId, hide_past_events_with_show_always_on_schedule, customEventIds);
 
             return {...state, filters, events, view}
         }
         case `SCHED_CLEAR_FILTERS`: {
-            const { allEvents, baseFilters, hide_past_events_with_show_always_on_schedule } = state;
-            
+            const { allEvents, baseFilters, hide_past_events_with_show_always_on_schedule, customEventIds } = state;
+
             return {...state,
                 filters : baseFilters ,
-                // refilter events
-                events: getFilteredEvents(allEvents, baseFilters, summitTimeZoneId, hide_past_events_with_show_always_on_schedule)}
+                // refilter events - custom subset survives clear-filters, it is not a facet
+                events: getFilteredEvents(allEvents, baseFilters, summitTimeZoneId, hide_past_events_with_show_always_on_schedule, customEventIds)}
         }
         case `SCHED_CHANGE_VIEW`: {
             const {view} = payload;
@@ -119,23 +123,31 @@ const scheduleReducer = (state = INITIAL_STATE, action) => {
         }
         case `SCHED_ADD_TO_SCHEDULE`: {
             const event = payload;
-            const {allEvents, filters, hide_past_events_with_show_always_on_schedule} = state;
+            const {allEvents, filters, hide_past_events_with_show_always_on_schedule, customEventIds} = state;
 
             allEvents.push(event);
-            const events = getFilteredEvents(allEvents, filters, summitTimeZoneId, hide_past_events_with_show_always_on_schedule);
+            const events = getFilteredEvents(allEvents, filters, summitTimeZoneId, hide_past_events_with_show_always_on_schedule, customEventIds);
 
             return {...state, allEvents, events};
 
         }
         case `SCHED_REMOVE_FROM_SCHEDULE`: {
             const event = payload;
-            const {allEvents: allEventsCurrent, filters, hide_past_events_with_show_always_on_schedule} = state;
+            const {allEvents: allEventsCurrent, filters, hide_past_events_with_show_always_on_schedule, customEventIds} = state;
 
             const allEvents = allEventsCurrent.filter(ev => ev.id !== event.id);
-            const events = getFilteredEvents(allEvents, filters, summitTimeZoneId, hide_past_events_with_show_always_on_schedule);
+            const events = getFilteredEvents(allEvents, filters, summitTimeZoneId, hide_past_events_with_show_always_on_schedule, customEventIds);
 
             return {...state, allEvents, events};
 
+        }
+        case `SCHED_SET_CUSTOM_EVENT_IDS`: {
+            const {customEventIds} = payload;
+            const {allEvents, filters, hide_past_events_with_show_always_on_schedule} = state;
+
+            const events = getFilteredEvents(allEvents, filters, summitTimeZoneId, hide_past_events_with_show_always_on_schedule, customEventIds);
+
+            return {...state, customEventIds, events};
         }
         default:
             return state;

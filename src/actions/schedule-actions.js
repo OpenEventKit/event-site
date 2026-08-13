@@ -9,6 +9,7 @@ export const CLEAR_FILTERS = "CLEAR_FILTERS";
 export const CHANGE_VIEW = "CHANGE_VIEW";
 export const CHANGE_TIMEZONE = "CHANGE_TIMEZONE";
 export const CHANGE_TIME_FORMAT = "CHANGE_TIME_FORMAT";
+export const SET_CUSTOM_EVENT_IDS = "SET_CUSTOM_EVENT_IDS";
 
 /**
  * This action is defined to just reinitialize the allScheduleReducer state
@@ -124,6 +125,19 @@ export const updateFiltersFromHash =
       );
     }
   };
+
+export const updateCustomEventIdsFromHash = (key) => (dispatch) => {
+  const rawEventIds = fragmentParser.getParam("event_ids");
+
+  const customEventIds = rawEventIds
+    ? decodeURIComponent(rawEventIds)
+        .split(",")
+        .filter((val) => val !== "" && !isNaN(val))
+        .map((val) => parseInt(val))
+    : [];
+
+  dispatch(createAction(SET_CUSTOM_EVENT_IDS)({ customEventIds, key }));
+};
 
 export const getShareLink = (filters, view) => {
   const hashVars = {};
