@@ -32,7 +32,7 @@ const useRegistrationWidgetProps = ({
     setPasswordlessLogin,
     setUserOrder,
     checkOrderData,
-    getUserProfile,
+    refreshUserProfile,
     getThirdPartyProviders,
     getExtraQuestions,
     checkRequireExtraQuestionsByAttendee,
@@ -153,8 +153,9 @@ const useRegistrationWidgetProps = ({
         onPurchaseComplete: (order) => {
             setUserOrder(order)
                 .then(() => checkOrderData(order))
-                .then(() => getUserProfile())
-                .catch((e) => console.log("getUserProfile error"));
+                .then(() => refreshUserProfile())
+                // Any of the three steps can be the one that failed.
+                .catch((e) => console.log("onPurchaseComplete error", e));
         },
         completedExtraQuestions: async (attendee) => {
             if (!attendee) return true;

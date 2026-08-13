@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 
 import FragmentParser from "openstack-uicore-foundation/lib/utils/fragment-parser";
 
-import { getUserProfile, setPasswordlessLogin, setUserOrder, checkOrderData, checkRequireExtraQuestionsByAttendee } from "../actions/user-actions";
+import { refreshUserProfile, setPasswordlessLogin, setUserOrder, checkOrderData, checkRequireExtraQuestionsByAttendee } from "../actions/user-actions";
 import { getThirdPartyProviders } from "../actions/base-actions";
 import { getExtraQuestions } from "../actions/summit-actions";
 
@@ -33,7 +33,7 @@ const RegistrationModalComponent = ({
     setPasswordlessLogin,
     setUserOrder,
     checkOrderData,
-    getUserProfile,
+    refreshUserProfile,
     getThirdPartyProviders,
     getExtraQuestions,
     checkRequireExtraQuestionsByAttendee,
@@ -45,11 +45,13 @@ const RegistrationModalComponent = ({
     useEffect(() => {
         const fragmentParser = new FragmentParser();
         if (!ignoreAutoOpen && fragmentParser.getParam("registration")) {
+            refreshUserProfile();
             setIsOpen(true);
         }
-    }, [ignoreAutoOpen]);
+    }, [ignoreAutoOpen, refreshUserProfile]);
 
     const handleOpenPopup = () => {
+        refreshUserProfile();
         setIsOpen(true);
     };
 
@@ -62,7 +64,7 @@ const RegistrationModalComponent = ({
         loadingProfile, loadingIDP, availableThirdPartyProviders,
         allowsNativeAuth, allowsOtpAuth,
         setPasswordlessLogin, setUserOrder, checkOrderData,
-        getUserProfile, getThirdPartyProviders, getExtraQuestions,
+        refreshUserProfile, getThirdPartyProviders, getExtraQuestions,
         checkRequireExtraQuestionsByAttendee,
         backUrl: '/#registration=1',
         closeWidget: handleClosePopup,
@@ -117,7 +119,7 @@ export default connect(mapStateToProps, {
     setPasswordlessLogin,
     setUserOrder,
     checkOrderData,
-    getUserProfile,
+    refreshUserProfile,
     getThirdPartyProviders,
     getExtraQuestions,
     checkRequireExtraQuestionsByAttendee
