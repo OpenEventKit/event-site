@@ -87,8 +87,7 @@ export const updateFiltersFromHash =
         window.location.hash = fragment;
     }
 
-    // escape if no filter hash
-    if (isEmpty(qsFilters)) return;
+    if (isEmpty(pickBy(qsFilters, (value, key) => key !== "event_ids"))) return;
 
     // remove any query vars that are not filters
     const normalizedFilters = pickBy(qsFilters, (value, key) =>
@@ -126,7 +125,7 @@ export const updateFiltersFromHash =
     }
   };
 
-export const updateCustomEventIdsFromHash = (key) => (dispatch) => {
+export const updateCustomEventIdsFromHash = (key) => (dispatch, getState) => {
   const rawEventIds = fragmentParser.getParam("event_ids");
 
   const customEventIds = rawEventIds
@@ -135,6 +134,10 @@ export const updateCustomEventIdsFromHash = (key) => (dispatch) => {
         .filter((val) => val !== "" && !isNaN(val))
         .map((val) => parseInt(val))
     : [];
+
+  const current = getState().allSchedulesState.schedules
+    .find((s) => s.key === key)?.customEventIds ?? [];
+  if (isEqual(customEventIds, current)) return;
 
   dispatch(createAction(SET_CUSTOM_EVENT_IDS)({ customEventIds, key }));
 };
