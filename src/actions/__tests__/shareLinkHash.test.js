@@ -9,6 +9,12 @@ const setHash = (hash) => {
     window.location.hash = hash;
 };
 
+// customEventIds deliberately doesn't match any value computed below, so the
+// "unchanged" short-circuit in updateCustomEventIdsFromHash never suppresses dispatch here
+const getState = () => ({
+    allSchedulesState: { schedules: [{ key: 'schedKey', customEventIds: [999] }] }
+});
+
 afterEach(() => {
     setHash('');
 });
@@ -18,7 +24,7 @@ describe('updateCustomEventIdsFromHash', () => {
         setHash('#event_ids=1,2,3');
         const dispatch = jest.fn();
 
-        updateCustomEventIdsFromHash('schedKey')(dispatch);
+        updateCustomEventIdsFromHash('schedKey')(dispatch, getState);
 
         expect(dispatch).toHaveBeenCalledWith({
             type: SET_CUSTOM_EVENT_IDS,
@@ -30,7 +36,7 @@ describe('updateCustomEventIdsFromHash', () => {
         setHash('#event_ids=1,abc,3');
         const dispatch = jest.fn();
 
-        expect(() => updateCustomEventIdsFromHash('schedKey')(dispatch)).not.toThrow();
+        expect(() => updateCustomEventIdsFromHash('schedKey')(dispatch, getState)).not.toThrow();
         expect(dispatch).toHaveBeenCalledWith({
             type: SET_CUSTOM_EVENT_IDS,
             payload: { customEventIds: [1, 3], key: 'schedKey' },
@@ -41,7 +47,7 @@ describe('updateCustomEventIdsFromHash', () => {
         setHash('#track=5');
         const dispatch = jest.fn();
 
-        updateCustomEventIdsFromHash('schedKey')(dispatch);
+        updateCustomEventIdsFromHash('schedKey')(dispatch, getState);
 
         expect(dispatch).toHaveBeenCalledWith({
             type: SET_CUSTOM_EVENT_IDS,
@@ -53,7 +59,7 @@ describe('updateCustomEventIdsFromHash', () => {
         setHash('#EVENT_IDS=1,2');
         const dispatch = jest.fn();
 
-        updateCustomEventIdsFromHash('schedKey')(dispatch);
+        updateCustomEventIdsFromHash('schedKey')(dispatch, getState);
 
         expect(dispatch).toHaveBeenCalledWith({
             type: SET_CUSTOM_EVENT_IDS,
