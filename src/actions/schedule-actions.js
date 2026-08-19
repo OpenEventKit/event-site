@@ -1,5 +1,6 @@
 import { createAction } from "openstack-uicore-foundation/lib/utils/actions";
 import FragmentParser from "openstack-uicore-foundation/lib/utils/fragment-parser";
+import * as Sentry from "@sentry/react";
 
 import { pickBy, isEqual, isEmpty } from "lodash";
 
@@ -131,7 +132,8 @@ export const updateCustomEventIdsFromHash = (key) => (dispatch, getState) => {
   let decoded = "";
   try {
     decoded = rawEventIds ? decodeURIComponent(rawEventIds) : "";
-  } catch {
+  } catch (e) {
+    Sentry?.captureMessage(`event_ids hash param is malformed and could not be decoded: ${rawEventIds}`);
     decoded = "";
   }
   
