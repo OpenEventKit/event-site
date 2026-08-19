@@ -128,12 +128,17 @@ export const updateFiltersFromHash =
 export const updateCustomEventIdsFromHash = (key) => (dispatch, getState) => {
   const rawEventIds = fragmentParser.getParam("event_ids");
 
-  const customEventIds = rawEventIds
-    ? decodeURIComponent(rawEventIds)
-        .split(",")
-        .filter((val) => val !== "" && !isNaN(val))
-        .map((val) => parseInt(val))
-    : [];
+  let decoded = "";
+  try {
+    decoded = rawEventIds ? decodeURIComponent(rawEventIds) : "";
+  } catch {
+    decoded = "";
+  }
+  
+  const customEventIds = decoded
+    .split(",")
+    .filter((val) => val !== "" && !isNaN(val))
+    .map((val) => parseInt(val));
 
   const current = getState().allSchedulesState.schedules
     .find((s) => s.key === key)?.customEventIds ?? [];

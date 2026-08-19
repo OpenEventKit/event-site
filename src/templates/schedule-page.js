@@ -34,11 +34,11 @@ const SchedulePage = ({ summit, scheduleState, summitPhase, isLoggedUser, locati
 
   const onScrollDirectionChange = useCallback(direction => {
     if (direction === SCROLL_DIRECTION.UP)
-      filtersWrapperRef.current.scroll({ top: 0, behavior: 'smooth' });
+      filtersWrapperRef.current?.scroll({ top: 0, behavior: 'smooth' });
   }, [filtersWrapperRef]);
 
   const onPageBottomReached = useCallback(pageBottomReached => {
-    if (pageBottomReached)
+    if (pageBottomReached && filtersWrappedRef.current)
       filtersWrapperRef.current.scroll({ top: filtersWrapperRef.current.scrollHeight, behavior: 'smooth' });
   }, [filtersWrapperRef]);
 
