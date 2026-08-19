@@ -38,7 +38,7 @@ const SchedulePage = ({ summit, scheduleState, summitPhase, isLoggedUser, locati
   }, [filtersWrapperRef]);
 
   const onPageBottomReached = useCallback(pageBottomReached => {
-    if (pageBottomReached && filtersWrappedRef.current)
+    if (pageBottomReached && filtersWrapperRef.current)
       filtersWrapperRef.current.scroll({ top: filtersWrapperRef.current.scrollHeight, behavior: 'smooth' });
   }, [filtersWrapperRef]);
 
