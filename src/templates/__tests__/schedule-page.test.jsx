@@ -6,12 +6,13 @@ import { PHASES } from "../../utils/phasesUtils";
 
 jest.mock("../../utils/withScheduleData", () => (Component) => Component);
 jest.mock("../../actions/schedule-actions", () => ({ deepLinkToEvent: jest.fn() }));
+// phasesUtils pulls in src/data/marketing-settings.json, a build-time artifact
+// (gitignored, written by gatsby-node.js) that doesn't exist outside a real build.
+jest.mock("../../utils/phasesUtils", () => ({ PHASES: { BEFORE: -1, DURING: 0, AFTER: 1 } }));
 
 jest.mock("gatsby", () => ({
   navigate: jest.fn(),
   Link: ({ children, to }) => <a href={to}>{children}</a>,
-  graphql: jest.fn(),
-  useStaticQuery: jest.fn(() => ({})),
 }));
 
 jest.mock("../../components/Layout", () => ({ children }) => <div>{children}</div>);
