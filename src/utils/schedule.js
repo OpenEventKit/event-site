@@ -98,11 +98,17 @@ export const preFilterEvents = (events, filters, summitTimezone, userProfile, fi
   return getFilteredEvents(result, filters, summitTimezone, hidePast);
 };
 
-export const getFilteredEvents = (events, filters, summitTimezone, hidePast) => {
+export const getFilteredEvents = (events, filters, summitTimezone, hidePast, customEventIds) => {
   const localNow = Date.now() / 1000;
 
   return events.filter((ev) => {
     let valid = true;
+
+    if (customEventIds?.length > 0) {
+      valid = customEventIds.includes(ev.id);
+      if (!valid) return false;
+    }
+
     if (filters.date?.values.length > 0) {
       const dateString = epochToMomentTimeZone(
         ev.start_date,

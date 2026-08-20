@@ -1,5 +1,6 @@
 import { createAction } from "openstack-uicore-foundation/lib/utils/actions";
 import FragmentParser from "openstack-uicore-foundation/lib/utils/fragment-parser";
+import * as Sentry from "@sentry/react";
 
 import { pickBy, isEqual, isEmpty } from "lodash";
 
@@ -9,6 +10,7 @@ export const CLEAR_FILTERS = "CLEAR_FILTERS";
 export const CHANGE_VIEW = "CHANGE_VIEW";
 export const CHANGE_TIMEZONE = "CHANGE_TIMEZONE";
 export const CHANGE_TIME_FORMAT = "CHANGE_TIME_FORMAT";
+export const SET_CUSTOM_EVENT_IDS = "SET_CUSTOM_EVENT_IDS";
 
 /**
  * This action is defined to just reinitialize the allScheduleReducer state
@@ -86,8 +88,7 @@ export const updateFiltersFromHash =
         window.location.hash = fragment;
     }
 
-    // escape if no filter hash
-    if (isEmpty(qsFilters)) return;
+    if (isEmpty(pickBy(qsFilters, (value, key) => key !== "event_ids"))) return;
 
     // remove any query vars that are not filters
     const normalizedFilters = pickBy(qsFilters, (value, key) =>
@@ -124,6 +125,29 @@ export const updateFiltersFromHash =
       );
     }
   };
+
+export const updateCustomEventIdsFromHash = (key) => (dispatch, getState) => {
+  const rawEventIds = fragmentParser.getParam("event_ids");
+
+  let decoded = "";
+  try {
+    decoded = rawEventIds ? decodeURIComponent(rawEventIds) : "";
+  } catch (e) {
+    Sentry?.captureMessage(`event_ids hash param is malformed and could not be decoded: ${rawEventIds}`);
+    decoded = "";
+  }
+  
+  const customEventIds = decoded
+    .split(",")
+    .filter((val) => val !== "" && !isNaN(val))
+    .map((val) => parseInt(val));
+
+  const current = getState().allSchedulesState.schedules
+    .find((s) => s.key === key)?.customEventIds ?? [];
+  if (isEqual(customEventIds, current)) return;
+
+  dispatch(createAction(SET_CUSTOM_EVENT_IDS)({ customEventIds, key }));
+};
 
 export const getShareLink = (filters, view) => {
   const hashVars = {};

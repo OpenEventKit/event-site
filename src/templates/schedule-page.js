@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import PropTypes from "prop-types";
 import { pickBy } from "lodash";
-import { navigate } from "gatsby";
+import { navigate, Link } from "gatsby";
 import {deepLinkToEvent} from "../actions/schedule-actions";
 import Layout from "../components/Layout";
 import FullSchedule from "../components/FullSchedule";
@@ -19,7 +19,12 @@ const SchedulePage = ({ summit, scheduleState, summitPhase, isLoggedUser, locati
 
   const [showFilters, setShowfilters] = useState(false);
   const filtersWrapperRef = useRef(null);
-  const { key, events, allEvents, filters, view, timezone, timeFormat, colorSource } = scheduleState || {};
+  const { key, events, allEvents, filters, view, timezone, timeFormat, colorSource, customEventIds } = scheduleState || {};
+  const hasCustomSubset = customEventIds?.length > 0;
+  // the subset itself, ignoring any facet the user has applied on top - a facet narrowing
+  // to zero is the widget's normal empty state, not a reason to hide the filters
+  const subsetEvents = hasCustomSubset ? (allEvents || []).filter((ev) => customEventIds.includes(ev.id)) : null;
+  const subsetIsEmpty = hasCustomSubset && subsetEvents.length === 0;
 
   useEffect(() => {
     if (scheduleState && !!events?.length) {
@@ -29,11 +34,11 @@ const SchedulePage = ({ summit, scheduleState, summitPhase, isLoggedUser, locati
 
   const onScrollDirectionChange = useCallback(direction => {
     if (direction === SCROLL_DIRECTION.UP)
-      filtersWrapperRef.current.scroll({ top: 0, behavior: 'smooth' });
+      filtersWrapperRef.current?.scroll({ top: 0, behavior: 'smooth' });
   }, [filtersWrapperRef]);
 
   const onPageBottomReached = useCallback(pageBottomReached => {
-    if (pageBottomReached)
+    if (pageBottomReached && filtersWrapperRef.current)
       filtersWrapperRef.current.scroll({ top: filtersWrapperRef.current.scrollHeight, behavior: 'smooth' });
   }, [filtersWrapperRef]);
 
@@ -47,7 +52,7 @@ const SchedulePage = ({ summit, scheduleState, summitPhase, isLoggedUser, locati
   const filterProps = {
     summit,
     events,
-    allEvents,
+    allEvents: hasCustomSubset ? subsetEvents : allEvents,
     filters: pickBy(filters, (value) => value.enabled),
     triggerAction: (action, payload) => {
       switch (action) {
@@ -90,15 +95,26 @@ const SchedulePage = ({ summit, scheduleState, summitPhase, isLoggedUser, locati
   return (
     <Layout location={location}>
       <div className={`container ${styles.container}`}>
-        <div className={`${styles.wrapper} ${showFilters ? styles.showFilters : ""}`}>
-          <div className={styles.scheduleWrapper}>
-            <FullSchedule {...schedProps} lastDataSync={lastDataSync} />
+        {subsetIsEmpty ? (
+          <div className="has-text-centered">
+            <p>No sessions match this link.</p>
+            <Link to={location.pathname}>View the full schedule</Link>
           </div>
-          <div ref={filtersWrapperRef} className={styles.filterWrapper}>
-            <ScheduleFilters {...filterProps} />
+        ) : (
+          <div className={`${styles.wrapper} ${showFilters ? styles.showFilters : ""}`}>
+            <div className={styles.scheduleWrapper}>
+              <FullSchedule {...schedProps} lastDataSync={lastDataSync} />
+            </div>
+            <div ref={filtersWrapperRef} className={styles.filterWrapper}>
+              {/* schedule-filter-widget only builds its facet option list once, on mount, from
+                  the allEvents prop it sees then - it never rebuilds it on later allEvents
+                  changes. Keying on the custom subset forces a remount so the option list is
+                  always rebuilt from the currently scoped allEvents. */}
+              <ScheduleFilters key={customEventIds?.length ? `subset-${customEventIds.join(',')}` : 'full'} {...filterProps} />
+            </div>
+            <FilterButton open={showFilters} onClick={() => setShowfilters(!showFilters)} />
           </div>
-          <FilterButton open={showFilters} onClick={() => setShowfilters(!showFilters)} />
-        </div>
+        )}
       </div>
       <AttendanceTrackerComponent />
       <AccessTracker />

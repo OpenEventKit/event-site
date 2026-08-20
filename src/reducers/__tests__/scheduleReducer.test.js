@@ -46,6 +46,7 @@ describe('scheduleReducer - SCHED_CLEAR_FILTERS', () => {
             level: { label: 'Level', order: 2, values: [], options: ['Beginner', 'Advanced'] }
         },
         events: ['some-event'],
+        customEventIds: [1, 2],
         hide_past_events_with_show_always_on_schedule: false
     };
 
@@ -60,15 +61,18 @@ describe('scheduleReducer - SCHED_CLEAR_FILTERS', () => {
             level: { label: 'Level', order: 2, values: [], options: ['Beginner', 'Advanced'] }
         });
 
-        // getFilteredEvents was called with correct arguments
+        // getFilteredEvents was called with correct arguments, including the untouched custom subset
         expect(getFilteredEvents).toHaveBeenCalledWith(
             initialState.allEvents,
             newState.filters,
             expect.any(String), // summitTimeZoneId
-            false
+            false,
+            initialState.customEventIds
         );
         // events were updated from its return value
         expect(newState.events).toEqual(['filtered-event-1', 'filtered-event-2']);
+        // the custom subset survives clear-filters - it is not a facet
+        expect(newState.customEventIds).toEqual([1, 2]);
     });
 
     it('should not mutate baseFilters object', () => {
@@ -94,6 +98,7 @@ describe('scheduleReducer - SCHED_UPDATE_FILTER', () => {
             level: { label: 'Level', order: 2, values: [], options: ['Beginner', 'Advanced'] }
         },
         events: [],
+        customEventIds: [1, 2],
         hide_past_events_with_show_always_on_schedule: false
     };
 
@@ -111,7 +116,13 @@ describe('scheduleReducer - SCHED_UPDATE_FILTER', () => {
 
         expect(state.filters.track.values).toEqual(['Ops']);
         expect(state.filters.level.values).toEqual(['Advanced']); // unchanged
-        expect(getFilteredEvents).toHaveBeenCalled();
+        expect(getFilteredEvents).toHaveBeenCalledWith(
+            initialState.allEvents,
+            state.filters,
+            expect.any(String),
+            false,
+            initialState.customEventIds
+        );
         expect(state.events).toEqual(['filtered-event-1', 'filtered-event-2']);
     });
 
@@ -130,6 +141,13 @@ describe('scheduleReducer - SCHED_UPDATE_FILTER', () => {
 
         expect(state.view).toBe('list');
         expect(state.filters.topic.values).toEqual(['AI']);
+        expect(getFilteredEvents).toHaveBeenCalledWith(
+            initialState.allEvents,
+            action.payload.filters,
+            expect.any(String),
+            false,
+            initialState.customEventIds
+        );
         expect(state.events).toEqual(['filtered-event-1', 'filtered-event-2']);
     });
 
@@ -149,6 +167,7 @@ describe('scheduleReducer - SCHED_RELOAD_SCHED_DATA', () => {
         allEvents: [],
         events: [],
         timeFormat: '12h',
+        customEventIds: [42],
         hide_past_events_with_show_always_on_schedule: false
     };
 
@@ -197,5 +216,108 @@ describe('scheduleReducer - SCHED_RELOAD_SCHED_DATA', () => {
         // This confirms that state.timeFormat is preserved from the previous state if already defined,
         // even though 24h is in the payload.
         expect(newState.timeFormat).toBe('12h'); // keeps existing unless null
+    });
+
+    it('keeps the custom subset applied across a full data reload (survives filters/baseFilters rebuild)', () => {
+        const newState = scheduleReducer(initialState, action);
+
+        expect(newState.customEventIds).toEqual([42]);
+        expect(getFilteredEvents).toHaveBeenCalledWith(
+            ['event-1', 'event-2'],
+            newState.filters,
+            expect.any(String),
+            true,
+            [42]
+        );
+    });
+});
+
+describe('scheduleReducer - SCHED_SYNC_DATA (real-time update path)', () => {
+    // real-time updates (Ably/Supabase -> synch worker -> synchEntityData) dispatch the base
+    // SYNC_DATA action, which all-schedules-reducer.js routes here as SCHED_SYNC_DATA - the exact
+    // same branch as a manual SCHED_RELOAD_SCHED_DATA. This locks in that the custom subset survives
+    // a live event insert/update/delete, not just an explicit "reload schedule data" click.
+    const initialState = {
+        filters: {},
+        baseFilters: {},
+        allEvents: [],
+        events: [],
+        timeFormat: '12h',
+        customEventIds: [7879],
+        hide_past_events_with_show_always_on_schedule: false
+    };
+
+    const action = {
+        type: 'SCHED_SYNC_DATA',
+        payload: {
+            color_source: 'Track',
+            pre_filters: { topic: { values: ['Dev'] } },
+            all_events: ['raw-event-1', 'raw-event-2'],
+            filters: {
+                topic: { label: 'Topic', values: [], options: ['Dev', 'Ops'], order: 1 }
+            },
+            baseFilters: {
+                topic: { label: 'Topic', values: [], options: ['Dev', 'Ops'], order: 1 }
+            },
+            only_events_with_attendee_access: false,
+            hide_past_events_with_show_always_on_schedule: false,
+            is_my_schedule: false,
+            isLoggedUser: true,
+            userProfile: { id: 123 },
+            time_format: '24h'
+        }
+    };
+
+    it('keeps the custom subset applied when a live update pushes fresh event data', () => {
+        const newState = scheduleReducer(initialState, action);
+
+        expect(newState.customEventIds).toEqual([7879]);
+        expect(getFilteredEvents).toHaveBeenCalledWith(
+            ['event-1', 'event-2'],
+            newState.filters,
+            expect.any(String),
+            false,
+            [7879]
+        );
+        expect(newState.events).toEqual(['filtered-event-1', 'filtered-event-2']);
+    });
+});
+
+describe('scheduleReducer - SCHED_SET_CUSTOM_EVENT_IDS', () => {
+    const initialState = {
+        allEvents: ['event1', 'event2'],
+        filters: {
+            track: { label: 'Track', order: 1, values: [], options: ['Dev', 'Ops'] }
+        },
+        baseFilters: {
+            track: { label: 'Track', order: 1, values: [], options: ['Dev', 'Ops'] }
+        },
+        events: [],
+        customEventIds: [],
+        hide_past_events_with_show_always_on_schedule: false
+    };
+
+    it('sets the custom subset and refilters using the existing filters', () => {
+        const action = { type: 'SCHED_SET_CUSTOM_EVENT_IDS', payload: { customEventIds: [1, 2, 3] } };
+
+        const newState = scheduleReducer(initialState, action);
+
+        expect(newState.customEventIds).toEqual([1, 2, 3]);
+        expect(getFilteredEvents).toHaveBeenCalledWith(
+            initialState.allEvents,
+            initialState.filters,
+            expect.any(String),
+            false,
+            [1, 2, 3]
+        );
+        expect(newState.events).toEqual(['filtered-event-1', 'filtered-event-2']);
+    });
+
+    it('never surfaces event_ids as a key of state.filters (mitigation for verified points 7 & 8)', () => {
+        const action = { type: 'SCHED_SET_CUSTOM_EVENT_IDS', payload: { customEventIds: [1, 2, 3] } };
+
+        const newState = scheduleReducer(initialState, action);
+
+        expect(Object.keys(newState.filters)).not.toContain('event_ids');
     });
 });

@@ -1,7 +1,7 @@
 import scheduleReducer from './schedule-reducer';
 import {filterEventsByTags} from '../utils/schedule';
 import {LOGOUT_USER} from "openstack-uicore-foundation/lib/security/actions";
-import {CLEAR_FILTERS, UPDATE_FILTER, UPDATE_FILTERS, CHANGE_VIEW, CHANGE_TIMEZONE, CHANGE_TIME_FORMAT, RELOAD_SCHED_DATA , RELOAD_USER_PROFILE} from '../actions/schedule-actions'
+import {CLEAR_FILTERS, UPDATE_FILTER, UPDATE_FILTERS, CHANGE_VIEW, CHANGE_TIMEZONE, CHANGE_TIME_FORMAT, RELOAD_SCHED_DATA , RELOAD_USER_PROFILE, SET_CUSTOM_EVENT_IDS} from '../actions/schedule-actions'
 import {RESET_STATE, SYNC_DATA} from "../actions/base-actions-definitions";
 import {GET_EVENT_DATA} from '../actions/event-actions-definitions';
 import {ADD_TO_SCHEDULE, REMOVE_FROM_SCHEDULE, GET_USER_PROFILE} from "../actions/user-actions";
@@ -102,7 +102,8 @@ const allSchedulesReducer = (state = DEFAULT_STATE, action) => {
         case CHANGE_VIEW:
         case CLEAR_FILTERS:
         case UPDATE_FILTERS:
-        case UPDATE_FILTER: {
+        case UPDATE_FILTER:
+        case SET_CUSTOM_EVENT_IDS: {
             const {key} = payload;
             const {schedules} = state;
 
