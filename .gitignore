@@ -21,3 +21,5 @@ yalc.lock
 src/data/*
 .claude/
 .playwright-mcp/
+docs/
+.codegraph
