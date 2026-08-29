@@ -75,8 +75,12 @@ export const onClientEntry = () => {
       dsn: GATSBY_SENTRY_DSN,
       tracesSampleRate: process.env.GATSBY_SENTRY_TRACE_SAMPLE_RATE,
       beforeSend(event) {
-        // Modify the event here
-        console.log('before send...', event)
+        if (event?.exception?.values?.some(
+          ex => ex.value === 'AUTH_ERROR_MISSING_AUTH_INFO' ||
+                (ex.value && ex.value.includes('AUTH_ERROR_MISSING_AUTH_INFO'))
+        )) {
+          return null;
+        }
         return event;
       },
       release: process.env.GATSBY_SENTRY_RELEASE,

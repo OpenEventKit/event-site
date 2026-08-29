@@ -72,7 +72,9 @@ export const getAccessTokenSafely = async () => {
     return await getAccessToken();
   } catch (e) {
     console.log("loginUtils::getAccessToken error: ", e);
-    Sentry.captureException(e)
+    if (!(e && (e.message === 'AUTH_ERROR_MISSING_AUTH_INFO' || e.toString().includes('AUTH_ERROR_MISSING_AUTH_INFO')))) {
+      Sentry.captureException(e);
+    }
     onLogOut();
     return Promise.reject();
   }
