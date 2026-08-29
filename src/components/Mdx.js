@@ -2,7 +2,11 @@
 import React, { useMemo } from "react";
 import { evaluateSync } from "@mdx-js/mdx";
 import * as jsxRuntime from "react/jsx-runtime";
-import remarkGfm from "remark-gfm";
+// remark-gfm v4 is required for evaluateSync (runtime MDX compilation).
+// Build-time gatsby-plugin-mdx uses remark-gfm v3 (aliased as "remark-gfm")
+// due to mdast-util-to-hast v10 incompatibility with v4's table AST nodes.
+// See: https://github.com/gatsbyjs/gatsby/issues/38789
+import remarkGfm from "remark-gfm-4";
 import rehypeExternalLinks from "rehype-external-links";
 import { MDXProvider, useMDXComponents } from "@mdx-js/react";
 
