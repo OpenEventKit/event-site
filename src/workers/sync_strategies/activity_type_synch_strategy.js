@@ -1,5 +1,5 @@
 import AbstractSynchStrategy from "./abstract_synch_strategy";
-import {fetchEventTypeById} from "../../actions/fetch-entities-actions";
+import {clearEtagCacheForUrl, fetchEventTypeById} from "../../actions/fetch-entities-actions";
 import {
     BUCKET_EVENTS_DATA_KEY,
     BUCKET_SUMMIT_DATA_KEY,
@@ -16,6 +16,8 @@ class ActivityTypeSynchStrategy extends AbstractSynchStrategy{
         console.log(`ActivityTypeSynchStrategy::process`, payload);
 
         const {entity_operator, entity_id} = payload;
+
+        clearEtagCacheForUrl(`/v1/summits/${this.summit.id}/event-types/${entity_id}`);
 
         const entity = await fetchEventTypeById(this.summit.id, entity_id, this.accessToken);
 

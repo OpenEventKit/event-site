@@ -3,6 +3,58 @@ import SummitAPIRequest from "../utils/build-json/SummitAPIRequest";
 import EventAPIRequest from "../utils/build-json/EventsAPIRequest";
 import SpeakersAPIRequest from "../utils/build-json/SpeakersAPIRequest";
 
+const etagCache = new Map();
+const MAX_CACHE_SIZE = 100;
+
+export const clearEtagCacheForUrl = (urlPattern) => {
+    for (const key of etagCache.keys()) {
+        if (key.includes(urlPattern)) {
+            etagCache.delete(key);
+        }
+    }
+};
+
+const fetchWithEtag = async (url) => {
+    const headers = {};
+
+    if (etagCache.has(url)) {
+        const { etag } = etagCache.get(url);
+        if (etag) {
+            headers['If-None-Match'] = etag;
+        }
+    }
+
+    const res = await fetch(url, {
+        method: 'GET',
+        cache: "no-store",
+        headers,
+    });
+
+    if (res.status === 304 && etagCache.has(url)) {
+        const { body } = etagCache.get(url);
+        return body;
+    }
+
+    if (res.status === 200) {
+        const data = await res.json();
+        const responseETAG = res.headers.get('etag');
+        if (responseETAG) {
+            if (etagCache.size >= MAX_CACHE_SIZE) {
+                const oldest = etagCache.keys().next().value;
+                etagCache.delete(oldest);
+            }
+            etagCache.set(url, { etag: responseETAG, body: data });
+        }
+        return data;
+    }
+
+    if (!res.ok) {
+        console.error(`fetchWithEtag failed (${res.status}):`, url);
+    }
+
+    return null;
+};
+
 /**
  * @param summitId
  * @param eventId
@@ -18,16 +70,7 @@ export const fetchEventById = async (summitId, eventId, accessToken = null) => {
     }
 
     const apiUrlWithParams = EventAPIRequest.build(apiUrl);
-
-    return fetch(apiUrlWithParams, {
-        method: 'GET',
-        cache: "no-store",
-    }).then(async (response) => {
-        if (response.status === 200) {
-            return await response.json();
-        }
-        return null;
-    });
+    return fetchWithEtag(apiUrlWithParams);
 }
 
 /**
@@ -39,15 +82,8 @@ export const fetchEventById = async (summitId, eventId, accessToken = null) => {
 export const fetchStreamingInfoByEventId = async (summitId, eventId, accessToken) => {
     const apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/v1/summits/${summitId}/events/${eventId}/published/streaming-info`);
     apiUrl.addQuery('access_token', accessToken);
-    return fetch(apiUrl.toString(), {
-        method: 'GET',
-        cache: "no-store",
-    }).then(async (response) => {
-        if (response.status === 200) {
-            return await response.json();
-        }
-        return null;
-    });
+    const url = apiUrl.toString();
+    return fetchWithEtag(url);
 }
 
 /**
@@ -64,19 +100,11 @@ export const fetchEventTypeById = async (summitId, eventTypeId, accessToken = nu
         apiUrl.addQuery('access_token', accessToken);
     }
 
-    return fetch(apiUrl.toString(), {
-        method: 'GET',
-        cache: "no-store",
-    }).then(async (response) => {
-        if (response.status === 200) {
-            return await response.json();
-        }
-        return null;
-    });
+    const url = apiUrl.toString();
+    return fetchWithEtag(url);
 }
 
 /**
- *
  * @param summitId
  * @param locationId
  * @param expand
@@ -94,19 +122,11 @@ export const fetchLocationById = async (summitId, locationId, expand, accessToke
     if (expand)
         apiUrl.addQuery('expand', expand);
 
-    return fetch(apiUrl.toString(), {
-        method: 'GET',
-        cache: "no-store",
-    }).then(async (response) => {
-        if (response.status === 200) {
-            return await response.json();
-        }
-        return null;
-    });
+    const url = apiUrl.toString();
+    return fetchWithEtag(url);
 }
 
 /**
- *
  * @param summitId
  * @param speakerId
  * @param accessToken
@@ -122,20 +142,10 @@ export const fetchSpeakerById = async (summitId, speakerId, accessToken = null) 
     }
 
     const apiUrlWithParams = SpeakersAPIRequest.build(apiUrl);
-
-    return fetch(apiUrlWithParams, {
-        method: 'GET',
-        cache: "no-store",
-    }).then(async (response) => {
-        if (response.status === 200) {
-            return await response.json();
-        }
-        return null;
-    });
+    return fetchWithEtag(apiUrlWithParams);
 }
 
 /**
- *
  * @param summitId
  * @param accessToken
  * @returns {Promise<Response>}
@@ -149,16 +159,7 @@ export const fetchSummitById = async (summitId, accessToken = null) => {
     }
 
     const apiUrlWithParams = SummitAPIRequest.build(apiUrl);
-
-    return fetch(apiUrlWithParams, {
-        method: 'GET',
-        cache: "no-store",
-    }).then(async (response) => {
-        if (response.status === 200) {
-            return await response.json();
-        }
-        return null;
-    });
+    return fetchWithEtag(apiUrlWithParams);
 }
 
 /**
@@ -171,24 +172,17 @@ export const fetchTrackById = async (summitId, trackId, accessToken = null) => {
     let apiUrl = URI(`${process.env.GATSBY_SUMMIT_API_BASE_URL}/api/public/v1/summits/${summitId}/tracks/${trackId}`);
 
     const fields = [
-        "id", "name", "code", "order", "parent_id", "color","text_color",
+        "id", "name", "code", "order", "parent_id", "color", "text_color",
         "subtracks.id", "subtracks.name", "subtracks.code", "subtracks.order",
         "subtracks.parent_id", "subtracks.color", "subtracks.text_color",
     ];
-    const relations = ['subtracks','subtracks.none'];
+    const relations = ['subtracks', 'subtracks.none'];
     const expand = ['subtracks']
 
     apiUrl.addQuery('fields', fields.join(','));
     apiUrl.addQuery('relations', relations.join(','));
     apiUrl.addQuery('expand', expand.join(','));
 
-    return fetch(apiUrl.toString(), {
-        method: 'GET',
-        cache: "no-store",
-    }).then(async (response) => {
-        if (response.status === 200) {
-            return await response.json();
-        }
-        return null;
-    });
+    const url = apiUrl.toString();
+    return fetchWithEtag(url);
 }

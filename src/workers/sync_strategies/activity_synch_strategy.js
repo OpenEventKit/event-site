@@ -1,5 +1,5 @@
 import AbstractSynchStrategy from "./abstract_synch_strategy";
-import {fetchEventById, fetchStreamingInfoByEventId} from "../../actions/fetch-entities-actions";
+import {clearEtagCacheForUrl, fetchEventById, fetchStreamingInfoByEventId} from "../../actions/fetch-entities-actions";
 import {insertSorted, intCheck, rebuildIndex} from "../../utils/arrayUtils";
 import {
     BUCKET_EVENTS_DATA_KEY,
@@ -161,8 +161,10 @@ class ActivitySynchStrategy extends AbstractSynchStrategy{
         switch (entity_operator) {
             case 'INSERT':
             case 'UPDATE':{
+                clearEtagCacheForUrl(`/v1/summits/${this.summit.id}/events/${entity_id}/published`);
                 let entity = await fetchEventById(this.summit.id, entity_id, this.accessToken);
                 if(this.accessToken && this._shouldFetchStreamingInfo(this.currentLocation)) {
+                    clearEtagCacheForUrl(`/v1/summits/${this.summit.id}/events/${entity_id}/published/streaming-info`)
                     const streaming_info = await fetchStreamingInfoByEventId(this.summit.id, entity_id, this.accessToken);
                     if(streaming_info) entity = {...entity, ...streaming_info};
                 }

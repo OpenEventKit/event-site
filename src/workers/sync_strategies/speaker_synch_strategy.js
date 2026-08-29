@@ -1,5 +1,5 @@
 import AbstractSynchStrategy from "./abstract_synch_strategy";
-import {fetchSpeakerById} from "../../actions/fetch-entities-actions";
+import {clearEtagCacheForUrl, fetchSpeakerById} from "../../actions/fetch-entities-actions";
 import {
     BUCKET_SUMMIT_DATA_KEY,
     BUCKET_EVENTS_DATA_KEY,
@@ -23,6 +23,7 @@ class SpeakerSynchStrategy extends AbstractSynchStrategy {
         const {entity_operator, entity_id} = payload;
         if (entity_operator === 'UPDATE') {
 
+            clearEtagCacheForUrl(`/v1/summits/${this.summit.id}/speakers/${entity_id}`);
 
             const entity = await fetchSpeakerById(this.summit.id, entity_id, this.accessToken);
 
