@@ -15079,10 +15079,10 @@ mux.js@6.0.1:
     "@babel/runtime" "^7.11.2"
     global "^4.4.0"
 
-my-orders-tickets-widget@1.0.16:
-  version "1.0.16"
-  resolved "https://registry.npmjs.org/my-orders-tickets-widget/-/my-orders-tickets-widget-1.0.16.tgz#d2994e9cb2c3a97a3a613a0440ad4e7274f43d0a"
-  integrity sha512-UnM7toah0zm2czQnuRZwD63HgPMm5L9skdjiXCZVsjAJ3vrA7qTS1jDoON25Yzv1I+nbf1GZ4BVkQJZfo6hbLw==
+my-orders-tickets-widget@1.0.17:
+  version "1.0.17"
+  resolved "https://registry.npmjs.org/my-orders-tickets-widget/-/my-orders-tickets-widget-1.0.17.tgz#bd1abaaf6ec159f377906557c9db3c2937c45c9c"
+  integrity sha512-0jH94vqA8HOqOlq4I0oECDXdIsmZvUukLIBxoy7aAn+aAdvx3kcdgKvOA0HKR3KzTqwYb2esuPfJIGelPk/EJQ==
   dependencies:
     "@emotion/react" "^11.11.4"
     "@emotion/styled" "^11.11.5"
