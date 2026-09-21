@@ -13,6 +13,7 @@
 import URI from "urijs"
 import React from 'react'
 import {connect} from "react-redux";
+import { getAuthUrl } from "openstack-uicore-foundation/lib/security/methods";
 import { getEnvVariable, TENANT_ID } from "@utils/envVariables";
 
 /**
@@ -32,6 +33,8 @@ class LogInCallbackRoute extends React.Component {
     componentWillMount() {
         const {doLogin, location} = this.props;
         const query = URI.parseQuery(location.search);
+        // the fragment never reaches the server, so the token stays out of access logs
+        const fragment = URI.parseQuery((location.hash || '').replace(/^#/, ''));
         let loginHint = null;
         let otpLoginHint = null;
         let backUrl = '/';
@@ -46,6 +49,17 @@ class LogInCallbackRoute extends React.Component {
 
         if (query["otp_login_hint"]) {
             otpLoginHint = encodeURI(query["otp_login_hint"]);
+        }
+
+        const idTokenHint = fragment["id_token_hint"] || query["id_token_hint"];
+
+        if (idTokenHint) {
+            // SSO handoff from an external caller (native app) holding an id_token.
+            // login_hint / otp_login_hint are intentionally NOT forwarded: the IDP
+            // evaluates them before id_token_hint, which would silently drop the token hint.
+            const url = getAuthUrl(backUrl, null, idTokenHint, null, null, null, getEnvVariable(TENANT_ID));
+            window.location.replace(url.toString());
+            return;
         }
 
         doLogin(backUrl, loginHint, otpLoginHint, null, null, getEnvVariable(TENANT_ID));
