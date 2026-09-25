@@ -44,7 +44,7 @@ class EventAPIRequest extends BaseAPIRequest {
             'rsvp_capacity',
         ];
 
-        const type_fields = ["type.id", "type.name", "type.allows_publishing_dates", "type.color"];
+        const type_fields = ["type.id", "type.name", "type.allows_publishing_dates", "type.color", "type.show_always_on_schedule"];
         const tags_fields = ["tags.id", "tags.tag"];
         const location_fields = ["location.id", "location.class_name", "location.name", "location.venue.name", "location.floor.name"];
         const track_fields = ["track.id", "track.name", "track.icon_url", "track.color", "track.text_color", "track.parent_id"];
