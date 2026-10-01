@@ -118,17 +118,18 @@ export const getFilteredEvents = (events, filters, summitTimezone, hidePast, cus
       if (!valid) return false;
     }
 
-    if (ev.type.show_always_on_schedule) {
-      // hide past events when the flag is on
-      return !(hidePast && ev.end_date < localNow);
-    }
+    const showAlways = ev.type.show_always_on_schedule;
+
+    // hide past events when the flag is on
+    if (showAlways && hidePast && ev.end_date < localNow) return false;
 
     if (filters.level?.values.length > 0) {
       valid = filters.level.values.some(l => l.toString().toLowerCase() === ev.level?.toLowerCase());
       if (!valid) return false;
     }
 
-    if (filters.track?.values.length > 0) {
+    // show_always_on_schedule events only bypass the track and track group filters
+    if (!showAlways && filters.track?.values.length > 0) {
       valid = filters.track.values.some( id => parseInt(id) === ev.track.id);
       if (!valid) return false;
     }
@@ -151,7 +152,7 @@ export const getFilteredEvents = (events, filters, summitTimezone, hidePast, cus
       if (!valid) return false;
     }
 
-    if (filters.track_groups?.values.length > 0) {
+    if (!showAlways && filters.track_groups?.values.length > 0) {
       const filteredTrackGroups = filters.track_groups.values.map(id => parseInt(id));
       valid = ev.track?.track_groups.some((tg) =>
           filteredTrackGroups.includes(tg)
