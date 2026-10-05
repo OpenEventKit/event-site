@@ -40,30 +40,38 @@ class AuthorizationCallbackRoute extends AbstractAuthorizationCallbackRoute {
             if (pendingAction) {
                 console.log(`AuthorizationCallbackRoute::_callback pendingAction ${pendingAction}`);
                 const { action, event } = pendingAction;
-                switch (typeof action === "string" ? action : action?.type) {
-                    case "ADD_EVENT":
-                        try {
-                            const savedEvent = await this.props.addToSchedule(event);
-                            // The action currently resolves API errors as values.
-                            if (!event?.id || savedEvent?.id !== event.id) {
-                                throw new Error("Schedule addition failed");
+                // The base class ignores what _callback returns, so a rejection here
+                // would skip the navigation below and strand the user.
+                try {
+                    switch (typeof action === "string" ? action : action?.type) {
+                        case "ADD_EVENT":
+                            try {
+                                if (!event?.id) {
+                                    throw new Error("Pending event has no id");
+                                }
+                                const savedEvent = await this.props.addToSchedule(event);
+                                // The action currently resolves API errors as values.
+                                if (savedEvent?.id !== event.id) {
+                                    throw new Error("Schedule addition failed");
+                                }
+                                return navigate("/a/my-schedule");
+                            } catch (error) {
+                                await alertWarning("Activity not added", "You are logged in, but we could not add this activity to My Schedule. Please try again.");
                             }
-                            return navigate("/a/my-schedule");
-                        } catch (error) {
-                            await alertWarning("Activity not added", "You are logged in, but we could not add this activity to My Schedule. Please try again.");
-                        }
-                        break;
-                    case "REMOVE_EVENT":
-                        await this.props.removeFromSchedule(event);
-                        break;
-                    case "ADD_RSVP":
-                        await this.props.rsvpToEvent(event);
-                        break;
-                    case "REMOVE_RSVP":
-                        await this.props.cancelRSVP(event);
-                        break;
+                            break;
+                        case "REMOVE_EVENT":
+                            await this.props.removeFromSchedule(event);
+                            break;
+                        case "ADD_RSVP":
+                            await this.props.rsvpToEvent(event);
+                            break;
+                        case "REMOVE_RSVP":
+                            await this.props.cancelRSVP(event);
+                            break;
+                    }
+                } catch (error) {
+                    console.log("AuthorizationCallbackRoute::_callback pending action failed", error);
                 }
-
             }
             backUrl = URI.decode(backUrl);
             // fallback
