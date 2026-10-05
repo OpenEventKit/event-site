@@ -21,6 +21,7 @@ import { getUserProfile, addToSchedule, removeFromSchedule, rsvpToEvent, cancelR
 import Interstitial from "../components/Interstitial";
 import { getEnvVariable, IDP_BASE_URL, OAUTH2_CLIENT_ID } from "@utils/envVariables";
 import { getPendingAction } from "@utils/schedule";
+import { alertWarning } from "@utils/alerts";
 
 import { userHasAccessLevel, VIRTUAL_ACCESS_LEVEL } from "@utils/authorizedGroups";
 
@@ -33,24 +34,33 @@ class AuthorizationCallbackRoute extends AbstractAuthorizationCallbackRoute {
     }
 
     _callback(backUrl) {
-        this.props.getUserProfile().then(() => {
+        return this.props.getUserProfile().then(async () => {
             const pendingAction = getPendingAction();
 
             if (pendingAction) {
                 console.log(`AuthorizationCallbackRoute::_callback pendingAction ${pendingAction}`);
                 const { action, event } = pendingAction;
-                switch (action.type) {
+                switch (typeof action === "string" ? action : action?.type) {
                     case "ADD_EVENT":
-                        this.props.addToSchedule(event);
+                        try {
+                            const savedEvent = await this.props.addToSchedule(event);
+                            // The action currently resolves API errors as values.
+                            if (!event?.id || savedEvent?.id !== event.id) {
+                                throw new Error("Schedule addition failed");
+                            }
+                            return navigate("/a/my-schedule");
+                        } catch (error) {
+                            await alertWarning("Activity not added", "You are logged in, but we could not add this activity to My Schedule. Please try again.");
+                        }
                         break;
                     case "REMOVE_EVENT":
-                        this.props.removeFromSchedule(event);
+                        await this.props.removeFromSchedule(event);
                         break;
                     case "ADD_RSVP":
-                        this.props.rsvpToEvent(event);
+                        await this.props.rsvpToEvent(event);
                         break;
                     case "REMOVE_RSVP":
-                        this.props.cancelRSVP(event);
+                        await this.props.cancelRSVP(event);
                         break;
                 }
 
