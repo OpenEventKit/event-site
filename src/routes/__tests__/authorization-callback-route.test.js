@@ -44,6 +44,17 @@ test('waits for the selected activity to save before navigating to My Schedule',
     finishSave(event);
     await done;
     expect(navigate).toHaveBeenCalledWith('/a/my-schedule');
+    expect(navigate).toHaveBeenCalledTimes(1);
+});
+
+// The request builds its URL from the id, so an event without one must never
+// reach it.
+test('does not call the API when the stored event has no id', async () => {
+    getPendingAction.mockReturnValue({ action: 'ADD_EVENT', event: { title: 'no id' } });
+    await new AuthorizationCallbackRoute(props)._callback('/schedule');
+    expect(props.addToSchedule).not.toHaveBeenCalled();
+    expect(alertWarning).toHaveBeenCalled();
+    expect(navigate).toHaveBeenCalledWith('/schedule');
 });
 
 test('also accepts the legacy action object', async () => {
@@ -78,4 +89,18 @@ test.each([
     await new AuthorizationCallbackRoute(props)._callback('/schedule');
     expect(props[handler]).toHaveBeenCalledWith(event);
     expect(navigate).toHaveBeenCalledWith('/schedule');
+});
+
+// These actions reject when the access token cannot be refreshed. The user
+// must still be sent on rather than left on the "Checking credentials" screen.
+test.each([
+    ['REMOVE_EVENT', 'removeFromSchedule'],
+    ['ADD_RSVP', 'rsvpToEvent'],
+    ['REMOVE_RSVP', 'cancelRSVP'],
+])('still sends the user on when %s fails', async (action, handler) => {
+    props[handler].mockRejectedValue(new Error('token refresh failed'));
+    getPendingAction.mockReturnValue({ action, event });
+    await new AuthorizationCallbackRoute(props)._callback('/schedule');
+    expect(navigate).toHaveBeenCalledWith('/schedule');
+    expect(navigate).toHaveBeenCalledTimes(1);
 });
