@@ -1,7 +1,7 @@
 {
   "name": "@openeventkit/event-site",
   "description": "Event Site",
-  "version": "2.1.67",
+  "version": "2.1.68",
   "author": "Tipit LLC",
   "dependencies": {
     "@emotion/server": "^11.11.0",
