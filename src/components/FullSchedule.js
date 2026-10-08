@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useMemo} from "react";
 import * as Sentry from "@sentry/react";
 import {connect} from "react-redux";
 import {needsLogin} from "../utils/alerts";
@@ -37,11 +37,19 @@ const FullSchedule = ({
     const {getSettingByKey} = useMarketingSettings();
     const defaultImage = getSettingByKey(MARKETING_SETTINGS_KEYS.scheduleDefaultImage);
     const summitLogoPrint = getSettingByKey(MARKETING_SETTINGS_KEYS.printLogo);
+    // profiles persisted before the reducer fix may still hold the serialized share info
+    // object; the widget builds the sync link only from a string, and re-derives its
+    // events on every new userProfile reference, so only copy the profile when needed
+    const scheduleUserProfile = useMemo(() => {
+        const shareableLink = userProfile?.schedule_shareable_link;
+        if (!shareableLink || typeof shareableLink === "string") return userProfile;
+        return {...userProfile, schedule_shareable_link: shareableLink.link};
+    }, [userProfile]);
     const componentProps = {
         title: "Schedule",
         summit,
         marketingSettings: colorSettings,
-        userProfile,
+        userProfile: scheduleUserProfile,
         withThumbs: false,
         defaultImage: defaultImage,
         summitLogoPrint: summitLogoPrint ? summitLogoPrint : null,
