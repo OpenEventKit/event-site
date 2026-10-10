@@ -158,3 +158,14 @@ describe("getAccessTokenWithRefreshSpread", () => {
     await expect(next).resolves.toBe("token-2");
   });
 });
+
+describe("the uicore exports the helper relies on", () => {
+  // The tests above mock uicore. If a new uicore version dropped one of these,
+  // the delay would silently never apply, so check the real module.
+  it("exist in the installed openstack-uicore-foundation", () => {
+    const uicore = jest.requireActual("openstack-uicore-foundation/lib/security/methods");
+    expect(typeof uicore.ACCESS_TOKEN_SKEW_TIME).toBe("number");
+    expect(typeof uicore.getAuthInfo).toBe("function");
+    expect(typeof uicore.getAccessToken).toBe("function");
+  });
+});

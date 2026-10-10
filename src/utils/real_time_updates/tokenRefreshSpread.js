@@ -17,6 +17,8 @@ const wouldRefreshAtIdp = (authInfo) => {
   return accessToken == null || elapsedSecs >= expiresIn - ACCESS_TOKEN_SKEW_TIME;
 };
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 let pending = null;
 
 /**
@@ -26,23 +28,15 @@ let pending = null;
  * delay or refresh is pending share it, so they resolve in call order.
  */
 export const getAccessTokenWithRefreshSpread = () => {
-  if (pending) return pending;
-
-  const run = (async () => {
-    if (wouldRefreshAtIdp(getAuthInfo())) {
-      await new Promise((resolve) =>
-        setTimeout(resolve, Math.random() * MAX_REFRESH_DELAY_MS)
-      );
-    }
-    return getAccessToken();
-  })();
-
-  pending = run;
-  // registered before any caller's handlers, so callers resume with pending cleared
-  const release = () => {
-    if (pending === run) pending = null;
-  };
-  run.then(release, release);
-
-  return run;
+  if (!pending) {
+    pending = (async () => {
+      if (wouldRefreshAtIdp(getAuthInfo())) {
+        await sleep(Math.random() * MAX_REFRESH_DELAY_MS);
+      }
+      return getAccessToken();
+    })().finally(() => {
+      pending = null;
+    });
+  }
+  return pending;
 };
