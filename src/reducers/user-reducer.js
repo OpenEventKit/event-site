@@ -62,9 +62,13 @@ const userReducer = (state = DEFAULT_STATE, action) => {
       return { ...state, loadingIDP: false };
     case GET_USER_PROFILE:
       const { response: userProfile } = payload;
+      // /members/me serializes the shareable link as an object, while the schedule
+      // widget needs the URL string; keep the current link if the refetch has none
+      const shareableLink = userProfile.schedule_shareable_link?.link
+        ?? state.userProfile?.schedule_shareable_link;
       return {
         ...state,
-        userProfile: { ...userProfile, rsvp_invitations: [] },
+        userProfile: { ...userProfile, schedule_shareable_link: shareableLink, rsvp_invitations: [] },
         isAuthorized: isAuthorizedUser(userProfile.groups),
         hasTicket: userProfile.summit_tickets?.length > 0
       }

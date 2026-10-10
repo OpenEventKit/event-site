@@ -31,3 +31,25 @@ describe("userReducer GET_USER_PROFILE", () => {
     expect(next.attendee).toEqual(ticket.owner);
   });
 });
+
+describe("userReducer GET_USER_PROFILE schedule_shareable_link", () => {
+  const link = "https://summit.example/api/public/v1/summits/1/members/me/schedule/abc/ics";
+  const profileWithLink = (schedule_shareable_link) => ({
+    payload: { response: { groups: [], summit_tickets: [], schedule_shareable_link } },
+    type: GET_USER_PROFILE,
+  });
+
+  it("flattens the serialized PersonalCalendarShareInfo to its link", () => {
+    // /members/me returns the relation as an object; the schedule widget only
+    // builds the Calendar Sync link from a string.
+    const shareInfo = { id: 5, link, summit_id: 1, owner_id: 10, cid: "abc" };
+    const next = userReducer({ userProfile: null }, profileWithLink(shareInfo));
+    expect(next.userProfile.schedule_shareable_link).toBe(link);
+  });
+
+  it("keeps the link already in state when the refetch carries none", () => {
+    const state = { userProfile: { schedule_shareable_link: link } };
+    const next = userReducer(state, profileWithLink(undefined));
+    expect(next.userProfile.schedule_shareable_link).toBe(link);
+  });
+});
