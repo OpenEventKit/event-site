@@ -4,6 +4,7 @@
  * gets a 412; it must end with the button matching the server, not with a
  * silent "success" carrying the error. On these endpoints summit-api answers
  * 412 only for "already in that state" and for events with an internal RSVP.
+ * (Event data only carries rsvp_type, so any RSVP counts here.)
  */
 import * as Sentry from "@sentry/react";
 import { addToSchedule, removeFromSchedule } from "../user-actions";
@@ -57,12 +58,6 @@ describe("executeUserIntent: add to schedule", () => {
     expect(alertWarning).not.toHaveBeenCalled();
   });
 
-  it("skips the write when the saved profile already has the event", async () => {
-    state = savedSchedule(42);
-    await expect(executeUserIntent(add)(dispatch, getState)).resolves.toBe(event);
-    expect(addToSchedule).not.toHaveBeenCalled();
-  });
-
   it("on a 412, treats the event as already scheduled, without Sentry or a message", async () => {
     writeRejects(addToSchedule, httpError(412));
 
@@ -73,21 +68,14 @@ describe("executeUserIntent: add to schedule", () => {
     expect(alertWarning).not.toHaveBeenCalled();
   });
 
-  it("on a 412 for an event with an internal RSVP, rejects with a message", async () => {
+  it("on a 412 for an event with an RSVP, rejects with the RSVP message", async () => {
     const error = httpError(412);
     writeRejects(addToSchedule, error);
-    const rsvpEvent = { id: 43, rsvp_type: "Public", rsvp_link: null, rsvp_template_id: 0 };
+    const rsvpEvent = { id: 43, rsvp_type: "Public" };
 
     await expect(executeUserIntent({ type: USER_INTENT.AddToSchedule, event: rsvpEvent })(dispatch, getState)).rejects.toBe(error);
-    expect(alertWarning).toHaveBeenCalledTimes(1);
+    expect(alertWarning).toHaveBeenCalledWith("Could not update My Schedule", "This session requires an RSVP.");
     expect(Sentry.captureException).not.toHaveBeenCalled();
-  });
-
-  it("on a 412 for an event that only links to an external RSVP, treats it as already scheduled", async () => {
-    writeRejects(addToSchedule, httpError(412));
-    const externalRsvp = { id: 44, rsvp_type: "Public", rsvp_link: "https://rsvp.example", rsvp_template_id: 0 };
-
-    await expect(executeUserIntent({ type: USER_INTENT.AddToSchedule, event: externalRsvp })(dispatch, getState)).resolves.toBe(externalRsvp);
   });
 
   it("rejects with a message and Sentry on any other failure", async () => {
@@ -122,18 +110,50 @@ describe("executeUserIntent: add to schedule", () => {
     expect(alertWarning).not.toHaveBeenCalled();
   });
 
-  it("shares one request between repeated clicks on the same event", async () => {
-    let finish;
-    addToSchedule.mockImplementation((ev) => () => new Promise((resolve) => { finish = () => resolve(ev); }));
+  it("sends repeated clicks one after another; the repeat's 412 settles it", async () => {
+    const calls = [];
+    let finishFirst;
+    addToSchedule
+      .mockImplementationOnce((ev) => () => { calls.push("first"); return new Promise((resolve) => { finishFirst = () => resolve(ev); }); })
+      .mockImplementationOnce(() => () => { calls.push("second"); return Promise.reject(httpError(412)); });
 
     const first = executeUserIntent(add)(dispatch, getState);
     const second = executeUserIntent(add)(dispatch, getState);
-    const third = executeUserIntent(remove)(dispatch, getState);
-    finish();
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(calls).toEqual(["first"]);
+    finishFirst();
 
-    await expect(Promise.all([first, second, third])).resolves.toEqual([event, event, event]);
-    expect(addToSchedule).toHaveBeenCalledTimes(1);
-    expect(removeFromSchedule).not.toHaveBeenCalled();
+    await expect(Promise.all([first, second])).resolves.toEqual([event, event]);
+    expect(calls).toEqual(["first", "second"]);
+    expect(alertWarning).not.toHaveBeenCalled();
+  });
+
+  it("runs a remove made during a pending add after the add, in that order", async () => {
+    const calls = [];
+    let finishAdd;
+    addToSchedule.mockImplementation((ev) => () => { calls.push("add"); return new Promise((resolve) => { finishAdd = () => { state = savedSchedule(42); resolve(ev); }; }); });
+    removeFromSchedule.mockImplementation((ev) => () => { calls.push("remove"); state = savedSchedule(); return Promise.resolve(ev); });
+
+    const adding = executeUserIntent(add)(dispatch, getState);
+    const removing = executeUserIntent(remove)(dispatch, getState);
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(calls).toEqual(["add"]);
+    finishAdd();
+
+    await expect(Promise.all([adding, removing])).resolves.toEqual([event, event]);
+    expect(calls).toEqual(["add", "remove"]);
+  });
+
+  it("retries on a click made after a real failure", async () => {
+    addToSchedule
+      .mockImplementationOnce(() => () => Promise.reject(httpError(500)))
+      .mockImplementationOnce((ev) => () => Promise.resolve(ev));
+
+    await expect(executeUserIntent(add)(dispatch, getState)).rejects.toBeTruthy();
+    await expect(executeUserIntent(add)(dispatch, getState)).resolves.toBe(event);
+    expect(addToSchedule).toHaveBeenCalledTimes(2);
   });
 
   it("rejects an intent without an event id without sending anything", async () => {
@@ -160,10 +180,10 @@ describe("executeUserIntent: remove from schedule", () => {
     expect(dispatched).toContainEqual({ type: "REMOVE_FROM_SCHEDULE", payload: event });
   });
 
-  it("on a 412 for an event with an internal RSVP, rejects", async () => {
+  it("on a 412 for an event with an RSVP, rejects", async () => {
     const error = httpError(412);
     writeRejects(removeFromSchedule, error);
-    const rsvpEvent = { id: 42, rsvp_type: "Private", rsvp_link: null, rsvp_template_id: 3 };
+    const rsvpEvent = { id: 42, rsvp_type: "Private" };
 
     await expect(executeUserIntent({ type: USER_INTENT.RemoveFromSchedule, event: rsvpEvent })(dispatch, getState)).rejects.toBe(error);
   });
