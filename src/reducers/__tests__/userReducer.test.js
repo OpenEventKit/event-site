@@ -1,5 +1,5 @@
 import userReducer from "../user-reducer";
-import { GET_USER_PROFILE } from "../../actions/user-actions";
+import { GET_USER_PROFILE, ADD_TO_SCHEDULE, REMOVE_FROM_SCHEDULE } from "../../actions/user-actions";
 
 const staleStateWithTicket = {
   userProfile: {
@@ -51,5 +51,26 @@ describe("userReducer GET_USER_PROFILE schedule_shareable_link", () => {
     const state = { userProfile: { schedule_shareable_link: link } };
     const next = userReducer(state, profileWithLink(undefined));
     expect(next.userProfile.schedule_shareable_link).toBe(link);
+  });
+});
+
+describe("userReducer ADD_TO_SCHEDULE / REMOVE_FROM_SCHEDULE", () => {
+  const withSchedule = (...ids) => ({ userProfile: { schedule_summit_events: ids.map((id) => ({ id })) } });
+
+  it("does not add an event that is already scheduled", () => {
+    // a 412 settled against the server dispatches the add for an event the
+    // saved profile may already hold
+    const state = withSchedule(42);
+    expect(userReducer(state, { type: ADD_TO_SCHEDULE, payload: { id: 42 } })).toBe(state);
+  });
+
+  it("adds an event that is not scheduled yet", () => {
+    const next = userReducer(withSchedule(7), { type: ADD_TO_SCHEDULE, payload: { id: 42 } });
+    expect(next.userProfile.schedule_summit_events.map((ev) => ev.id)).toEqual([7, 42]);
+  });
+
+  it.each([ADD_TO_SCHEDULE, REMOVE_FROM_SCHEDULE])("ignores %s when there is no saved profile", (type) => {
+    const state = { userProfile: null };
+    expect(userReducer(state, { type, payload: { id: 42 } })).toBe(state);
   });
 });

@@ -123,9 +123,10 @@ const scheduleReducer = (state = INITIAL_STATE, action) => {
         }
         case `SCHED_ADD_TO_SCHEDULE`: {
             const event = payload;
-            const {allEvents, filters, hide_past_events_with_show_always_on_schedule, customEventIds} = state;
+            const {allEvents: allEventsCurrent, filters, hide_past_events_with_show_always_on_schedule, customEventIds} = state;
 
-            allEvents.push(event);
+            if (allEventsCurrent.some(ev => ev.id === event.id)) return state;
+            const allEvents = [...allEventsCurrent, event];
             const events = getFilteredEvents(allEvents, filters, summitTimeZoneId, hide_past_events_with_show_always_on_schedule, customEventIds);
 
             return {...state, allEvents, events};
