@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import { synchEntityData } from "../../actions/update-data-actions";
 import { updateLastCheckForNovelties } from "../../actions/base-actions";
 import {connect} from 'react-redux'
-import { getAccessToken } from "openstack-uicore-foundation/lib/security/methods";
+import { getAccessTokenWithRefreshSpread } from "./tokenRefreshSpread";
 
 const CHECK_FOR_NOVELTIES_DELAY = 5000;
 
@@ -54,9 +54,14 @@ const withRealTimeUpdates = WrappedComponent => {
             (
                 getEnvVariable(REAL_TIME_UPDATES_STRATEGY),
                 (payload) => {
-                        const {updateLastCheckForNovelties} = _this.props;
-                        updateLastCheckForNovelties(payload.created_at);
-                        return _this.processUpdates([payload]);
+                        return _this.processUpdates([payload]).then((posted) => {
+                            // advance only once the update reached the worker, a dropped one must be re-fetched on the next mount
+                            if (posted) {
+                                const {updateLastCheckForNovelties} = _this.props;
+                                updateLastCheckForNovelties(payload.created_at);
+                            }
+                            return posted;
+                        });
                 },
                 this._checkForPastNoveltiesDebounced
             );
@@ -70,24 +75,32 @@ const withRealTimeUpdates = WrappedComponent => {
         /**
          *
          * @param updates
-         * @returns {Promise<void>}
+         * @returns {Promise<boolean>} true when the updates were posted to the worker
          */
         async processUpdates(updates) {
-
-            const {summit, allEvents, allIDXEvents, allSpeakers, allIDXSpeakers, synchEntityData} = this.props;
 
             if(!this._worker)
             {
                 console.log('withRealTimeUpdates::processUpdates worker is null');
-                return;
+                return false;
             }
 
             let accessToken = null;
             try {
-                accessToken = await getAccessToken();
+                accessToken = await getAccessTokenWithRefreshSpread();
             } catch (e) {
                 console.log('withRealTimeUpdates::processUpdates getAccessToken error: ', e);
             }
+
+            // the token refresh can wait up to 10 s, the component may have unmounted meanwhile
+            if(!this._worker)
+            {
+                console.log('withRealTimeUpdates::processUpdates worker is null after getting the access token');
+                return false;
+            }
+
+            // read the props after the wait, so the worker syncs against the current state
+            const {summit, allEvents, allIDXEvents, allSpeakers, allIDXSpeakers, synchEntityData} = this.props;
 
             this._worker.postMessage({
                 accessToken: accessToken,
@@ -125,6 +138,8 @@ const withRealTimeUpdates = WrappedComponent => {
                     newAllIDXSpeakers
                 )
             }
+
+            return true;
         }
 
         /**
@@ -193,17 +208,22 @@ const withRealTimeUpdates = WrappedComponent => {
 
                 console.log('withRealTimeUpdates::checkForPastNovelties res has data', res);
 
-                const {updateLastCheckForNovelties} = _this.props;
+                return _this.processUpdates(res).then((posted) => {
+                    // advance only once the updates reached the worker, dropped ones must be re-fetched on the next mount
+                    if (!posted) {
+                        console.log('withRealTimeUpdates::checkForPastNovelties updates not posted, keeping lastCheckForNovelties');
+                        return;
+                    }
 
-                _this.processUpdates(res);
-
-                const lastP = res[res.length - 1]
-                let {created_at: lastUpdateNovelty} = lastP;
-                if (lastUpdateNovelty) {
-                    // update lastCheckForNovelties
-                    console.log(`withRealTimeUpdates::checkForPastNovelties setting new lastCheckForNovelties ${lastUpdateNovelty} from last queryRealTimeDB`);
-                    updateLastCheckForNovelties(lastUpdateNovelty);
-                }
+                    const {updateLastCheckForNovelties} = _this.props;
+                    const lastP = res[res.length - 1]
+                    let {created_at: lastUpdateNovelty} = lastP;
+                    if (lastUpdateNovelty) {
+                        // update lastCheckForNovelties
+                        console.log(`withRealTimeUpdates::checkForPastNovelties setting new lastCheckForNovelties ${lastUpdateNovelty} from last queryRealTimeDB`);
+                        updateLastCheckForNovelties(lastUpdateNovelty);
+                    }
+                });
 
             }).catch((err) => console.log(err));
 
