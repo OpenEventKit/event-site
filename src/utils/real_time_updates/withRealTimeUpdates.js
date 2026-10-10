@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import { synchEntityData } from "../../actions/update-data-actions";
 import { updateLastCheckForNovelties } from "../../actions/base-actions";
 import {connect} from 'react-redux'
-import { getAccessToken } from "openstack-uicore-foundation/lib/security/methods";
+import { getAccessTokenWithRefreshSpread } from "./tokenRefreshSpread";
 
 const CHECK_FOR_NOVELTIES_DELAY = 5000;
 
@@ -74,8 +74,6 @@ const withRealTimeUpdates = WrappedComponent => {
          */
         async processUpdates(updates) {
 
-            const {summit, allEvents, allIDXEvents, allSpeakers, allIDXSpeakers, synchEntityData} = this.props;
-
             if(!this._worker)
             {
                 console.log('withRealTimeUpdates::processUpdates worker is null');
@@ -84,10 +82,20 @@ const withRealTimeUpdates = WrappedComponent => {
 
             let accessToken = null;
             try {
-                accessToken = await getAccessToken();
+                accessToken = await getAccessTokenWithRefreshSpread();
             } catch (e) {
                 console.log('withRealTimeUpdates::processUpdates getAccessToken error: ', e);
             }
+
+            // the token refresh can wait up to 10 s, the component may have unmounted meanwhile
+            if(!this._worker)
+            {
+                console.log('withRealTimeUpdates::processUpdates worker is null after getting the access token');
+                return;
+            }
+
+            // read the props after the wait, so the worker syncs against the current state
+            const {summit, allEvents, allIDXEvents, allSpeakers, allIDXSpeakers, synchEntityData} = this.props;
 
             this._worker.postMessage({
                 accessToken: accessToken,
