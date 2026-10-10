@@ -90,10 +90,14 @@ const userReducer = (state = DEFAULT_STATE, action) => {
     case GET_IDP_PROFILE:
       return { ...state, idpProfile: payload.response }
     case ADD_TO_SCHEDULE: {
-      return { ...state, userProfile: { ...state.userProfile, schedule_summit_events: [...state.userProfile.schedule_summit_events, payload] } }
+      if (!state.userProfile) return state;
+      const scheduled = state.userProfile.schedule_summit_events ?? [];
+      if (scheduled.some(ev => ev.id === payload.id)) return state;
+      return { ...state, userProfile: { ...state.userProfile, schedule_summit_events: [...scheduled, payload] } }
     }
     case REMOVE_FROM_SCHEDULE: {
-      return { ...state, userProfile: { ...state.userProfile, schedule_summit_events: [...state.userProfile.schedule_summit_events.filter(ev => ev.id !== payload.id)] } }
+      if (!state.userProfile) return state;
+      return { ...state, userProfile: { ...state.userProfile, schedule_summit_events: (state.userProfile.schedule_summit_events ?? []).filter(ev => ev.id !== payload.id) } }
     }
     case RSVP_CONFIRMED: {
       return { ...state, userProfile: { ...state.userProfile, rsvp: [...state.userProfile.rsvp, { ...payload }] } }
