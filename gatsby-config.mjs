@@ -3,7 +3,9 @@ import dotenv from "dotenv";
 import { createRequire } from "module";
 import { fileURLToPath } from "url";
 import webpack from "webpack";
-import remarkGfm from "remark-gfm";
+// gatsby-plugin-mdx compiles with MDX 2, which needs remark-gfm 3; remark-gfm 4
+// (used by the MDX 3 runtime in src/components/Mdx.js) breaks MDX 2 on tables.
+import remarkGfm from "remark-gfm-mdx2";
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeMdxImportMedia from "rehype-mdx-import-media";
 

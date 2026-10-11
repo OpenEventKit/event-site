@@ -124,6 +124,7 @@
     "rehype-external-links": "^3.0.0",
     "rehype-mdx-import-media": "^1.2.0",
     "remark-gfm": "^4.0.1",
+    "remark-gfm-mdx2": "npm:remark-gfm@^3.0.1",
     "sass": "^1.49.9",
     "schedule-filter-widget": "3.0.7",
     "simple-chat-widget": "^1.0.31",
