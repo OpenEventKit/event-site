@@ -17,7 +17,8 @@ import { navigate } from "gatsby";
 import { Redirect } from "@gatsbyjs/reach-router";
 import { connect } from "react-redux";
 import AbstractAuthorizationCallbackRoute from "openstack-uicore-foundation/lib/security/abstract-auth-callback-route";
-import { getUserProfile, addToSchedule, removeFromSchedule, rsvpToEvent, cancelRSVP } from "../actions/user-actions";
+import { getUserProfile, rsvpToEvent, cancelRSVP } from "../actions/user-actions";
+import { executeUserIntent, USER_INTENT } from "../actions/user-intents";
 import Interstitial from "../components/Interstitial";
 import { getEnvVariable, IDP_BASE_URL, OAUTH2_CLIENT_ID } from "@utils/envVariables";
 import { getPendingAction } from "@utils/schedule";
@@ -49,8 +50,8 @@ class AuthorizationCallbackRoute extends AbstractAuthorizationCallbackRoute {
                                 if (!event?.id) {
                                     throw new Error("Pending event has no id");
                                 }
-                                const savedEvent = await this.props.addToSchedule(event);
-                                // The action currently resolves API errors as values.
+                                // silent: the message below fits the login context better
+                                const savedEvent = await this.props.executeUserIntent({ type: USER_INTENT.AddToSchedule, event }, { silent: true });
                                 if (savedEvent?.id !== event.id) {
                                     throw new Error("Schedule addition failed");
                                 }
@@ -60,7 +61,7 @@ class AuthorizationCallbackRoute extends AbstractAuthorizationCallbackRoute {
                             }
                             break;
                         case "REMOVE_EVENT":
-                            await this.props.removeFromSchedule(event);
+                            await this.props.executeUserIntent({ type: USER_INTENT.RemoveFromSchedule, event });
                             break;
                         case "ADD_RSVP":
                             await this.props.rsvpToEvent(event);
@@ -120,8 +121,7 @@ const mapStateToProps = ({ userState }) => ({
 
 export default connect(mapStateToProps, {
     getUserProfile,
-    addToSchedule,
-    removeFromSchedule,
+    executeUserIntent,
     rsvpToEvent,
     cancelRSVP,
 })(AuthorizationCallbackRoute);

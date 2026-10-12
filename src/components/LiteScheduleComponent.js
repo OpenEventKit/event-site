@@ -9,7 +9,7 @@ import "lite-schedule-widget/dist/index.css";
 // https://cdnjs.cloudflare.com/ajax/libs/awesome-bootstrap-checkbox/1.0.2/awesome-bootstrap-checkbox.min.css
 // injected through HeadComponents
 
-import {addToSchedule, removeFromSchedule} from "../actions/user-actions";
+import {executeUserIntent, USER_INTENT} from "../actions/user-intents";
 
 import useMarketingSettings, { MARKETING_SETTINGS_KEYS } from "@utils/useMarketingSettings";
 import { SentryFallbackFunction } from "./SentryErrorComponent";
@@ -18,8 +18,7 @@ const LiteScheduleComponent = ({
    className = "schedule-container",
    userProfile,
    colorSettings,
-   addToSchedule,
-   removeFromSchedule,
+   executeUserIntent,
    schedules,
    summit,
    schedKey = "schedule-main",
@@ -38,10 +37,10 @@ const LiteScheduleComponent = ({
     triggerAction: (action, {event}) => {
       switch (action) {
         case "ADDED_TO_SCHEDULE": {
-          return addToSchedule(event);
+          return executeUserIntent({ type: USER_INTENT.AddToSchedule, event });
         }
         case "REMOVED_FROM_SCHEDULE": {
-          return removeFromSchedule(event);
+          return executeUserIntent({ type: USER_INTENT.RemoveFromSchedule, event });
         }
         default: {
           return;
@@ -66,4 +65,4 @@ const mapStateToProps = ({userState, summitState, allSchedulesState, settingStat
   colorSettings: settingState.colorSettings
 });
 
-export default connect(mapStateToProps, {addToSchedule, removeFromSchedule})(LiteScheduleComponent)
+export default connect(mapStateToProps, {executeUserIntent})(LiteScheduleComponent)

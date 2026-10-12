@@ -256,6 +256,7 @@ export const scanBadge = (sponsorId) => async (dispatch) => {
         });
 }
 
+// Rejects on any failure; executeUserIntent decides what the user sees.
 export const addToSchedule = (event) => async (dispatch, getState) => {
 
     const accessToken = await getAccessTokenSafely()
@@ -271,13 +272,10 @@ export const addToSchedule = (event) => async (dispatch, getState) => {
     ).then(() => {
         dispatch(createAction(ADD_TO_SCHEDULE)(event));
         return event;
-    }).catch(e => {
-        console.log('ERROR: ', e);
-        Sentry.captureException(e)
-        return e;
     });
 };
 
+// Rejects on any failure; executeUserIntent decides what the user sees.
 export const removeFromSchedule = (event) => async (dispatch, getState) => {
 
     const accessToken = await getAccessTokenSafely()
@@ -293,10 +291,6 @@ export const removeFromSchedule = (event) => async (dispatch, getState) => {
     ).then(() => {
         dispatch(createAction(REMOVE_FROM_SCHEDULE)(event));
         return event;
-    }).catch(e => {
-        console.log('ERROR: ', e);
-        Sentry.captureException(e)
-        return e;
     });
 };
 

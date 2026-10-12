@@ -3,14 +3,13 @@ import * as Sentry from "@sentry/react";
 import {connect} from "react-redux";
 import {needsLogin} from "../utils/alerts";
 import {
-    addToSchedule,
     cancelRSVP,
-    removeFromSchedule,
     RSVP_CANCELLED,
     RSVP_CONFIRMED,
     rsvpToEvent
 } from "../actions/user-actions";
 import {callAction, getShareLink} from "../actions/schedule-actions";
+import {executeUserIntent, USER_INTENT} from "../actions/user-intents";
 
 // these two libraries are client-side only
 import Schedule from "full-schedule-widget/dist";
@@ -23,8 +22,7 @@ const FullSchedule = ({
                           className,
                           userProfile,
                           colorSettings,
-                          addToSchedule,
-                          removeFromSchedule,
+                          executeUserIntent,
                           rsvpToEvent,
                           cancelRSVP,
                           callAction,
@@ -64,10 +62,10 @@ const FullSchedule = ({
         triggerAction: (action, payload) => {
             switch (action) {
                 case "ADDED_TO_SCHEDULE": {
-                    return addToSchedule(payload.event);
+                    return executeUserIntent({ type: USER_INTENT.AddToSchedule, event: payload.event });
                 }
                 case "REMOVED_FROM_SCHEDULE": {
-                    return removeFromSchedule(payload.event);
+                    return executeUserIntent({ type: USER_INTENT.RemoveFromSchedule, event: payload.event });
                 }
                 case RSVP_CONFIRMED: {
                     return rsvpToEvent(payload.event);
@@ -98,8 +96,7 @@ const mapStateToProps = ({userState, settingState}) => ({
 });
 
 export default connect(mapStateToProps, {
-    addToSchedule,
-    removeFromSchedule,
+    executeUserIntent,
     rsvpToEvent,
     cancelRSVP,
     callAction,
