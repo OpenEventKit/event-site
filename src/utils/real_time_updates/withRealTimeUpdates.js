@@ -8,6 +8,7 @@ import { synchEntityData } from "../../actions/update-data-actions";
 import { updateLastCheckForNovelties } from "../../actions/base-actions";
 import {connect} from 'react-redux'
 import { getAccessTokenWithRefreshSpread } from "./tokenRefreshSpread";
+import { waitForSyncSpread } from "./syncSpread";
 
 const CHECK_FOR_NOVELTIES_DELAY = 5000;
 
@@ -82,6 +83,15 @@ const withRealTimeUpdates = WrappedComponent => {
             if(!this._worker)
             {
                 console.log('withRealTimeUpdates::processUpdates worker is null');
+                return false;
+            }
+
+            // every open tab gets the same push at the same time: spread the re-fetch over 0-10 s
+            await waitForSyncSpread();
+
+            if(!this._worker)
+            {
+                console.log('withRealTimeUpdates::processUpdates worker is null after the sync spread');
                 return false;
             }
 
