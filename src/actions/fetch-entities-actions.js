@@ -7,7 +7,8 @@ import SpeakersAPIRequest from "../utils/build-json/SpeakersAPIRequest";
  * @param summitId
  * @param eventId
  * @param accessToken
- * @returns {Promise<Response>}
+ * @returns {Promise<Object|null>} the event, or null when the API answers 404 (not published).
+ * Any other error rejects, so a failed request never reads as an unpublished event.
  */
 export const fetchEventById = async (summitId, eventId, accessToken = null) => {
 
@@ -26,7 +27,10 @@ export const fetchEventById = async (summitId, eventId, accessToken = null) => {
         if (response.status === 200) {
             return await response.json();
         }
-        return null;
+        if (response.status === 404) {
+            return null;
+        }
+        throw new Error(`fetchEventById: event ${eventId} returned ${response.status}`);
     });
 }
 
