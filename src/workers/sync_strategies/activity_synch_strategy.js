@@ -161,6 +161,7 @@ class ActivitySynchStrategy extends AbstractSynchStrategy{
         switch (entity_operator) {
             case 'INSERT':
             case 'UPDATE':{
+                // rejects on any error other than a 404, so the worker skips this update and keeps the event
                 let entity = await fetchEventById(this.summit.id, entity_id, this.accessToken);
                 if(this.accessToken && this._shouldFetchStreamingInfo(this.currentLocation)) {
                     const streaming_info = await fetchStreamingInfoByEventId(this.summit.id, entity_id, this.accessToken);
