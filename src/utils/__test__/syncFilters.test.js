@@ -43,4 +43,28 @@ describe('syncFilters', () => {
         expect(result.track.options).not.toBe(currentFilters.track.options);
     });
 
+    it('should keep the text of a free-text filter (title, abstract)', () => {
+        const newFilters = {
+            title: { label: 'Title', order: 3, values: [], options: [] },
+            abstract: { label: 'Abstract', order: 4, values: [], options: [] }
+        };
+
+        const result = syncFilters(newFilters, {
+            title: { values: 'scale-up', options: [] },
+            abstract: { values: '', options: [] }
+        });
+
+        expect(result.title.values).toBe('scale-up');
+        expect(result.abstract.values).toBe('');
+    });
+
+    it('should start a filter empty when it has no current value', () => {
+        const newFilters = { title: { label: 'Title', order: 3, values: [], options: [] } };
+
+        const result = syncFilters(newFilters, {});
+
+        expect(result.title.values).toEqual([]);
+        expect(result.title.options).toEqual([]);
+    });
+
 });

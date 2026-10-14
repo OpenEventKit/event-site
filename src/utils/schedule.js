@@ -212,7 +212,7 @@ export const syncFilters = (newFilters, currentFilters) => {
     const existing = currentFilters[key] || {};
     synced[key] = {
       ...value,
-      values: Array.isArray(existing.values) ? [...existing.values] : [],
+      values: Array.isArray(existing.values) ? [...existing.values] : (existing.values ?? []),
       options: Array.isArray(existing.options) ? [...existing.options] : []
     };
   });
