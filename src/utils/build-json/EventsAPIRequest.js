@@ -31,8 +31,8 @@ class EventAPIRequest extends BaseAPIRequest {
             "attendance_count",
             "current_attendance_count",
             "to_record",
-            "etherpad_link",
-            "streaming_url",
+            // streaming_url / etherpad_link are intentionally NOT requested: events.json is bundled into
+            // public JS. They are served at runtime by /events/{id}/published/streaming-info (auth + ticket).
             "streaming_type",
             "meeting_url",
             "current_attendance",
