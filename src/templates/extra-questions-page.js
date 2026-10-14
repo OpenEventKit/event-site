@@ -11,7 +11,7 @@ import { getExtraQuestions } from '../actions/summit-actions';
 import { saveAttendeeQuestions } from '../actions/user-actions';
 import { TICKET_ATTENDEE_KEYS as TicketKeys } from '@utils/ticketConstants';
 import Input from 'openstack-uicore-foundation/lib/components/inputs/text-input'
-import RegistrationCompanyInput  from 'openstack-uicore-foundation/lib/components/inputs/registration-company-input';
+import CompanyInputV2 from 'openstack-uicore-foundation/lib/components/inputs/company-input-v2';
 import RawHTML from 'openstack-uicore-foundation/lib/components/raw-html';
 import FragmentParser from "openstack-uicore-foundation/lib/utils/fragment-parser";
 import QuestionsSet from 'openstack-uicore-foundation/lib/utils/questions-set';
@@ -23,8 +23,24 @@ import { getAttendeeData } from '../actions/extra-questions-actions';
 import Interstitial from "../components/Interstitial";
 
 import styles from '../styles/extra-questions.module.scss';
+import "../i18n";
 
 const noOpFn = () => {};
+
+// CompanyInputV2 is a MUI field; match the Bulma inputs next to it (34px tall, 14px text, no extra margin).
+const companyInputSx = {
+    '& .MuiFormControl-root': { mt: 0, mb: 0 },
+    '& .MuiOutlinedInput-root.MuiInputBase-sizeSmall': {
+        paddingTop: '4px',
+        paddingBottom: '4px',
+        paddingLeft: '4px',
+        fontSize: '14px',
+        color: 'var(--color_input_text_color)',
+        '& .MuiAutocomplete-input': { padding: '3px 8px' }
+    },
+    '& .MuiInputBase-input.Mui-disabled': { WebkitTextFillColor: 'var(--color_input_text_color)' },
+    '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--color_input_border_color)' }
+};
 
 export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, attendee, attendeeId, saveAttendeeQuestions, someoneElseLoaded }) => {
 
@@ -183,7 +199,7 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
                                 disabled={!!initialValues[TicketKeys.firstName]}
                             />
                             {(formik.touched[TicketKeys.firstName] || triedSubmitting) && formik.errors[TicketKeys.firstName] &&
-                            <p className={styles.errorLabel}>{t("ticket_popup.edit_required")}</p>
+                            <p className={styles.errorLabel}>{t("extra_questions_page.required")}</p>
                             }
                         </div>
                         <div className={`column is-full-mobile is-half ${styles.extraQuestion}`}>
@@ -200,7 +216,7 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
                                 disabled={!!initialValues[TicketKeys.lastName]}
                             />
                             {(formik.touched[TicketKeys.lastName] || triedSubmitting) && formik.errors[TicketKeys.lastName] &&
-                            <p className={styles.errorLabel}>{t("ticket_popup.edit_required")}</p>
+                            <p className={styles.errorLabel}>{t("extra_questions_page.required")}</p>
                             }
                         </div>
                         <div className={`column is-full-mobile is-half ${styles.extraQuestion}`}>
@@ -216,19 +232,23 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
                         </div>
                         <div className={`column is-full-mobile is-half ${styles.extraQuestion}`}>
                             <label htmlFor={TicketKeys.company}>Company</label>
-                            <RegistrationCompanyInput
+                            {/* CompanyInputV2 keeps a typed company that is not in the list when the field loses focus. */}
+                            <CompanyInputV2
                                 id={TicketKeys.company}
                                 name={TicketKeys.company}
+                                label=""
+                                size="small"
+                                sx={companyInputSx}
                                 summitId={summit.id}
                                 placeholder={'Your Company'}
                                 value={formik.values[TicketKeys.company]}
-                                onBlur={formik.handleBlur}
-                                onChange={!!initialValues[TicketKeys.company].name ? noOpFn : formik.handleChange}
+                                // The input commits the typed text right before onBlur; validating on blur would read the stale value.
+                                onBlur={() => formik.setFieldTouched(TicketKeys.company, true, false)}
+                                onChange={!!initialValues[TicketKeys.company].name ? noOpFn : (ev) => formik.setFieldValue(TicketKeys.company, ev.target.value || { id: null, name: '' })}
                                 disabled={!!initialValues[TicketKeys.company].name}
-                                tabSelectsValue={false}
                             />
                             {(formik.touched[TicketKeys.company] || triedSubmitting) && formik.errors[TicketKeys.company] &&
-                            <p className={styles.errorLabel}>{t("ticket_popup.edit_required")}</p>
+                            <p className={styles.errorLabel}>{t("extra_questions_page.required")}</p>
                             }
                         </div>
                     </div>
@@ -273,7 +293,7 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
                             </RawHTML>
                         </div>
                         {(formik.touched[TicketKeys.disclaimerAccepted] || triedSubmitting) && formik.errors[TicketKeys.disclaimerAccepted] &&
-                            <p className={styles.errorLabel}>{t("ticket_popup.edit_required")}</p>
+                            <p className={styles.errorLabel}>{t("extra_questions_page.required")}</p>
                         }
                     </div>
                     }
