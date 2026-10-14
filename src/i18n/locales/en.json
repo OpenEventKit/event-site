@@ -19,5 +19,8 @@
     "speakers": "Speakers",
     "accept_button": "YES, I will attend.",
     "decline_button": "NO, I will not attend."
+  },
+  "extra_questions_page": {
+    "required": "Required"
   }
 }
