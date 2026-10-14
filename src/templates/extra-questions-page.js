@@ -27,6 +27,21 @@ import "../i18n";
 
 const noOpFn = () => {};
 
+// CompanyInputV2 is a MUI field; match the Bulma inputs next to it (34px tall, 14px text, no extra margin).
+const companyInputSx = {
+    '& .MuiFormControl-root': { mt: 0, mb: 0 },
+    '& .MuiOutlinedInput-root.MuiInputBase-sizeSmall': {
+        paddingTop: '4px',
+        paddingBottom: '4px',
+        paddingLeft: '4px',
+        fontSize: '14px',
+        color: 'var(--color_input_text_color)',
+        '& .MuiAutocomplete-input': { padding: '3px 8px' }
+    },
+    '& .MuiInputBase-input.Mui-disabled': { WebkitTextFillColor: 'var(--color_input_text_color)' },
+    '& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--color_input_border_color)' }
+};
+
 export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, attendee, attendeeId, saveAttendeeQuestions, someoneElseLoaded }) => {
 
     const { t } = useTranslation();
@@ -222,6 +237,8 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
                                 id={TicketKeys.company}
                                 name={TicketKeys.company}
                                 label=""
+                                size="small"
+                                sx={companyInputSx}
                                 summitId={summit.id}
                                 placeholder={'Your Company'}
                                 value={formik.values[TicketKeys.company]}
