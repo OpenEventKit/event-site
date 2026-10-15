@@ -40,6 +40,22 @@ const companyInput = () => screen.getByLabelText("Company");
 
 const settle = () => act(() => new Promise((resolve) => setTimeout(resolve, 0)));
 
+// Mimics Chrome / Edge "Translate this page": every text node is replaced by font > font.
+const translatePage = (root) => {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const textNodes = [];
+  while (walker.nextNode()) {
+    if (walker.currentNode.nodeValue.trim()) textNodes.push(walker.currentNode);
+  }
+  textNodes.forEach((node) => {
+    const outer = document.createElement("font");
+    const inner = document.createElement("font");
+    inner.textContent = node.nodeValue;
+    outer.appendChild(inner);
+    node.replaceWith(outer);
+  });
+};
+
 beforeAll(() => {
   Element.prototype.scrollIntoView = jest.fn();
 });
@@ -83,5 +99,36 @@ describe("ExtraQuestionsPageTemplate company field", () => {
     expect(await screen.findByText("Required")).toBeInTheDocument();
     expect(screen.queryByText("ticket_popup.edit_required")).not.toBeInTheDocument();
     expect(saveAttendeeQuestions).not.toHaveBeenCalled();
+  });
+});
+
+describe("ExtraQuestionsPageTemplate save button", () => {
+  it("swaps its label when the page is translated", async () => {
+    let finishSave;
+    const saveAttendeeQuestions = jest.fn(() => new Promise((resolve) => { finishSave = resolve; }));
+    renderPage(saveAttendeeQuestions);
+
+    await act(async () => {
+      fireEvent.change(companyInput(), { target: { value: "Palo Alto Networks" } });
+    });
+    await act(async () => {
+      fireEvent.blur(companyInput());
+    });
+    await settle();
+
+    const saveButton = screen.getByRole("button", { name: "Save and Continue" });
+    translatePage(saveButton);
+    await act(async () => {
+      fireEvent.click(saveButton);
+    });
+    await waitFor(() => expect(saveAttendeeQuestions).toHaveBeenCalledTimes(1));
+    expect(saveButton).toHaveTextContent("Saving...");
+
+    // the action resolves on both success and error (it alerts on its own), so the label swaps back
+    translatePage(saveButton);
+    await act(async () => {
+      finishSave();
+    });
+    expect(saveButton).toHaveTextContent("Save and Continue");
   });
 });

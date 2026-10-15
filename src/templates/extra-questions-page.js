@@ -301,8 +301,10 @@ export const ExtraQuestionsPageTemplate = ({ user, summit, extraQuestions, atten
                         className={`${styles.buttonSave} button is-large`}
                         disabled={formik.isSubmitting}
                         onClick={triggerSubmit}>
-                        {!formik.isSubmitting && <>Save and Continue</>}
-                        {formik.isSubmitting && <>Saving...</>}
+                        {/* single keyed element so page translators wrapping the text don't break the swap */}
+                        <span key={formik.isSubmitting ? "saving" : "save"}>
+                            {formik.isSubmitting ? "Saving..." : "Save and Continue"}
+                        </span>
                     </button>
                 </div>
             </div>
