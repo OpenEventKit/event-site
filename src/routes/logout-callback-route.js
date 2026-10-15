@@ -18,7 +18,6 @@ import URI from "urijs"
 import { initLogOut } from 'openstack-uicore-foundation/lib/security/methods'
 import { doLogout } from 'openstack-uicore-foundation/lib/security/actions'
 import { getFromLocalStorage } from 'openstack-uicore-foundation/lib/utils/methods'
-import { broadcastLogout } from '../utils/logoutBroadcast'
 
 export class LogOutCallbackRoute extends React.Component {
 
@@ -47,8 +46,6 @@ export class LogOutCallbackRoute extends React.Component {
                 if(typeof window !== 'undefined') {
                     window.localStorage.clear();
                 }
-                // other open tabs still hold a logged in state in memory, tell them to drop it
-                broadcastLogout();
                 navigate(backUrl ? backUrl : '/');
                 return;
             }
