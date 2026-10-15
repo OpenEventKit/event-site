@@ -11,6 +11,19 @@ const DEFAULT_STATE = {
   error: null,
 };
 
+// only the overflow endpoint sends these; the copies used to update the event
+// (schedule data, published event) never have them, so keep the current ones
+const OVERFLOW_FIELDS = ["overflow_streaming_url", "overflow_stream_is_secure", "overflow_url", "overflow_tokens"];
+
+const keepOverflowFields = (currentEvent, updatedEvent) => {
+  if (!currentEvent || !updatedEvent || currentEvent.id !== updatedEvent.id) return updatedEvent;
+  const event = { ...updatedEvent };
+  OVERFLOW_FIELDS.forEach((field) => {
+    if (event[field] === undefined && currentEvent[field] !== undefined) event[field] = currentEvent[field];
+  });
+  return event;
+};
+
 const eventReducer = (state = DEFAULT_STATE, action) => {
   const { type, payload } = action
 
@@ -40,7 +53,7 @@ const eventReducer = (state = DEFAULT_STATE, action) => {
       if(state?.event){
         const idx = eventsIDXData[state?.event?.id] || null;
         if(idx) {
-          const updatedEvent = eventsData[idx];
+          const updatedEvent = keepOverflowFields(state.event, eventsData[idx]);
           return {...state, loading: false, event: updatedEvent, tokens: null};
         }
       }
@@ -54,7 +67,7 @@ const eventReducer = (state = DEFAULT_STATE, action) => {
     case RELOAD_EVENT_STATE:{
       const { tokens: newTokens, ...rest } = payload;
       const formerTokens = state.tokens;
-      return {...state, loading:false, event: {...rest}, tokens: newTokens || formerTokens};
+      return {...state, loading:false, event: keepOverflowFields(state.event, {...rest}), tokens: newTokens || formerTokens};
     }
     case GET_EVENT_STREAMING_INFO:{
       const { tokens, ...rest } = payload.response

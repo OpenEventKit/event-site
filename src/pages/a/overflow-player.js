@@ -34,7 +34,6 @@ const OverflowPlayerPage = ({
     }, [event]);
 
     const onAblyMessage = useCallback((msg) => {
-        debugger;
         const { data } = msg || {};
         const { entity_id, params: { overflow_url } = {} } = data || {};
         const currentId = latestEventIdRef.current;
