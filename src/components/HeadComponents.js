@@ -6,6 +6,8 @@ export const HtmlAttributes = {
 };
 
 export const HeadComponents = [
+  // opt out of Chrome iOS intent detection, which rewrites React-managed text (PROD-2026OCPGLOBAL-P)
+  <meta key="chrome-nointentdetection" name="chrome" content="nointentdetection" />,
   <link
     key="awesome-bootstrap-checkbox"
     rel="stylesheet"
