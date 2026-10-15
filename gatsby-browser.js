@@ -8,6 +8,7 @@ import cookieServices from "./src/utils/cookies/services";
 import TagManager from "./src/utils/tag-manager/TagManager";
 import GoogleTagManagerProvider from "./src/utils/tag-manager/providers/GoogleTagManagerProvider";
 import { getEnvVariable, GOOGLE_TAGMANAGER_ID } from "@utils/envVariables";
+import { dropExpectedAuthErrors } from "@utils/loginUtils";
 import smoothscroll from "smoothscroll-polyfill";
 import "what-input";
 
@@ -77,7 +78,7 @@ export const onClientEntry = () => {
       beforeSend(event) {
         // Modify the event here
         console.log('before send...', event)
-        return event;
+        return dropExpectedAuthErrors(event);
       },
       release: process.env.GATSBY_SENTRY_RELEASE,
       integrations: [

@@ -1,9 +1,11 @@
 import { applyMiddleware, compose, createStore } from "redux";
 import { persistCombineReducers, persistStore } from "redux-persist";
 import thunk from "redux-thunk";
+import { doLogout } from "openstack-uicore-foundation/lib/security/actions";
 
 import * as reducers from "../reducers";
 import { persistConfig } from "./persistConfig";
+import { onLogoutBroadcast } from "../utils/logoutBroadcast";
 
 const states = {
   loggedUserState: reducers.loggedUserReducer,
@@ -38,6 +40,13 @@ export const { store, persistor } = (() => {
   const store = createStore(persistedReducers, enhancer);
   const onRehydrateComplete = () => {};
   const persistor = persistStore(store, null, onRehydrateComplete);
+
+  // another tab logged out and cleared authInfo: drop the logged in state here too, so it is not persisted again
+  onLogoutBroadcast(() => {
+    if (store.getState().loggedUserState?.isLoggedUser) {
+      store.dispatch(doLogout());
+    }
+  });
 
   return { store, persistor };
 })();
