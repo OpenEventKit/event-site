@@ -17,4 +17,10 @@ describe("EventAPIRequest requested fields", () => {
     it("requests type.show_always_on_schedule so the schedule bypass can read it", () => {
         expect(requestedFields()).toContain("type.show_always_on_schedule");
     });
+
+    // events.json is imported into the public JS bundle, so stream URLs must only
+    // come from the authenticated /published/streaming-info endpoint at runtime.
+    it.each(["streaming_url", "etherpad_link"])("does not request %s (would leak into the public bundle)", (field) => {
+        expect(requestedFields()).not.toContain(field);
+    });
 });
