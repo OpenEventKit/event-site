@@ -9,6 +9,7 @@ import { updateLastCheckForNovelties } from "../../actions/base-actions";
 import {connect} from 'react-redux'
 import { getAccessTokenWithRefreshSpread } from "./tokenRefreshSpread";
 import { waitForSyncSpread } from "./syncSpread";
+import { isUnrecoverableAuthError, onLogOut } from "../loginUtils";
 
 const CHECK_FOR_NOVELTIES_DELAY = 5000;
 
@@ -31,6 +32,8 @@ const withRealTimeUpdates = WrappedComponent => {
 
             let _this = this;
             this._worker = null;
+            // set once the session is dead, so this tab stops asking the IDP for tokens
+            this._authRejected = false;
             this.createRealTimeSubscription = this.createRealTimeSubscription.bind(this);
             this.queryRealTimeDB = this.queryRealTimeDB.bind(this);
             this.checkForPastNovelties = this.checkForPastNovelties.bind(this);
@@ -96,10 +99,17 @@ const withRealTimeUpdates = WrappedComponent => {
             }
 
             let accessToken = null;
-            try {
-                accessToken = await getAccessTokenWithRefreshSpread();
-            } catch (e) {
-                console.log('withRealTimeUpdates::processUpdates getAccessToken error: ', e);
+            if (!this._authRejected) {
+                try {
+                    accessToken = await getAccessTokenWithRefreshSpread();
+                } catch (e) {
+                    console.log('withRealTimeUpdates::processUpdates getAccessToken error: ', e);
+                    // anonymous visitors always lack auth info, only a logged user has a session to end
+                    if (isUnrecoverableAuthError(e) && this.props.isLoggedUser) {
+                        this._authRejected = true;
+                        onLogOut();
+                    }
+                }
             }
 
             // the token refresh can wait up to 10 s, the component may have unmounted meanwhile
@@ -299,8 +309,9 @@ const withRealTimeUpdates = WrappedComponent => {
         }
     }
 
-    const mapStateToProps = ({speakerState, allSchedulesState, settingState, summitState}) => ({
+    const mapStateToProps = ({loggedUserState, speakerState, allSchedulesState, settingState, summitState}) => ({
         summit: summitState?.summit,
+        isLoggedUser: loggedUserState.isLoggedUser,
         staticJsonFilesBuildTime: settingState.staticJsonFilesBuildTime,
         lastCheckForNovelties: settingState.lastCheckForNovelties,
         allEvents: allSchedulesState.allEvents,

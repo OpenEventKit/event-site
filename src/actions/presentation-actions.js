@@ -5,10 +5,6 @@ import {
   startLoading,
 } from 'openstack-uicore-foundation/lib/utils/actions';
 
-import {
-  getAccessToken,
-} from 'openstack-uicore-foundation/lib/security/methods';
-
 import { customErrorHandler } from '../utils/customErrorHandler';
 
 import { VotingPeriod } from '../model/VotingPeriod';
