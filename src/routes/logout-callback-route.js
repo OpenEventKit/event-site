@@ -15,7 +15,7 @@ import { connect } from 'react-redux';
 import { navigate } from "gatsby"
 import { Redirect } from "@gatsbyjs/reach-router";
 import URI from "urijs"
-import { initLogOut } from 'openstack-uicore-foundation/lib/security/methods'
+import { clearAuthInfo, getIdToken, getLogoutUrl } from 'openstack-uicore-foundation/lib/security/methods'
 import { doLogout } from 'openstack-uicore-foundation/lib/security/actions'
 import { getFromLocalStorage } from 'openstack-uicore-foundation/lib/utils/methods'
 
@@ -50,13 +50,17 @@ export class LogOutCallbackRoute extends React.Component {
                 return;
             }
             // error
+            clearAuthInfo();
             this.setState({...this.state, error: 'Invalid Nonce', error_description:'There was an error on logout process. Please try again.'})
             return;
         }
         // starts logout process
         let backUrl = location.state?.backUrl ? location.state.backUrl : '/';
         window.localStorage.setItem('post_logout_redirect_path', backUrl);
-        initLogOut();
+        // build the end-session url while the id_token is still stored, then drop the session before leaving
+        const logoutUrl = getLogoutUrl(getIdToken()).toString();
+        clearAuthInfo();
+        window.location.replace(logoutUrl);
     }
 
     render() {
