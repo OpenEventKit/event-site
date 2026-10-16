@@ -1,4 +1,5 @@
-import { dropTransientUserFlags } from "../persistTransforms";
+import { storeAuthInfo } from "openstack-uicore-foundation/lib/security/methods";
+import { dropTransientUserFlags, deriveLoggedInFromAuthInfo } from "../persistTransforms";
 
 describe("dropTransientUserFlags", () => {
   it("clears the in-flight flags on rehydrate", () => {
@@ -19,5 +20,25 @@ describe("dropTransientUserFlags", () => {
     // Only the flags: the profile snapshot itself is the point of persisting.
     expect(rehydrated.userProfile).toEqual(persisted.userProfile);
     expect(rehydrated.hasTicket).toBe(true);
+  });
+});
+
+describe("deriveLoggedInFromAuthInfo", () => {
+  // another tab may have persisted the opposite of what the shared token says
+  afterEach(() => window.localStorage.clear());
+
+  it("rehydrates as logged in when authInfo is present", () => {
+    storeAuthInfo("access-token", 3600);
+
+    const rehydrated = deriveLoggedInFromAuthInfo.out({ isLoggedUser: false, backUrl: "/a/" }, "loggedUserState", {});
+
+    expect(rehydrated.isLoggedUser).toBe(true);
+    expect(rehydrated.backUrl).toBe("/a/");
+  });
+
+  it("rehydrates as logged out when authInfo is missing", () => {
+    const rehydrated = deriveLoggedInFromAuthInfo.out({ isLoggedUser: true }, "loggedUserState", {});
+
+    expect(rehydrated.isLoggedUser).toBe(false);
   });
 });
