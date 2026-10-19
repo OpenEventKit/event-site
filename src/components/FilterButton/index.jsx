@@ -7,7 +7,8 @@ const FilterButton = ({ open, onClick }) => {
       return (
         <>
           <i className="fa fa-filter" />
-          Filters
+          {/* own element so page translators wrapping the text don't break the toggle */}
+          <span>Filters</span>
         </>
       );
     } else {
