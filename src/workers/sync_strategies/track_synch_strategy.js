@@ -1,5 +1,5 @@
 import AbstractSynchStrategy from "./abstract_synch_strategy";
-import {fetchTrackById} from "../../actions/fetch-entities-actions";
+import {clearEtagCacheForUrl, fetchTrackById} from "../../actions/fetch-entities-actions";
 import {
     BUCKET_EVENTS_DATA_KEY,
     BUCKET_EVENTS_IDX_DATA_KEY,
@@ -159,6 +159,7 @@ class TrackSynchStrategy extends AbstractSynchStrategy {
         switch (entity_operator) {
             case 'INSERT':
             case 'UPDATE':{
+                clearEtagCacheForUrl(`/v1/summits/${this.summit.id}/tracks/${entity_id}`);
                 const entity = await fetchTrackById(this.summit.id, entity_id, this.accessToken);
                 if (!entity) return Promise.reject('TrackSynchStrategy::process entity not found.');
                 return this._handleUpsert(entity, payload);
