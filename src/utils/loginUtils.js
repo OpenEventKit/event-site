@@ -1,4 +1,9 @@
 import { getAccessToken } from 'openstack-uicore-foundation/lib/security/methods'
+import {
+  AUTH_ERROR_MISSING_AUTH_INFO,
+  AUTH_ERROR_MISSING_REFRESH_TOKEN,
+  AUTH_ERROR_REFRESH_TOKEN_REQUEST_ERROR
+} from 'openstack-uicore-foundation/lib/security/constants'
 import * as Sentry from '@sentry/react'
 import {
   getEnvVariable,
@@ -75,5 +80,27 @@ export const getAccessTokenSafely = async () => {
     Sentry.captureException(e)
     onLogOut();
     return Promise.reject();
+  }
+};
+
+// errors after which the session can't be recovered, retrying would only replay a dead refresh token
+const UNRECOVERABLE_AUTH_ERRORS = [
+  AUTH_ERROR_REFRESH_TOKEN_REQUEST_ERROR,
+  AUTH_ERROR_MISSING_REFRESH_TOKEN,
+  AUTH_ERROR_MISSING_AUTH_INFO
+];
+
+export const isUnrecoverableAuthError = (e) =>
+  UNRECOVERABLE_AUTH_ERRORS.some((code) => e?.message?.startsWith(code));
+
+// for widgets that get getAccessToken: logs out on an unrecoverable error, network errors are left to the widget
+export const getAccessTokenOrLogOut = async () => {
+  try {
+    return await getAccessToken();
+  } catch (e) {
+    if (isUnrecoverableAuthError(e)) {
+      onLogOut();
+    }
+    throw e;
   }
 };

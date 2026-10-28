@@ -15,9 +15,10 @@ import { connect } from 'react-redux';
 import { navigate } from "gatsby"
 import { Redirect } from "@gatsbyjs/reach-router";
 import URI from "urijs"
-import { initLogOut } from 'openstack-uicore-foundation/lib/security/methods'
+import { clearAuthInfo, getIdToken, getLogoutUrl } from 'openstack-uicore-foundation/lib/security/methods'
 import { doLogout } from 'openstack-uicore-foundation/lib/security/actions'
 import { getFromLocalStorage } from 'openstack-uicore-foundation/lib/utils/methods'
+import { persistor } from '../state/store'
 
 export class LogOutCallbackRoute extends React.Component {
 
@@ -50,13 +51,21 @@ export class LogOutCallbackRoute extends React.Component {
                 return;
             }
             // error
-            this.setState({...this.state, error: 'Invalid Nonce', error_description:'There was an error on logout process. Please try again.'})
+            clearAuthInfo();
+            this.props.doLogout();
+            persistor.flush().then(() =>
+                this.setState({...this.state, error: 'Invalid Nonce', error_description:'There was an error on logout process. Please try again.'}));
             return;
         }
         // starts logout process
         let backUrl = location.state?.backUrl ? location.state.backUrl : '/';
         window.localStorage.setItem('post_logout_redirect_path', backUrl);
-        initLogOut();
+        // build the end-session url while the id_token is still stored, then drop the session before leaving
+        const logoutUrl = getLogoutUrl(getIdToken()).toString();
+        clearAuthInfo();
+        this.props.doLogout();
+        // flush so the logged-out redux state is on disk before the page unloads
+        persistor.flush().then(() => window.location.replace(logoutUrl));
     }
 
     render() {

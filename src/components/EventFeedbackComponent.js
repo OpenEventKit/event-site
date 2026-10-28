@@ -1,7 +1,7 @@
 import React from "react"
 import {connect} from "react-redux";
-import {getAccessToken} from 'openstack-uicore-foundation/lib/security/methods'
 import {getEnvVariable, SUMMIT_API_BASE_URL} from "../utils/envVariables";
+import {getAccessTokenOrLogOut} from "../utils/loginUtils";
 
 // these two libraries are client-side only
 import EventFeedbackWidget from 'event-feedback-widget/dist/index.js';
@@ -15,7 +15,7 @@ const EventFeedbackComponent = ({eventId, summit, user, colorSettings, className
     eventId,
     userId: user.id,
     marketingData: colorSettings,
-    getAccessToken: getAccessToken,
+    getAccessToken: getAccessTokenOrLogOut,
     apiBaseUrl: getEnvVariable(SUMMIT_API_BASE_URL),
   };
 
