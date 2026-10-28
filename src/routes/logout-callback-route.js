@@ -18,6 +18,7 @@ import URI from "urijs"
 import { clearAuthInfo, getIdToken, getLogoutUrl } from 'openstack-uicore-foundation/lib/security/methods'
 import { doLogout } from 'openstack-uicore-foundation/lib/security/actions'
 import { getFromLocalStorage } from 'openstack-uicore-foundation/lib/utils/methods'
+import { persistor } from '../state/store'
 
 export class LogOutCallbackRoute extends React.Component {
 
@@ -51,7 +52,9 @@ export class LogOutCallbackRoute extends React.Component {
             }
             // error
             clearAuthInfo();
-            this.setState({...this.state, error: 'Invalid Nonce', error_description:'There was an error on logout process. Please try again.'})
+            this.props.doLogout();
+            persistor.flush().then(() =>
+                this.setState({...this.state, error: 'Invalid Nonce', error_description:'There was an error on logout process. Please try again.'}));
             return;
         }
         // starts logout process
@@ -60,7 +63,9 @@ export class LogOutCallbackRoute extends React.Component {
         // build the end-session url while the id_token is still stored, then drop the session before leaving
         const logoutUrl = getLogoutUrl(getIdToken()).toString();
         clearAuthInfo();
-        window.location.replace(logoutUrl);
+        this.props.doLogout();
+        // flush so the logged-out redux state is on disk before the page unloads
+        persistor.flush().then(() => window.location.replace(logoutUrl));
     }
 
     render() {
