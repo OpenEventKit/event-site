@@ -41,6 +41,13 @@ describe("eventReducer keeps the overflow stream on updates", () => {
     expect(next.event.overflow_streaming_url).toBe("https://stream.example.com/new.m3u8");
   });
 
+  it("keeps the streaming-info fields when the update does not send them", () => {
+    const withStream = { ...state, event: { ...overflowEvent, streaming_url: "https://stream.example.com/live.m3u8", etherpad_link: "https://pad.example.com/p/7813" } };
+    const next = eventReducer(withStream, { type: RELOAD_EVENT_STATE, payload: refetched });
+    expect(next.event.streaming_url).toBe("https://stream.example.com/live.m3u8");
+    expect(next.event.etherpad_link).toBe("https://pad.example.com/p/7813");
+  });
+
   it("does not copy overflow fields onto a different event", () => {
     const next = eventReducer(state, { type: RELOAD_EVENT_STATE, payload: { id: 7879, title: "Welcome Address" } });
     expect(next.event.overflow_streaming_url).toBeUndefined();
