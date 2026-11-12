@@ -17,6 +17,14 @@ export const onLogOut = (backUrl = null) => {
   });
 }
 
+let isLoggingOut = false;
+// concurrent auth failures share one logout navigation; LogoutButton keeps calling onLogOut directly
+export const logOutOnAuthError = (backUrl = null) => {
+  if (isLoggingOut) return;
+  isLoggingOut = true;
+  onLogOut(backUrl);
+};
+
 export const getDefaultLocation = (
   eventRedirect,
   hasVirtualAccess = false
@@ -74,8 +82,8 @@ export const getAccessTokenSafely = async () => {
   } catch (e) {
     console.log("loginUtils::getAccessToken error: ", e);
     Sentry.captureException(e)
-    onLogOut();
-    return Promise.reject();
+    logOutOnAuthError();
+    return Promise.reject(e);
   }
 };
 

@@ -1,7 +1,8 @@
 /**
- * Other tabs change the shared authInfo token (login, logout, failed token
- * refresh); this tab reloads whenever its login state no longer matches it,
- * so it never persists a stale login state.
+ * Another tab clears the shared authInfo token (logout, failed token refresh,
+ * or a re-auth still at the IDP); a logged in tab reloads to logged out, but
+ * only once it has focus, so a re-auth that restores the token in the
+ * meantime leaves it alone.
  */
 import { storeAuthInfo } from "openstack-uicore-foundation/lib/security/methods";
 import { store, persistor } from "../store";
@@ -23,14 +24,12 @@ jest.mock("gatsby", () => ({
   useStaticQuery: jest.fn(),
   withPrefix: (path) => path,
 }));
-jest.mock("../../actions/user-actions", () => ({
-  getUserProfile: jest.fn(() => ({ type: "GET_USER_PROFILE_MOCK" })),
-}));
 
 const AUTH_INFO = JSON.stringify({ accessToken: "token", expiresIn: 3600, accessTokenUpdatedAt: 0 });
 
 // another tab changed localStorage; the browser only fires this in the other tabs
 const otherTabChanged = (key) => window.dispatchEvent(new StorageEvent("storage", { key }));
+const focusTab = () => window.dispatchEvent(new Event("focus"));
 
 const setLoggedIn = () => store.dispatch({ type: "SET_LOGGED_USER", payload: { sessionState: null } });
 const setLoggedOut = () => store.dispatch({ type: "LOGOUT_USER", payload: { backUrl: null } });
@@ -38,21 +37,20 @@ const setLoggedOut = () => store.dispatch({ type: "LOGOUT_USER", payload: { back
 describe("store auth sync across tabs", () => {
   const originalLocation = window.location;
   let reload;
-  let replace;
   let pause;
+  let hasFocus;
 
   beforeEach(() => {
     reload = jest.fn();
-    replace = jest.fn();
     delete window.location;
-    window.location = { reload, replace };
+    window.location = { reload };
     pause = jest.spyOn(persistor, "pause");
+    hasFocus = jest.spyOn(document, "hasFocus").mockReturnValue(true);
     window.localStorage.clear();
   });
 
   afterEach(() => {
     window.location = originalLocation;
-    window.history.replaceState(null, "");
     jest.restoreAllMocks();
   });
 
@@ -62,7 +60,7 @@ describe("store auth sync across tabs", () => {
     expect(window.localStorage.getItem("authInfo")).not.toBeNull();
   });
 
-  it("reloads a logged in tab when another tab logs out", () => {
+  it("reloads a focused logged in tab when another tab logs out", () => {
     setLoggedIn();
 
     otherTabChanged(null);
@@ -71,7 +69,7 @@ describe("store auth sync across tabs", () => {
     expect(reload).toHaveBeenCalledTimes(1);
   });
 
-  it("reloads a logged in tab when another tab's token refresh fails", () => {
+  it("reloads a focused logged in tab when another tab's token refresh fails", () => {
     setLoggedIn();
 
     otherTabChanged("authInfo");
@@ -79,26 +77,41 @@ describe("store auth sync across tabs", () => {
     expect(reload).toHaveBeenCalledTimes(1);
   });
 
-  it("sends a logged out tab back to its login redirect page when another tab logs in", () => {
-    setLoggedOut();
-    window.history.replaceState({ backUrl: "/a/my-tickets/" }, "");
-    window.localStorage.setItem("authInfo", AUTH_INFO);
+  it("waits for focus before reloading an unfocused tab", () => {
+    setLoggedIn();
+    hasFocus.mockReturnValue(false);
+
+    otherTabChanged(null);
+    expect(reload).not.toHaveBeenCalled();
+
+    hasFocus.mockReturnValue(true);
+    focusTab();
+    expect(pause).toHaveBeenCalledTimes(1);
+    expect(reload).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not reload an unfocused tab when another tab's re-auth restores the token before focus", () => {
+    setLoggedIn();
+    hasFocus.mockReturnValue(false);
 
     otherTabChanged("authInfo");
+    window.localStorage.setItem("authInfo", AUTH_INFO);
+    otherTabChanged("authInfo");
 
-    expect(pause).toHaveBeenCalledTimes(1);
-    expect(replace).toHaveBeenCalledWith("/a/my-tickets/");
+    hasFocus.mockReturnValue(true);
+    focusTab();
+    expect(pause).not.toHaveBeenCalled();
     expect(reload).not.toHaveBeenCalled();
   });
 
-  it("reloads a logged out tab with no login redirect when another tab logs in", () => {
+  it("does nothing when another tab logs in", () => {
     setLoggedOut();
     window.localStorage.setItem("authInfo", AUTH_INFO);
 
     otherTabChanged("authInfo");
+    focusTab();
 
-    expect(reload).toHaveBeenCalledTimes(1);
-    expect(replace).not.toHaveBeenCalled();
+    expect(reload).not.toHaveBeenCalled();
   });
 
   it("does nothing when another tab refreshes the token", () => {
@@ -117,5 +130,35 @@ describe("store auth sync across tabs", () => {
     otherTabChanged("persist:root");
 
     expect(reload).not.toHaveBeenCalled();
+  });
+});
+
+describe("store rehydrate without authInfo", () => {
+  // persistConfig keys storage by env vars, unset under jest
+  const PERSIST_KEY = "persist:root_undefined_undefined";
+
+  afterEach(() => window.localStorage.clear());
+
+  it("drops the previous session's profile and flags", async () => {
+    window.localStorage.setItem(PERSIST_KEY, JSON.stringify({
+      loggedUserState: JSON.stringify({ isLoggedUser: true }),
+      userState: JSON.stringify({ userProfile: { id: 1 }, isAuthorized: true, hasTicket: true }),
+      _persist: JSON.stringify({ version: -1, rehydrated: true }),
+    }));
+
+    let isolated;
+    jest.isolateModules(() => {
+      isolated = require("../store");
+    });
+    await new Promise((resolve) => {
+      if (isolated.persistor.getState().bootstrapped) return resolve();
+      isolated.persistor.subscribe(() => isolated.persistor.getState().bootstrapped && resolve());
+    });
+
+    const { loggedUserState, userState } = isolated.store.getState();
+    expect(loggedUserState.isLoggedUser).toBe(false);
+    expect(userState.userProfile).toBeNull();
+    expect(userState.isAuthorized).toBe(false);
+    expect(userState.hasTicket).toBe(false);
   });
 });

@@ -5,7 +5,7 @@ import thunk from "redux-thunk";
 import * as reducers from "../reducers";
 import { persistConfig } from "./persistConfig";
 import { getAuthInfo } from "openstack-uicore-foundation/lib/security/methods";
-import { getUserProfile } from "../actions/user-actions";
+import { LOGOUT_USER } from "openstack-uicore-foundation/lib/security/actions";
 
 const states = {
   loggedUserState: reducers.loggedUserReducer,
@@ -39,27 +39,27 @@ export const { store, persistor } = (() => {
 
   const store = createStore(persistedReducers, enhancer);
   const onRehydrateComplete = () => {
-    // logged in (per authInfo) but another tab persisted an empty profile: load it once
-    const { loggedUserState, userState } = store.getState();
-    if (loggedUserState?.isLoggedUser && !userState?.userProfile) {
-      store.dispatch(getUserProfile());
+    // no shared token: drop the previous session's profile, isAuthorized and hasTicket too
+    if (!getAuthInfo() && store.getState().userState?.userProfile) {
+      store.dispatch({ type: LOGOUT_USER, payload: {} });
     }
   };
   const persistor = persistStore(store, null, onRehydrateComplete);
 
-  // another tab logged in or out (or its token refresh failed): reload when this tab no longer matches the shared token
   if (typeof window !== "undefined") {
+    // logged in here, but another tab cleared the shared token (logout, failed refresh or a re-auth still at the IDP)
+    const hasStaleLogin = () => !!store.getState().loggedUserState?.isLoggedUser && !getAuthInfo();
+    // wait for focus: a re-auth in another tab has usually restored the token by the time the user comes back
+    const reloadIfStaleLogin = () => {
+      if (!document.hasFocus() || !hasStaleLogin()) return;
+      persistor.pause();
+      window.location.reload();
+    };
     window.addEventListener("storage", ({ key }) => {
       // null = localStorage.clear() on logout
-      if (key !== "authInfo" && key !== null) return;
-      const hasAuthInfo = !!getAuthInfo();
-      if (!!store.getState().loggedUserState?.isLoggedUser === hasAuthInfo) return;
-      persistor.pause();
-      // login: resume the page the login redirect came from (WithAuthRoute keeps it in the history state)
-      const backUrl = window.history.state?.backUrl;
-      if (hasAuthInfo && backUrl) window.location.replace(backUrl);
-      else window.location.reload();
+      if (key === "authInfo" || key === null) reloadIfStaleLogin();
     });
+    window.addEventListener("focus", reloadIfStaleLogin);
   }
 
   return { store, persistor };
