@@ -34,8 +34,8 @@ class RealTimeStrategyFactory {
         }
 
         if(type === STRATEGY_ABLY){
+            // no fallback: Ably retries on its own and the supabase v1 fallback is broken
             main = new AblyRealTimeStrategy(callback, checkPastCallback);
-            fallback = new SUPARealTimeStrategy(callback, checkPastCallback);
         }
 
         if(main && fallback) {

@@ -106,7 +106,10 @@ class AblyRealTimeStrategy extends AbstractRealTimeStrategy {
             }
         };
 
-        this._channel.subscribe(this._onMessage);
+        // ably v2 subscribe returns the attach promise, connection state is handled by _onConn
+        this._channel.subscribe(this._onMessage).catch((e) => {
+            console.warn('AblyRealTimeStrategy::create channel.subscribe', e);
+        });
 
     }
 
@@ -144,8 +147,8 @@ class AblyRealTimeStrategy extends AbstractRealTimeStrategy {
 
         if (client && channel && client.connection.state !== 'closed' &&
             ['attached','attaching','detaching'].includes(channel.state)) {
-            // Detach asynchronously, then release if allowed
-            channel.detach(() => tryRelease());
+            // ably v2 detach takes no callback, release and close the client whatever the outcome
+            channel.detach().catch(() => {}).finally(tryRelease);
         } else {
             // Already detached/failed/closed (or no channel) → just release if possible and close
             tryRelease();

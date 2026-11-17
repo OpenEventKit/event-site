@@ -23,7 +23,10 @@ export function useAblyChannel({
         const channel = client.channels.get(channelName);
         channelRef.current = channel;
 
-        if (onMessage) channel.subscribe(onMessage);
+        // ably v2 subscribe returns the attach promise, rejects on attach failure or close() during attach
+        if (onMessage) channel.subscribe(onMessage).catch((e) => {
+            console.warn("useAblyChannel channel.subscribe", e);
+        });
 
         return () => {
             if (onMessage) channel.unsubscribe(onMessage);
