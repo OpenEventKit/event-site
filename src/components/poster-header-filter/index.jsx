@@ -42,7 +42,7 @@ const PosterHeaderFilter = ({ changeHeaderFilter }) => {
       */}
       <div className={styles.dropdown}>
         <span onClick={() => setDropdownOpen(!dropdownOpen)}>
-          Order by {dropdownOption.label} {dropdownOption.icon ? <i style={{ marginLeft: 5 }} className={`fa ${dropdownOption.icon}`} /> : null}
+          <span>{`Order by ${dropdownOption.label}`}</span> {dropdownOption.icon ? <i style={{ marginLeft: 5 }} className={`fa ${dropdownOption.icon}`} /> : null}
           <i className='fa fa-caret-down' />
         </span>
         {dropdownOpen &&
