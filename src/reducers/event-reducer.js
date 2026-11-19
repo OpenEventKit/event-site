@@ -11,6 +11,14 @@ const DEFAULT_STATE = {
   error: null,
 };
 
+// the copies used to update the event (schedule data, published event) lack
+// fields that only the overflow endpoint or streaming-info send, so for the
+// same event keep the current fields the update does not send
+const mergeSameEvent = (currentEvent, updatedEvent) => {
+  if (!currentEvent || !updatedEvent || currentEvent.id !== updatedEvent.id) return updatedEvent;
+  return { ...currentEvent, ...updatedEvent };
+};
+
 const eventReducer = (state = DEFAULT_STATE, action) => {
   const { type, payload } = action
 
@@ -40,7 +48,7 @@ const eventReducer = (state = DEFAULT_STATE, action) => {
       if(state?.event){
         const idx = eventsIDXData[state?.event?.id] || null;
         if(idx) {
-          const updatedEvent = eventsData[idx];
+          const updatedEvent = mergeSameEvent(state.event, eventsData[idx]);
           return {...state, loading: false, event: updatedEvent, tokens: null};
         }
       }
@@ -54,7 +62,7 @@ const eventReducer = (state = DEFAULT_STATE, action) => {
     case RELOAD_EVENT_STATE:{
       const { tokens: newTokens, ...rest } = payload;
       const formerTokens = state.tokens;
-      return {...state, loading:false, event: {...rest}, tokens: newTokens || formerTokens};
+      return {...state, loading:false, event: mergeSameEvent(state.event, {...rest}), tokens: newTokens || formerTokens};
     }
     case GET_EVENT_STREAMING_INFO:{
       const { tokens, ...rest } = payload.response
