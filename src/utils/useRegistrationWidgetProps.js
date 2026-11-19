@@ -13,7 +13,7 @@ import usePaymentSettings from "@utils/usePaymentSettings";
 import useMarketingSettings, { MARKETING_SETTINGS_KEYS } from "@utils/useMarketingSettings";
 import { getEnvVariable, SUMMIT_API_BASE_URL, OAUTH2_CLIENT_ID, SUPPORT_EMAIL, TENANT_ID } from "@utils/envVariables";
 import { userHasAccessLevel, VIRTUAL_ACCESS_LEVEL } from "@utils/authorizedGroups";
-import { validateIdentityProviderButtons, getAccessTokenSafely } from "@utils/loginUtils";
+import { validateIdentityProviderButtons, getAccessTokenSafely, logOutOnAuthError } from "@utils/loginUtils";
 import { triggerTagManagerTrackEvent } from "@utils/eventTriggers";
 
 const useRegistrationWidgetProps = ({
@@ -174,11 +174,7 @@ const useRegistrationWidgetProps = ({
         loginInitialEmailInputValue: initialEmailValue,
         authErrorCallback: (error) => {
             const fragment = window?.location?.hash;
-            return navigate("/auth/logout", {
-                state: {
-                    backUrl: backUrl + (fragment || '')
-                }
-            });
+            return logOutOnAuthError(backUrl + (fragment || ''));
         },
         allowPromoCodes,
         companyDDLPlaceholder,

@@ -1,5 +1,6 @@
 import { getAccessToken } from 'openstack-uicore-foundation/lib/security/methods'
 import * as Sentry from '@sentry/react'
+import { AUTH_ERROR_MISSING_AUTH_INFO } from 'openstack-uicore-foundation/lib/security/constants'
 import {
   getEnvVariable,
   AUTHORIZED_DEFAULT_PATH
@@ -15,6 +16,14 @@ export const onLogOut = (backUrl = null) => {
     }
   });
 }
+
+let isLoggingOut = false;
+// concurrent auth failures share one logout navigation; LogoutButton keeps calling onLogOut directly
+export const logOutOnAuthError = (backUrl = null) => {
+  if (isLoggingOut) return;
+  isLoggingOut = true;
+  onLogOut(backUrl);
+};
 
 export const getDefaultLocation = (
   eventRedirect,
@@ -73,7 +82,17 @@ export const getAccessTokenSafely = async () => {
   } catch (e) {
     console.log("loginUtils::getAccessToken error: ", e);
     Sentry.captureException(e)
-    onLogOut();
-    return Promise.reject();
+    logOutOnAuthError();
+    return Promise.reject(e);
   }
+};
+
+// Sentry beforeSend: a missing authInfo means the session is already gone, keep it as a breadcrumb instead of an error
+export const dropExpectedAuthErrors = (event) => {
+  const isMissingAuthInfo = event?.exception?.values?.some(
+    (value) => value?.value === AUTH_ERROR_MISSING_AUTH_INFO
+  );
+  if (!isMissingAuthInfo) return event;
+  Sentry.addBreadcrumb({ category: "auth", level: "warning", message: AUTH_ERROR_MISSING_AUTH_INFO });
+  return null;
 };
